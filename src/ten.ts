@@ -132,6 +132,8 @@ export class Ten<C extends DefaultContext<any>> {
 
       try {
         const module = await eval('import(`${this._appPath}${match.route}/${this._routeFileName}`)');
+        console.info("Module called path:", `${this._appPath}${match.route}/${this._routeFileName}`);
+        console.info("Module called:", module);
         const fn = module[method] as
           | ((req: Request, ctx: C) => Response | Promise<Response>)
           | undefined;
@@ -143,7 +145,8 @@ export class Ten<C extends DefaultContext<any>> {
           } as C);
         }
         return new Response("Method not implemented", { status: 501 });
-      } catch {
+      } catch(e) {
+        console.error("Error loading module:", e);
         if (match.hasPage && method === "GET") {
           try {
             const pageModule = Deno.readTextFileSync(
