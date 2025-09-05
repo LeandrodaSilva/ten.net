@@ -1,5 +1,5 @@
 import {walk} from "@std/fs/walk";
-import { toFileUrl, join } from "jsr:@std/path";
+import { toFileUrl } from "@std/path";
 
 function hostBaseUrl(): URL {
   // CWD do processo = raiz do projeto host
