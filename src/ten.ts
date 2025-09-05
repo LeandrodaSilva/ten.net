@@ -10,7 +10,7 @@ async function importFromHost(relativePath: string) {
   const base = hostBaseUrl();               // file:///.../meu-app/
   const href = new URL(relativePath, base); // ex.: ./app/api/blob/route.ts
   console.log(href.toString());
-  return import(href.href);
+  return eval('import(href.href)');
 }
 
 
