@@ -131,8 +131,9 @@ export class Ten<C extends DefaultContext<any>> {
       if (!match) return new Response("Not found", { status: 404 });
 
       try {
-        const module = await eval('import(`${this._appPath}${match.route}/${this._routeFileName}`)');
-        console.info("Module called path:", `${this._appPath}${match.route}/${this._routeFileName}`);
+        const workDir = Deno.cwd();
+        const module = await eval('import(`./${workDir}/app${match.route}/${this._routeFileName}`)');
+        console.info("Module called path:", `./${workDir}/app${match.route}/${this._routeFileName}`);
         console.info("Module called:", module);
         const fn = module[method] as
           | ((req: Request, ctx: C) => Response | Promise<Response>)
