@@ -1,7 +1,6 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@denorid/reflection@0.2": "0.2.0",
     "jsr:@std/assert@1": "1.0.14",
     "jsr:@std/fs@^1.0.19": "1.0.19",
     "jsr:@std/internal@^1.0.10": "1.0.10",
@@ -10,9 +9,6 @@
     "npm:@types/node@*": "24.1.0"
   },
   "jsr": {
-    "@denorid/reflection@0.2.0": {
-      "integrity": "b236481e04914121a99817195f25bbbdbcef3a93f0ae7cec5a1b7e08ba97d44e"
-    },
     "@std/assert@1.0.14": {
       "integrity": "68d0d4a43b365abc927f45a9b85c639ea18a9fab96ad92281e493e4ed84abaa4",
       "dependencies": [
@@ -49,7 +45,6 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@denorid/reflection@0.2",
       "jsr:@std/assert@1",
       "jsr:@std/fs@^1.0.19"
     ]

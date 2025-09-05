@@ -1,11 +1,20 @@
 import {walk} from "@std/fs/walk";
-import {DefaultContext, RouteInfo} from "./types.ts";
+
+export type RouteInfo = {
+  route: string;
+  regex: RegExp;
+  hasPage: boolean;
+};
+
+export interface DefaultContext<P> {
+  params?: P;
+}
 
 export class Ten<C extends DefaultContext<any>> {
   private readonly _appPath = "./app";
   private readonly _routeFileName = "route.ts";
   private readonly _routes: RouteInfo[] = [];
-  private _context: (req: Request) => Partial<C> = (req: Request): Partial<C> => ({})
+  private _context: (req: Request) => Partial<C> = (req: Request): {} => ({})
 
   static net<C extends DefaultContext<any>>(): Ten<C> {
     return new Ten<C>();
@@ -121,10 +130,7 @@ export class Ten<C extends DefaultContext<any>> {
       if (!match) return new Response("Not found", { status: 404 });
 
       try {
-        const spec = import.meta.resolve(
-          `${this._appPath}${match.route}/${this._routeFileName}`
-        );
-        const module = await import(spec);
+        const module = await eval('import(`${this._appPath}${match.route}/${this._routeFileName}`)');
         const fn = module[method] as
           | ((req: Request, ctx: C) => Response | Promise<Response>)
           | undefined;
