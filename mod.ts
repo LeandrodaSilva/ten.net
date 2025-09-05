@@ -1,1 +1,1 @@
-export { Ten, DefaultContext} from "./src/ten.ts"
+export { Ten, type DefaultContext} from "./src/ten.ts"
