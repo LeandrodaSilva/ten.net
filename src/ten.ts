@@ -7,7 +7,7 @@ export class Ten<C extends DefaultContext<any>> {
   private readonly _routes: RouteInfo[] = [];
   private _context: (req: Request) => Partial<C> = (req: Request): Partial<C> => ({})
 
-  static net<C extends DefaultContext<any>>() {
+  static net<C extends DefaultContext<any>>(): Ten<C> {
     return new Ten<C>();
   }
 
