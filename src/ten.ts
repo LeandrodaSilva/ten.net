@@ -121,6 +121,7 @@ export class Ten<C extends DefaultContext<any>> {
 
   public async start() {
     this._routes.push(...await this._buildRoutes());
+    console.info("Routes:", this._routes.map(r => r.route));
     Deno.serve(async (req: Request): Promise<Response> => {
       const url = new URL(req.url);
       const path = url.pathname;
