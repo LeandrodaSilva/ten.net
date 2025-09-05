@@ -1,231 +1,170 @@
-import {Reflection} from "@denorid/reflection";
-import {RouteDef, routesRegistry} from "./decorators/route.ts";
-import {ITen} from "./types.ts";
+import {walk} from "@std/fs/walk";
+import {DefaultContext, RouteInfo} from "./types.ts";
 
-function getParamNames(fn: Function): string[] {
-  const str = fn.toString()
-    .replace(/\/\*.*?\*\//gs, "")
-    .replace(/\/\/.*$/gm, "");
-  const argsMatch = str.match(/constructor\s*\(([^)]*)\)/) || str.match(/^[^(]*\(([^)]*)\)/);
-  if (!argsMatch) return [];
-  return argsMatch[1]
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((s) => s.replace(/=.*/, "").trim())
-    .map((s) => s.replace(/[{}\[\]]/g, "").trim());
-}
+export class Ten<C extends DefaultContext<any>> {
+  private readonly _appPath = "./app";
+  private readonly _routeFileName = "route.ts";
+  private readonly _routes: RouteInfo[] = [];
+  private _context: (req: Request) => Partial<C> = (req: Request): Partial<C> => ({})
 
-function toKey(name: string) {
-  if (!name) return name;
-  if (name.length > 1 && name[0] === "I" && name[1] === name[1].toUpperCase()) {
-    name = name.slice(1);
-  }
-  return name.charAt(0).toLowerCase() + name.slice(1);
-}
-
-export class Ten<S extends Record<string, any> = {}> implements ITen {
-  static net() {
-    return new this();
+  static net<C extends DefaultContext<any>>() {
+    return new Ten<C>();
   }
 
-  static init() {
-    return Ten.net();
+  private _escapeRegex(s: string) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
-  static create() {
-    return Ten.net();
+  private _toRegex(route: string): RegExp {
+    const pattern = route
+      .split("/")
+      .map((seg) => {
+        if (!seg) return "";
+        if (seg.startsWith("[") && seg.endsWith("]")) return "[^/]+";
+        return this._escapeRegex(seg);
+      })
+      .join("/");
+
+    return new RegExp(`^${pattern}$`);
   }
 
-  private readonly _services: Record<string, unknown> = {};
-  private readonly _routes: RouteDef[] = [];
+  private async _buildRoutes(): Promise<RouteInfo[]> {
+    const routes: RouteInfo[] = [];
 
-  public async handler(req: Request) {
-    const method = req.method.toUpperCase();
+    for await (const entry of walk(this._appPath, { includeDirs: true })) {
+      if (!entry.isDirectory) continue;
 
-    for (const r of this._routes) {
-      if (r.method !== method) continue;
-      const match = r.pattern.exec(req.url);
-      if (!match) continue;
+      let hasPage = false;
 
-      const Ctor = r.controller as any;
-
-      // Tenta obter tipos dos parâmetros do construtor
-      let paramTypes: any[] | undefined;
       try {
-        paramTypes =
-          (Reflection.getMetadata &&
-            Reflection.getMetadata("design:paramtypes", Ctor)) ||
-          (Reflection.getOwnMetadata &&
-            Reflection.getOwnMetadata("design:paramtypes", Ctor)) ||
-          undefined;
+        await Deno.stat(`${entry.path}/${this._routeFileName}`);
       } catch {
-        paramTypes = undefined;
-      }
-
-      const paramNames = getParamNames(Ctor);
-      const argCount = Math.max(paramTypes?.length || 0, paramNames.length);
-
-      const args: any[] = new Array(argCount).fill(undefined);
-
-      for (let i = 0; i < argCount; i++) {
-        const t = paramTypes?.[i];
-        const n = paramNames[i];
-
-        // Injeção do Request por tipo ou por nome
-        if (t === Request || n === "req" || n === "request") {
-          args[i] = req;
+        try {
+          await Deno.stat(`${entry.path}/page.html`);
+          hasPage = true;
+        } catch {
           continue;
         }
+      }
 
-        // Injeção por tipo (classe conhecida registrada no Ten) -> pelo nome da classe
-        if (typeof t === "function" && t?.name) {
-          const key = toKey(t.name);
-          if ((this as any)[key]) {
-            args[i] = (this as any)[key];
-            continue;
+      const rel = entry.path
+        .replace(/^[.\/]*app/, "") // remove prefixos como './app' ou 'app'
+        .replaceAll("\\", "/");
+
+      const route = rel.length ? rel : "/";
+
+      routes.push({
+        route,
+        regex: this._toRegex(route),
+        hasPage,
+      });
+    }
+
+    return routes;
+  }
+
+  private _pathNamedParams(path: string, route: string): Record<string, string> {
+    const params: Record<string, string> = {};
+    const pathSegments = path.split("/").filter(Boolean);
+    const routeSegments = route.split("/").filter(Boolean);
+
+    routeSegments.forEach((seg, i) => {
+      if (seg.startsWith("[") && seg.endsWith("]")) {
+        const paramName = seg.slice(1, -1);
+        params[paramName] = pathSegments[i];
+      }
+    });
+    return params;
+  }
+
+  public setContext(context: (req: Request) => Partial<C>) {
+    this._context = context;
+    return this;
+  }
+
+  private _findOrderedLayouts(route: string): string[] {
+    const layouts: string[] = [];
+    const segments = route.split("/").filter(Boolean);
+    let currentPath = this._appPath;
+
+    for (const segment of ["", ...segments]) {
+      currentPath += `/${segment}`;
+      try {
+        Deno.statSync(`${currentPath}/layout.html`);
+        layouts.push(`${currentPath}/layout.html`);
+      } catch {
+        // No layout in this segment, continue
+      }
+    }
+
+    return layouts;
+  }
+
+  private _findDocumentLayoutRoot(): string {
+    const rootLayoutPath = `${this._appPath}/document.html`;
+    try {
+      Deno.statSync(rootLayoutPath);
+      return Deno.readTextFileSync(rootLayoutPath);
+    } catch {
+      return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ten.net</title></head><body>{{content}}</body></html>`;
+    }
+  }
+
+  public async start() {
+    this._routes.push(...await this._buildRoutes());
+    Deno.serve(async (req: Request): Promise<Response> => {
+      const url = new URL(req.url);
+      const path = url.pathname;
+      const method = req.method.toUpperCase();
+
+      const match = this._routes.find((r) => r.regex.test(path));
+      if (!match) return new Response("Not found", { status: 404 });
+
+      try {
+        const module = await import(
+          `${this._appPath}${match.route}/${this._routeFileName}`
+          );
+        const fn = module[method] as
+          | ((req: Request, ctx: C) => Response | Promise<Response>)
+          | undefined;
+        const params = this._pathNamedParams(path, match.route);
+        if (typeof fn === "function" && !match.hasPage) {
+          return fn(req, {
+            params,
+            ...this._context(req),
+          } as C);
+        }
+        return new Response("Method not implemented", { status: 501 });
+      } catch {
+        if (match.hasPage && method === "GET") {
+          try {
+            const pageModule = Deno.readTextFileSync(
+              `${this._appPath}${match.route}/page.html`,
+            );
+            const layouts = this._findOrderedLayouts(match.route);
+            const documentLayout = this._findDocumentLayoutRoot();
+            let fullContent = documentLayout.replace("{{content}}", pageModule);
+            if (layouts) {
+              for (let i = layouts.length - 1; i >= 0; i--) {
+                const layoutContent = Deno.readTextFileSync(layouts[i]);
+                fullContent = layoutContent.replace("{{content}}", fullContent);
+              }
+              return new Response(fullContent, {
+                status: 200,
+                headers: { "Content-Type": "text/html" },
+              });
+            }
+            return new Response(pageModule, {
+              status: 200,
+              headers: { "Content-Type": "text/html" },
+            });
+          }
+          catch {
+            return new Response("Not found", { status: 404 });
           }
         }
-
-        // Injeção por nome (ex.: userService)
-        if (n && (this as any)[n]) {
-          args[i] = (this as any)[n];
-          continue;
-        }
-
-        // Fallback: undefined
-        args[i] = undefined;
+        return new Response("Not found", { status: 404 });
       }
-
-      const controller = new Ctor(...args);
-      const action = (controller as any)[r.action].bind(controller);
-
-      // Extrai grupos do URLPattern
-      const groups = match.pathname?.groups ?? {};
-      const orderedParams: any[] = r.paramOrder?.map((k) => groups[k]) ?? [];
-
-      const result = action(...orderedParams, groups);
-      if (result instanceof Promise) {
-        return result;
-      }
-      return result as Response;
-    }
-
-    return new Response(JSON.stringify({
-      success: false,
-      error: "Not Found",
-    }), {
-      status: 404,
     });
   }
-
-  public start() {
-    Deno.serve({ port: Deno.env.get("PORT") }, this.handler.bind(this));
-  }
-
-  public addControllers(): Ten<S> {
-    this._routes.push(...routesRegistry);
-    return this as any;
-  }
-
-  // Tipagem avançada: quando a chave é literal, propagamos T para o tipo de retorno
-  public addScoped<K extends string, I, T extends I>(
-    key: K,
-    impl: abstract new () => T,
-  ): Ten<S & Record<K, T>>;
-  public addScoped<K extends string, I, T extends I>(
-    key: K,
-    factory: () => T,
-  ): Ten<S & Record<K, T>>;
-
-  // Demais sobrecargas (mantêm compatibilidade)
-  public addScoped<I, T extends I>(
-    token: abstract new () => I,
-    impl: abstract new () => T,
-  ): this;
-  public addScoped<I, T extends I>(impl: abstract new () => T): this;
-  public addScoped<I, T extends I>(
-    token: abstract new () => I,
-    factory: () => T,
-  ): this;
-  public addScoped<I, T extends I>(factory: () => T): this;
-
-  public addScoped<I, T extends I>(
-    a: any,
-    b?: any,
-  ): any {
-    try {
-      const meta = Reflection?.getOwnMetadata?.();
-      if (meta) console.debug("addScoped(): metadata", meta);
-    } catch (_) { /* ignore */ }
-
-    const isCtor = (x: unknown): x is abstract new (...args: any[]) => any =>
-      typeof x === "function" && !!(x as any).prototype;
-
-    const toKey = (name: string) => {
-      if (
-        name.length > 1 && name[0] === "I" && name[1] === name[1].toUpperCase()
-      ) {
-        name = name.slice(1);
-      }
-      return name.charAt(0).toLowerCase() + name.slice(1);
-    };
-
-    let key: string;
-    let instance: I;
-
-    if (typeof a === "string") {
-      key = a;
-      if (isCtor(b)) {
-        instance = new b();
-      } else if (typeof b === "function") {
-        instance = b();
-      } else {
-        throw new Error("addScoped(key, impl|factory): impl/factory inválido");
-      }
-    } else if (isCtor(a)) {
-      if (isCtor(b)) {
-        key = toKey(a.name || "service");
-        instance = new b();
-      } else if (typeof b === "function") {
-        key = toKey(a.name || "service");
-        instance = b();
-      } else {
-        key = toKey(a.name || "service");
-        instance = new a();
-      }
-    } else if (typeof a === "function") {
-      instance = (a as () => I)();
-      key = "service";
-    } else {
-      throw new Error("Uso inválido de addScoped");
-    }
-
-    (this as any)[key] = instance;
-    this._services[key] = instance;
-
-    return this as any;
-  }
-
-  // resolve com chave literal preserva tipo do serviço
-  public resolve<K extends keyof S>(key: K): S[K];
-  public resolve<I>(token: abstract new () => I): I;
-  public resolve(a: any): any {
-    const toKey = (name: string) => {
-      if (
-        name.length > 1 && name[0] === "I" && name[1] === name[1].toUpperCase()
-      ) {
-        name = name.slice(1);
-      }
-      return name.charAt(0).toLowerCase() + name.slice(1);
-    };
-
-    const key = typeof a === "string" ? a : toKey(a?.name ?? "service");
-    const service = this._services[key];
-    if (!service) throw new Error(`Serviço não encontrado: ${key}`);
-    return service;
-  }
 }
-
-// Mapeia propriedades de S para a instância de Ten (melhora a descoberta em editores)
-export interface Ten<S extends Record<string, any>> extends S {}
