@@ -77,7 +77,7 @@ export class Ten<C extends DefaultContext<any>> {
     return params;
   }
 
-  public setContext(context: (req: Request) => Partial<C>) {
+  public setContext(context: (req: Request) => Partial<C>): Ten<C> {
     this._context = context;
     return this;
   }
