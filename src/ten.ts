@@ -1,4 +1,18 @@
 import {walk} from "@std/fs/walk";
+import { toFileUrl, join } from "jsr:@std/path";
+
+function hostBaseUrl(): URL {
+  // CWD do processo = raiz do projeto host
+  return toFileUrl(Deno.cwd() + "/");
+}
+
+async function importFromHost(relativePath: string) {
+  const base = hostBaseUrl();               // file:///.../meu-app/
+  const href = new URL(relativePath, base); // ex.: ./app/api/blob/route.ts
+  console.log(href.toString());
+  return import(href.href);
+}
+
 
 export type RouteInfo = {
   route: string;
@@ -132,7 +146,7 @@ export class Ten<C extends DefaultContext<any>> {
 
       try {
         console.info("Module called path:", `./app${match.route}/${this._routeFileName}`);
-        const module = await eval('import(`./app${match.route}/${this._routeFileName}`)');
+        const module = await eval('importFromHost(`./app${match.route}/${this._routeFileName}`)');
         console.info("Module called:", module);
         const fn = module[method] as
           | ((req: Request, ctx: C) => Response | Promise<Response>)
