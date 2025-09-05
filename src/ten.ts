@@ -121,9 +121,10 @@ export class Ten<C extends DefaultContext<any>> {
       if (!match) return new Response("Not found", { status: 404 });
 
       try {
-        const module = await import(
+        const spec = import.meta.resolve(
           `${this._appPath}${match.route}/${this._routeFileName}`
-          );
+        );
+        const module = await import(spec);
         const fn = module[method] as
           | ((req: Request, ctx: C) => Response | Promise<Response>)
           | undefined;
