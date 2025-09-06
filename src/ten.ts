@@ -176,7 +176,7 @@ export class Ten<C extends DefaultContext<any>> {
 
       try {
         console.info("Module called path:", `@app${match.route}/${this._routeFileName}`);
-        let module: null;
+        let module: { [key: string]: unknown } = {};
 
         if (Object.keys(TRANSPILED_CODE).length > 0) {
           module = await import("data:application/javascript," + encodeURIComponent(TRANSPILED_CODE[`@app${match.route}/route.ts`]));
