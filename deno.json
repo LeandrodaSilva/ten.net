@@ -8,6 +8,7 @@
     "start": "deno run --inspect --allow-net --allow-env --allow-read --watch demo.ts"
   },
   "imports": {
+    "@deno/emit": "jsr:@deno/emit@^0.46.0",
     "@std/assert": "jsr:@std/assert@1",
     "@std/fs": "jsr:@std/fs@^1.0.19",
     "@std/path": "jsr:@std/path@^1.1.2",

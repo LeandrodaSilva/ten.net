@@ -1,8 +1,8 @@
-import * as emit from "jsr:@deno/emit";
-import { toFileUrl, join, isAbsolute, dirname } from "jsr:@std/path";
+import * as emit from "@deno/emit";
+import { toFileUrl, join, isAbsolute, dirname } from "@std/path";
 
 // (opcional) importe um import map, se você usa alias tipo "@app/"
-import type { ImportMap } from "jsr:@deno/emit";
+import type { ImportMap } from "@deno/emit";
 const importMap: ImportMap | undefined = await (async () => {
   try {
     const raw = await Deno.readTextFile("import_map.json");
