@@ -1,18 +1,5 @@
 import {walk} from "@std/fs/walk";
-import { toFileUrl } from "@std/path";
-
-function hostBaseUrl(): URL {
-  // CWD do processo = raiz do projeto host
-  return toFileUrl(Deno.cwd() + "/");
-}
-
-async function importFromHost(relativePath: string) {
-  const base = hostBaseUrl();               // file:///.../meu-app/
-  const href = new URL(relativePath, base); // ex.: ./app/api/blob/route.ts
-  console.log(href.toString());
-  return eval('import(href.href)');
-}
-
+import {transpileFile} from "./trans.ts";
 
 export type RouteInfo = {
   route: string;
@@ -22,6 +9,45 @@ export type RouteInfo = {
 
 export interface DefaultContext<P> {
   params?: P;
+}
+
+export function isCompiledBinary(): boolean {
+  const exec = Deno.execPath();
+  const base = exec.replace(/^.*[\\/]/, "").toLowerCase();
+  // Heurística 1: nome do executável
+  const looksLikeDeno = base === "deno" || base === "deno.exe";
+
+  // Heurística 2 (fallback): em binários compilados, execPath !== caminho do script principal.
+  // Observação: Deno.mainModule é o caminho do seu entrypoint no momento da compilação.
+  // Quando você move o binário, execPath muda (aponta pro binário), mas mainModule continua igual.
+  const mainIsExec =
+    exec === new URL(Deno.mainModule).pathname ||
+    exec === new URL(Deno.mainModule).pathname.replace(/\//g, "\\");
+
+  // Se parece com o deno oficial, provavelmente está em `deno run`.
+  // Caso o usuário tenha renomeado o deno, usamos a 2ª heurística.
+  return !looksLikeDeno && !mainIsExec;
+}
+
+const isCompiled = isCompiledBinary();
+
+console.info("isCompiledBinary:", isCompiled);
+
+if (isCompiled) {
+  // para cada arquivo em app/**/*.ts, gerar um .js na mesma pasta
+  // usando o path absoluto para o arquivo
+  // e usando o Deno.emit() para transpilar
+  // isso permite que o import dinâmico funcione em binários compilados
+  for await (const entry of walk("./app", { includeDirs: false, exts: [".ts"] })) {
+    const sourcePath = entry.path;
+    const outPath = sourcePath.replace(/\.ts$/, ".js");
+    try {
+      console.log("Transpilando", sourcePath, "->", outPath);
+      await transpileFile(sourcePath);
+    } catch (e) {
+      console.error(`Erro ao transpilar ${sourcePath}:`, e);
+    }
+  }
 }
 
 export class Ten<C extends DefaultContext<any>> {
@@ -75,6 +101,7 @@ export class Ten<C extends DefaultContext<any>> {
         .replaceAll("\\", "/");
 
       const route = rel.length ? rel : "/";
+
 
       routes.push({
         route,
@@ -136,6 +163,7 @@ export class Ten<C extends DefaultContext<any>> {
   public async start() {
     this._routes.push(...await this._buildRoutes());
     console.info("Routes:", this._routes.map(r => r.route));
+
     Deno.serve(async (req: Request): Promise<Response> => {
       const url = new URL(req.url);
       const path = url.pathname;
@@ -146,7 +174,7 @@ export class Ten<C extends DefaultContext<any>> {
 
       try {
         console.info("Module called path:", `@app${match.route}/${this._routeFileName}`);
-        const module = await import(`@app${match.route}/${this._routeFileName}`)
+        const module = await import(`@app${match.route}/route.${isCompiled ? "js" : "ts"}`);
         console.info("Module called:", module);
         const fn = module[method] as
           | ((req: Request, ctx: C) => Response | Promise<Response>)
