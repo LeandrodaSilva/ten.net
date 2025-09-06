@@ -33,6 +33,8 @@ const isCompiled = isCompiledBinary();
 
 console.info("isCompiledBinary:", isCompiled);
 
+const TRANSPILED_CODE = {};
+
 if (isCompiled || Deno.env.get("APP_ENV") === "production") {
   // para cada arquivo em app/**/*.ts, gerar um .js na mesma pasta
   // usando o path absoluto para o arquivo
@@ -43,7 +45,7 @@ if (isCompiled || Deno.env.get("APP_ENV") === "production") {
     const outPath = sourcePath.replace(/\.ts$/, ".js");
     try {
       console.log("Transpilando", sourcePath, "->", outPath);
-      await transpileFile(sourcePath);
+      TRANSPILED_CODE[`@${sourcePath}`] = await transpileFile(sourcePath);
     } catch (e) {
       console.error(`Erro ao transpilar ${sourcePath}:`, e);
     }
@@ -174,7 +176,13 @@ export class Ten<C extends DefaultContext<any>> {
 
       try {
         console.info("Module called path:", `@app${match.route}/${this._routeFileName}`);
-        const module = await import(`@app${match.route}/route.${isCompiled ? "js" : "ts"}`);
+        let module: null;
+
+        if (Object.keys(TRANSPILED_CODE).length > 0) {
+          module = await import("data:application/javascript," + encodeURIComponent(TRANSPILED_CODE[`@app${match.route}/route.ts`]));
+        } else {
+          module = await import(`@app${match.route}/route.${isCompiled ? "js" : "ts"}`);
+        }
         console.info("Module called:", module);
         const fn = module[method] as
           | ((req: Request, ctx: C) => Response | Promise<Response>)
