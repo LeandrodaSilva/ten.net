@@ -33,7 +33,7 @@ const isCompiled = isCompiledBinary();
 
 console.info("isCompiledBinary:", isCompiled);
 
-if (isCompiled) {
+if (isCompiled || Deno.env.get("DENO_ENV") === "production") {
   // para cada arquivo em app/**/*.ts, gerar um .js na mesma pasta
   // usando o path absoluto para o arquivo
   // e usando o Deno.emit() para transpilar
