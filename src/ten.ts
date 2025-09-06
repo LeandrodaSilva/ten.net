@@ -194,6 +194,9 @@ export class Ten<C extends DefaultContext<any>> {
             ...this._context(req),
           } as C);
         }
+        if (Object.keys(module).length === 0) {
+          throw new Error("Module is empty");
+        }
         return new Response("Method not implemented", { status: 501 });
       } catch(e) {
         console.error("Error loading module:", e);
