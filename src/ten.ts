@@ -179,9 +179,9 @@ export class Ten<C extends DefaultContext<any>> {
         let module: { [key: string]: unknown } = {};
 
         if (Object.keys(TRANSPILED_CODE).length > 0) {
-          module = await import("data:application/javascript," + encodeURIComponent(TRANSPILED_CODE[`@app${match.route}/route.ts`]));
+          module = await import("data:application/javascript," + encodeURIComponent(TRANSPILED_CODE[`@app${match.route}/route.ts`])) as unknown as any;
         } else {
-          module = await import(`@app${match.route}/route.${isCompiled ? "js" : "ts"}`);
+          module = await import(`@app${match.route}/route.${isCompiled ? "js" : "ts"}`) as unknown as any;
         }
         console.info("Module called:", module);
         const fn = module[method] as
