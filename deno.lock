@@ -19,6 +19,7 @@
     "jsr:@std/path@^1.1.1": "1.1.2",
     "jsr:@std/path@^1.1.2": "1.1.2",
     "npm:@types/node@*": "24.1.0",
+    "npm:chalk@*": "5.4.1",
     "npm:esbuild@*": "0.25.9"
   },
   "jsr": {
@@ -222,6 +223,9 @@
       "dependencies": [
         "undici-types"
       ]
+    },
+    "chalk@5.4.1": {
+      "integrity": "sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w=="
     },
     "esbuild@0.25.9": {
       "integrity": "sha512-CRbODhYyQx3qp7ZEwzxOk4JBqmD/seJrzPa/cGjY1VtIn5E09Oi9/dB4JwctnfZ8Q8iT7rioVv5k/FNT/uf54g==",

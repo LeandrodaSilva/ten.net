@@ -7,7 +7,7 @@ export type RouteInfo = {
   hasPage: boolean;
 };
 
-export interface DefaultContext<P> {
+interface DefaultContext<P> {
   params?: P;
 }
 
