@@ -11,44 +11,16 @@ export interface DefaultContext<P> {
   params?: P;
 }
 
-export function isCompiledBinary(): boolean {
-  const exec = Deno.execPath();
-  const base = exec.replace(/^.*[\\/]/, "").toLowerCase();
-  // Heurística 1: nome do executável
-  const looksLikeDeno = base === "deno" || base === "deno.exe";
-
-  // Heurística 2 (fallback): em binários compilados, execPath !== caminho do script principal.
-  // Observação: Deno.mainModule é o caminho do seu entrypoint no momento da compilação.
-  // Quando você move o binário, execPath muda (aponta pro binário), mas mainModule continua igual.
-  const mainIsExec =
-    exec === new URL(Deno.mainModule).pathname ||
-    exec === new URL(Deno.mainModule).pathname.replace(/\//g, "\\");
-
-  // Se parece com o deno oficial, provavelmente está em `deno run`.
-  // Caso o usuário tenha renomeado o deno, usamos a 2ª heurística.
-  return !looksLikeDeno && !mainIsExec;
-}
-
-const isCompiled = isCompiledBinary();
-
-console.info("isCompiledBinary:", isCompiled);
-
 const TRANSPILED_CODE: any = {};
 
-if (isCompiled || Deno.env.get("APP_ENV") === "production") {
-  // para cada arquivo em app/**/*.ts, gerar um .js na mesma pasta
-  // usando o path absoluto para o arquivo
-  // e usando o Deno.emit() para transpilar
-  // isso permite que o import dinâmico funcione em binários compilados
-  for await (const entry of walk("./app", { includeDirs: false, exts: [".ts"] })) {
-    const sourcePath = entry.path;
-    const outPath = sourcePath.replace(/\.ts$/, ".js");
-    try {
-      console.log("Transpilando", sourcePath, "->", outPath);
-      TRANSPILED_CODE[`@${sourcePath}`] = await transpileFile(sourcePath);
-    } catch (e) {
-      console.error(`Erro ao transpilar ${sourcePath}:`, e);
-    }
+for await (const entry of walk("./app", { includeDirs: false, exts: [".ts"] })) {
+  const sourcePath = entry.path;
+  const outPath = sourcePath.replace(/\.ts$/, ".js");
+  try {
+    console.log("Transpilando", sourcePath, "->", outPath);
+    TRANSPILED_CODE[`@${sourcePath}`] = await transpileFile(sourcePath);
+  } catch (e) {
+    console.error(`Erro ao transpilar ${sourcePath}:`, e);
   }
 }
 
@@ -176,13 +148,7 @@ export class Ten<C extends DefaultContext<any>> {
 
       try {
         console.info("Module called path:", `@app${match.route}/${this._routeFileName}`);
-        let module: { [key: string]: unknown } = {};
-
-        if (Object.keys(TRANSPILED_CODE).length > 0) {
-          module = await import("data:application/javascript," + encodeURIComponent(TRANSPILED_CODE[`@app${match.route}/route.ts`])) as unknown as any;
-        } else {
-          module = await import(`@app${match.route}/route.${isCompiled ? "js" : "ts"}`) as unknown as any;
-        }
+        const module = await import("data:application/javascript," + encodeURIComponent(TRANSPILED_CODE[`@app${match.route}/route.ts`])) as unknown as any;
         console.info("Module called:", module);
         const fn = module[method] as
           | ((req: Request, ctx: C) => Response | Promise<Response>)
@@ -199,7 +165,6 @@ export class Ten<C extends DefaultContext<any>> {
         }
         return new Response("Method not implemented", { status: 501 });
       } catch(e) {
-        console.error("Error loading module:", e);
         if (match.hasPage && method === "GET") {
           try {
             const pageModule = Deno.readTextFileSync(
