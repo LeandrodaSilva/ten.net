@@ -192,21 +192,23 @@ export class Ten<C extends DefaultContext<any>> {
               fullContent = layoutContent.replace("{{content}}", fullContent);
             }
 
-            try {
-              const routeResponse = await fn(req, {
-                params,
-              } as C) as Response;
+            if (fn) {
+              try {
+                const routeResponse = await fn(req, {
+                  params,
+                } as C) as Response;
 
-              if (routeResponse) {
-                const body = await routeResponse.json();
-                const keys = Object.keys(body);
+                if (routeResponse) {
+                  const body = await routeResponse.json();
+                  const keys = Object.keys(body);
 
-                keys.forEach((key) => {
-                  fullContent = String(fullContent).replace(`{{${key}}}`, body[key])
-                })
+                  keys.forEach((key) => {
+                    fullContent = String(fullContent).replace(`{{${key}}}`, body[key])
+                  })
+                }
+              } catch (e) {
+                console.error(e);
               }
-            } catch (e) {
-              console.error(e);
             }
 
             return new Response(fullContent, {
