@@ -6,7 +6,7 @@ export async function transpileFile(tsPath: string): Promise<string> {
 		platform: "deno",
 		minify: false,
 	});
-	const file = result.outputFiles[0]
+	const file = result.outputFiles.shift()
 	if (!file) {
 		throw new Error(`Sem saída JS para ${tsPath} (verifique imports/alias).`);
 	}
