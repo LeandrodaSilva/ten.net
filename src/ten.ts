@@ -168,7 +168,7 @@ export class Ten<C extends DefaultContext<any>> {
         | ((req: Request, ctx: C) => Response | Promise<Response>)
         | undefined;
       const params = this._pathNamedParams(path, match.route);
-      if (typeof fn === "function" && !match.hasPage) {
+      if (typeof fn === "function" && (!match.hasPage || method !== "GET")) {
         return fn(req, {
           params,
         } as C);
