@@ -6,6 +6,7 @@ export type RouteInfo = {
   regex: RegExp;
   hasPage: boolean;
   transpiledCode: string;
+	sourcePath: string;
 };
 
 interface DefaultContext<P> {
@@ -81,24 +82,48 @@ export class Ten<C extends DefaultContext<any>> {
       const route = rel.length ? rel : "/";
 
       const sourcePath = `${entry.path}/route.ts`;
-      const outPath = sourcePath.replace(/\.ts$/, ".js");
-      let transpiledCode = "";
-      try {
-        console.log("Transpilando", sourcePath, "->", outPath);
-        transpiledCode = await transpileFile(sourcePath);
-      } catch (e) {
-        console.error(`Erro ao transpilar ${sourcePath}:`, e);
-      }
+      // const outPath = sourcePath.replace(/\.ts$/, ".js");
+      // let transpiledCode = "";
+      // try {
+      //   console.log("Transpilando", sourcePath, "->", outPath);
+      //   transpiledCode = await transpileFile(sourcePath);
+      // } catch (e) {
+      //   console.error(`Erro ao transpilar ${sourcePath}:`, e);
+      // }
 
       routes.push({
         route,
         regex: this._toRegex(route),
         hasPage,
-        transpiledCode,
+        transpiledCode: "",
+	      sourcePath,
       });
     }
 
-    return routes;
+		const promises = routes.map(async (r) => {
+			const sourcePath = r.sourcePath;
+			const outPath = sourcePath.replace(/\.ts$/, ".js");
+			let transpiledCode = "";
+
+			try {
+				Deno.statSync(sourcePath);
+			} catch {
+				return r
+			}
+
+			try {
+				console.log("Transpilando", sourcePath, "->", outPath);
+				transpiledCode = await transpileFile(sourcePath);
+			} catch (e) {
+				console.error(`Erro ao transpilar ${sourcePath}:`, e);
+			}
+
+			r.transpiledCode = transpiledCode;
+
+			return r;
+		});
+
+    return await Promise.all(promises);
   }
 
   private _pathNamedParams(

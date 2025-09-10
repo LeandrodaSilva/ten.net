@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Demo" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/../deno-blob/main.ts" programParameters="task dev">
+    <method v="2" />
+  </configuration>
+</component>
