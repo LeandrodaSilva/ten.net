@@ -1,173 +1,79 @@
-import { walk } from "@std/fs/walk";
-import { transpileFile } from "./trans.ts";
+import type { RouteInfo } from "./@types/routeInfo.ts";
+import { routeFactory } from "./routeFactory.ts";
+import { findDocumentLayoutRoot } from "./utils/findDocumentLayoutRoot.ts";
+import { findOrderedLayouts } from "./utils/findOrderedLayouts.ts";
+import { pathNamedParams } from "./utils/pathNamedParams.ts";
 
-export type RouteInfo = {
-  route: string;
-  regex: RegExp;
-  hasPage: boolean;
-  transpiledCode: string;
-	sourcePath: string;
-};
-
-interface DefaultContext<P> {
-  params?: P;
-}
-
-// const TRANSPILED_CODE: any = {};
-//
-// for await (const entry of walk("./app", { includeDirs: false, exts: [".ts"] })) {
-//   const sourcePath = entry.path;
-//   const outPath = sourcePath.replace(/\.ts$/, ".js");
-//   try {
-//     console.log("Transpilando", sourcePath, "->", outPath);
-//     TRANSPILED_CODE[`@${sourcePath}`] = await transpileFile(sourcePath);
-//   } catch (e) {
-//     console.error(`Erro ao transpilar ${sourcePath}:`, e);
-//   }
-// }
-
-export class Ten<C extends DefaultContext<any>> {
+/**
+ * Ten is a web framework class that provides routing, request handling, and server functionality.
+ * It supports file-based routing with dynamic route parameters, HTML page rendering with layouts,
+ * and automatic transpilation of TypeScript route files.
+ * 
+ * @example
+ * ```typescript
+ * const app = Ten.net();
+ * await app.start();
+ * ```
+ */
+export class Ten {
   private readonly _appPath = "./app";
   private readonly _routeFileName = "route.ts";
   private readonly _routes: RouteInfo[] = [];
 
-  static net<C extends DefaultContext<any>>(): Ten<C> {
-    return new Ten<C>();
+  /**
+   * Creates and returns a new instance of the Ten class.
+   * 
+   * @returns A new Ten instance
+   */
+  static net(): Ten {
+    return new Ten();
   }
 
-  private _escapeRegex(s: string) {
-    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  }
-
-  private _toRegex(route: string): RegExp {
-    const pattern = route
-      .split("/")
-      .map((seg) => {
-        if (!seg) return "";
-        if (seg.startsWith("[") && seg.endsWith("]")) return "[^/]+";
-        return this._escapeRegex(seg);
-      })
-      .join("/");
-
-    return new RegExp(`^${pattern}$`);
-  }
-
-  private async _buildRoutes(): Promise<RouteInfo[]> {
-    const routes: RouteInfo[] = [];
-
-    for await (const entry of walk(this._appPath, { includeDirs: true })) {
-      if (!entry.isDirectory) continue;
-
-      let hasPage = false;
-      let hasRoute = false;
-
-      try {
-        await Deno.stat(`${entry.path}/${this._routeFileName}`);
-        hasRoute = true;
-      } catch {
-      }
-
-      try {
-        await Deno.stat(`${entry.path}/page.html`);
-        hasPage = true;
-      } catch {
-      }
-
-      if (!hasRoute && !hasPage) continue;
-
-      const rel = entry.path
-        .replace(/^[.\/]*app/, "") // remove prefixos como './app' ou 'app'
-        .replaceAll("\\", "/");
-
-      const route = rel.length ? rel : "/";
-
-      const sourcePath = `${entry.path}/route.ts`;
-      // const outPath = sourcePath.replace(/\.ts$/, ".js");
-      // let transpiledCode = "";
-      // try {
-      //   console.log("Transpilando", sourcePath, "->", outPath);
-      //   transpiledCode = await transpileFile(sourcePath);
-      // } catch (e) {
-      //   console.error(`Erro ao transpilar ${sourcePath}:`, e);
-      // }
-
-      routes.push({
-        route,
-        regex: this._toRegex(route),
-        hasPage,
-        transpiledCode: "",
-	      sourcePath,
-      });
-    }
-
-		const promises = routes.map(async (r) => {
-			const sourcePath = r.sourcePath;
-			const outPath = sourcePath.replace(/\.ts$/, ".js");
-			let transpiledCode = "";
-
-			try {
-				Deno.statSync(sourcePath);
-			} catch {
-				return r
-			}
-
-			try {
-				console.log("Transpilando", sourcePath, "->", outPath);
-				transpiledCode = await transpileFile(sourcePath);
-			} catch (e) {
-				console.error(`Erro ao transpilar ${sourcePath}:`, e);
-			}
-
-			r.transpiledCode = transpiledCode;
-
-			return r;
-		});
-
-    return await Promise.all(promises);
-  }
-
-  private _pathNamedParams(
-    path: string,
-    route: string,
-  ): Record<string, string> {
-    const params: Record<string, string> = {};
-    const pathSegments = path.split("/").filter(Boolean);
-    const routeSegments = route.split("/").filter(Boolean);
-
-    routeSegments.forEach((seg, i) => {
-      if (seg.startsWith("[") && seg.endsWith("]")) {
-        const paramName = seg.slice(1, -1);
-        params[paramName] = pathSegments[i];
-      }
-    });
-    return params;
-  }
-
-  private _findOrderedLayouts(route: string): string[] {
-    const layouts: string[] = [];
-    const segments = route.split("/").filter(Boolean);
-    let currentPath = this._appPath;
-
-    for (const segment of ["", ...segments]) {
-      currentPath += `/${segment}`;
-      try {
-        Deno.statSync(`${currentPath}/layout.html`);
-        layouts.push(`${currentPath}/layout.html`);
-      } catch {
-        // No layout in this segment, continue
-      }
-    }
-
-    return layouts;
-  }
-
-  private _findDocumentLayoutRoot(): string {
-    const rootLayoutPath = `${this._appPath}/document.html`;
+  /**
+   * Dynamically imports and executes JavaScript code to retrieve a specific method function.
+   * 
+   * This method creates a data URI from the provided JavaScript code, imports it as a module,
+   * and extracts the specified method function that can handle HTTP requests.
+   * 
+   * @param method - The name of the method/function to extract from the imported module
+   * @param code - The JavaScript code as a string to be dynamically imported
+   * 
+   * @returns A promise that resolves to an object containing:
+   * - `module`: The imported module as a record of key-value pairs
+   * - `fn`: The extracted method function that accepts a Request and optional context with params,
+   *   or undefined if the method doesn't exist or isn't callable
+   * 
+   * @throws Logs errors to console if the dynamic import fails, but doesn't throw exceptions
+   * 
+   * @example
+   * ```typescript
+   * const result = await this._getRouteModuleMethodFn('handleGet', 'export function handleGet(req) { return new Response("Hello"); }');
+   * if (result.fn) {
+   *   const response = await result.fn(request, { params: { id: '123' } });
+   * }
+   * ```
+   */
+  private async _getRouteModuleMethodFn(method: string, code: string): Promise<{
+    module: Record<string, unknown>;
+    fn:((req: Request, ctx?: { params: Record<string, string> }) => Response | Promise<Response>) | undefined;
+  }> {
     try {
-      Deno.statSync(rootLayoutPath);
-      return Deno.readTextFileSync(rootLayoutPath);
-    } catch {
-      return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ten.net</title></head><body>{{content}}</body></html>`;
+      const module = await import(
+        "data:application/javascript," +
+        encodeURIComponent(code)
+      ) as unknown as Record<string, unknown>;
+      console.info("Module called:", module);
+      const fn = module[method] as
+        | ((req: Request, ctx?: { params: Record<string, string> }) => Response | Promise<Response>)
+        | undefined;
+      return {
+        module,
+        fn,
+      };
+    }
+    catch (e) {
+      console.error(e);
+      return { module: {}, fn: undefined };
     }
   }
 
@@ -180,23 +86,13 @@ export class Ten<C extends DefaultContext<any>> {
     if (!match) return new Response("Not found", { status: 404 });
 
     try {
-      console.info(
-        "Module called path:",
-        `@app${match.route}/${this._routeFileName}`,
-      );
-      const module = await import(
-        "data:application/javascript," +
-          encodeURIComponent(match.transpiledCode)
-      ) as unknown as any;
-      console.info("Module called:", module);
-      const fn = module[method] as
-        | ((req: Request, ctx: C) => Response | Promise<Response>)
-        | undefined;
-      const params = this._pathNamedParams(path, match.route);
+      const { fn, module } = await this._getRouteModuleMethodFn(method, match.transpiledCode);
+      const params = pathNamedParams(path, match.route);
+
       if (typeof fn === "function" && (!match.hasPage || method !== "GET")) {
         return fn(req, {
           params,
-        } as C);
+        });
       }
 
       if (Object.keys(module).length === 0 && !match.hasPage) {
@@ -208,8 +104,8 @@ export class Ten<C extends DefaultContext<any>> {
           const pageModule = Deno.readTextFileSync(
             `${this._appPath}${match.route}/page.html`,
           );
-          const layouts = this._findOrderedLayouts(match.route);
-          const documentLayout = this._findDocumentLayoutRoot();
+          const layouts = findOrderedLayouts(this._appPath, match.route);
+          const documentLayout = findDocumentLayoutRoot(this._appPath);
           let fullContent = documentLayout.replace("{{content}}", pageModule);
           if (layouts) {
             for (let i = layouts.length - 1; i >= 0; i--) {
@@ -221,7 +117,7 @@ export class Ten<C extends DefaultContext<any>> {
               try {
                 const routeResponse = await fn(req, {
                   params,
-                } as C) as Response;
+                }) as Response;
 
                 if (routeResponse) {
                   const body = await routeResponse.json();
@@ -251,12 +147,23 @@ export class Ten<C extends DefaultContext<any>> {
       }
       return new Response("Not found", { status: 404 });
     } catch (e) {
-      return new Response("Method not implemented", { status: 500 });
+      return new Response(String(e), { status: 500 });
     }
   }
 
+  /**
+   * Starts the server by loading routes and beginning to serve HTTP requests.
+   * 
+   * This method performs the following operations:
+   * 1. Loads routes from the route factory using the configured app path and route file name
+   * 2. Logs the loaded routes to the console for debugging purposes
+   * 3. Starts the Deno HTTP server with the configured request handler
+   * 
+   * @returns A promise that resolves when the server startup process is complete
+   * @throws {Error} May throw if route loading fails or server cannot start
+   */
   public async start() {
-    this._routes.push(...await this._buildRoutes());
+    this._routes.push(...await routeFactory(this._appPath, this._routeFileName));
     console.info("Routes:", this._routes.map((r) => r.route));
     Deno.serve(this._handleRequest.bind(this));
   }
