@@ -19,7 +19,7 @@
     "deno-fs": "jsr:@std/fs@^1.0.19",
     "@std/path": "jsr:@std/path@^1.1.2",
     "@deno-assert": "https://deno.land/std@0.208.0/assert/mod.ts",
-    "@deno-walk": "https://deno.land/std@0.208.0/fs/walk.ts"
+    "@deno-walk": "jsr:@std/fs@1/walk"
   },
   "exclude": [
     ".git",
