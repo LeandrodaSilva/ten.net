@@ -53,7 +53,7 @@ jobs:
           deno-version: v2.x
 
       - name: Publish to JSR
-        run: deno publish --token ${{ secrets.JSR_TOKEN }}
+        run: deno publish
 
   release:
     name: Create Release
