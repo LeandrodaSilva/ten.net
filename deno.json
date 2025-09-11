@@ -37,6 +37,7 @@
   },
   "publish": {
     "include": [
+      "mod.ts",
       "src/",
       "README.md",
       "LICENSE",
