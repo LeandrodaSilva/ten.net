@@ -2,10 +2,17 @@
   "name": "@leproj/tennet",
   "version": "0.1.21",
   "license": "MIT",
-  "exports": "./mod.ts",
+  "exports": {
+    ".": "./src/mod.ts",
+    "./route-factory": "./src/routeFactory.ts",
+    "./types": "./src/@types/mod.ts"
+  },
   "tasks": {
     "dev": "deno run -P --inspect --unstable-bundle --watch demo.ts",
-    "test": "deno test -P --unstable"
+    "test": "deno test --allow-all",
+    "fmt": "deno fmt",
+    "lint": "deno lint",
+    "check": "deno check **/*.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
@@ -13,6 +20,12 @@
     "deno-fs": "jsr:@std/fs@^1.0.19",
     "@std/path": "jsr:@std/path@^1.1.2"
   },
+  "exclude": [
+    ".git",
+    "node_modules",
+    "dist",
+    "build"
+  ],
   "permissions": {
     "default": {
       "read": true,
@@ -20,5 +33,13 @@
       "env": true,
       "net": true
     }
+  },
+  "publish": {
+    "include": [
+      "src/",
+      "README.md",
+      "LICENSE",
+      "deno.json"
+    ]
   }
 }

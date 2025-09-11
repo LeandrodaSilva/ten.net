@@ -1,4 +1,4 @@
-import { walk } from "deno-fs/walk";
+import { walk } from "https://deno.land/std@0.208.0/fs/walk.ts";
 import { getRegexRoute } from "./utils/getRegexRoute.ts";
 import { transpileFile } from "./utils/transpileFile.ts";
 import type { RouteInfo } from "./@types/routeInfo.ts";
