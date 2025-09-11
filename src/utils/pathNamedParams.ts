@@ -11,8 +11,8 @@
  * // Returns: { id: "123", postId: "456" }
  * ```
  */
-export function pathNamedParams(path: string, route: string): Record<string, string> {
-  const params: Record<string, string> = {};
+export function pathNamedParams(path: string, route: string): Record<string, string|undefined> {
+  const params: Record<string, string|undefined> = {};
   const pathSegments = path.split("/").filter(Boolean);
   const routeSegments = route.split("/").filter(Boolean);
 

@@ -26,5 +26,5 @@ export function findOrderedLayouts(appPath: string, route: string): string[] {
     }
   }
 
-  return layouts;
+  return layouts.map(p => p.replaceAll("//", "/"));
 }

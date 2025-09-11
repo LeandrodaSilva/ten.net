@@ -87,7 +87,10 @@ export class Ten {
 
     try {
       const { fn, module } = await this._getRouteModuleMethodFn(method, match.transpiledCode);
-      const params = pathNamedParams(path, match.route);
+      const rawParams = pathNamedParams(path, match.route);
+      const params = Object.fromEntries(
+        Object.entries(rawParams).filter(([_, value]) => value !== undefined)
+      ) as Record<string, string>;
 
       if (typeof fn === "function" && (!match.hasPage || method !== "GET")) {
         return fn(req, {
