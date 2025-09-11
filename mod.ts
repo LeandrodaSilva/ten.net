@@ -1,1 +1,1 @@
-export { Ten } from "./src/ten.ts"
+export { Ten } from "./src/ten.ts";

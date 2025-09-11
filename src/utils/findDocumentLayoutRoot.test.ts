@@ -8,7 +8,8 @@ const DOCUMENT_HTML_PATH = `${TEST_APP_PATH}/document.html`;
 Deno.test("findDocumentLayoutRoot - returns file content when document.html exists", () => {
   // Setup
   Deno.mkdirSync(TEST_APP_PATH, { recursive: true });
-  const expectedContent = `<!DOCTYPE html><html><head><title>Custom Layout</title></head><body><div id="app">{{content}}</div></body></html>`;
+  const expectedContent =
+    `<!DOCTYPE html><html><head><title>Custom Layout</title></head><body><div id="app">{{content}}</div></body></html>`;
   Deno.writeTextFileSync(DOCUMENT_HTML_PATH, expectedContent);
 
   try {
@@ -26,7 +27,8 @@ Deno.test("findDocumentLayoutRoot - returns file content when document.html exis
 Deno.test("findDocumentLayoutRoot - returns default template when document.html does not exist", () => {
   // Setup
   const nonExistentPath = "./non_existent_path";
-  const expectedDefault = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ten.net</title></head><body>{{content}}</body></html>`;
+  const expectedDefault =
+    `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ten.net</title></head><body>{{content}}</body></html>`;
 
   // Act
   const result = findDocumentLayoutRoot(nonExistentPath);
@@ -39,7 +41,7 @@ Deno.test("findDocumentLayoutRoot - returns default template when file exists bu
   // Setup
   Deno.mkdirSync(TEST_APP_PATH, { recursive: true });
   Deno.writeTextFileSync(DOCUMENT_HTML_PATH, "test content");
-  
+
   // Make file unreadable by changing permissions (Unix-like systems)
   try {
     Deno.chmodSync(DOCUMENT_HTML_PATH, 0o000);
@@ -49,7 +51,8 @@ Deno.test("findDocumentLayoutRoot - returns default template when file exists bu
     return;
   }
 
-  const expectedDefault = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ten.net</title></head><body>{{content}}</body></html>`;
+  const expectedDefault =
+    `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ten.net</title></head><body>{{content}}</body></html>`;
 
   try {
     // Act

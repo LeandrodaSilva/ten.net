@@ -8,7 +8,7 @@ import { pathNamedParams } from "./utils/pathNamedParams.ts";
  * Ten is a web framework class that provides routing, request handling, and server functionality.
  * It supports file-based routing with dynamic route parameters, HTML page rendering with layouts,
  * and automatic transpilation of TypeScript route files.
- * 
+ *
  * @example
  * ```typescript
  * const app = Ten.net();
@@ -22,7 +22,7 @@ export class Ten {
 
   /**
    * Creates and returns a new instance of the Ten class.
-   * 
+   *
    * @returns A new Ten instance
    */
   static net(): Ten {
@@ -31,20 +31,20 @@ export class Ten {
 
   /**
    * Dynamically imports and executes JavaScript code to retrieve a specific method function.
-   * 
+   *
    * This method creates a data URI from the provided JavaScript code, imports it as a module,
    * and extracts the specified method function that can handle HTTP requests.
-   * 
+   *
    * @param method - The name of the method/function to extract from the imported module
    * @param code - The JavaScript code as a string to be dynamically imported
-   * 
+   *
    * @returns A promise that resolves to an object containing:
    * - `module`: The imported module as a record of key-value pairs
    * - `fn`: The extracted method function that accepts a Request and optional context with params,
    *   or undefined if the method doesn't exist or isn't callable
-   * 
+   *
    * @throws Logs errors to console if the dynamic import fails, but doesn't throw exceptions
-   * 
+   *
    * @example
    * ```typescript
    * const result = await this._getRouteModuleMethodFn('handleGet', 'export function handleGet(req) { return new Response("Hello"); }');
@@ -55,23 +55,30 @@ export class Ten {
    */
   private async _getRouteModuleMethodFn(method: string, code: string): Promise<{
     module: Record<string, unknown>;
-    fn:((req: Request, ctx?: { params: Record<string, string> }) => Response | Promise<Response>) | undefined;
+    fn:
+      | ((
+        req: Request,
+        ctx?: { params: Record<string, string> },
+      ) => Response | Promise<Response>)
+      | undefined;
   }> {
     try {
       const module = await import(
         "data:application/javascript," +
-        encodeURIComponent(code)
+          encodeURIComponent(code)
       ) as unknown as Record<string, unknown>;
       console.info("Module called:", module);
       const fn = module[method] as
-        | ((req: Request, ctx?: { params: Record<string, string> }) => Response | Promise<Response>)
+        | ((
+          req: Request,
+          ctx?: { params: Record<string, string> },
+        ) => Response | Promise<Response>)
         | undefined;
       return {
         module,
         fn,
       };
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       return { module: {}, fn: undefined };
     }
@@ -86,10 +93,13 @@ export class Ten {
     if (!match) return new Response("Not found", { status: 404 });
 
     try {
-      const { fn, module } = await this._getRouteModuleMethodFn(method, match.transpiledCode);
+      const { fn, module } = await this._getRouteModuleMethodFn(
+        method,
+        match.transpiledCode,
+      );
       const rawParams = pathNamedParams(path, match.route);
       const params = Object.fromEntries(
-        Object.entries(rawParams).filter(([_, value]) => value !== undefined)
+        Object.entries(rawParams).filter(([_, value]) => value !== undefined),
       ) as Record<string, string>;
 
       if (typeof fn === "function" && (!match.hasPage || method !== "GET")) {
@@ -127,8 +137,11 @@ export class Ten {
                   const keys = Object.keys(body);
 
                   keys.forEach((key) => {
-                    fullContent = String(fullContent).replace(`{{${key}}}`, body[key])
-                  })
+                    fullContent = String(fullContent).replace(
+                      `{{${key}}}`,
+                      body[key],
+                    );
+                  });
                 }
               } catch (e) {
                 console.error(e);
@@ -156,17 +169,19 @@ export class Ten {
 
   /**
    * Starts the server by loading routes and beginning to serve HTTP requests.
-   * 
+   *
    * This method performs the following operations:
    * 1. Loads routes from the route factory using the configured app path and route file name
    * 2. Logs the loaded routes to the console for debugging purposes
    * 3. Starts the Deno HTTP server with the configured request handler
-   * 
+   *
    * @returns A promise that resolves when the server startup process is complete
    * @throws {Error} May throw if route loading fails or server cannot start
    */
   public async start() {
-    this._routes.push(...await routeFactory(this._appPath, this._routeFileName));
+    this._routes.push(
+      ...await routeFactory(this._appPath, this._routeFileName),
+    );
     console.info("Routes:", this._routes.map((r) => r.route));
     Deno.serve(this._handleRequest.bind(this));
   }

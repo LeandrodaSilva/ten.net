@@ -1,6 +1,6 @@
 /**
  * Represents information about a route in the application.
- * 
+ *
  * @interface RouteInfo
  * @property {string} route - The route path or pattern
  * @property {RegExp} regex - Regular expression used for route matching
@@ -13,5 +13,5 @@ export type RouteInfo = {
   regex: RegExp;
   hasPage: boolean;
   transpiledCode: string;
-	sourcePath: string;
+  sourcePath: string;
 };

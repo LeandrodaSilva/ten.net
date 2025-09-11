@@ -1,13 +1,13 @@
 /**
  * Converts a route pattern string into a regular expression for matching URLs.
- * 
+ *
  * This function transforms route patterns with dynamic segments (enclosed in square brackets)
  * into regex patterns that can match actual URLs. Dynamic segments like `[id]` or `[slug]`
  * are converted to match any characters except forward slashes.
- * 
+ *
  * @param route - The route pattern string to convert (e.g., "/users/[id]/posts/[slug]")
  * @returns A RegExp object that matches URLs conforming to the route pattern
- * 
+ *
  * @example
  * ```typescript
  * const regex = getRegexRoute("/users/[id]/posts");
