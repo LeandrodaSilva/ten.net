@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.208.0/assert/mod.ts";
+import { assertEquals } from "@deno-assert";
 import { getRegexRoute } from "./getRegexRoute.ts";
 
 Deno.test("getRegexRoute - static routes - should match exact static routes", () => {

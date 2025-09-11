@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.208.0/assert/mod.ts";
+import { assertEquals } from "@deno-assert";
 import { pathNamedParams } from "./pathNamedParams.ts";
 
 Deno.test("pathNamedParams - should extract single named parameter", () => {

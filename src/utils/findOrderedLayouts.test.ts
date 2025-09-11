@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.208.0/assert/mod.ts";
+import { assertEquals } from "@deno-assert";
 import { findOrderedLayouts } from "./findOrderedLayouts.ts";
 
 Deno.test("findOrderedLayouts - should return empty array when no layouts exist", () => {

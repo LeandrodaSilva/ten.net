@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.208.0/assert/mod.ts";
+import { assertEquals } from "@deno-assert";
 import { findDocumentLayoutRoot } from "./findDocumentLayoutRoot.ts";
 
 const TEST_DIR = "./test_temp";
