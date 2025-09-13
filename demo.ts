@@ -1,4 +1,4 @@
-import { Ten } from "./mod.ts";
+import { Ten } from "./src/mod.ts";
 
 const result = await Deno.bundle({
   entrypoints: [
