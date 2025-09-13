@@ -1,7 +1,7 @@
-import { walk } from "@deno-walk";
-import { getRegexRoute } from "./utils/getRegexRoute.ts";
-import { transpileFile } from "./utils/transpileFile.ts";
-import type { RouteInfo } from "./@types/routeInfo.ts";
+import {walk} from "@deno-walk";
+import {getRegexRoute} from "./utils/getRegexRoute.ts";
+import {transpileRoute} from "./utils/transpileRoute.ts";
+import {Route} from "./models/Route.ts";
 
 /**
  * Creates route information by scanning a directory structure for route files and pages.
@@ -18,7 +18,7 @@ import type { RouteInfo } from "./@types/routeInfo.ts";
  * @example
  * ```typescript
  * const routes = await routeFactory('./app', 'route.ts');
- * console.log(routes); // Array of RouteInfo objects
+ * console.log(rout es); // Array of RouteInfo objects
  * ```
  *
  * @remarks
@@ -28,17 +28,18 @@ import type { RouteInfo } from "./@types/routeInfo.ts";
  * - Transpilation errors are logged but don't stop the process
  * - Missing route files are handled gracefully and return empty transpiled code
  */
-export async function routeFactory(
+export async function routerEngine(
   appPath: string,
   routeFileName: string,
-): Promise<RouteInfo[]> {
-  const routes: RouteInfo[] = [];
+): Promise<Route[]> {
+  const routes: Route[] = [];
 
   for await (const entry of walk(appPath, { includeDirs: true })) {
     if (!entry.isDirectory) continue;
 
     let hasPage = false;
     let hasRoute = false;
+		let page: string = "";
 
     try {
       Deno.lstatSync(`${entry.path}/${routeFileName}`);
@@ -48,7 +49,9 @@ export async function routeFactory(
     }
 
     try {
-      Deno.lstatSync(`${entry.path}/page.html`);
+	    page = Deno.readTextFileSync(
+		    `${entry.path}/page.html`,
+	    );
       hasPage = true;
     } catch {
       // No page file
@@ -60,22 +63,25 @@ export async function routeFactory(
       .replace(/^[.\/]*app/, "") // remove prefixos como './app' ou 'app'
       .replaceAll("\\", "/");
 
-    const route = rel.length ? rel : "/";
+    const path = rel.length ? rel : "/";
 
     const sourcePath = `${entry.path}/route.ts`;
 
-    routes.push({
-      route,
-      regex: getRegexRoute(route),
-      hasPage,
-      transpiledCode: "",
-      sourcePath,
-    });
+		const route = new Route({
+			path,
+			regex: getRegexRoute(path),
+			hasPage,
+			transpiledCode: "",
+			sourcePath,
+		});
+
+		route.page = page;
+
+    routes.push(route);
   }
 
   const promises = routes.map(async (r) => {
     const sourcePath = r.sourcePath;
-    const outPath = sourcePath.replace(/\.ts$/, ".js");
     let transpiledCode = "";
 
     try {
@@ -85,10 +91,9 @@ export async function routeFactory(
     }
 
     try {
-      console.log("Transpilando", sourcePath, "->", outPath);
-      transpiledCode = await transpileFile(sourcePath);
+      transpiledCode = await transpileRoute(sourcePath);
     } catch (e) {
-      console.error(`Erro ao transpilar ${sourcePath}:`, e);
+      console.error(`Error ${sourcePath}:`, e);
     }
 
     r.transpiledCode = transpiledCode;
