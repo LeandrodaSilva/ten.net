@@ -1,8 +1,7 @@
-import type { RouteInfo } from "./@types/routeInfo.ts";
-import { routeFactory } from "./routeFactory.ts";
-import { findDocumentLayoutRoot } from "./utils/findDocumentLayoutRoot.ts";
-import { findOrderedLayouts } from "./utils/findOrderedLayouts.ts";
-import { pathNamedParams } from "./utils/pathNamedParams.ts";
+import {routerEngine} from "./routerEngine.ts";
+import {viewEngine} from "./viewEngine.ts";
+import {paramsEngine} from "./paramsEngine.ts";
+import {Route} from "./models/Route.ts";
 
 /**
  * Ten is a web framework class that provides routing, request handling, and server functionality.
@@ -18,7 +17,7 @@ import { pathNamedParams } from "./utils/pathNamedParams.ts";
 export class Ten {
   private readonly _appPath = "./app";
   private readonly _routeFileName = "route.ts";
-  private readonly _routes: RouteInfo[] = [];
+  private _routes: Route[] = [];
 
   /**
    * Creates and returns a new instance of the Ten class.
@@ -29,136 +28,40 @@ export class Ten {
     return new Ten();
   }
 
-  /**
-   * Dynamically imports and executes JavaScript code to retrieve a specific method function.
-   *
-   * This method creates a data URI from the provided JavaScript code, imports it as a module,
-   * and extracts the specified method function that can handle HTTP requests.
-   *
-   * @param method - The name of the method/function to extract from the imported module
-   * @param code - The JavaScript code as a string to be dynamically imported
-   *
-   * @returns A promise that resolves to an object containing:
-   * - `module`: The imported module as a record of key-value pairs
-   * - `fn`: The extracted method function that accepts a Request and optional context with params,
-   *   or undefined if the method doesn't exist or isn't callable
-   *
-   * @throws Logs errors to console if the dynamic import fails, but doesn't throw exceptions
-   *
-   * @example
-   * ```typescript
-   * const result = await this._getRouteModuleMethodFn('handleGet', 'export function handleGet(req) { return new Response("Hello"); }');
-   * if (result.fn) {
-   *   const response = await result.fn(request, { params: { id: '123' } });
-   * }
-   * ```
-   */
-  private async _getRouteModuleMethodFn(method: string, code: string): Promise<{
-    module: Record<string, unknown>;
-    fn:
-      | ((
-        req: Request,
-        ctx?: { params: Record<string, string> },
-      ) => Response | Promise<Response>)
-      | undefined;
-  }> {
-    try {
-      const module = await import(
-        "data:application/javascript," +
-          encodeURIComponent(code)
-      ) as unknown as Record<string, unknown>;
-      console.info("Module called:", module);
-      const fn = module[method] as
-        | ((
-          req: Request,
-          ctx?: { params: Record<string, string> },
-        ) => Response | Promise<Response>)
-        | undefined;
-      return {
-        module,
-        fn,
-      };
-    } catch (e) {
-      console.error(e);
-      return { module: {}, fn: undefined };
-    }
-  }
-
   private async _handleRequest(req: Request): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
-    const method = req.method.toUpperCase();
 
-    const match = this._routes.find((r) => r.regex.test(path));
-    if (!match) return new Response("Not found", { status: 404 });
+    const route = this._routes.find((r) => r.regex.test(path));
+	  route.method = req.method;
+
+    if (!route) return new Response("Not found", { status: 404 });
 
     try {
-      const { fn, module } = await this._getRouteModuleMethodFn(
-        method,
-        match.transpiledCode,
-      );
-      const rawParams = pathNamedParams(path, match.route);
-      const params = Object.fromEntries(
-        Object.entries(rawParams).filter(([_, value]) => value !== undefined),
-      ) as Record<string, string>;
+      await route.import();
 
-      if (typeof fn === "function" && (!match.hasPage || method !== "GET")) {
-        return fn(req, {
+      const params = paramsEngine(path, route);
+
+      if (typeof route.call === "function" && (!route.hasPage || route.method !== "GET")) {
+        return route.call(req, {
           params,
         });
       }
 
-      if (Object.keys(module).length === 0 && !match.hasPage) {
-        throw new Error("Module is empty");
-      }
-
-      if (match.hasPage && method === "GET") {
+      if (route.hasPage && route.method === "GET") {
         try {
-          const pageModule = Deno.readTextFileSync(
-            `${this._appPath}${match.route}/page.html`,
-          );
-          const layouts = findOrderedLayouts(this._appPath, match.route);
-          const documentLayout = findDocumentLayoutRoot(this._appPath);
-          let fullContent = documentLayout.replace("{{content}}", pageModule);
-          if (layouts) {
-            for (let i = layouts.length - 1; i >= 0; i--) {
-              const layoutContent = Deno.readTextFileSync(layouts[i]);
-              fullContent = layoutContent.replace("{{content}}", fullContent);
-            }
-
-            if (fn) {
-              try {
-                const routeResponse = await fn(req, {
-                  params,
-                }) as Response;
-
-                if (routeResponse) {
-                  const body = await routeResponse.json();
-                  const keys = Object.keys(body);
-
-                  keys.forEach((key) => {
-                    fullContent = String(fullContent).replace(
-                      `{{${key}}}`,
-                      body[key],
-                    );
-                  });
-                }
-              } catch (e) {
-                console.error(e);
-              }
-            }
-
-            return new Response(fullContent, {
-              status: 200,
-              headers: { "Content-Type": "text/html" },
-            });
-          }
-          return new Response(pageModule, {
-            status: 200,
-            headers: { "Content-Type": "text/html" },
-          });
+					const page = await viewEngine({
+						_appPath: this._appPath,
+						route,
+						req,
+						params
+					});
+					return new Response(page, {
+						status: 200,
+						headers: { "Content-Type": "text/html" },
+					})
         } catch {
-          return new Response("Not found", { status: 404 });
+          console.error(`Error rendering page for route: ${route.path}`); // NOSONAR
         }
       }
       return new Response("Not found", { status: 404 });
@@ -179,10 +82,30 @@ export class Ten {
    * @throws {Error} May throw if route loading fails or server cannot start
    */
   public async start() {
-    this._routes.push(
-      ...await routeFactory(this._appPath, this._routeFileName),
-    );
-    console.info("Routes:", this._routes.map((r) => r.route));
-    Deno.serve(this._handleRequest.bind(this));
+	  this._routes.push(
+		  ...await routerEngine(this._appPath, this._routeFileName),
+	  );
+	  console.info("Routes:", this._routes.map((r) => r.path));
+
+		if (Deno.env.get("DEBUG")) {
+			console.log(">> DEBUG MODE - devFileWatcher ON");
+			const worker = new Worker(new URL("./devFileWatcherWorker.ts", import.meta.url), {
+				type: "module",
+			});
+
+			worker.onmessage = async (event) => {
+				console.info("Worker message: ", event);
+				this._routes = [];
+				this._routes.push(
+					...await routerEngine(this._appPath, this._routeFileName),
+				);
+			};
+
+			worker.postMessage({
+				action: "start",
+			});
+		}
+
+	  Deno.serve(this._handleRequest.bind(this));
   }
 }
