@@ -3,7 +3,7 @@
   "version": "0.1.22",
   "license": "MIT",
   "exports": {
-    ".": "./mod.ts",
+    ".": "./src/mod.ts",
     "./route-factory": "./src/routeFactory.ts"
   },
   "tasks": {
@@ -37,7 +37,6 @@
   },
   "publish": {
     "include": [
-      "mod.ts",
       "src/",
       "README.md",
       "LICENSE",
