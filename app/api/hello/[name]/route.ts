@@ -3,5 +3,11 @@ export function GET(_req: Request, ctx: {
     name: string;
   };
 }): Response {
-  return new Response(`Hello ${ctx.params.name}`);
+  return  new Response(JSON.stringify({
+	  message: `Hello ${ctx.params.name}`
+  }), {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+  });
 }
