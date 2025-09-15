@@ -69,6 +69,10 @@ export class Route {
 		return this._pageContent;
 	}
 
+	get isView() {
+		return this.hasPage && this._method === "GET";
+	}
+
   /**
    * Dynamically imports and executes JavaScript code to retrieve a specific method function.
    *

@@ -42,13 +42,13 @@ export class Ten {
 
       const params = paramsEngine(path, route);
 
-      if (typeof route.call === "function" && (!route.hasPage || route.method !== "GET")) {
+      if (!route.isView) {
         return route.call(req, {
           params,
         });
       }
 
-      if (route.hasPage && route.method === "GET") {
+      if (route.isView) {
         try {
 					const page = await viewEngine({
 						_appPath: this._appPath,
@@ -64,11 +64,30 @@ export class Ten {
           console.error(`Error rendering page for route: ${route.path}`); // NOSONAR
         }
       }
+
       return new Response("Not found", { status: 404 });
     } catch (e) {
       return new Response(String(e), { status: 500 });
     }
   }
+
+	private _startFileWatcher() {
+		const worker = new Worker(new URL("./devFileWatcherWorker.ts", import.meta.url), {
+			type: "module",
+		});
+
+		worker.onmessage = async (event) => {
+			console.info("Worker message: ", event);
+			this._routes = [];
+			this._routes.push(
+				...await routerEngine(this._appPath, this._routeFileName),
+			);
+		};
+
+		worker.postMessage({
+			action: "start",
+		});
+	}
 
   /**
    * Starts the server by loading routes and beginning to serve HTTP requests.
@@ -88,22 +107,7 @@ export class Ten {
 	  console.info("Routes:", this._routes.map((r) => r.path));
 
 		if (Deno.env.get("DEBUG")) {
-			console.log(">> DEBUG MODE - devFileWatcher ON");
-			const worker = new Worker(new URL("./devFileWatcherWorker.ts", import.meta.url), {
-				type: "module",
-			});
-
-			worker.onmessage = async (event) => {
-				console.info("Worker message: ", event);
-				this._routes = [];
-				this._routes.push(
-					...await routerEngine(this._appPath, this._routeFileName),
-				);
-			};
-
-			worker.postMessage({
-				action: "start",
-			});
+			this._startFileWatcher();
 		}
 
 	  Deno.serve(this._handleRequest.bind(this));
