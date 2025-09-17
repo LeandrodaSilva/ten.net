@@ -1,3 +1,5 @@
+import documentLayout from "../assets/document.html" with { type: "text" };
+
 /**
  * Finds and returns the content of a document layout root file.
  *
@@ -14,12 +16,13 @@
  * // Returns content of /path/to/app/document.html or default template
  * ```
  */
-export function findDocumentLayoutRoot(appPath: string): string {
-  const rootLayoutPath = `${appPath}/document.html`;
-  try {
-    Deno.lstatSync(rootLayoutPath);
-    return Deno.readTextFileSync(rootLayoutPath);
-  } catch {
-    return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ten.net</title></head><body>{{content}}</body></html>`;
+export function findDocumentLayoutRoot(appPath?: string): string {
+  if (appPath) {
+	  const rootLayoutPath = `${appPath}/document.html`;
+	  try {
+		  Deno.lstatSync(rootLayoutPath);
+		  return Deno.readTextFileSync(rootLayoutPath);
+	  } catch {}
   }
+	return <string>documentLayout;
 }

@@ -2,6 +2,10 @@ import {routerEngine} from "./routerEngine.ts";
 import {viewEngine} from "./viewEngine.ts";
 import {paramsEngine} from "./paramsEngine.ts";
 import {Route} from "./models/Route.ts";
+import {html} from "./admin/app.tsx";
+import {Plugin} from "./models/Plugin.ts";
+import {PagePlugin} from "./plugins/pagePlugin.ts";
+import {AdminPlugin} from "./plugins/adminPlugin.ts";
 
 /**
  * Ten is a web framework class that provides routing, request handling, and server functionality.
@@ -18,6 +22,7 @@ export class Ten {
   private readonly _appPath = "./app";
   private readonly _routeFileName = "route.ts";
   private _routes: Route[] = [];
+	private _plugins: Plugin[] = [];
 
   /**
    * Creates and returns a new instance of the Ten class.
@@ -28,14 +33,43 @@ export class Ten {
     return new Ten();
   }
 
+	public addPlugin(plugin: new (...args: any[]) => Plugin) {
+		// Here you can add logic to register the plugin
+		console.log(`Plugin ${plugin.name} added.`);
+		const p = new plugin();
+		const routes = p.getRoutes();
+		this._plugins.push(p);
+		this._routes.push(...routes);
+		this._plugins.forEach((pl) => {
+			pl.plugins = this._plugins;
+		});
+	}
+
   private async _handleRequest(req: Request): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
 
+    // if (path === "/admin") {
+    //   return new Response(html, {
+    //     headers: { "Content-Type": "text/html; charset=utf-8" },
+    //   });
+    // }
+
+	  if (path === "/admin/favicon.ico") {
+		  const favicon = await import("./assets/favicon.ico", {
+			  with: { type: "bytes" },
+		  });
+			const bytes = new Uint8Array(favicon.default);
+		  return new Response(bytes, {
+			  headers: { "Content-Type": "image/x-icon" },
+		  });
+	  }
+
     const route = this._routes.find((r) => r.regex.test(path));
-	  route.method = req.method;
 
     if (!route) return new Response("Not found", { status: 404 });
+
+	  route.method = req.method;
 
     try {
       await route.import();
@@ -50,16 +84,16 @@ export class Ten {
 
       if (route.isView) {
         try {
-					const page = await viewEngine({
-						_appPath: this._appPath,
-						route,
-						req,
-						params
-					});
-					return new Response(page, {
-						status: 200,
-						headers: { "Content-Type": "text/html" },
-					})
+          const page = await viewEngine({
+            _appPath: this._appPath,
+            route,
+            req,
+            params,
+          });
+          return new Response(page, {
+            status: 200,
+            headers: { "Content-Type": "text/html" },
+          });
         } catch {
           console.error(`Error rendering page for route: ${route.path}`); // NOSONAR
         }
@@ -71,23 +105,26 @@ export class Ten {
     }
   }
 
-	private _startFileWatcher() {
-		const worker = new Worker(new URL("./devFileWatcherWorker.ts", import.meta.url), {
-			type: "module",
-		});
+  private _startFileWatcher() {
+    const worker = new Worker(
+      new URL("./devFileWatcherWorker.ts", import.meta.url),
+      {
+        type: "module",
+      },
+    );
 
-		worker.onmessage = async (event) => {
-			console.info("Worker message: ", event);
-			this._routes = [];
-			this._routes.push(
-				...await routerEngine(this._appPath, this._routeFileName),
-			);
-		};
+    worker.onmessage = async (event) => {
+      console.info("Worker message: ", event);
+      this._routes = [];
+      this._routes.push(
+        ...await routerEngine(this._appPath, this._routeFileName),
+      );
+    };
 
-		worker.postMessage({
-			action: "start",
-		});
-	}
+    worker.postMessage({
+      action: "start",
+    });
+  }
 
   /**
    * Starts the server by loading routes and beginning to serve HTTP requests.
@@ -101,15 +138,17 @@ export class Ten {
    * @throws {Error} May throw if route loading fails or server cannot start
    */
   public async start() {
-	  this._routes.push(
-		  ...await routerEngine(this._appPath, this._routeFileName),
-	  );
-	  console.info("Routes:", this._routes.map((r) => r.path));
+    this._routes.push(
+      ...await routerEngine(this._appPath, this._routeFileName),
+    );
+	  this.addPlugin(AdminPlugin);
+	  this.addPlugin(PagePlugin);
+    console.info("Routes:", this._routes.map((r) => r.path));
 
-		if (Deno.env.get("DEBUG")) {
-			this._startFileWatcher();
-		}
+    if (Deno.env.get("DEBUG")) {
+      this._startFileWatcher();
+    }
 
-	  Deno.serve(this._handleRequest.bind(this));
+    Deno.serve(this._handleRequest.bind(this));
   }
 }

@@ -18,7 +18,7 @@ export async function transpileRoute(tsPath: string): Promise<string> {
     ],
     platform: "deno",
     minify: false,
-	  write: false,
+    write: false,
   });
   if (result.success) {
     const file = result?.outputFiles?.shift();

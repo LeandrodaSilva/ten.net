@@ -9,7 +9,19 @@ Deno.test("findDocumentLayoutRoot - returns file content when document.html exis
   // Setup
   Deno.mkdirSync(TEST_APP_PATH, { recursive: true });
   const expectedContent =
-    `<!DOCTYPE html><html><head><title>Custom Layout</title></head><body><div id="app">{{content}}</div></body></html>`;
+    `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module">
+    </script>
+    <title>Ten.net</title>
+</head>
+<body>{{content}}</body>
+</html>`;
   Deno.writeTextFileSync(DOCUMENT_HTML_PATH, expectedContent);
 
   try {
@@ -28,7 +40,19 @@ Deno.test("findDocumentLayoutRoot - returns default template when document.html 
   // Setup
   const nonExistentPath = "./non_existent_path";
   const expectedDefault =
-    `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ten.net</title></head><body>{{content}}</body></html>`;
+    `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module">
+    </script>
+    <title>Ten.net</title>
+</head>
+<body>{{content}}</body>
+</html>`;
 
   // Act
   const result = findDocumentLayoutRoot(nonExistentPath);
@@ -52,7 +76,19 @@ Deno.test("findDocumentLayoutRoot - returns default template when file exists bu
   }
 
   const expectedDefault =
-    `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ten.net</title></head><body>{{content}}</body></html>`;
+    `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module">
+    </script>
+    <title>Ten.net</title>
+</head>
+<body>{{content}}</body>
+</html>`;
 
   try {
     // Act

@@ -4,7 +4,7 @@ export class Route {
   public hasPage: boolean;
   public transpiledCode: string;
   public sourcePath: string;
-	private _pageContent: string = "";
+  private _pageContent: string = "";
   private _method:
     | "GET"
     | "POST"
@@ -57,21 +57,35 @@ export class Route {
     return this._method;
   }
 
-	get call() {
-		return this._call;
+  get call() {
+    return this._call;
+  }
+
+	get isAdmin() {
+		const adminPathPattern = /^\/admin(\/|$)/;
+		return adminPathPattern.test(this.path);
 	}
 
-	set page(str: string) {
-		this._pageContent = str;
+	set call(
+		fn: ((
+			req: Request,
+			ctx?: { params: Record<string, string> },
+		) => Response | Promise<Response>) | undefined,
+	) {
+		this._call = fn;
 	}
 
-	get page() {
-		return this._pageContent;
-	}
+  set page(str: string) {
+    this._pageContent = str;
+  }
 
-	get isView() {
-		return this.hasPage && this._method === "GET";
-	}
+  get page() {
+    return this._pageContent;
+  }
+
+  get isView() {
+    return this.hasPage && this._method === "GET";
+  }
 
   /**
    * Dynamically imports and executes JavaScript code to retrieve a specific method function.
@@ -97,11 +111,14 @@ export class Route {
    * }
    * ```
    */
-  public async import(): Promise<| ((
-	  req: Request,
-	  ctx?: { params: Record<string, string> },
-  ) => Response | Promise<Response>)
-	  | undefined> {
+  public async import(): Promise<
+    | ((
+      req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => Response | Promise<Response>)
+    | undefined
+  > {
+		if (this.call) return this.call;
     try {
       const module = await import(
         "data:application/javascript," +
@@ -117,7 +134,7 @@ export class Route {
       if (Object.keys(module).length === 0 && !this.hasPage) {
         throw new Error("Module is empty");
       }
-			this._call = fn;
+      this._call = fn;
       return fn;
     } catch (e) {
       console.error(e);

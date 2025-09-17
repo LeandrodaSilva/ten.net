@@ -13,7 +13,10 @@
     "jsr:@std/path@^1.1.1": "1.1.2",
     "jsr:@std/path@^1.1.2": "1.1.2",
     "jsr:@std/testing@^1.0.15": "1.0.15",
-    "npm:@types/node@*": "24.1.0"
+    "npm:@heroicons/react@*": "2.2.0_react@19.1.1",
+    "npm:@types/node@*": "24.1.0",
+    "npm:react-dom@^19.1.1": "19.1.1_react@19.1.1",
+    "npm:react@^19.1.1": "19.1.1"
   },
   "jsr": {
     "@std/assert@1.0.14": {
@@ -57,11 +60,30 @@
     }
   },
   "npm": {
+    "@heroicons/react@2.2.0_react@19.1.1": {
+      "integrity": "sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==",
+      "dependencies": [
+        "react"
+      ]
+    },
     "@types/node@24.1.0": {
       "integrity": "sha512-ut5FthK5moxFKH2T1CUOC6ctR67rQRvvHdFLCD2Ql6KXmMuCrjsSsRI9UsLCm9M18BMwClv4pn327UvB7eeO1w==",
       "dependencies": [
         "undici-types"
       ]
+    },
+    "react-dom@19.1.1_react@19.1.1": {
+      "integrity": "sha512-Dlq/5LAZgF0Gaz6yiqZCf6VCcZs1ghAJyrsu84Q/GT0gV+mCxbfmKNoGRKBYMJ8IEdGPqu49YWXD02GCknEDkw==",
+      "dependencies": [
+        "react",
+        "scheduler"
+      ]
+    },
+    "react@19.1.1": {
+      "integrity": "sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ=="
+    },
+    "scheduler@0.26.0": {
+      "integrity": "sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA=="
     },
     "undici-types@7.8.0": {
       "integrity": "sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw=="
@@ -239,7 +261,9 @@
       "jsr:@std/fs@1",
       "jsr:@std/fs@^1.0.19",
       "jsr:@std/path@^1.1.2",
-      "jsr:@std/testing@^1.0.15"
+      "jsr:@std/testing@^1.0.15",
+      "npm:react-dom@^19.1.1",
+      "npm:react@^19.1.1"
     ]
   }
 }

@@ -1,7 +1,7 @@
-import {walk} from "@deno-walk";
-import {getRegexRoute} from "./utils/getRegexRoute.ts";
-import {transpileRoute} from "./utils/transpileRoute.ts";
-import {Route} from "./models/Route.ts";
+import { walk } from "@deno-walk";
+import { getRegexRoute } from "./utils/getRegexRoute.ts";
+import { transpileRoute } from "./utils/transpileRoute.ts";
+import { Route } from "./models/Route.ts";
 
 /**
  * Creates route information by scanning a directory structure for route files and pages.
@@ -39,7 +39,7 @@ export async function routerEngine(
 
     let hasPage = false;
     let hasRoute = false;
-		let page: string = "";
+    let page: string = "";
 
     try {
       Deno.lstatSync(`${entry.path}/${routeFileName}`);
@@ -49,9 +49,9 @@ export async function routerEngine(
     }
 
     try {
-	    page = Deno.readTextFileSync(
-		    `${entry.path}/page.html`,
-	    );
+      page = Deno.readTextFileSync(
+        `${entry.path}/page.html`,
+      );
       hasPage = true;
     } catch {
       // No page file
@@ -67,15 +67,15 @@ export async function routerEngine(
 
     const sourcePath = `${entry.path}/route.ts`;
 
-		const route = new Route({
-			path,
-			regex: getRegexRoute(path),
-			hasPage,
-			transpiledCode: "",
-			sourcePath,
-		});
+    const route = new Route({
+      path,
+      regex: getRegexRoute(path),
+      hasPage,
+      transpiledCode: "",
+      sourcePath,
+    });
 
-		route.page = page;
+    route.page = page;
 
     routes.push(route);
   }
