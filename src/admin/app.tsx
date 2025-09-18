@@ -4,7 +4,7 @@ import Dashboard from "../layout/dashboard.tsx";
 import { Plugins } from "./components/plugins.tsx";
 import React from "react";
 
-const App = ({ children }: {children: React.ReactElement}) => {
+const App = ({ children }: { children: React.ReactElement }) => {
   return (
     <html className="h-full bg-gray-100">
       <head>

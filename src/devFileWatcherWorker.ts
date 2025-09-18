@@ -1,18 +1,18 @@
 import { debounce } from "@std/async/debounce";
 
 interface WorkerGlobalScope {
-	onerror: (this: WorkerGlobalScope, ev: ErrorEvent) => any;
+  onerror: (this: WorkerGlobalScope, ev: ErrorEvent) => any;
 }
 
 interface DedicatedWorkerGlobalScope extends WorkerGlobalScope {
-	onmessage: (this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any;
-	postMessage: (message: any) => void;
+  onmessage: (this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any;
+  postMessage: (message: any) => void;
 }
 
 //define types globally of onmessage and postMessage
 declare const self: {
-	onmessage: (this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any;
-	postMessage: (message: any) => void;
+  onmessage: (this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any;
+  postMessage: (message: any) => void;
 };
 
 self.onmessage = async () => {
