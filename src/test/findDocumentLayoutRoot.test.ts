@@ -1,65 +1,39 @@
 import { assertEquals } from "@deno-assert";
 import { findDocumentLayoutRoot } from "../utils/findDocumentLayoutRoot.ts";
-
 const TEST_DIR = "./test_temp";
 const TEST_APP_PATH = `${TEST_DIR}/app`;
 const DOCUMENT_HTML_PATH = `${TEST_APP_PATH}/document.html`;
+import { assertSnapshot } from "@std/testing/snapshot";
 
-Deno.test("findDocumentLayoutRoot - returns file content when document.html exists", () => {
+Deno.test("findDocumentLayoutRoot - returns file content when document.html exists", async (t) => {
   // Setup
   Deno.mkdirSync(TEST_APP_PATH, { recursive: true });
-  const expectedContent = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module">
-    </script>
-    <title>Ten.net</title>
-</head>
-<body>{{content}}</body>
-</html>`;
-  Deno.writeTextFileSync(DOCUMENT_HTML_PATH, expectedContent);
+  Deno.writeTextFileSync(DOCUMENT_HTML_PATH, t.toString());
 
   try {
     // Act
     const result = findDocumentLayoutRoot(TEST_APP_PATH);
 
     // Assert
-    assertEquals(result, expectedContent);
+	  await assertSnapshot(t, result);
   } finally {
     // Cleanup
     Deno.removeSync(TEST_DIR, { recursive: true });
   }
 });
 
-Deno.test("findDocumentLayoutRoot - returns default template when document.html does not exist", () => {
+Deno.test("findDocumentLayoutRoot - returns default template when document.html does not exist", async (t) => {
   // Setup
   const nonExistentPath = "./non_existent_path";
-  const expectedDefault = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module">
-    </script>
-    <title>Ten.net</title>
-</head>
-<body>{{content}}</body>
-</html>`;
 
   // Act
   const result = findDocumentLayoutRoot(nonExistentPath);
 
   // Assert
-  assertEquals(result, expectedDefault);
+	await assertSnapshot(t, result);
 });
 
-Deno.test("findDocumentLayoutRoot - returns default template when file exists but cannot be read", () => {
+Deno.test("findDocumentLayoutRoot - returns default template when file exists but cannot be read", async (t) => {
   // Setup
   Deno.mkdirSync(TEST_APP_PATH, { recursive: true });
   Deno.writeTextFileSync(DOCUMENT_HTML_PATH, "test content");
@@ -73,26 +47,12 @@ Deno.test("findDocumentLayoutRoot - returns default template when file exists bu
     return;
   }
 
-  const expectedDefault = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module">
-    </script>
-    <title>Ten.net</title>
-</head>
-<body>{{content}}</body>
-</html>`;
-
   try {
     // Act
     const result = findDocumentLayoutRoot(TEST_APP_PATH);
 
     // Assert
-    assertEquals(result, expectedDefault);
+	  await assertSnapshot(t, result);
   } finally {
     // Cleanup
     try {
