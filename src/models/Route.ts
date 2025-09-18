@@ -53,16 +53,21 @@ export class Route {
     }
   }
 
-  get method() {
+  get method(): string {
     return this._method;
   }
 
-  get isAdmin() {
+  get isAdmin(): boolean {
     const adminPathPattern = /^\/admin(\/|$)/;
     return adminPathPattern.test(this.path);
   }
 
-  get run() {
+  get run():
+    | ((
+      req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => Response | Promise<Response>)
+    | undefined {
     return this._run;
   }
 
@@ -81,11 +86,11 @@ export class Route {
     this._pageContent = str;
   }
 
-  get page() {
+  get page(): string {
     return this._pageContent;
   }
 
-  get isView() {
+  get isView(): boolean {
     return this.hasPage && this._method === "GET";
   }
 
