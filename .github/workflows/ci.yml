@@ -30,4 +30,4 @@ jobs:
         run: deno test --parallel --allow-all --unstable-raw-imports --unstable-bundle
 
       - name: Type check
-        run: deno check **/*.ts
+        run: deno check **/*.ts --unstable-raw-imports
