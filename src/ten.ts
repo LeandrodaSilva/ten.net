@@ -69,7 +69,7 @@ export class Ten {
 
       const params = paramsEngine(path, route);
 
-      if (!route.isView) {
+      if (!route.isView && route.run) {
         return route.run(req, {
           params,
         });

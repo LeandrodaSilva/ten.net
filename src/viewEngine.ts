@@ -5,8 +5,8 @@ import type { Route } from "./models/Route.ts";
 interface IViewEngine {
   _appPath: string;
   route: Route;
-  req?: Request;
-  params?: Record<string, string>;
+  req: Request;
+  params: Record<string, string>;
 }
 
 export async function viewEngine(args: IViewEngine) {
@@ -17,7 +17,7 @@ export async function viewEngine(args: IViewEngine) {
     params,
   } = args;
   let pageModule = route.page;
-  let layouts = [];
+  let layouts: string[] = [];
   if (false === route.isAdmin) {
     layouts = findOrderedLayouts(_appPath, route.path);
     const documentLayout = findDocumentLayoutRoot(_appPath);

@@ -2,8 +2,9 @@ import { renderToString } from "react-dom/server";
 import { Script } from "./components/script.tsx";
 import Dashboard from "../layout/dashboard.tsx";
 import { Plugins } from "./components/plugins.tsx";
+import React from "react";
 
-const App = ({ children }) => {
+const App = ({ children }: {children: React.ReactElement}) => {
   return (
     <html className="h-full bg-gray-100">
       <head>
@@ -30,7 +31,7 @@ const App = ({ children }) => {
   );
 };
 
-export const appWithChildren = (Children: () => JSX.Element) => {
+export const appWithChildren = (Children: () => React.ReactElement) => {
   return `<!DOCTYPE html>${
     renderToString(
       <App>

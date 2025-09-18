@@ -11,7 +11,7 @@
     "coverage": "deno test *.ts --no-check --coverage src --allow-all --unstable-raw-imports --unstable-bundle",
     "fmt": "deno fmt",
     "lint": "deno lint --unstable-raw-imports",
-    "check": "deno check **/*.ts"
+    "check": "deno check  **/*.ts --unstable-raw-imports"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -27,13 +27,16 @@
     "@deno-walk": "jsr:@std/fs@1/walk",
     "react": "npm:react@^19.1.1",
     "react-dom": "npm:react-dom@^19.1.1",
-    "react-dom/server": "npm:react-dom@^19.1.1/server"
+    "react-dom/server": "npm:react-dom@^19.1.1/server",
+    "@types/react": "npm:@types/react@^19.1.1",
+    "@types/react-dom": "npm:@types/react-dom@^19.1.1"
   },
   "exclude": [
     ".git",
     "node_modules",
     "dist",
-    "build"
+    "build",
+    "coverage"
   ],
   "permissions": {
     "default": {

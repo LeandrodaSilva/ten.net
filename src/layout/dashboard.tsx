@@ -1,6 +1,7 @@
 import { Logs } from "../admin/components/logs.tsx";
+import React from "react";
 
-export default function Dashboard({ children }) {
+export default function Dashboard({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-full flex-col h-full">
       <header className="relative shrink-0 border-b border-white/10 bg-gray-900 before:pointer-events-none before:absolute before:inset-0 before:bg-black/10">

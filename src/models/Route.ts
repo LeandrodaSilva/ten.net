@@ -63,7 +63,7 @@ export class Route {
   }
 
   get run():
-    | ((
+    ((
       req: Request,
       ctx?: { params: Record<string, string> },
     ) => Response | Promise<Response>)

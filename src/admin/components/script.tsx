@@ -1,4 +1,6 @@
-export const Script = ({ children }) => {
+import React from "react";
+
+export const Script = ({ children }: {children: () => void}) => {
   const functionCode = children.toString();
   const bodyMatch = functionCode.match(/\{([\s\S]*)\}/);
   const functionBody = bodyMatch ? bodyMatch[1].trim() : "";
