@@ -22,12 +22,12 @@ export async function transpileRoute(tsPath: string): Promise<string> {
   });
   if (result.success) {
     const file = result?.outputFiles?.shift();
-    if (!file) {
-      throw new Error(`Sem saída JS para ${tsPath} (verifique imports/alias).`);
+    const text = file?.text();
+    const lines = text?.split("\n");
+    if (lines![0]?.startsWith("//")) {
+      lines?.shift();
     }
-    return file.text();
-  } else {
-    console.error(`✘ Erro ao transpilar ${tsPath}:`, result.errors);
+    return lines?.join("\n") ?? "";
   }
 
   return "";

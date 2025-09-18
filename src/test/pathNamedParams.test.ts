@@ -1,5 +1,5 @@
 import { assertEquals } from "@deno-assert";
-import { pathNamedParams } from "../src/utils/pathNamedParams.ts";
+import { pathNamedParams } from "../utils/pathNamedParams.ts";
 
 Deno.test("pathNamedParams - should extract single named parameter", () => {
   const result = pathNamedParams("/users/123", "/users/[id]");
