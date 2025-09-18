@@ -26,13 +26,13 @@ jobs:
         run: deno fmt --check
 
       - name: Run linter
-        run: deno lint
+        run: deno lint --unstable-raw-imports
 
       - name: Run tests
-        run: deno test --allow-all
+        run: deno test --parallel --allow-all --unstable-raw-imports --unstable-bundle
 
       - name: Type check
-        run: deno check **/*.ts
+        run: deno check **/*.ts --unstable-raw-imports
 
   publish:
     name: Publish to JSR
