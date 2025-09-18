@@ -24,7 +24,7 @@ jobs:
         run: deno fmt --check
 
       - name: Run linter
-        run: deno lint
+        run: deno lint --unstable-raw-imports
 
       - name: Run tests
         run: deno test --allow-all
