@@ -62,12 +62,17 @@ export class Route {
     return adminPathPattern.test(this.path);
   }
 
-	get run() {
-		return this._run;
-	}
+  get run() {
+    return this._run;
+  }
 
   set run(
-    fn: ((req: Request, ctx?: { params: Record<string, string> }) => Response | Promise<Response>) | undefined,
+    fn:
+      | ((
+        req: Request,
+        ctx?: { params: Record<string, string> },
+      ) => Response | Promise<Response>)
+      | undefined,
   ) {
     this._run = fn;
   }

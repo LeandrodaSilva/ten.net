@@ -23,7 +23,7 @@ export function findDocumentLayoutRoot(appPath?: string): string {
       Deno.lstatSync(rootLayoutPath);
       return Deno.readTextFileSync(rootLayoutPath);
     } catch {
-			// File does not exist or cannot be read, return default layout
+      // File does not exist or cannot be read, return default layout
     }
   }
   return <string> documentLayout;
