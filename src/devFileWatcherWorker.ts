@@ -6,13 +6,13 @@ interface WorkerGlobalScope {
 
 interface DedicatedWorkerGlobalScope extends WorkerGlobalScope {
   onmessage: (this: DedicatedWorkerGlobalScope, ev: MessageEvent) => void;
-  postMessage: (message: Deno.FsEvenT) => void;
+  postMessage: (message: string) => void;
 }
 
 //define types globally of onmessage and postMessage
 declare const self: {
   onmessage: (this: DedicatedWorkerGlobalScope, ev: MessageEvent) => void;
-  postMessage: (message: never) => void;
+  postMessage: (message: string) => void;
 };
 
 self.onmessage = async () => {
@@ -23,7 +23,7 @@ self.onmessage = async () => {
   }
   const call = debounce((event: Deno.FsEvent) => {
     console.log("[%s] %s", event.kind, event.paths[0]);
-    self.postMessage(event);
+    self.postMessage(String(event.kind));
   }, 200);
 
   watcher = Deno.watchFs("./app");
