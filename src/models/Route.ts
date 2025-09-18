@@ -14,7 +14,7 @@ export class Route {
     | "OPTIONS"
     | "HEAD"
     | "ALL" = "ALL";
-  private _call:
+  private _run:
     | ((
       req: Request,
       ctx?: { params: Record<string, string> },
@@ -57,23 +57,20 @@ export class Route {
     return this._method;
   }
 
-  get call() {
-    return this._call;
+  get isAdmin() {
+    const adminPathPattern = /^\/admin(\/|$)/;
+    return adminPathPattern.test(this.path);
   }
 
-	get isAdmin() {
-		const adminPathPattern = /^\/admin(\/|$)/;
-		return adminPathPattern.test(this.path);
+	get run() {
+		return this._run;
 	}
 
-	set call(
-		fn: ((
-			req: Request,
-			ctx?: { params: Record<string, string> },
-		) => Response | Promise<Response>) | undefined,
-	) {
-		this._call = fn;
-	}
+  set run(
+    fn: ((req: Request, ctx?: { params: Record<string, string> }) => Response | Promise<Response>) | undefined,
+  ) {
+    this._run = fn;
+  }
 
   set page(str: string) {
     this._pageContent = str;
@@ -118,7 +115,7 @@ export class Route {
     ) => Response | Promise<Response>)
     | undefined
   > {
-		if (this.call) return this.call;
+    if (this.run) return this.run;
     try {
       const module = await import(
         "data:application/javascript," +
@@ -134,7 +131,7 @@ export class Route {
       if (Object.keys(module).length === 0 && !this.hasPage) {
         throw new Error("Module is empty");
       }
-      this._call = fn;
+      this._run = fn;
       return fn;
     } catch (e) {
       console.error(e);

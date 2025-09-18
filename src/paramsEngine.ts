@@ -1,5 +1,5 @@
 import { pathNamedParams } from "./utils/pathNamedParams.ts";
-import { Route } from "./models/Route.ts";
+import type { Route } from "./models/Route.ts";
 
 export function paramsEngine(path: string, route: Route) {
   const rawParams = pathNamedParams(path, route.path);

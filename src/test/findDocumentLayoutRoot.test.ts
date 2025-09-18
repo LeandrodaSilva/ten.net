@@ -8,8 +8,7 @@ const DOCUMENT_HTML_PATH = `${TEST_APP_PATH}/document.html`;
 Deno.test("findDocumentLayoutRoot - returns file content when document.html exists", () => {
   // Setup
   Deno.mkdirSync(TEST_APP_PATH, { recursive: true });
-  const expectedContent =
-    `<!DOCTYPE html>
+  const expectedContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -39,8 +38,7 @@ Deno.test("findDocumentLayoutRoot - returns file content when document.html exis
 Deno.test("findDocumentLayoutRoot - returns default template when document.html does not exist", () => {
   // Setup
   const nonExistentPath = "./non_existent_path";
-  const expectedDefault =
-    `<!DOCTYPE html>
+  const expectedDefault = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -75,8 +73,7 @@ Deno.test("findDocumentLayoutRoot - returns default template when file exists bu
     return;
   }
 
-  const expectedDefault =
-    `<!DOCTYPE html>
+  const expectedDefault = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">

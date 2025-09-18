@@ -1,6 +1,6 @@
-import {Logs} from "../admin/components/logs.tsx";
+import { Logs } from "../admin/components/logs.tsx";
 
-export default function Dashboard({children}) {
+export default function Dashboard({ children }) {
   return (
     <div className="flex min-h-full flex-col h-full">
       <header className="relative shrink-0 border-b border-white/10 bg-gray-900 before:pointer-events-none before:absolute before:inset-0 before:bg-black/10">
@@ -49,7 +49,7 @@ export default function Dashboard({children}) {
         {/*</aside>*/}
 
         <main className="flex-1 h-full">
-	        {children}
+          {children}
         </main>
 
         <aside className="sticky top-8 hidden w-96 shrink-0 xl:block h-full rounded-lg shadow-sm p-4 bg-white">

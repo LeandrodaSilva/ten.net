@@ -1,6 +1,6 @@
 import { findOrderedLayouts } from "./utils/findOrderedLayouts.ts";
 import { findDocumentLayoutRoot } from "./utils/findDocumentLayoutRoot.ts";
-import { Route } from "./models/Route.ts";
+import type { Route } from "./models/Route.ts";
 
 interface IViewEngine {
   _appPath: string;
@@ -17,11 +17,11 @@ export async function viewEngine(args: IViewEngine) {
     params,
   } = args;
   let pageModule = route.page;
-	let layouts = [];
+  let layouts = [];
   if (false === route.isAdmin) {
-	  layouts = findOrderedLayouts(_appPath, route.path);
-	  const documentLayout = findDocumentLayoutRoot(_appPath);
-	  pageModule = documentLayout.replace("{{content}}", pageModule);
+    layouts = findOrderedLayouts(_appPath, route.path);
+    const documentLayout = findDocumentLayoutRoot(_appPath);
+    pageModule = documentLayout.replace("{{content}}", pageModule);
   }
   if (layouts) {
     for (let i = layouts.length - 1; i >= 0; i--) {
@@ -29,9 +29,9 @@ export async function viewEngine(args: IViewEngine) {
       pageModule = layoutContent.replace("{{content}}", pageModule);
     }
 
-    if (route.call) {
+    if (route.run) {
       try {
-        const routeResponse = await route.call(req, {
+        const routeResponse = await route.run(req, {
           params,
         }) as Response;
 

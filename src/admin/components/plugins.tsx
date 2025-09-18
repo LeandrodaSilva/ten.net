@@ -24,13 +24,16 @@ export const Plugins = () => {
           </div>
           <div className="mt-8">
             <h3 className="text-base font-semibold text-gray-900">
-              <a href="/admin/plugins/page-plugin" className="focus:outline-hidden">
+              <a
+                href="/admin/plugins/page-plugin"
+                className="focus:outline-hidden"
+              >
                 <span aria-hidden="true" className="absolute inset-0"></span>
                 Pages
               </a>
             </h3>
             <p className="mt-2 text-sm text-gray-500">
-							Here contains all pages created by you or your team.
+              Here contains all pages created by you or your team.
             </p>
           </div>
           <span

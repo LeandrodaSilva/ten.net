@@ -1,9 +1,9 @@
 import { renderToString } from "react-dom/server";
 import { Script } from "./components/script.tsx";
 import Dashboard from "../layout/dashboard.tsx";
-import {Plugins} from "./components/plugins.tsx";
+import { Plugins } from "./components/plugins.tsx";
 
-const App = ({children}) => {
+const App = ({ children }) => {
   return (
     <html className="h-full bg-gray-100">
       <head>
@@ -17,7 +17,7 @@ const App = ({children}) => {
       </head>
       <body className="h-full">
         <Dashboard>
-	        {children || <Plugins />}
+          {children || <Plugins />}
         </Dashboard>
         <Script>
           {() => {
@@ -30,8 +30,12 @@ const App = ({children}) => {
   );
 };
 
-export const html = `<!DOCTYPE html>${renderToString(<App />)}`;
-
-export const appWithChildren = (Children: Function) => {
-	return `<!DOCTYPE html>${renderToString(<App><Children/></App>)}`;
-}
+export const appWithChildren = (Children: () => JSX.Element) => {
+  return `<!DOCTYPE html>${
+    renderToString(
+      <App>
+        <Children />
+      </App>,
+    )
+  }`;
+};

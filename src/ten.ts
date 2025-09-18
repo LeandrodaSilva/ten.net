@@ -1,11 +1,10 @@
-import {routerEngine} from "./routerEngine.ts";
-import {viewEngine} from "./viewEngine.ts";
-import {paramsEngine} from "./paramsEngine.ts";
-import {Route} from "./models/Route.ts";
-import {html} from "./admin/app.tsx";
-import {Plugin} from "./models/Plugin.ts";
-import {PagePlugin} from "./plugins/pagePlugin.ts";
-import {AdminPlugin} from "./plugins/adminPlugin.ts";
+import { routerEngine } from "./routerEngine.ts";
+import { viewEngine } from "./viewEngine.ts";
+import { paramsEngine } from "./paramsEngine.ts";
+import type { Route } from "./models/Route.ts";
+import type { Plugin } from "./models/Plugin.ts";
+import { PagePlugin } from "./plugins/pagePlugin.ts";
+import { AdminPlugin } from "./plugins/adminPlugin.ts";
 
 /**
  * Ten is a web framework class that provides routing, request handling, and server functionality.
@@ -22,7 +21,7 @@ export class Ten {
   private readonly _appPath = "./app";
   private readonly _routeFileName = "route.ts";
   private _routes: Route[] = [];
-	private _plugins: Plugin[] = [];
+  private _plugins: Plugin[] = [];
 
   /**
    * Creates and returns a new instance of the Ten class.
@@ -33,43 +32,37 @@ export class Ten {
     return new Ten();
   }
 
-	public addPlugin(plugin: new (...args: any[]) => Plugin) {
-		// Here you can add logic to register the plugin
-		console.log(`Plugin ${plugin.name} added.`);
-		const p = new plugin();
-		const routes = p.getRoutes();
-		this._plugins.push(p);
-		this._routes.push(...routes);
-		this._plugins.forEach((pl) => {
-			pl.plugins = this._plugins;
-		});
-	}
+  public addPlugin(plugin: new (...args: never[]) => Plugin) {
+    // Here you can add logic to register the plugin
+    console.log(`Plugin ${plugin.name} added.`);
+    const p = new plugin();
+    const routes = p.getRoutes();
+    this._plugins.push(p);
+    this._routes.push(...routes);
+    this._plugins.forEach((pl) => {
+      pl.plugins = this._plugins;
+    });
+  }
 
   private async _handleRequest(req: Request): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
 
-    // if (path === "/admin") {
-    //   return new Response(html, {
-    //     headers: { "Content-Type": "text/html; charset=utf-8" },
-    //   });
-    // }
-
-	  if (path === "/admin/favicon.ico") {
-		  const favicon = await import("./assets/favicon.ico", {
-			  with: { type: "bytes" },
-		  });
-			const bytes = new Uint8Array(favicon.default);
-		  return new Response(bytes, {
-			  headers: { "Content-Type": "image/x-icon" },
-		  });
-	  }
+    if (path === "/admin/favicon.ico") {
+      const favicon = await import("./assets/favicon.ico", {
+        with: { type: "bytes" },
+      });
+      const bytes = new Uint8Array(favicon.default);
+      return new Response(bytes, {
+        headers: { "Content-Type": "image/x-icon" },
+      });
+    }
 
     const route = this._routes.find((r) => r.regex.test(path));
 
     if (!route) return new Response("Not found", { status: 404 });
 
-	  route.method = req.method;
+    route.method = req.method;
 
     try {
       await route.import();
@@ -77,7 +70,7 @@ export class Ten {
       const params = paramsEngine(path, route);
 
       if (!route.isView) {
-        return route.call(req, {
+        return route.run(req, {
           params,
         });
       }
@@ -141,8 +134,8 @@ export class Ten {
     this._routes.push(
       ...await routerEngine(this._appPath, this._routeFileName),
     );
-	  this.addPlugin(AdminPlugin);
-	  this.addPlugin(PagePlugin);
+    this.addPlugin(AdminPlugin);
+    this.addPlugin(PagePlugin);
     console.info("Routes:", this._routes.map((r) => r.path));
 
     if (Deno.env.get("DEBUG")) {

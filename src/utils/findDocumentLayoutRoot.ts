@@ -18,11 +18,13 @@ import documentLayout from "../assets/document.html" with { type: "text" };
  */
 export function findDocumentLayoutRoot(appPath?: string): string {
   if (appPath) {
-	  const rootLayoutPath = `${appPath}/document.html`;
-	  try {
-		  Deno.lstatSync(rootLayoutPath);
-		  return Deno.readTextFileSync(rootLayoutPath);
-	  } catch {}
+    const rootLayoutPath = `${appPath}/document.html`;
+    try {
+      Deno.lstatSync(rootLayoutPath);
+      return Deno.readTextFileSync(rootLayoutPath);
+    } catch {
+			// File does not exist or cannot be read, return default layout
+    }
   }
-	return <string>documentLayout;
+  return <string> documentLayout;
 }
