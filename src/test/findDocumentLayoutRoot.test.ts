@@ -15,7 +15,7 @@ Deno.test("findDocumentLayoutRoot - returns file content when document.html exis
     const result = findDocumentLayoutRoot(TEST_APP_PATH);
 
     // Assert
-	  await assertSnapshot(t, result);
+    await assertSnapshot(t, result);
   } finally {
     // Cleanup
     Deno.removeSync(TEST_DIR, { recursive: true });
@@ -30,7 +30,7 @@ Deno.test("findDocumentLayoutRoot - returns default template when document.html 
   const result = findDocumentLayoutRoot(nonExistentPath);
 
   // Assert
-	await assertSnapshot(t, result);
+  await assertSnapshot(t, result);
 });
 
 Deno.test("findDocumentLayoutRoot - returns default template when file exists but cannot be read", async (t) => {
@@ -52,7 +52,7 @@ Deno.test("findDocumentLayoutRoot - returns default template when file exists bu
     const result = findDocumentLayoutRoot(TEST_APP_PATH);
 
     // Assert
-	  await assertSnapshot(t, result);
+    await assertSnapshot(t, result);
   } finally {
     // Cleanup
     try {
