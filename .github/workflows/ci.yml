@@ -27,7 +27,7 @@ jobs:
         run: deno lint --unstable-raw-imports
 
       - name: Run tests
-        run: deno test --allow-all
+        run: deno test --parallel --allow-all --unstable-raw-imports --unstable-bundle
 
       - name: Type check
         run: deno check **/*.ts
