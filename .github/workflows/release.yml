@@ -53,7 +53,7 @@ jobs:
           deno-version: v2.x
 
       - name: Publish to JSR
-        run: deno publish
+        run: deno publish --unstable-raw-imports
 
   release:
     name: Create Release
