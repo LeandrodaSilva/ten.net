@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Script = ({ children }: { children: () => void }) => {
   const functionCode = children.toString();
   const bodyMatch = functionCode.match(/\{([\s\S]*)\}/);
