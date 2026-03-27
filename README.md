@@ -10,8 +10,10 @@ A minimalist web microframework for [Deno](https://deno.com).
 ## Features
 
 - **File-based routing** — directories in `app/` map directly to URL paths
-- **HTML templating** — `{{mustache}}` placeholders populated from route handler data
-- **Nested layouts** — `layout.html` and `document.html` wrap pages hierarchically
+- **HTML templating** — `{{mustache}}` placeholders populated from route handler
+  data
+- **Nested layouts** — `layout.html` and `document.html` wrap pages
+  hierarchically
 - **Dynamic route parameters** — `[param]/` directories for URL segments
 - **Plugin system** — extensible architecture with a built-in admin panel
 - **Dev mode** — file watcher with automatic route reload
@@ -69,20 +71,20 @@ Visit `http://localhost:8000/hello` to see "Hello World!".
 
 The `app/` directory defines your routes. Each subdirectory can contain:
 
-| File | Purpose |
-|------|---------|
-| `route.ts` | Exports HTTP method handlers (`GET`, `POST`, `PUT`, `DELETE`, etc.) |
-| `page.html` | HTML template with `{{placeholder}}` syntax |
-| `layout.html` | Wrapping layout — nests via `{{content}}` |
-| `document.html` | Root HTML document (typically at `app/` root only) |
+| File            | Purpose                                                             |
+| --------------- | ------------------------------------------------------------------- |
+| `route.ts`      | Exports HTTP method handlers (`GET`, `POST`, `PUT`, `DELETE`, etc.) |
+| `page.html`     | HTML template with `{{placeholder}}` syntax                         |
+| `layout.html`   | Wrapping layout — nests via `{{content}}`                           |
+| `document.html` | Root HTML document (typically at `app/` root only)                  |
 
 ### Route types
 
-| Structure | Behavior |
-|-----------|----------|
+| Structure                | Behavior                                                         |
+| ------------------------ | ---------------------------------------------------------------- |
 | `route.ts` + `page.html` | **View route** — GET renders the page with data from the handler |
-| `route.ts` only | **API route** — returns the raw Response from the handler |
-| `page.html` only | **Static page** — renders the HTML as-is |
+| `route.ts` only          | **API route** — returns the raw Response from the handler        |
+| `page.html` only         | **Static page** — renders the HTML as-is                         |
 
 ### Directory-to-URL mapping
 
@@ -148,7 +150,8 @@ export function GET(_req: Request, ctx: {
 
 ## Templates
 
-Page templates use `{{key}}` placeholders that are replaced with values from the route handler's JSON response:
+Page templates use `{{key}}` placeholders that are replaced with values from the
+route handler's JSON response:
 
 ```html
 <!-- app/hello/page.html -->
@@ -171,7 +174,8 @@ Result: `<h1>Hello Leandro!</h1>`
 
 ### Document layout
 
-Place a `document.html` at the `app/` root to define the outer HTML shell. Use `{{content}}` as the injection point:
+Place a `document.html` at the `app/` root to define the outer HTML shell. Use
+`{{content}}` as the injection point:
 
 ```html
 <!-- app/document.html -->
@@ -187,11 +191,13 @@ Place a `document.html` at the `app/` root to define the outer HTML shell. Use `
 </html>
 ```
 
-If no `document.html` is provided, a default one is used (includes Tailwind CSS via CDN).
+If no `document.html` is provided, a default one is used (includes Tailwind CSS
+via CDN).
 
 ### Nested layouts
 
-Add `layout.html` files at any directory level. They nest from root to leaf, each using `{{content}}` to wrap inner content:
+Add `layout.html` files at any directory level. They nest from root to leaf,
+each using `{{content}}` to wrap inner content:
 
 ```
 app/
