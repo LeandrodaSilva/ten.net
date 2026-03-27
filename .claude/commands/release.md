@@ -1,6 +1,7 @@
 Crie um novo release para o pacote @leproj/tennet no JSR.
 
-O argumento $ARGUMENTS indica o tipo de bump: patch, minor ou major. Se não informado, assume "patch".
+O argumento $ARGUMENTS indica o tipo de bump: patch, minor ou major. Se não
+informado, assume "patch".
 
 Passos:
 
@@ -18,7 +19,8 @@ Passos:
    - `deno check **/*.ts --unstable-raw-imports`
    - `deno publish --dry-run --allow-dirty`
 6. Se algum check falhar, corrija o problema e repita
-7. Faça commit de todas as alterações com mensagem no formato: `release: v{nova_versão}`
+7. Faça commit de todas as alterações com mensagem no formato:
+   `release: v{nova_versão}`
 8. Crie a tag `v{nova_versão}`
 9. Faça push do branch e da tag para origin
 10. Monitore a pipeline do GitHub Actions até concluir com sucesso

@@ -2,7 +2,8 @@ Verifique o score atual do pacote @leproj/tennet no JSR.
 
 Passos:
 
-1. Faça um fetch na API pública: `https://api.jsr.io/scopes/leproj/packages/tennet`
+1. Faça um fetch na API pública:
+   `https://api.jsr.io/scopes/leproj/packages/tennet`
 2. Extraia e mostre:
    - Score atual (ex: 94/100)
    - Versão mais recente publicada
