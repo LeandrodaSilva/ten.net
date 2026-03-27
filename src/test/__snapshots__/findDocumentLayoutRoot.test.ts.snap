@@ -18,8 +18,7 @@ snapshot[`findDocumentLayoutRoot - returns default template when document.html d
     <title>Ten.net</title>
   </head>
   <body>{{content}}</body>
-</html>
-'
+</html>'
 `;
 
 snapshot[`findDocumentLayoutRoot - returns default template when file exists but cannot be read 1`] = `
@@ -38,6 +37,5 @@ snapshot[`findDocumentLayoutRoot - returns default template when file exists but
     <title>Ten.net</title>
   </head>
   <body>{{content}}</body>
-</html>
-'
+</html>'
 `;

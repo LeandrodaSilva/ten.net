@@ -68,11 +68,8 @@ export class Ten {
     const path = url.pathname;
 
     if (path === "/admin/favicon.ico") {
-      const favicon = await import("./assets/favicon.ico", {
-        with: { type: "bytes" },
-      });
-      const bytes = new Uint8Array(favicon.default);
-      return new Response(bytes, {
+      const { faviconBytes } = await import("./assets/faviconData.ts");
+      return new Response(faviconBytes.buffer as ArrayBuffer, {
         headers: { "Content-Type": "image/x-icon" },
       });
     }

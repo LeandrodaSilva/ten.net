@@ -1,4 +1,4 @@
-import documentLayout from "../assets/document.html" with { type: "text" };
+import { defaultDocumentHtml } from "../assets/documentHtml.ts";
 
 /**
  * Finds and returns the content of a document layout root file.
@@ -26,5 +26,5 @@ export function findDocumentLayoutRoot(appPath?: string): string {
       // File does not exist or cannot be read, return default layout
     }
   }
-  return <string> documentLayout;
+  return defaultDocumentHtml;
 }
