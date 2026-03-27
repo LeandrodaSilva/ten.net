@@ -27,12 +27,31 @@ export class Ten {
    * Creates and returns a new instance of the Ten class.
    *
    * @returns A new Ten instance
+   *
+   * @example
+   * ```typescript
+   * const app = Ten.net();
+   * ```
    */
   static net(): Ten {
     return new Ten();
   }
 
-  public addPlugin(plugin: new (...args: never[]) => Plugin) {
+  /**
+   * Registers a plugin with the Ten application. The plugin's routes are
+   * automatically added to the router and it becomes visible in the admin dashboard.
+   *
+   * @param plugin - The plugin class constructor to register. Must extend the abstract Plugin class.
+   *
+   * @example
+   * ```typescript
+   * import { Ten } from "@leproj/tennet";
+   *
+   * const app = Ten.net();
+   * app.addPlugin(MyPlugin);
+   * ```
+   */
+  public addPlugin(plugin: new (...args: never[]) => Plugin): void {
     // Here you can add logic to register the plugin
     console.log(`Plugin ${plugin.name} added.`);
     const p = new plugin();
@@ -129,8 +148,14 @@ export class Ten {
    *
    * @returns A promise that resolves when the server startup process is complete
    * @throws {Error} May throw if route loading fails or server cannot start
+   *
+   * @example
+   * ```typescript
+   * const app = Ten.net();
+   * await app.start();
+   * ```
    */
-  public async start() {
+  public async start(): Promise<void> {
     this._routes.push(
       ...await routerEngine(this._appPath, this._routeFileName),
     );

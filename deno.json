@@ -1,6 +1,7 @@
 {
   "name": "@leproj/tennet",
-  "version": "0.1.22",
+  "version": "0.1.23",
+  "description": "A minimalist Deno web microframework with file-based routing, HTML templating, nested layouts, and a plugin system",
   "license": "MIT",
   "exports": {
     ".": "./src/mod.ts"
