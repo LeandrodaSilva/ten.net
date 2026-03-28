@@ -228,5 +228,45 @@ describe("Route", () => {
         console.info = infoSpy;
       }
     });
+
+    it("should import bundled-style code with separate export block", async () => {
+      const bundledCode = [
+        'function GET(_req) { return new Response(JSON.stringify({ name: "Leandro" }), { headers: { "Content-Type": "application/json" } }); }',
+        "export { GET };",
+      ].join("\n");
+
+      const route = createRoute({ transpiledCode: bundledCode });
+      route.method = "GET";
+      const infoSpy = console.info;
+      console.info = () => {};
+      try {
+        const fn = await route.import();
+        assertEquals(typeof fn, "function");
+        assertEquals(route.run !== undefined, true);
+
+        const res = await fn!(new Request("http://localhost/hello"));
+        const body = await res.json();
+        assertEquals(body.name, "Leandro");
+      } finally {
+        console.info = infoSpy;
+      }
+    });
+
+    it("should set route.run after successful import", async () => {
+      const route = createRoute({
+        transpiledCode: 'export function GET() { return new Response("ok"); }',
+      });
+      route.method = "GET";
+      assertEquals(route.run, undefined);
+
+      const infoSpy = console.info;
+      console.info = () => {};
+      try {
+        await route.import();
+        assertEquals(route.run !== undefined, true);
+      } finally {
+        console.info = infoSpy;
+      }
+    });
   });
 });

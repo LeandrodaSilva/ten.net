@@ -1,4 +1,19 @@
-import { assertEquals, assertStringIncludes } from "@std/assert";
+import {
+  assertEquals,
+  assertNotMatch,
+  assertStringIncludes,
+} from "@std/assert";
+
+/** Verify that no raw `{{...}}` template variables remain in rendered HTML. */
+export function assertNoRawTemplateVars(body: string, context?: string): void {
+  assertNotMatch(
+    body,
+    /\{\{[^}]+\}\}/,
+    `Rendered HTML should not contain raw template variables${
+      context ? ` (${context})` : ""
+    }`,
+  );
+}
 
 export async function assertHomePage(baseUrl: string): Promise<void> {
   const res = await fetch(`${baseUrl}/`);
@@ -14,6 +29,7 @@ export async function assertHelloPage(baseUrl: string): Promise<void> {
   assertEquals(res.headers.get("Content-Type"), "text/html");
   const body = await res.text();
   assertStringIncludes(body, "Hello Leandro!");
+  assertNoRawTemplateVars(body, "GET /hello");
 }
 
 export async function assertFormGet(baseUrl: string): Promise<void> {
@@ -41,6 +57,7 @@ export async function assertFormCongrats(baseUrl: string): Promise<void> {
   assertEquals(res.status, 200);
   const body = await res.text();
   assertStringIncludes(body, "Thanks BuildTestUser for contacting us");
+  assertNoRawTemplateVars(body, "GET /form/congrats");
 }
 
 export async function assertApiHello(baseUrl: string): Promise<void> {

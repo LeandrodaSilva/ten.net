@@ -142,10 +142,16 @@ export class Route {
   > {
     if (this.run) return this.run;
     try {
-      const module = await import(
-        "data:application/javascript," +
-          encodeURIComponent(this.transpiledCode)
-      ) as unknown as Record<string, unknown>;
+      const blob = new Blob([this.transpiledCode], {
+        type: "application/javascript",
+      });
+      const url = URL.createObjectURL(blob);
+      let module: Record<string, unknown>;
+      try {
+        module = await import(url) as unknown as Record<string, unknown>;
+      } finally {
+        URL.revokeObjectURL(url);
+      }
       console.info("Module called:", module);
       const fn = module[this._method] as
         | ((
