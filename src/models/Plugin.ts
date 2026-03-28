@@ -28,10 +28,12 @@ export abstract class Plugin {
     // Base constructor logic (if any)
   }
 
+  /** Replace the list of registered plugins (used internally for cross-plugin awareness). */
   set plugins(plugins: Plugin[]) {
     this._plugins = plugins;
   }
 
+  /** Return a JSON representation of this plugin. */
   private _index(_req: Request): Response {
     return new Response(
       JSON.stringify({
@@ -43,6 +45,7 @@ export abstract class Plugin {
     );
   }
 
+  /** Create and register the default admin index route for this plugin. */
   private _addIndexRoute() {
     const slug = toSlug(this.name);
     const isAdminPlugin = slug === "admin-plugin";
@@ -71,6 +74,7 @@ export abstract class Plugin {
     this._routes.push(route);
   }
 
+  /** Build and return the plugin's registered routes. */
   public getRoutes(): Route[] {
     this._addIndexRoute();
 
