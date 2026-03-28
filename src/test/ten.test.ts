@@ -267,7 +267,7 @@ describe("Ten", () => {
       const originalServe = Deno.serve;
       let serveCalled = false;
       // deno-lint-ignore no-explicit-any
-      (Deno as any).serve = (_handler: unknown) => {
+      (Deno as any).serve = (_options: unknown, _handler: unknown) => {
         serveCalled = true;
         return { finished: Promise.resolve(), ref: () => {}, unref: () => {} };
       };
@@ -295,7 +295,7 @@ describe("Ten", () => {
 
       const originalServe = Deno.serve;
       // deno-lint-ignore no-explicit-any
-      (Deno as any).serve = () => ({
+      (Deno as any).serve = (_options: unknown, _handler: unknown) => ({
         finished: Promise.resolve(),
         ref: () => {},
         unref: () => {},
@@ -342,7 +342,7 @@ describe("Ten", () => {
 
       const originalServe = Deno.serve;
       // deno-lint-ignore no-explicit-any
-      (Deno as any).serve = () => ({
+      (Deno as any).serve = (_options: unknown, _handler: unknown) => ({
         finished: Promise.resolve(),
         ref: () => {},
         unref: () => {},

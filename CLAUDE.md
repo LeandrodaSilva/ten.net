@@ -9,6 +9,21 @@ Ten.net (`@leproj/tennet`) is a minimalist Deno web microframework with
 file-based routing, HTML templating, nested layouts, and a plugin system.
 Published to JSR.
 
+## Project Vision & Purpose
+
+- **Self-contained binary**: The framework compiles the entire application
+  (server, routes, templates, static assets) into a single deployable binary. No
+  runtime dependencies required in production.
+- **Code protection (roadmap)**: Future obfuscation and encryption to prevent
+  reverse engineering of distributed application binaries.
+- **Maximum simplicity**: Directory-based routing, HTML templates, `.ts` route
+  files. No decorators, no configuration ceremony, no boilerplate.
+- **Plugin extensibility**: Abstract `Plugin` class with auto-registered admin
+  routes. Users extend functionality without modifying the core.
+- **Admin panel for non-developers (roadmap)**: `/admin` React SSR dashboard
+  designed for marketing teams and end-users to manage the production
+  application. Currently in early development.
+
 ## Tech Stack
 
 - **Runtime**: Deno 2.x (NOT Node.js — no npm, no package.json)

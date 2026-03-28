@@ -19,6 +19,35 @@ A minimalist web microframework for [Deno](https://deno.com).
 - **Plugin system** — extensible architecture with a built-in admin panel
 - **Dev mode** — file watcher with automatic route reload
 
+## Vision
+
+### Self-Contained Binary Deployment
+
+Compile your entire application into a single production-ready binary with all
+routes, templates, and assets embedded. No runtime dependencies — just deploy
+and run.
+
+### Code Protection (Roadmap)
+
+Future versions will include obfuscation and encryption for bundled application
+code, preventing reverse engineering in distributed deployments.
+
+### Maximum Simplicity
+
+No boilerplate. Directories define routes. HTML files are the frontend engine.
+TypeScript files handle server logic. Two lines to start a server.
+
+### Extensible Plugin System
+
+Extend the framework by subclassing `Plugin`. Custom plugins auto-register
+routes and appear in the admin dashboard.
+
+### Built-in Admin Panel (Roadmap)
+
+A server-rendered admin dashboard at `/admin` for marketing teams and
+non-technical users to manage the application in production. Currently in early
+development with basic plugin listing and dashboard structure.
+
 ## Installation
 
 ```bash
