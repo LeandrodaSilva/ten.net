@@ -5,6 +5,8 @@
   "license": "MIT",
   "exports": {
     ".": "./src/mod.ts",
+    "./cli": "./src/cli.ts",
+    "./build": "./src/build/build.ts",
     "./build/manifest": "./src/build/manifest.ts",
     "./build/crypto": "./src/build/crypto.ts"
   },

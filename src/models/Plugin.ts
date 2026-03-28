@@ -4,14 +4,22 @@ import { toSlug } from "../utils/toSlug.ts";
 import { appWithChildren } from "../admin/app.tsx";
 import { Plugins } from "../admin/components/plugins.tsx";
 
+/** Schema map describing a plugin's data model fields and their types. */
 export type PluginModel = Record<
   string,
   "string" | "number" | "boolean" | "object"
 >;
 
+/**
+ * Base class for Ten.net plugins. Extend this class and implement the
+ * required properties to create a plugin that auto-registers admin routes.
+ */
 export abstract class Plugin {
+  /** Display name of the plugin. */
   abstract name: string;
+  /** Short description shown in the admin dashboard. */
   abstract description: string;
+  /** Data model schema for the plugin. */
   abstract model: PluginModel;
   private _routes: Route[] = [];
   private _plugins: Plugin[] = [];

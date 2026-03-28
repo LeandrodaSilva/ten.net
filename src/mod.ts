@@ -15,4 +15,5 @@
 
 export { Ten } from "./ten.ts";
 export type { AppManifest } from "./build/manifest.ts";
+export type { BuildOptions, BuildResult } from "./build/build.ts";
 export { decompressData, decrypt, importKeyRaw } from "./build/crypto.ts";
