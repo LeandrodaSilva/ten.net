@@ -5,6 +5,8 @@ import type { Route } from "./models/Route.ts";
 import type { Plugin } from "./models/Plugin.ts";
 import { PagePlugin } from "./plugins/pagePlugin.ts";
 import { AdminPlugin } from "./plugins/adminPlugin.ts";
+import type { AppManifest } from "./build/manifest.ts";
+import { embeddedRouterEngine } from "./embedded/embeddedRouterEngine.ts";
 
 /**
  * Ten is a web framework class that provides routing, request handling, and server functionality.
@@ -22,19 +24,31 @@ export class Ten {
   private readonly _routeFileName = "route.ts";
   private _routes: Route[] = [];
   private _plugins: Plugin[] = [];
+  private _embedded?: AppManifest;
 
   /**
    * Creates and returns a new instance of the Ten class.
+   * When called with an `embedded` manifest, the framework runs in compiled mode
+   * using pre-bundled and obfuscated routes, templates, and assets.
    *
+   * @param options - Optional configuration. Pass `embedded` for compiled binary mode.
    * @returns A new Ten instance
    *
    * @example
    * ```typescript
+   * // Development mode
    * const app = Ten.net();
+   *
+   * // Compiled mode (used by generated binary)
+   * const app = Ten.net({ embedded: manifest });
    * ```
    */
-  static net(): Ten {
-    return new Ten();
+  static net(options?: { embedded?: AppManifest }): Ten {
+    const instance = new Ten();
+    if (options?.embedded) {
+      instance._embedded = options.embedded;
+    }
+    return instance;
   }
 
   /**
@@ -74,6 +88,17 @@ export class Ten {
       });
     }
 
+    if (this._embedded?.assets[path]) {
+      const asset = this._embedded.assets[path];
+      const { decodeBase64 } = await import("@std/encoding");
+      return new Response(decodeBase64(asset.dataBase64), {
+        headers: {
+          "Content-Type": asset.mimeType,
+          "Cache-Control": "public, max-age=31536000",
+        },
+      });
+    }
+
     const route = this._routes.find((r) => r.regex.test(path));
 
     if (!route) return new Response("Not found", { status: 404 });
@@ -98,6 +123,7 @@ export class Ten {
             route,
             req,
             params,
+            embedded: this._embedded,
           });
           return new Response(page, {
             status: 200,
@@ -157,14 +183,19 @@ export class Ten {
   public async start(
     options?: Deno.ServeTcpOptions,
   ): Promise<Deno.HttpServer<Deno.NetAddr>> {
-    this._routes.push(
-      ...await routerEngine(this._appPath, this._routeFileName),
-    );
+    if (this._embedded) {
+      this._routes.push(...embeddedRouterEngine(this._embedded));
+    } else {
+      this._routes.push(
+        ...await routerEngine(this._appPath, this._routeFileName),
+      );
+    }
+
     this.addPlugin(AdminPlugin);
     this.addPlugin(PagePlugin);
     console.info("Routes:", this._routes.map((r) => r.path));
 
-    if (Deno.env.get("DEBUG")) {
+    if (!this._embedded && Deno.env.get("DEBUG")) {
       this._startFileWatcher();
     }
 
