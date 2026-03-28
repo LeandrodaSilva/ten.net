@@ -1,7 +1,19 @@
 ---
 name: testing-agent
 description: "Escreve testes unitarios, de integracao e snapshots, mantendo o threshold de 90% de coverage."
-tools: [Read, Glob, Grep, Bash, Write, Edit, SendMessage, TaskCreate, TaskUpdate, TaskList, TaskGet]
+tools: [
+  Read,
+  Glob,
+  Grep,
+  Bash,
+  Write,
+  Edit,
+  SendMessage,
+  TaskCreate,
+  TaskUpdate,
+  TaskList,
+  TaskGet,
+]
 model: sonnet
 color: magenta
 ---
@@ -23,6 +35,7 @@ terem implementado funcionalidades.
 ## Dominio de Arquivos
 
 Voce e **responsavel** por este diretorio (crie/modifique arquivos aqui):
+
 - `src/test/` — Todos os arquivos de teste
 
 Voce **NAO modifica** nenhum arquivo fora de `src/test/`.
@@ -112,7 +125,8 @@ describe("Route.isAdmin", () => {
 - `assertSnapshot` de `@std/testing/snapshot` para HTML output
 - Snapshots em `src/test/__snapshots__/`
 - Suprimir console output substituindo `console.log/info/error` nos testes
-- Para E2E: usar `port: 0` e `AbortController` ou `server.shutdown()` para cleanup
+- Para E2E: usar `port: 0` e `AbortController` ou `server.shutdown()` para
+  cleanup
 
 ## Categorias de Testes a Escrever
 
@@ -147,8 +161,8 @@ src/test/new-plugins.test.ts
 - Route handlers: status codes, content types, body
 - Validacao de input (rejeitar dados malformados)
 
-**Plugins esperados**: PostsPlugin, CategoriesPlugin, GroupsPlugin,
-UsersPlugin, SettingsPlugin
+**Plugins esperados**: PostsPlugin, CategoriesPlugin, GroupsPlugin, UsersPlugin,
+SettingsPlugin
 
 ### 3. Testes de Middleware (`.test.ts`)
 
@@ -239,10 +253,11 @@ Garanta que coverage permaneca **acima de 90%**.
 
 ## Comunicacao
 
-- Leia detalhes de implementacao do backend-dev e frontend-dev via TaskList/messages
+- Leia detalhes de implementacao do backend-dev e frontend-dev via
+  TaskList/messages
 - Leia casos de teste de seguranca do security-agent
-- Se um teste revelar um bug, crie uma task via TaskCreate e notifique o
-  dev agent responsavel via SendMessage
+- Se um teste revelar um bug, crie uma task via TaskCreate e notifique o dev
+  agent responsavel via SendMessage
 - Envie relatorio de testes e coverage para todos os agents
 
 ## Checklist de Entrega

@@ -58,10 +58,15 @@ export abstract class Plugin {
       if (type === "string" && typeof value !== "string") {
         errors[key] = `${key} must be a string`;
       }
-      if (type === "number" && typeof value !== "number" && isNaN(Number(value))) {
+      if (
+        type === "number" && typeof value !== "number" && isNaN(Number(value))
+      ) {
         errors[key] = `${key} must be a number`;
       }
-      if (type === "boolean" && typeof value !== "boolean" && value !== "true" && value !== "false") {
+      if (
+        type === "boolean" && typeof value !== "boolean" && value !== "true" &&
+        value !== "false"
+      ) {
         errors[key] = `${key} must be a boolean`;
       }
     }

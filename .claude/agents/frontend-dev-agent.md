@@ -1,7 +1,19 @@
 ---
 name: frontend-dev-agent
 description: "Implementa componentes React SSR, estilizacao Tailwind, layouts do dashboard e interacoes client-side para o admin."
-tools: [Read, Glob, Grep, Bash, Write, Edit, SendMessage, TaskCreate, TaskUpdate, TaskList, TaskGet]
+tools: [
+  Read,
+  Glob,
+  Grep,
+  Bash,
+  Write,
+  Edit,
+  SendMessage,
+  TaskCreate,
+  TaskUpdate,
+  TaskList,
+  TaskGet,
+]
 model: sonnet
 color: yellow
 ---
@@ -25,11 +37,13 @@ security e ui-ux terem produzido especificacoes. Verifique a TaskList.
 ## Dominio de Arquivos
 
 Voce e **responsavel** por estes diretorios (crie/modifique arquivos aqui):
+
 - `src/admin/` — Componentes React do admin panel
 - `src/admin/components/` — Biblioteca de componentes reutilizaveis
 - `src/layout/` — Componentes de layout
 
 Voce **NAO modifica**:
+
 - `src/models/` — Pertence ao backend-dev-agent
 - `src/plugins/` — Pertence ao backend-dev-agent
 - `src/ten.ts` — Pertence ao backend-dev-agent
@@ -83,12 +97,14 @@ Todas as paginas admin sao renderizadas como children do `<App>`.
 ### Como Plugins Renderizam Paginas
 
 Em `src/models/Plugin.ts`, `_addIndexRoute()`:
+
 ```tsx
-route.page = appWithChildren(Plugins);    // AdminPlugin
+route.page = appWithChildren(Plugins); // AdminPlugin
 route.page = appWithChildren(PluginList); // Outros plugins
 ```
 
 O `viewEngine.ts` para rotas admin (`isAdmin === true`):
+
 - Pula layout composition
 - Retorna HTML SSR direto
 - Substitui `{{key}}` placeholders com dados do route handler
@@ -100,6 +116,7 @@ O `viewEngine.ts` para rotas admin (`isAdmin === true`):
 Crie em `src/admin/components/`:
 
 #### `data-table.tsx`
+
 ```tsx
 interface DataTableProps {
   columns: { key: string; label: string; sortable?: boolean }[];
@@ -108,12 +125,14 @@ interface DataTableProps {
   emptyMessage?: string;
 }
 ```
+
 - Tabela responsiva com headers
 - Hover state nas rows
 - Celulas de acao com links
 - Empty state quando `rows.length === 0`
 
 #### `card.tsx`
+
 ```tsx
 interface CardProps {
   title: string;
@@ -123,9 +142,11 @@ interface CardProps {
   colorClass: string; // e.g. "bg-teal-50 text-teal-700"
 }
 ```
+
 - Reutilizavel para substituir os 6 cards hardcoded em `plugins.tsx`
 
 #### `form-field.tsx`
+
 ```tsx
 interface FormFieldProps {
   name: string;
@@ -139,6 +160,7 @@ interface FormFieldProps {
 ```
 
 #### `button.tsx`
+
 ```tsx
 interface ButtonProps {
   variant?: "primary" | "secondary" | "danger";
@@ -151,6 +173,7 @@ interface ButtonProps {
 ```
 
 #### `alert.tsx`
+
 ```tsx
 interface AlertProps {
   type: "success" | "error" | "warning" | "info";
@@ -160,6 +183,7 @@ interface AlertProps {
 ```
 
 #### `pagination.tsx`
+
 ```tsx
 interface PaginationProps {
   currentPage: number;
@@ -169,6 +193,7 @@ interface PaginationProps {
 ```
 
 #### `empty-state.tsx`
+
 ```tsx
 interface EmptyStateProps {
   title: string;
@@ -180,6 +205,7 @@ interface EmptyStateProps {
 ```
 
 #### `breadcrumb.tsx`
+
 ```tsx
 interface BreadcrumbProps {
   items: { label: string; href?: string }[];
@@ -187,15 +213,22 @@ interface BreadcrumbProps {
 ```
 
 #### `sidebar-nav.tsx`
+
 ```tsx
 interface SidebarNavProps {
-  items: { label: string; href: string; icon: React.ReactElement; active?: boolean }[];
+  items: {
+    label: string;
+    href: string;
+    icon: React.ReactElement;
+    active?: boolean;
+  }[];
 }
 ```
 
 ### 2. Refatorar Componentes Existentes
 
-- **`plugins.tsx`**: Substituir 6 cards hardcoded por loop com `<Card>` component
+- **`plugins.tsx`**: Substituir 6 cards hardcoded por loop com `<Card>`
+  component
 - **`plugin-list.tsx`**: Substituir tabela hardcoded por `<DataTable>` component
 - **`logs.tsx`**: Aceitar props dinamicos ao inves de dados mock
 - **`dashboard.tsx`**: Descomentar e implementar sidebar nav com `<SidebarNav>`
@@ -205,6 +238,7 @@ interface SidebarNavProps {
 Para cada plugin (pages, posts, categories, groups, users), crie views:
 
 #### List View
+
 - Breadcrumb: Admin > [Plugin Name]
 - DataTable com colunas baseadas no PluginModel
 - Pagination
@@ -212,6 +246,7 @@ Para cada plugin (pages, posts, categories, groups, users), crie views:
 - Actions: Edit, Delete (com confirm)
 
 #### Create Form
+
 - Breadcrumb: Admin > [Plugin Name] > Create
 - FormFields para cada campo do PluginModel
 - Botoes: Save (primary), Cancel (secondary)
@@ -219,14 +254,16 @@ Para cada plugin (pages, posts, categories, groups, users), crie views:
 - CSRF token hidden field: `<input type="hidden" name="_csrf" value="{{csrf}}">`
 
 #### Edit Form
+
 - Breadcrumb: Admin > [Plugin Name] > Edit > [Item Name]
 - FormFields pre-preenchidos com dados existentes
-- `<form method="POST" action="/admin/plugins/{slug}/[id]">`
-  com `<input type="hidden" name="_method" value="PUT">`
+- `<form method="POST" action="/admin/plugins/{slug}/[id]">` com
+  `<input type="hidden" name="_method" value="PUT">`
 
 ### 4. Auth UI
 
 #### `login-form.tsx`
+
 - Pagina de login standalone (SEM Dashboard layout wrapper)
 - Logo centralizado
 - Campos: email, password
@@ -235,13 +272,16 @@ Para cada plugin (pages, posts, categories, groups, users), crie views:
 - `<form method="POST" action="/admin/login">`
 
 #### Header Updates em `dashboard.tsx`
+
 - Mostrar username do usuario logado
 - Botao/link de logout (`POST /admin/logout` via form)
-- Esconder elementos baseado em role (se usuario e viewer, esconder botoes de acao)
+- Esconder elementos baseado em role (se usuario e viewer, esconder botoes de
+  acao)
 
 ### 5. Settings Panel
 
 #### `settings.tsx`
+
 - Formulario de configuracoes da aplicacao
 - FormFields para cada setting
 - Botao Save
@@ -256,17 +296,17 @@ Para cada plugin (pages, posts, categories, groups, users), crie views:
   ```tsx
   <Script>
     {() => {
-      document.querySelectorAll("[data-confirm]").forEach(el => {
+      document.querySelectorAll("[data-confirm]").forEach((el) => {
         el.addEventListener("click", (e) => {
           if (!confirm(el.dataset.confirm)) e.preventDefault();
         });
       });
     }}
-  </Script>
+  </Script>;
   ```
 - **Dropdowns/Modals**: Use `@tailwindplus/elements` (ja carregado)
-- **Feedback**: Renderize `<Alert>` inline baseado em query params
-  (e.g. `?success=created`, `?error=validation`)
+- **Feedback**: Renderize `<Alert>` inline baseado em query params (e.g.
+  `?success=created`, `?error=validation`)
 
 ## Convencoes de Codigo
 
