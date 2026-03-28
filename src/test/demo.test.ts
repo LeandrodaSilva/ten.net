@@ -1,6 +1,13 @@
 import { afterAll, beforeAll, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { Ten } from "../ten.ts";
+import { AdminPlugin } from "../plugins/adminPlugin.tsx";
+import { PagePlugin } from "../plugins/pagePlugin.ts";
+import { PostsPlugin } from "../plugins/postsPlugin.ts";
+import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
+import { GroupsPlugin } from "../plugins/groupsPlugin.ts";
+import { UsersPlugin } from "../plugins/usersPlugin.ts";
+import { SettingsPlugin } from "../plugins/settingsPlugin.ts";
 
 describe("Demo E2E Integration", () => {
   let server: Deno.HttpServer;
@@ -18,6 +25,18 @@ describe("Demo E2E Integration", () => {
     console.error = () => {};
 
     const app = Ten.net();
+    await app.useAdmin(
+      new AdminPlugin({
+        plugins: [
+          PagePlugin,
+          PostsPlugin,
+          CategoriesPlugin,
+          GroupsPlugin,
+          UsersPlugin,
+          SettingsPlugin,
+        ],
+      }),
+    );
     server = await app.start({ port: 0, onListen: () => {} });
     const addr = server.addr as Deno.NetAddr;
     baseUrl = `http://localhost:${addr.port}`;

@@ -3,10 +3,8 @@ import { assertEquals } from "@std/assert";
 import { build } from "../build/build.ts";
 import {
   assert404,
-  assertAdminPage,
   assertApiHello,
   assertApiHelloDynamic,
-  assertFavicon,
   assertFormCongrats,
   assertFormGet,
   assertFormPost,
@@ -144,18 +142,6 @@ describe("Build Compiled TS E2E", () => {
   describe("Dynamic parameter routes", () => {
     it("GET /api/hello/John should return JSON with param", async () => {
       await assertApiHelloDynamic(baseUrl);
-    });
-  });
-
-  describe("Admin panel", () => {
-    it("GET /admin should render the admin dashboard", async () => {
-      await assertAdminPage(baseUrl);
-    });
-  });
-
-  describe("Favicon", () => {
-    it("GET /admin/favicon.ico should return icon", async () => {
-      await assertFavicon(baseUrl);
     });
   });
 

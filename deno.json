@@ -8,7 +8,8 @@
     "./cli": "./src/cli.ts",
     "./build": "./src/build/build.ts",
     "./build/manifest": "./src/build/manifest.ts",
-    "./build/crypto": "./src/build/crypto.ts"
+    "./build/crypto": "./src/build/crypto.ts",
+    "./admin": "./src/admin/mod.ts"
   },
   "tasks": {
     "dev": "deno run -P --inspect --unstable-raw-imports --watch demo.ts",

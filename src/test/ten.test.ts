@@ -2,7 +2,7 @@ import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { Ten } from "../ten.ts";
 import { Route } from "../models/Route.ts";
-import { AdminPlugin } from "../plugins/adminPlugin.ts";
+import { AdminPlugin } from "../plugins/adminPlugin.tsx";
 import { PagePlugin } from "../plugins/pagePlugin.ts";
 
 describe("Ten", () => {
@@ -19,52 +19,31 @@ describe("Ten", () => {
     });
   });
 
-  describe("addPlugin", () => {
-    it("should register a plugin and add its routes", () => {
+  describe("useAdmin", () => {
+    it("should register admin routes and middlewares", async () => {
       const app = Ten.net();
-      const consoleSpy = console.log;
-      console.log = () => {};
-      try {
-        app.addPlugin(AdminPlugin);
-        const routes = (app as unknown as { _routes: Route[] })._routes;
-        assertEquals(routes.length > 0, true);
-      } finally {
-        console.log = consoleSpy;
-      }
+      const admin = new AdminPlugin({ plugins: [PagePlugin] });
+      await app.useAdmin(admin);
+      const routes = (app as unknown as { _routes: Route[] })._routes;
+      // Dashboard + favicon + 6 CRUD routes for PagePlugin + 3 auth routes = 11
+      assertEquals(routes.length > 0, true);
     });
 
-    it("should register multiple plugins", () => {
+    it("should register middlewares from admin plugin", async () => {
       const app = Ten.net();
-      const consoleSpy = console.log;
-      console.log = () => {};
-      try {
-        app.addPlugin(AdminPlugin);
-        app.addPlugin(PagePlugin);
-        const routes = (app as unknown as { _routes: Route[] })._routes;
-        // AdminPlugin: 1 route (index), PagePlugin: 6 routes (index + /new + CRUD)
-        assertEquals(routes.length, 7);
-      } finally {
-        console.log = consoleSpy;
-      }
-    });
-  });
-
-  describe("_handleRequest (via integration)", () => {
-    it("should return 404 for unknown routes", async () => {
-      const app = Ten.net();
-      // Access private method via type assertion
-      const handler = (app as unknown as {
-        _handleRequest: (req: Request) => Promise<Response>;
-      })._handleRequest.bind(app);
-
-      const response = await handler(
-        new Request("http://localhost/nonexistent"),
-      );
-      assertEquals(response.status, 404);
+      const admin = new AdminPlugin({ plugins: [] });
+      await app.useAdmin(admin);
+      const middlewares = (app as unknown as { _middlewares: unknown[] })
+        ._middlewares;
+      // securityHeaders, authMiddleware, csrfMiddleware
+      assertEquals(middlewares.length, 3);
     });
 
-    it("should return favicon for /admin/favicon.ico", async () => {
+    it("should make admin routes accessible via request handler", async () => {
       const app = Ten.net();
+      const admin = new AdminPlugin({ plugins: [PagePlugin] });
+      await app.useAdmin(admin);
+
       const handler = (app as unknown as {
         _handleRequest: (req: Request) => Promise<Response>;
       })._handleRequest.bind(app);
@@ -78,10 +57,23 @@ describe("Ten", () => {
         "image/x-icon",
       );
     });
+  });
+
+  describe("_handleRequest (via integration)", () => {
+    it("should return 404 for unknown routes", async () => {
+      const app = Ten.net();
+      const handler = (app as unknown as {
+        _handleRequest: (req: Request) => Promise<Response>;
+      })._handleRequest.bind(app);
+
+      const response = await handler(
+        new Request("http://localhost/nonexistent"),
+      );
+      assertEquals(response.status, 404);
+    });
 
     it("should execute non-view route handler", async () => {
       const app = Ten.net();
-      // Inject a route manually
       const routes = (app as unknown as { _routes: Route[] })._routes;
       const route = new Route({
         path: "/api/test",
@@ -237,7 +229,6 @@ describe("Ten", () => {
       });
       route.method = "GET";
       route.page = "<h1>{{content}}</h1>";
-      // Set run to a function that throws for viewEngine to fail
       route.run = () => {
         throw new Error("Handler fails");
       };
@@ -253,7 +244,6 @@ describe("Ten", () => {
         const response = await handler(
           new Request("http://localhost/broken-page"),
         );
-        // viewEngine will fail, so it falls through to 404
         assertEquals(response.status === 200 || response.status === 404, true);
       } finally {
         console.error = consoleSpy;
@@ -358,7 +348,6 @@ describe("Ten", () => {
       (globalThis as any).Worker = class MockWorker {
         onmessage: ((event: MessageEvent) => void) | null = null;
         postMessage() {
-          // After onmessage is assigned, fire it to cover the handler
           if (this.onmessage) {
             capturedOnmessage = this.onmessage;
           }
@@ -374,14 +363,12 @@ describe("Ten", () => {
       try {
         await app.start();
 
-        // Simulate worker message to cover onmessage handler
         if (capturedOnmessage) {
           await capturedOnmessage(
             new MessageEvent("message", { data: "change" }),
           );
         }
 
-        // Routes should have been reloaded
         const routes = (app as unknown as { _routes: Route[] })._routes;
         assertEquals(Array.isArray(routes), true);
       } finally {

@@ -2,23 +2,15 @@ import { routerEngine } from "./routerEngine.ts";
 import { viewEngine } from "./viewEngine.ts";
 import { paramsEngine } from "./paramsEngine.ts";
 import type { Route } from "./models/Route.ts";
-import type { Plugin } from "./models/Plugin.ts";
-import { PagePlugin } from "./plugins/pagePlugin.ts";
-import { AdminPlugin } from "./plugins/adminPlugin.ts";
-import { PostsPlugin } from "./plugins/postsPlugin.ts";
-import { CategoriesPlugin } from "./plugins/categoriesPlugin.ts";
-import { GroupsPlugin } from "./plugins/groupsPlugin.ts";
-import { UsersPlugin } from "./plugins/usersPlugin.ts";
-import { SettingsPlugin } from "./plugins/settingsPlugin.ts";
 import type { AppManifest } from "./build/manifest.ts";
 import { embeddedRouterEngine } from "./embedded/embeddedRouterEngine.ts";
 import type { BuildOptions, BuildResult } from "./build/build.ts";
 import type { Middleware } from "./middleware/middleware.ts";
-import { authMiddleware } from "./auth/authMiddleware.ts";
-import { csrfMiddleware } from "./auth/csrfMiddleware.ts";
-import { securityHeadersMiddleware } from "./auth/securityHeaders.ts";
-import { createAuthRoutes } from "./auth/loginHandler.ts";
-import { InMemoryUserStore, seedDefaultAdmin } from "./auth/userStore.ts";
+
+/** Interface for an admin plugin that can be registered via useAdmin(). */
+export interface AdminPluginLike {
+  init(): Promise<{ routes: Route[]; middlewares: Middleware[] }>;
+}
 
 /**
  * Ten is a web framework class that provides routing, request handling, and server functionality.
@@ -35,7 +27,6 @@ export class Ten {
   private readonly _appPath = "./app";
   private readonly _routeFileName = "route.ts";
   private _routes: Route[] = [];
-  private _plugins: Plugin[] = [];
   private _embedded?: AppManifest;
   private _middlewares: Middleware[] = [];
 
@@ -96,29 +87,27 @@ export class Ten {
   }
 
   /**
-   * Registers a plugin with the Ten application. The plugin's routes are
-   * automatically added to the router and it becomes visible in the admin dashboard.
+   * Registers an admin plugin, initializing its routes and middlewares.
+   * Call this before start() to enable the admin panel.
    *
-   * @param plugin - The plugin class constructor to register. Must extend the abstract Plugin class.
+   * @param admin - An AdminPlugin instance (or any object implementing AdminPluginLike)
    *
    * @example
    * ```typescript
    * import { Ten } from "@leproj/tennet";
+   * import { AdminPlugin, PagePlugin } from "@leproj/tennet/admin";
    *
    * const app = Ten.net();
-   * app.addPlugin(MyPlugin);
+   * await app.useAdmin(new AdminPlugin({ plugins: [PagePlugin] }));
+   * await app.start();
    * ```
    */
-  public addPlugin(plugin: new (...args: never[]) => Plugin): void {
-    // Here you can add logic to register the plugin
-    console.log(`Plugin ${plugin.name} added.`);
-    const p = new plugin();
-    const routes = p.getRoutes();
-    this._plugins.push(p);
+  public async useAdmin(admin: AdminPluginLike): Promise<void> {
+    const { routes, middlewares } = await admin.init();
     this._routes.push(...routes);
-    this._plugins.forEach((pl) => {
-      pl.plugins = this._plugins;
-    });
+    for (const mw of middlewares) {
+      this.use(mw);
+    }
   }
 
   /** Route an incoming HTTP request through the middleware chain and router. */
@@ -138,17 +127,10 @@ export class Ten {
     return await next();
   }
 
-  /** Core routing logic, extracted from the original _handleRequest. */
+  /** Core routing logic. */
   private async _routeRequest(req: Request): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
-
-    if (path === "/admin/favicon.ico") {
-      const { faviconBytes } = await import("./assets/faviconData.ts");
-      return new Response(faviconBytes.buffer as ArrayBuffer, {
-        headers: { "Content-Type": "image/x-icon" },
-      });
-    }
 
     if (this._embedded?.assets[path]) {
       const asset = this._embedded.assets[path];
@@ -163,7 +145,6 @@ export class Ten {
 
     const route = this._routes.find((r) => {
       if (!r.regex.test(path)) return false;
-      // Routes with specific methods must match the request method
       if (r.method !== "ALL" && r.method !== req.method.toUpperCase()) {
         return false;
       }
@@ -172,7 +153,6 @@ export class Ten {
 
     if (!route) return new Response("Not found", { status: 404 });
 
-    // Save original method and set request method for import resolution
     const originalMethod = route.method;
     route.method = req.method;
 
@@ -242,21 +222,13 @@ export class Ten {
   /**
    * Starts the server by loading routes and beginning to serve HTTP requests.
    *
-   * This method performs the following operations:
-   * 1. Loads routes from the route factory using the configured app path and route file name
-   * 2. Registers built-in plugins (admin, pages, posts, categories, groups, users, settings)
-   * 3. Registers security middlewares (headers, auth, CSRF)
-   * 4. Starts the Deno HTTP server with the configured request handler
-   *
    * @param options - Optional Deno.ServeTcpOptions (e.g. `{ port: 3000 }`)
    * @returns The Deno.HttpServer instance for lifecycle control (e.g. shutdown)
-   * @throws {Error} May throw if route loading fails or server cannot start
    *
    * @example
    * ```typescript
    * const app = Ten.net();
-   * const server = await app.start({ port: 3000 });
-   * // Later: await server.shutdown();
+   * await app.start({ port: 3000 });
    * ```
    */
   public async start(
@@ -270,26 +242,7 @@ export class Ten {
       );
     }
 
-    // Register built-in plugins
-    this.addPlugin(AdminPlugin);
-    this.addPlugin(PagePlugin);
-    this.addPlugin(PostsPlugin);
-    this.addPlugin(CategoriesPlugin);
-    this.addPlugin(GroupsPlugin);
-    this.addPlugin(UsersPlugin);
-    this.addPlugin(SettingsPlugin);
-
-    // Register auth routes (login/logout) and seed default admin user
-    const userStore = new InMemoryUserStore();
-    await seedDefaultAdmin(userStore);
-    this._routes.push(...createAuthRoutes(userStore));
-
     console.info("Routes:", this._routes.map((r) => r.path));
-
-    // Register security middlewares
-    this.use(securityHeadersMiddleware);
-    this.use(authMiddleware());
-    this.use(csrfMiddleware);
 
     if (!this._embedded && Deno.env.get("DEBUG")) {
       this._startFileWatcher();
