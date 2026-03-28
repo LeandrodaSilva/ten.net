@@ -286,7 +286,7 @@ Add it as a task in your project's `deno.json`:
 Or install globally:
 
 ```bash
-deno install -A -n tennet jsr:@leproj/tennet/cli
+deno install -A --global -n tennet jsr:@leproj/tennet/cli
 tennet build
 ```
 
