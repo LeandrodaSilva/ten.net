@@ -17,6 +17,8 @@ import type { Middleware } from "./middleware/middleware.ts";
 import { authMiddleware } from "./auth/authMiddleware.ts";
 import { csrfMiddleware } from "./auth/csrfMiddleware.ts";
 import { securityHeadersMiddleware } from "./auth/securityHeaders.ts";
+import { createAuthRoutes } from "./auth/loginHandler.ts";
+import { InMemoryUserStore, seedDefaultAdmin } from "./auth/userStore.ts";
 
 /**
  * Ten is a web framework class that provides routing, request handling, and server functionality.
@@ -276,6 +278,12 @@ export class Ten {
     this.addPlugin(GroupsPlugin);
     this.addPlugin(UsersPlugin);
     this.addPlugin(SettingsPlugin);
+
+    // Register auth routes (login/logout) and seed default admin user
+    const userStore = new InMemoryUserStore();
+    await seedDefaultAdmin(userStore);
+    this._routes.push(...createAuthRoutes(userStore));
+
     console.info("Routes:", this._routes.map((r) => r.path));
 
     // Register security middlewares

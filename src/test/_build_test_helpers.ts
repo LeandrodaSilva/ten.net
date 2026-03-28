@@ -84,6 +84,14 @@ export async function assertAdminPage(baseUrl: string): Promise<void> {
   await res.body?.cancel();
 }
 
+export async function assertAdminLoginPage(baseUrl: string): Promise<void> {
+  const res = await fetch(`${baseUrl}/admin/login`);
+  assertEquals(res.status, 200);
+  assertEquals(res.headers.get("Content-Type"), "text/html");
+  const body = await res.text();
+  assertStringIncludes(body, "Sign in to admin");
+}
+
 export async function assertFavicon(baseUrl: string): Promise<void> {
   const res = await fetch(`${baseUrl}/admin/favicon.ico`);
   assertEquals(res.status, 200);
