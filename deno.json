@@ -11,16 +11,16 @@
     "./build/crypto": "./src/build/crypto.ts"
   },
   "tasks": {
-    "dev": "deno run -P --inspect --unstable-bundle --unstable-raw-imports --watch demo.ts",
-    "test": "deno test --parallel --allow-all --unstable-raw-imports --unstable-bundle",
-    "coverage": "deno test --no-check --coverage=coverage --allow-all --unstable-raw-imports --unstable-bundle",
+    "dev": "deno run -P --inspect --unstable-raw-imports --watch demo.ts",
+    "test": "deno test --parallel --allow-all --unstable-raw-imports",
+    "coverage": "deno test --no-check --coverage=coverage --allow-all --unstable-raw-imports",
     "fmt": "deno fmt",
     "lint": "deno lint --unstable-raw-imports",
     "check": "deno check  **/*.ts --unstable-raw-imports",
-    "bench": "deno bench --allow-all --unstable-raw-imports --unstable-bundle --json src/bench/ | deno run --allow-all src/bench/_history.ts && deno fmt README.md",
-    "bench:run": "deno bench --allow-all --unstable-raw-imports --unstable-bundle src/bench/",
+    "bench": "deno bench --allow-all --unstable-raw-imports --json src/bench/ | deno run --allow-all src/bench/_history.ts && deno fmt README.md",
+    "bench:run": "deno bench --allow-all --unstable-raw-imports src/bench/",
     "bench:check": "deno run --allow-all src/bench/_check_thresholds.ts",
-    "build": "deno run --allow-read --allow-write --allow-env --allow-run --unstable-bundle src/build/buildCommand.ts"
+    "build": "deno run --allow-read --allow-write --allow-env --allow-run src/build/buildCommand.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -36,6 +36,7 @@
     "@deno-assert": "https://deno.land/std@0.208.0/assert/mod.ts",
     "@std/cli": "jsr:@std/cli@^1.0.0",
     "@deno-walk": "jsr:@std/fs@1/walk",
+    "@deno/emit": "jsr:@deno/emit@^0.46",
     "react": "npm:react@^19.1.1",
     "react-dom": "npm:react-dom@^19.1.1",
     "react-dom/server": "npm:react-dom@^19.1.1/server",

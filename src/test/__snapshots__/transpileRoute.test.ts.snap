@@ -1,11 +1,8 @@
 export const snapshot = {};
 
 snapshot[`transpileRoute should transpile a simple TypeScript file 1`] = `
-'function greet(name) {
-  return "Hello, " + name;
+"export function greet(name) {
+  return 'Hello, ' + name;
 }
-export {
-  greet
-};
-'
+"
 `;
