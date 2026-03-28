@@ -27,7 +27,7 @@ jobs:
         run: deno lint --unstable-raw-imports
 
       - name: Run tests with coverage
-        run: deno test --parallel --allow-all --unstable-raw-imports --unstable-bundle --coverage=coverage
+        run: deno test --allow-all --unstable-raw-imports --unstable-bundle --coverage=coverage
 
       - name: Generate coverage report
         run: deno coverage coverage --lcov --output=coverage/lcov.info
@@ -36,7 +36,7 @@ jobs:
         run: |
           LINE_COV=$(deno coverage coverage 2>&1 | grep "All files" | awk '{print $NF}' | tr -d '%')
           echo "Line coverage: ${LINE_COV}%"
-          if [ "$(echo "$LINE_COV < 90" | bc -l)" -eq 1 ]; then
+          if [ "$(echo "$LINE_COV" | awk '{print ($1 < 90)}')" -eq 1 ]; then
             echo "::error::Line coverage ${LINE_COV}% is below 90% threshold"
             exit 1
           fi
