@@ -29,4 +29,4 @@ export const THRESHOLDS: Record<string, number> = {
 } as const;
 
 /** Multiplier for regression detection against historical average. */
-export const REGRESSION_MULTIPLIER = 1.5;
+export const REGRESSION_MULTIPLIER = 3.0;
