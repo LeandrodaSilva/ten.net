@@ -28,6 +28,11 @@ jobs:
       - name: Run linter
         run: deno lint --unstable-raw-imports
 
+      - name: Cache dependencies and warm up bundler
+        run: |
+          deno cache --unstable-raw-imports --unstable-bundle src/mod.ts
+          deno eval --unstable-bundle 'await Deno.bundle({ entrypoints: ["./app/api/hello/route.ts"], platform: "deno", minify: false, write: false }); console.log("Bundler warmed up")'
+
       - name: Run tests
         run: deno test --allow-all --unstable-raw-imports --unstable-bundle
 
