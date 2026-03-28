@@ -15,9 +15,8 @@
  * @module
  */
 
-// deno-lint-ignore no-explicit-any
 const AsyncFunction = Object.getPrototypeOf(async function () {})
-  .constructor as new (...args: any[]) => (...args: any[]) => Promise<any>;
+  .constructor as new (body: string) => () => Promise<Record<string, unknown>>;
 
 /**
  * Evaluates self-contained JavaScript code that uses ES module `export` syntax,
