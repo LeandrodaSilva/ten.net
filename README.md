@@ -292,13 +292,13 @@ tennet build
 
 #### CLI options
 
-| Option           | Default    | Description                                  |
-| ---------------- | ---------- | -------------------------------------------- |
-| `--secret`       | (auto)     | Encryption secret (auto-generated if omitted) |
-| `--output`       | `./dist`   | Output directory                             |
-| `--app-path`     | `./app`    | Application root directory                   |
-| `--public-path`  | `./public` | Public/static assets directory               |
-| `--no-compile`   | `false`    | Generate compiled TS only, skip binary        |
+| Option          | Default    | Description                                   |
+| --------------- | ---------- | --------------------------------------------- |
+| `--secret`      | (auto)     | Encryption secret (auto-generated if omitted) |
+| `--output`      | `./dist`   | Output directory                              |
+| `--app-path`    | `./app`    | Application root directory                    |
+| `--public-path` | `./public` | Public/static assets directory                |
+| `--no-compile`  | `false`    | Generate compiled TS only, skip binary        |
 
 ### Programmatic API
 
