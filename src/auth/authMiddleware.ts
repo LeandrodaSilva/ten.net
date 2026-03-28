@@ -1,14 +1,10 @@
 import type { Middleware } from "../middleware/middleware.ts";
 import type { Permission, Resource, Session } from "./types.ts";
 import { ROLE_PERMISSIONS } from "./types.ts";
-import { InMemorySessionStore } from "./sessionStore.ts";
 import type { SessionStore } from "./sessionStore.ts";
 
 /** WeakMap associating requests with their authenticated sessions. */
 export const requestSession = new WeakMap<Request, Session>();
-
-/** Global session store instance. */
-export const sessionStore: SessionStore = new InMemorySessionStore();
 
 const DEFAULT_COOKIE_NAME = "__tennet_sid";
 
@@ -73,6 +69,7 @@ function redirectToLogin(): Response {
 
 /** Auth middleware: guards /admin routes, enforces RBAC. */
 export function authMiddleware(
+  store: SessionStore,
   cookieName = DEFAULT_COOKIE_NAME,
 ): Middleware {
   return async (req: Request, next: () => Promise<Response>) => {
@@ -90,7 +87,7 @@ export function authMiddleware(
 
     if (!sessionId) return redirectToLogin();
 
-    const session = await sessionStore.get(sessionId);
+    const session = await store.get(sessionId);
     if (!session) return redirectToLogin();
 
     // Logout requires a valid session but no RBAC check

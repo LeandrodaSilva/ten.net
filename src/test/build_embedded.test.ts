@@ -33,7 +33,9 @@ describe("Build Embedded Integration", () => {
 
     const manifest = await collectManifest("./app", "./public");
     const app = Ten.net({ embedded: manifest });
-    await app.useAdmin(new AdminPlugin({ plugins: [PagePlugin] }));
+    await app.useAdmin(
+      new AdminPlugin({ storage: "memory", plugins: [PagePlugin] }),
+    );
     server = await app.start({ port: 0, onListen: () => {} });
     const addr = server.addr as Deno.NetAddr;
     baseUrl = `http://localhost:${addr.port}`;

@@ -146,6 +146,7 @@ describe("SettingsPlugin", () => {
 describe("AdminPlugin generates CRUD routes for each plugin", () => {
   it("should generate 6 CRUD routes per plugin", async () => {
     const admin = new AdminPlugin({
+      storage: "memory",
       plugins: [
         PostsPlugin,
         CategoriesPlugin,
@@ -166,6 +167,7 @@ describe("AdminPlugin generates CRUD routes for each plugin", () => {
 
   it("should generate index routes for each plugin", async () => {
     const admin = new AdminPlugin({
+      storage: "memory",
       plugins: [PostsPlugin, CategoriesPlugin],
     });
     const { routes } = await admin.init();
@@ -180,7 +182,10 @@ describe("AdminPlugin generates CRUD routes for each plugin", () => {
   });
 
   it("index route regex should match correct path", async () => {
-    const admin = new AdminPlugin({ plugins: [PostsPlugin] });
+    const admin = new AdminPlugin({
+      storage: "memory",
+      plugins: [PostsPlugin],
+    });
     const { routes } = await admin.init();
     const indexRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin" && r.method === "GET",

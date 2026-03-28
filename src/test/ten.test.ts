@@ -22,7 +22,10 @@ describe("Ten", () => {
   describe("useAdmin", () => {
     it("should register admin routes and middlewares", async () => {
       const app = Ten.net();
-      const admin = new AdminPlugin({ plugins: [PagePlugin] });
+      const admin = new AdminPlugin({
+        storage: "memory",
+        plugins: [PagePlugin],
+      });
       await app.useAdmin(admin);
       const routes = (app as unknown as { _routes: Route[] })._routes;
       // Dashboard + favicon + 6 CRUD routes for PagePlugin + 3 auth routes = 11
@@ -31,7 +34,7 @@ describe("Ten", () => {
 
     it("should register middlewares from admin plugin", async () => {
       const app = Ten.net();
-      const admin = new AdminPlugin({ plugins: [] });
+      const admin = new AdminPlugin({ storage: "memory", plugins: [] });
       await app.useAdmin(admin);
       const middlewares = (app as unknown as { _middlewares: unknown[] })
         ._middlewares;
@@ -41,7 +44,10 @@ describe("Ten", () => {
 
     it("should make admin routes accessible via request handler", async () => {
       const app = Ten.net();
-      const admin = new AdminPlugin({ plugins: [PagePlugin] });
+      const admin = new AdminPlugin({
+        storage: "memory",
+        plugins: [PagePlugin],
+      });
       await app.useAdmin(admin);
 
       const handler = (app as unknown as {
