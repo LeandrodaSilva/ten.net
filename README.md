@@ -360,25 +360,25 @@ Benchmarks run against the demo app with `deno task bench`.
 
 | Benchmark              | Avg     | Min     | Max     | p75     | p99     | Iterations |
 | ---------------------- | ------- | ------- | ------- | ------- | ------- | ---------- |
-| findDocumentLayoutRoot | 8.2us   | 8.1us   | 8.3us   | 8.2us   | 8.3us   | 17         |
-| findOrderedLayouts     | 44.1us  | 39.3us  | 292.3us | 42.0us  | 83.7us  | 11349      |
-| getRegexRoute_dynamic  | 930ns   | 920ns   | 989ns   | 934ns   | 989ns   | 64         |
-| getRegexRoute_static   | 808ns   | 793ns   | 888ns   | 811ns   | 888ns   | 72         |
-| http_404               | 103.5us | 89.7us  | 870.8us | 105.2us | 163.8us | 4843       |
-| http_admin             | 198.0us | 182.3us | 1.08ms  | 200.3us | 271.6us | 2536       |
-| http_api               | 115.2us | 105.4us | 587.5us | 114.1us | 163.1us | 4351       |
-| http_dynamic_param     | 126.8us | 116.6us | 993.4us | 126.5us | 165.1us | 3955       |
-| http_post_redirect     | 210.5us | 182.9us | 883.6us | 226.4us | 284.6us | 2385       |
-| http_static_page       | 433.4us | 363.3us | 1.36ms  | 444.1us | 699.9us | 1164       |
-| http_view_template     | 269.3us | 244.8us | 5.25ms  | 273.6us | 401.6us | 1867       |
-| paramsEngine           | 536ns   | 529ns   | 625ns   | 539ns   | 567ns   | 104        |
-| pathNamedParams        | 274ns   | 261ns   | 679ns   | 271ns   | 633ns   | 193        |
-| regex_test_match       | 22ns    | 22ns    | 33ns    | 22ns    | 23ns    | 2303       |
-| regex_test_nomatch     | 17ns    | 16ns    | 37ns    | 16ns    | 33ns    | 2999       |
-| routerEngine_full      | 28.59ms | 27.61ms | 29.56ms | 28.82ms | 29.56ms | 6          |
-| toSlug                 | 728ns   | 715ns   | 824ns   | 730ns   | 824ns   | 79         |
-| viewEngine_data        | 93.3us  | 84.7us  | 2.40ms  | 91.1us  | 163.6us | 5369       |
-| viewEngine_static      | 52.6us  | 47.3us  | 629.1us | 50.1us  | 95.1us  | 9516       |
+| findDocumentLayoutRoot | 8.5us   | 8.2us   | 135.1us | 8.4us   | 13.7us  | 58602      |
+| findOrderedLayouts     | 44.3us  | 40.5us  | 287.7us | 42.7us  | 72.5us  | 11302      |
+| getRegexRoute_dynamic  | 952ns   | 938ns   | 1.2us   | 953ns   | 1.2us   | 63         |
+| getRegexRoute_static   | 815ns   | 805ns   | 907ns   | 818ns   | 907ns   | 72         |
+| http_404               | 108.8us | 93.2us  | 875.2us | 109.1us | 177.5us | 4606       |
+| http_admin             | 200.6us | 186.3us | 865.1us | 204.0us | 241.5us | 2503       |
+| http_api               | 117.6us | 108.4us | 570.8us | 117.1us | 162.7us | 4261       |
+| http_dynamic_param     | 129.8us | 119.7us | 830.5us | 129.4us | 168.2us | 3862       |
+| http_post_redirect     | 226.6us | 191.3us | 723.9us | 238.1us | 298.7us | 2216       |
+| http_static_page       | 426.4us | 359.7us | 1.34ms  | 439.5us | 678.3us | 1182       |
+| http_view_template     | 268.5us | 246.2us | 6.70ms  | 275.1us | 398.5us | 1872       |
+| paramsEngine           | 553ns   | 540ns   | 865ns   | 550ns   | 748ns   | 101        |
+| pathNamedParams        | 275ns   | 261ns   | 596ns   | 274ns   | 558ns   | 192        |
+| regex_test_match       | 22ns    | 22ns    | 29ns    | 22ns    | 24ns    | 2300       |
+| regex_test_nomatch     | 17ns    | 16ns    | 35ns    | 16ns    | 18ns    | 3035       |
+| routerEngine_full      | 29.16ms | 28.45ms | 30.14ms | 29.55ms | 30.14ms | 6          |
+| toSlug                 | 704ns   | 697ns   | 785ns   | 708ns   | 785ns   | 81         |
+| viewEngine_data        | 93.7us  | 85.0us  | 2.39ms  | 91.9us  | 155.7us | 5347       |
+| viewEngine_static      | 53.5us  | 48.0us  | 523.0us | 50.6us  | 100.3us | 9353       |
 
 <!-- BENCH:END -->
 
