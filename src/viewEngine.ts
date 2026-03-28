@@ -2,6 +2,7 @@ import { findOrderedLayouts } from "./utils/findOrderedLayouts.ts";
 import { findDocumentLayoutRoot } from "./utils/findDocumentLayoutRoot.ts";
 import type { Route } from "./models/Route.ts";
 import type { AppManifest } from "./build/manifest.ts";
+import { escapeHtml } from "./auth/htmlEscape.ts";
 
 interface IViewEngine {
   _appPath: string;
@@ -53,9 +54,15 @@ export async function viewEngine(args: IViewEngine) {
           const keys = Object.keys(body);
 
           keys.forEach((key) => {
+            // Triple-brace: raw output (unescaped)
+            pageModule = String(pageModule).replace(
+              `{{{${key}}}}`,
+              String(body[key]),
+            );
+            // Double-brace: escaped output (XSS-safe)
             pageModule = String(pageModule).replace(
               `{{${key}}}`,
-              body[key],
+              escapeHtml(String(body[key])),
             );
           });
         }

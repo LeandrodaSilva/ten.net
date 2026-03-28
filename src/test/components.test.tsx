@@ -119,7 +119,7 @@ describe("Dashboard layout", () => {
         <div>Test content</div>
       </Dashboard>,
     );
-    assertStringIncludes(html, "Your Company");
+    assertStringIncludes(html, "Ten.net");
     assertStringIncludes(html, "bg-gray-900");
   });
 
@@ -173,7 +173,7 @@ describe("appWithChildren", () => {
   it("should include Dashboard layout", () => {
     const TestComponent = () => <div>Test</div>;
     const result = appWithChildren(TestComponent);
-    assertStringIncludes(result, "Your Company");
+    assertStringIncludes(result, "Ten.net");
   });
 
   it("should be a string", () => {

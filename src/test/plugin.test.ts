@@ -22,6 +22,7 @@ describe("AdminPlugin", () => {
   it("should generate routes with getRoutes()", () => {
     const plugin = new AdminPlugin();
     const routes = plugin.getRoutes();
+    // AdminPlugin generates only 1 route (no CRUD for admin-plugin slug)
     assertEquals(routes.length, 1);
   });
 
@@ -81,7 +82,8 @@ describe("PagePlugin", () => {
   it("should generate routes at /admin/plugins/page-plugin", () => {
     const plugin = new PagePlugin();
     const routes = plugin.getRoutes();
-    assertEquals(routes.length, 1);
+    // PagePlugin now generates CRUD routes: index GET, POST create, GET [id], POST [id], POST [id]/delete
+    assertEquals(routes.length, 5);
     assertEquals(routes[0].path, "/admin/plugins/page-plugin");
   });
 
@@ -97,7 +99,7 @@ describe("PagePlugin", () => {
     const routes = plugin.getRoutes();
     const handler = routes[0].run!;
     const req = new Request("http://localhost/admin/plugins/page-plugin");
-    const response = handler(req);
+    const response = await handler(req);
     const body = await (response as Response).json();
     assertEquals(body.plugin, "PagePlugin");
   });

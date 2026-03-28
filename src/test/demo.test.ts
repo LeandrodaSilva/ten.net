@@ -107,12 +107,14 @@ describe("Demo E2E Integration", () => {
   });
 
   describe("Admin panel", () => {
-    it("GET /admin should render the admin dashboard", async () => {
-      const res = await fetch(`${baseUrl}/admin`);
-      assertEquals(res.status, 200);
-      assertEquals(res.headers.get("Content-Type"), "text/html");
-      const body = await res.text();
-      assertStringIncludes(body, "<!DOCTYPE html>");
+    it("GET /admin should redirect to login without session", async () => {
+      const res = await fetch(`${baseUrl}/admin`, { redirect: "manual" });
+      assertEquals(res.status, 302);
+      assertStringIncludes(
+        res.headers.get("Location") ?? "",
+        "/admin/login",
+      );
+      await res.body?.cancel();
     });
   });
 

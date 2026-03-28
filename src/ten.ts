@@ -5,9 +5,18 @@ import type { Route } from "./models/Route.ts";
 import type { Plugin } from "./models/Plugin.ts";
 import { PagePlugin } from "./plugins/pagePlugin.ts";
 import { AdminPlugin } from "./plugins/adminPlugin.ts";
+import { PostsPlugin } from "./plugins/postsPlugin.ts";
+import { CategoriesPlugin } from "./plugins/categoriesPlugin.ts";
+import { GroupsPlugin } from "./plugins/groupsPlugin.ts";
+import { UsersPlugin } from "./plugins/usersPlugin.ts";
+import { SettingsPlugin } from "./plugins/settingsPlugin.ts";
 import type { AppManifest } from "./build/manifest.ts";
 import { embeddedRouterEngine } from "./embedded/embeddedRouterEngine.ts";
 import type { BuildOptions, BuildResult } from "./build/build.ts";
+import type { Middleware } from "./middleware/middleware.ts";
+import { authMiddleware } from "./auth/authMiddleware.ts";
+import { csrfMiddleware } from "./auth/csrfMiddleware.ts";
+import { securityHeadersMiddleware } from "./auth/securityHeaders.ts";
 
 /**
  * Ten is a web framework class that provides routing, request handling, and server functionality.
@@ -26,6 +35,7 @@ export class Ten {
   private _routes: Route[] = [];
   private _plugins: Plugin[] = [];
   private _embedded?: AppManifest;
+  private _middlewares: Middleware[] = [];
 
   /**
    * Creates and returns a new instance of the Ten class.
@@ -74,6 +84,16 @@ export class Ten {
   }
 
   /**
+   * Registers a middleware function in the request pipeline.
+   * Middlewares are executed in the order they are registered.
+   *
+   * @param middleware - The middleware function to register
+   */
+  public use(middleware: Middleware): void {
+    this._middlewares.push(middleware);
+  }
+
+  /**
    * Registers a plugin with the Ten application. The plugin's routes are
    * automatically added to the router and it becomes visible in the admin dashboard.
    *
@@ -99,8 +119,25 @@ export class Ten {
     });
   }
 
-  /** Route an incoming HTTP request and return the appropriate response. */
+  /** Route an incoming HTTP request through the middleware chain and router. */
   private async _handleRequest(req: Request): Promise<Response> {
+    let index = 0;
+    const chain = this._middlewares;
+    const routeRequest = this._routeRequest.bind(this);
+
+    const next = async (): Promise<Response> => {
+      if (index < chain.length) {
+        const mw = chain[index++];
+        return mw(req, next);
+      }
+      return routeRequest(req);
+    };
+
+    return next();
+  }
+
+  /** Core routing logic, extracted from the original _handleRequest. */
+  private async _routeRequest(req: Request): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
 
@@ -122,10 +159,19 @@ export class Ten {
       });
     }
 
-    const route = this._routes.find((r) => r.regex.test(path));
+    const route = this._routes.find((r) => {
+      if (!r.regex.test(path)) return false;
+      // Routes with specific methods must match the request method
+      if (r.method !== "ALL" && r.method !== req.method.toUpperCase()) {
+        return false;
+      }
+      return true;
+    });
 
     if (!route) return new Response("Not found", { status: 404 });
 
+    // Save original method and set request method for import resolution
+    const originalMethod = route.method;
     route.method = req.method;
 
     try {
@@ -134,9 +180,11 @@ export class Ten {
       const params = paramsEngine(path, route);
 
       if (!route.isView && route.run) {
-        return route.run(req, {
+        const response = route.run(req, {
           params,
         });
+        route.method = originalMethod;
+        return response;
       }
 
       if (route.isView) {
@@ -148,6 +196,7 @@ export class Ten {
             params,
             embedded: this._embedded,
           });
+          route.method = originalMethod;
           return new Response(page, {
             status: 200,
             headers: { "Content-Type": "text/html" },
@@ -157,9 +206,12 @@ export class Ten {
         }
       }
 
+      route.method = originalMethod;
       return new Response("Not found", { status: 404 });
     } catch (e) {
-      return new Response(String(e), { status: 500 });
+      route.method = originalMethod;
+      console.error(e);
+      return new Response("Internal Server Error", { status: 500 });
     }
   }
 
@@ -190,8 +242,9 @@ export class Ten {
    *
    * This method performs the following operations:
    * 1. Loads routes from the route factory using the configured app path and route file name
-   * 2. Logs the loaded routes to the console for debugging purposes
-   * 3. Starts the Deno HTTP server with the configured request handler
+   * 2. Registers built-in plugins (admin, pages, posts, categories, groups, users, settings)
+   * 3. Registers security middlewares (headers, auth, CSRF)
+   * 4. Starts the Deno HTTP server with the configured request handler
    *
    * @param options - Optional Deno.ServeTcpOptions (e.g. `{ port: 3000 }`)
    * @returns The Deno.HttpServer instance for lifecycle control (e.g. shutdown)
@@ -215,9 +268,20 @@ export class Ten {
       );
     }
 
+    // Register built-in plugins
     this.addPlugin(AdminPlugin);
     this.addPlugin(PagePlugin);
+    this.addPlugin(PostsPlugin);
+    this.addPlugin(CategoriesPlugin);
+    this.addPlugin(GroupsPlugin);
+    this.addPlugin(UsersPlugin);
+    this.addPlugin(SettingsPlugin);
     console.info("Routes:", this._routes.map((r) => r.path));
+
+    // Register security middlewares
+    this.use(securityHeadersMiddleware);
+    this.use(authMiddleware());
+    this.use(csrfMiddleware);
 
     if (!this._embedded && Deno.env.get("DEBUG")) {
       this._startFileWatcher();

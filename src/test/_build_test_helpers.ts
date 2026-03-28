@@ -75,11 +75,13 @@ export async function assertApiHelloDynamic(baseUrl: string): Promise<void> {
 }
 
 export async function assertAdminPage(baseUrl: string): Promise<void> {
-  const res = await fetch(`${baseUrl}/admin`);
-  assertEquals(res.status, 200);
-  assertEquals(res.headers.get("Content-Type"), "text/html");
-  const body = await res.text();
-  assertStringIncludes(body, "<!DOCTYPE html>");
+  const res = await fetch(`${baseUrl}/admin`, { redirect: "manual" });
+  assertEquals(res.status, 302);
+  assertStringIncludes(
+    res.headers.get("Location") ?? "",
+    "/admin/login",
+  );
+  await res.body?.cancel();
 }
 
 export async function assertFavicon(baseUrl: string): Promise<void> {

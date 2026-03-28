@@ -67,7 +67,10 @@ export const Plugins = () => {
           </div>
           <div className="mt-8">
             <h3 className="text-base font-semibold text-gray-900">
-              <a href="#" className="focus:outline-hidden">
+              <a
+                href="/admin/plugins/post-plugin"
+                className="focus:outline-hidden"
+              >
                 <span aria-hidden="true" className="absolute inset-0"></span>
                 Posts
               </a>
@@ -107,7 +110,10 @@ export const Plugins = () => {
           </div>
           <div className="mt-8">
             <h3 className="text-base font-semibold text-gray-900">
-              <a href="#" className="focus:outline-hidden">
+              <a
+                href="/admin/plugins/category-plugin"
+                className="focus:outline-hidden"
+              >
                 <span aria-hidden="true" className="absolute inset-0"></span>
                 Categories
               </a>
@@ -147,7 +153,10 @@ export const Plugins = () => {
           </div>
           <div className="mt-8">
             <h3 className="text-base font-semibold text-gray-900">
-              <a href="#" className="focus:outline-hidden">
+              <a
+                href="/admin/plugins/group-plugin"
+                className="focus:outline-hidden"
+              >
                 <span aria-hidden="true" className="absolute inset-0"></span>
                 Groups
               </a>
@@ -187,7 +196,10 @@ export const Plugins = () => {
           </div>
           <div className="mt-8">
             <h3 className="text-base font-semibold text-gray-900">
-              <a href="#" className="focus:outline-hidden">
+              <a
+                href="/admin/plugins/user-plugin"
+                className="focus:outline-hidden"
+              >
                 <span aria-hidden="true" className="absolute inset-0"></span>
                 Users
               </a>
@@ -227,7 +239,10 @@ export const Plugins = () => {
           </div>
           <div className="mt-8">
             <h3 className="text-base font-semibold text-gray-900">
-              <a href="#" className="focus:outline-hidden">
+              <a
+                href="/admin/plugins/settings-plugin"
+                className="focus:outline-hidden"
+              >
                 <span aria-hidden="true" className="absolute inset-0"></span>
                 Settings
               </a>
