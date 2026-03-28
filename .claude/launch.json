@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ten-dev",
+      "runtimeExecutable": "deno",
+      "runtimeArgs": [
+        "run",
+        "-P",
+        "--inspect",
+        "--unstable-raw-imports",
+        "--watch",
+        "demo.ts"
+      ],
+      "port": 8000
+    }
+  ]
+}

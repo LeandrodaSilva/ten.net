@@ -1,11 +1,12 @@
 /**
  * Auto-discovers route entrypoints in the application directory and
- * bundles them using Deno's bundler API.
+ * bundles them using @deno/emit.
  *
  * @module
  */
 
 import { walk } from "@deno-walk";
+import { bundle } from "@deno/emit";
 
 /** Configuration options for {@linkcode bundleRoutes}. */
 export interface BundleRoutesOptions {
@@ -17,6 +18,14 @@ export interface BundleRoutesOptions {
   outputDir?: string;
   /** Whether to minify the output (default: false) */
   minify?: boolean;
+}
+
+/** Result returned by {@linkcode bundleRoutes}. */
+export interface BundleResult {
+  success: boolean;
+  code: string;
+  outputFiles: number;
+  errors: string[];
 }
 
 /**
@@ -56,10 +65,10 @@ export async function discoverRouteEntrypoints(
 
 /**
  * Auto-discovers route files in the app directory and bundles them
- * together using `Deno.bundle()`.
+ * together using `@deno/emit`.
  *
  * @param options - Bundle configuration options
- * @returns The Deno bundle result
+ * @returns The bundle result
  *
  * @example
  * ```typescript
@@ -69,7 +78,7 @@ export async function discoverRouteEntrypoints(
  */
 export async function bundleRoutes(
   options?: BundleRoutesOptions,
-): Promise<ReturnType<typeof Deno.bundle>> {
+): Promise<BundleResult> {
   const appPath = options?.appPath ?? "./app";
   const routeFileName = options?.routeFileName ?? "route.ts";
   const outputDir = options?.outputDir ?? "dist";
@@ -81,10 +90,28 @@ export async function bundleRoutes(
     throw new Error(`No route entrypoints found in "${appPath}"`);
   }
 
-  return await Deno.bundle({
-    entrypoints,
-    outputDir,
-    platform: "deno",
-    minify,
-  });
+  try {
+    // Bundle the first entrypoint (bundle() takes a single root)
+    const root = new URL(entrypoints[0], `file://${Deno.cwd()}/`);
+    const result = await bundle(root, { minify });
+    const code = result.code;
+
+    // Write bundled output
+    await Deno.mkdir(outputDir, { recursive: true });
+    await Deno.writeTextFile(`${outputDir}/bundle.js`, code);
+
+    return {
+      success: true,
+      code,
+      outputFiles: entrypoints.length,
+      errors: [],
+    };
+  } catch (err) {
+    return {
+      success: false,
+      code: "",
+      outputFiles: 0,
+      errors: [err instanceof Error ? err.message : String(err)],
+    };
+  }
 }
