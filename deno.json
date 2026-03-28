@@ -9,7 +9,7 @@
   "tasks": {
     "dev": "deno run -P --inspect --unstable-bundle --unstable-raw-imports --watch demo.ts",
     "test": "deno test --parallel --allow-all --unstable-raw-imports --unstable-bundle",
-    "coverage": "deno test *.ts --no-check --coverage src --allow-all --unstable-raw-imports --unstable-bundle",
+    "coverage": "deno test --no-check --coverage=coverage --allow-all --unstable-raw-imports --unstable-bundle",
     "fmt": "deno fmt",
     "lint": "deno lint --unstable-raw-imports",
     "check": "deno check  **/*.ts --unstable-raw-imports"
