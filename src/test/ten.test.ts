@@ -41,8 +41,8 @@ describe("Ten", () => {
         app.addPlugin(AdminPlugin);
         app.addPlugin(PagePlugin);
         const routes = (app as unknown as { _routes: Route[] })._routes;
-        // AdminPlugin: 1 route (index), PagePlugin: 5 routes (index + CRUD)
-        assertEquals(routes.length, 6);
+        // AdminPlugin: 1 route (index), PagePlugin: 6 routes (index + /new + CRUD)
+        assertEquals(routes.length, 7);
       } finally {
         console.log = consoleSpy;
       }

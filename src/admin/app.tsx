@@ -2,9 +2,15 @@ import { renderToString } from "react-dom/server";
 import { Script } from "./components/script.tsx";
 import Dashboard from "../layout/dashboard.tsx";
 import { Plugins } from "./components/plugins.tsx";
+import type { SidebarNavItem } from "./components/sidebar-nav.tsx";
 import type { ReactElement } from "react";
 
-export const App = ({ children }: { children: ReactElement }) => {
+export const App = (
+  { children, navItems }: {
+    children: ReactElement;
+    navItems?: SidebarNavItem[];
+  },
+) => {
   return (
     <html lang="en" className="h-full bg-gray-100">
       <head>
@@ -26,7 +32,7 @@ export const App = ({ children }: { children: ReactElement }) => {
         >
           Skip to content
         </a>
-        <Dashboard>
+        <Dashboard navItems={navItems}>
           {children || <Plugins />}
         </Dashboard>
         <Script>
@@ -34,6 +40,32 @@ export const App = ({ children }: { children: ReactElement }) => {
             // @ts-ignore: DOM APIs available at runtime in browser
             const doc = globalThis.document;
             if (!doc) return;
+
+            // @ts-ignore: Confirm delete
+            doc.addEventListener("submit", (e) => {
+              // @ts-ignore: DOM API
+              const btn = e.target.querySelector("[data-confirm]");
+              if (btn) {
+                // @ts-ignore: DOM API
+                const msg = btn.getAttribute("data-confirm") || "Are you sure?";
+                // @ts-ignore: DOM API
+                if (!confirm(msg)) e.preventDefault();
+              }
+            });
+
+            // @ts-ignore: Dismiss alerts
+            doc.querySelectorAll("[data-dismiss-alert]").forEach(
+              // @ts-ignore: DOM API
+              (btn) => {
+                // @ts-ignore: DOM API
+                btn.addEventListener("click", () => {
+                  // @ts-ignore: DOM API
+                  const alert = btn.closest("[role='alert']");
+                  // @ts-ignore: DOM API
+                  if (alert) alert.remove();
+                });
+              },
+            );
           }}
         </Script>
       </body>
@@ -50,3 +82,17 @@ export const appWithChildren = (Children: () => React.ReactElement) => {
     )
   }`;
 };
+
+export function renderAdminPage<P extends Record<string, unknown>>(
+  Component: (props: P) => React.ReactElement,
+  props: P,
+  navItems?: SidebarNavItem[],
+): string {
+  return `<!DOCTYPE html>${
+    renderToString(
+      <App navItems={navItems}>
+        <Component {...props} />
+      </App>,
+    )
+  }`;
+}

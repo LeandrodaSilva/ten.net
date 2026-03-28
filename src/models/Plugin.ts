@@ -1,8 +1,11 @@
 import { Route } from "./Route.ts";
-import { PluginList } from "../admin/components/plugin-list.tsx";
 import { toSlug } from "../utils/toSlug.ts";
-import { appWithChildren } from "../admin/app.tsx";
+import { appWithChildren, renderAdminPage } from "../admin/app.tsx";
 import { Plugins } from "../admin/components/plugins.tsx";
+import { CrudList } from "../admin/components/crud-list.tsx";
+import { CrudForm } from "../admin/components/crud-form.tsx";
+import type { FormFieldProps } from "../admin/components/form-field.tsx";
+import { requestSession } from "../auth/authMiddleware.ts";
 import { InMemoryStorage } from "./Storage.ts";
 import type { Storage, StorageItem } from "./Storage.ts";
 
@@ -214,22 +217,62 @@ export abstract class Plugin {
     const route = new Route({
       path,
       regex: new RegExp(`^${path}$`),
-      hasPage: true,
+      hasPage: isAdminPlugin,
       transpiledCode: "",
       sourcePath: "",
     });
     route.method = "GET";
-    route.run = isAdminPlugin
-      ? this._index.bind(this)
-      : this._listItems.bind(this);
 
     if (isAdminPlugin) {
-      route.page = appWithChildren(Plugins);
+      route.run = this._index.bind(this);
+      route.page = appWithChildren(
+        Plugins as unknown as () => React.ReactElement,
+      );
     } else {
-      route.page = appWithChildren(PluginList);
+      route.run = async (req: Request) => {
+        const listResponse = await this._listItems(req);
+        const data = await listResponse.json();
+        const url = new URL(req.url);
+
+        const columns = Object.keys(this.model).map((key) => ({
+          key,
+          label: key.charAt(0).toUpperCase() + key.slice(1),
+        }));
+
+        const session = requestSession.get(req);
+        const csrfToken = session?.csrfToken;
+
+        const html = renderAdminPage(CrudList, {
+          pluginName: this.name,
+          pluginSlug: this.slug,
+          columns,
+          rows: data.items as Record<string, unknown>[],
+          total: data.total as number,
+          page: data.page as number,
+          totalPages: data.totalPages as number,
+          success: url.searchParams.get("success") ?? undefined,
+          error: url.searchParams.get("error") ?? undefined,
+          csrfToken,
+        });
+
+        return new Response(html, {
+          status: 200,
+          headers: { "Content-Type": "text/html" },
+        });
+      };
     }
 
     this._routes.push(route);
+  }
+
+  /** Map a model field type to a form field type. */
+  private _fieldType(type: string): FormFieldProps["type"] {
+    switch (type) {
+      case "boolean":
+        return "checkbox";
+      default:
+        return "text";
+    }
   }
 
   /** Register CRUD routes for this plugin. */
@@ -251,17 +294,90 @@ export abstract class Plugin {
     createRoute.run = this._createItem.bind(this);
     this._routes.push(createRoute);
 
-    // GET — single item
+    // GET — new item form (MUST be before /{id} to avoid regex conflict)
+    const newRoute = new Route({
+      path: `${basePath}/new`,
+      regex: new RegExp(`^${basePath}/new$`),
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    newRoute.method = "GET";
+    newRoute.run = (req: Request) => {
+      const session = requestSession.get(req);
+      const csrfToken = session?.csrfToken;
+      const fields = Object.entries(this.model).map(([key, type]) => ({
+        name: key,
+        label: key.charAt(0).toUpperCase() + key.slice(1),
+        type: this._fieldType(type),
+        required: type !== "boolean",
+      }));
+      const html = renderAdminPage(CrudForm, {
+        pluginName: this.name,
+        pluginSlug: this.slug,
+        fields,
+        action: basePath,
+        isEdit: false,
+        csrfToken,
+      });
+      return new Response(html, {
+        status: 200,
+        headers: { "Content-Type": "text/html" },
+      });
+    };
+    this._routes.push(newRoute);
+
+    // GET — edit item form
     const getRoute = new Route({
       path: `${basePath}/[id]`,
       regex: new RegExp(`^${basePath}/([^/]+)$`),
-      hasPage: true,
+      hasPage: false,
       transpiledCode: "",
       sourcePath: "",
     });
     getRoute.method = "GET";
-    getRoute.run = this._getItem.bind(this);
-    getRoute.page = appWithChildren(PluginList);
+    getRoute.run = async (
+      req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const id = ctx?.params?.id;
+      if (!id) return new Response("Not found", { status: 404 });
+      const item = await this.storage.get(id);
+      if (!item) return new Response("Not found", { status: 404 });
+
+      const session = requestSession.get(req);
+      const csrfToken = session?.csrfToken;
+
+      const fields = Object.entries(this.model).map(([key, type]) => ({
+        name: key,
+        label: key.charAt(0).toUpperCase() + key.slice(1),
+        type: this._fieldType(type),
+        required: type !== "boolean",
+      }));
+
+      const values: Record<string, string> = {};
+      for (const key of Object.keys(this.model)) {
+        const val = item[key];
+        if (val !== undefined && val !== null) {
+          values[key] = String(val);
+        }
+      }
+
+      const html = renderAdminPage(CrudForm, {
+        pluginName: this.name,
+        pluginSlug: this.slug,
+        fields,
+        values,
+        action: `${basePath}/${id}`,
+        isEdit: true,
+        itemId: id,
+        csrfToken,
+      });
+      return new Response(html, {
+        status: 200,
+        headers: { "Content-Type": "text/html" },
+      });
+    };
     this._routes.push(getRoute);
 
     // POST — update item

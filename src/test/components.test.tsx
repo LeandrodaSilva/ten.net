@@ -3,7 +3,6 @@ import { assertEquals, assertStringIncludes } from "@std/assert";
 import { renderToString } from "react-dom/server";
 import { Script } from "../admin/components/script.tsx";
 import { Plugins } from "../admin/components/plugins.tsx";
-import { PluginList } from "../admin/components/plugin-list.tsx";
 import { Logs } from "../admin/components/logs.tsx";
 import Dashboard from "../layout/dashboard.tsx";
 import { App, appWithChildren } from "../admin/app.tsx";
@@ -45,70 +44,43 @@ describe("Script component", () => {
 });
 
 describe("Plugins component", () => {
-  it("should render the plugins grid", () => {
+  const samplePlugins = [
+    { name: "Pages", slug: "page-plugin", description: "Manage your pages" },
+    { name: "Posts", slug: "post-plugin", description: "Manage your posts" },
+  ];
+
+  it("should render empty state when no plugins", () => {
     const html = renderToString(<Plugins />);
-    assertStringIncludes(html, "Pages");
-    assertStringIncludes(html, "Posts");
-    assertStringIncludes(html, "Categories");
-    assertStringIncludes(html, "Groups");
-    assertStringIncludes(html, "Users");
-    assertStringIncludes(html, "Settings");
+    assertStringIncludes(html, "No plugins registered");
   });
 
-  it("should contain link to page-plugin", () => {
-    const html = renderToString(<Plugins />);
+  it("should render plugin cards when plugins provided", () => {
+    const html = renderToString(<Plugins plugins={samplePlugins} />);
+    assertStringIncludes(html, "Pages");
+    assertStringIncludes(html, "Posts");
+  });
+
+  it("should contain link to plugin slug", () => {
+    const html = renderToString(<Plugins plugins={samplePlugins} />);
     assertStringIncludes(html, "/admin/plugins/page-plugin");
+    assertStringIncludes(html, "/admin/plugins/post-plugin");
   });
 
   it("should render card descriptions", () => {
-    const html = renderToString(<Plugins />);
-    assertStringIncludes(html, "Here contains all pages created by you");
-    assertStringIncludes(html, "Here contains all posts created by you");
-  });
-});
-
-describe("PluginList component", () => {
-  it("should render a table with headers", () => {
-    const html = renderToString(<PluginList />);
-    assertStringIncludes(html, "Name");
-    assertStringIncludes(html, "Title");
-    assertStringIncludes(html, "Email");
-    assertStringIncludes(html, "Role");
-  });
-
-  it("should render template placeholders", () => {
-    const html = renderToString(<PluginList />);
-    assertStringIncludes(html, "{{plugin}}");
-    assertStringIncludes(html, "{{description}}");
-  });
-
-  it("should render table rows with sample data", () => {
-    const html = renderToString(<PluginList />);
-    assertStringIncludes(html, "Lindsay Walton");
-    assertStringIncludes(html, "Courtney Henry");
-    assertStringIncludes(html, "Tom Cook");
-  });
-
-  it("should render Add user button", () => {
-    const html = renderToString(<PluginList />);
-    assertStringIncludes(html, "Add user");
+    const html = renderToString(<Plugins plugins={samplePlugins} />);
+    assertStringIncludes(html, "Manage your pages");
+    assertStringIncludes(html, "Manage your posts");
   });
 });
 
 describe("Logs component", () => {
-  it("should render timeline items", () => {
+  it("should render empty state", () => {
     const html = renderToString(<Logs />);
-    assertStringIncludes(html, "Front End Developer");
-    assertStringIncludes(html, "Bethany Blake");
-    assertStringIncludes(html, "Martha Gardner");
-    assertStringIncludes(html, "Katherine Snyder");
-  });
-
-  it("should render time elements", () => {
-    const html = renderToString(<Logs />);
-    assertStringIncludes(html, "Sep 20");
-    assertStringIncludes(html, "Sep 22");
-    assertStringIncludes(html, "Oct 4");
+    assertStringIncludes(html, "No recent activity");
+    assertStringIncludes(
+      html,
+      "Activity will appear here as you use the admin panel",
+    );
   });
 });
 
@@ -138,7 +110,7 @@ describe("Dashboard layout", () => {
         <div>Content</div>
       </Dashboard>,
     );
-    assertStringIncludes(html, "Front End Developer");
+    assertStringIncludes(html, "No recent activity");
   });
 
   it("should render notification button", () => {
@@ -187,7 +159,6 @@ describe("appWithChildren", () => {
       <App>{null as unknown as ReactElement}</App>,
     );
     // Quando children é null/falsy, o || <Plugins /> ativa o fallback
-    assertStringIncludes(html, "Pages");
-    assertStringIncludes(html, "/admin/plugins/page-plugin");
+    assertStringIncludes(html, "No plugins registered");
   });
 });

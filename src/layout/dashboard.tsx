@@ -1,7 +1,37 @@
 import { Logs } from "../admin/components/logs.tsx";
+import {
+  SidebarNav,
+  type SidebarNavItem,
+} from "../admin/components/sidebar-nav.tsx";
 import type { ReactElement } from "react";
 
-export default function Dashboard({ children }: { children: ReactElement }) {
+export default function Dashboard(
+  { children, navItems }: {
+    children: ReactElement;
+    navItems?: SidebarNavItem[];
+  },
+) {
+  const dashboardIcon = (
+    <svg
+      aria-hidden="true"
+      className="size-5 shrink-0 text-gray-400 group-hover:text-indigo-600"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+      />
+    </svg>
+  );
+
+  const allNavItems: SidebarNavItem[] = [
+    { label: "Dashboard", href: "/admin", icon: dashboardIcon },
+    ...(navItems ?? []),
+  ];
   return (
     <div className="flex min-h-full flex-col h-full">
       <header className="relative shrink-0 border-b border-white/10 bg-gray-900 before:pointer-events-none before:absolute before:inset-0 before:bg-black/10">
@@ -52,6 +82,7 @@ export default function Dashboard({ children }: { children: ReactElement }) {
           aria-label="Site navigation"
           className="sticky top-8 hidden w-44 shrink-0 lg:block h-full rounded-lg shadow-sm p-4 bg-white"
         >
+          <SidebarNav items={allNavItems} />
         </aside>
 
         <main id="main-content" className="flex-1 h-full">
