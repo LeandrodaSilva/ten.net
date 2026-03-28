@@ -58,7 +58,6 @@ describe("Build Compiled TS E2E", () => {
         "run",
         "--allow-net",
         "--allow-env",
-        "--unstable-bundle",
         "--unstable-raw-imports",
         `--config=${denoJsonPath}`,
         result.compiledPath,

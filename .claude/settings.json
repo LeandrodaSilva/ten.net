@@ -7,7 +7,7 @@
           {
             "type": "command",
             "if": "Bash(git commit*)",
-            "command": "deno test --parallel --allow-all --unstable-raw-imports --unstable-bundle 2>&1 || { echo '{\"decision\":\"block\",\"reason\":\"Tests failed. Fix failing tests before committing.\"}'; exit 0; }",
+            "command": "deno test --parallel --allow-all --unstable-raw-imports 2>&1 || { echo '{\"decision\":\"block\",\"reason\":\"Tests failed. Fix failing tests before committing.\"}'; exit 0; }",
             "timeout": 120,
             "statusMessage": "Running tests before commit..."
           }

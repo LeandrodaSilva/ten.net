@@ -7,7 +7,7 @@ describe("cli", () => {
       args: [
         "run",
         "--allow-all",
-        "--unstable-bundle",
+
         "src/cli.ts",
       ],
       stdout: "piped",
@@ -27,7 +27,7 @@ describe("cli", () => {
       args: [
         "run",
         "--allow-all",
-        "--unstable-bundle",
+
         "src/cli.ts",
         "--version",
       ],
@@ -47,7 +47,7 @@ describe("cli", () => {
       args: [
         "run",
         "--allow-all",
-        "--unstable-bundle",
+
         "src/cli.ts",
         "unknown-command",
       ],
