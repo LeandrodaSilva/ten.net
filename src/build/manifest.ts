@@ -1,3 +1,11 @@
+/**
+ * Type definitions for the Ten.net application manifest used in
+ * compiled single-binary builds. Defines the structure for embedded
+ * routes, static assets, and layout mappings.
+ *
+ * @module
+ */
+
 export interface EmbeddedRoute {
   path: string;
   regexSource: string;

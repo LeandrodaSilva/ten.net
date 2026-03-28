@@ -1,3 +1,11 @@
+/**
+ * AES-256-GCM encryption utilities for Ten.net code obfuscation builds.
+ * Provides key derivation (PBKDF2), encrypt/decrypt, gzip
+ * compression, and helpers for protecting compiled application bundles.
+ *
+ * @module
+ */
+
 import { decodeBase64, encodeBase64 } from "@std/encoding";
 
 const PBKDF2_ITERATIONS = 100_000;
