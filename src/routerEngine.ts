@@ -80,26 +80,21 @@ export async function routerEngine(
     routes.push(route);
   }
 
-  const promises = routes.map(async (r) => {
+  for (const r of routes) {
     const sourcePath = r.sourcePath;
-    let transpiledCode = "";
 
     try {
       Deno.lstatSync(sourcePath);
     } catch {
-      return r;
+      continue;
     }
 
     try {
-      transpiledCode = await transpileRoute(sourcePath);
+      r.transpiledCode = await transpileRoute(sourcePath);
     } catch (e) {
       console.error(`Error ${sourcePath}:`, e);
     }
+  }
 
-    r.transpiledCode = transpiledCode;
-
-    return r;
-  });
-
-  return await Promise.all(promises);
+  return routes;
 }
