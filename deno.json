@@ -12,7 +12,10 @@
     "coverage": "deno test --no-check --coverage=coverage --allow-all --unstable-raw-imports --unstable-bundle",
     "fmt": "deno fmt",
     "lint": "deno lint --unstable-raw-imports",
-    "check": "deno check  **/*.ts --unstable-raw-imports"
+    "check": "deno check  **/*.ts --unstable-raw-imports",
+    "bench": "deno bench --allow-all --unstable-raw-imports --unstable-bundle --json src/bench/ | deno run --allow-all src/bench/_history.ts && deno fmt README.md",
+    "bench:run": "deno bench --allow-all --unstable-raw-imports --unstable-bundle src/bench/",
+    "bench:check": "deno run --allow-all src/bench/_check_thresholds.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
