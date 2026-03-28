@@ -64,7 +64,7 @@ export async function exportKeyRaw(key: CryptoKey): Promise<Uint8Array> {
   return new Uint8Array(await crypto.subtle.exportKey("raw", key));
 }
 
-export async function importKeyRaw(raw: Uint8Array): Promise<CryptoKey> {
+export function importKeyRaw(raw: Uint8Array): Promise<CryptoKey> {
   return crypto.subtle.importKey(
     "raw",
     raw.buffer as ArrayBuffer,

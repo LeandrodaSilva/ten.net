@@ -1,5 +1,3 @@
-import { encodeBase64 } from "@std/encoding";
-
 export function generateCompiledApp(
   encryptedDataBase64: string,
   ivBase64: string,
