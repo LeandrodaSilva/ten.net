@@ -7,14 +7,14 @@ export default function Dashboard({ children }: { children: ReactElement }) {
       <header className="relative shrink-0 border-b border-white/10 bg-gray-900 before:pointer-events-none before:absolute before:inset-0 before:bg-black/10">
         <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <img
-            alt="Your Company"
+            alt="Ten.net"
             src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
             className="h-8 w-auto"
           />
           <div className="flex items-center gap-x-8">
             <button
               type="button"
-              className="-m-2.5 p-2.5 text-gray-400 hover:text-white"
+              className="-m-2.5 p-2.5 text-gray-400 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               <span className="sr-only">View notifications</span>
               <svg
@@ -22,7 +22,6 @@ export default function Dashboard({ children }: { children: ReactElement }) {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
-                data-slot="icon"
                 aria-hidden="true"
                 className="size-6"
               >
@@ -33,7 +32,10 @@ export default function Dashboard({ children }: { children: ReactElement }) {
                 />
               </svg>
             </button>
-            <a href="#" className="-m-1.5 p-1.5">
+            <a
+              href="#"
+              className="-m-1.5 p-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white rounded-full"
+            >
               <span className="sr-only">Your profile</span>
               <img
                 alt=""
@@ -46,14 +48,20 @@ export default function Dashboard({ children }: { children: ReactElement }) {
       </header>
 
       <div className="mx-auto flex w-full max-w-7xl items-start gap-x-8 px-4 py-10 sm:px-6 lg:px-8 h-full">
-        {/*<aside className="sticky top-8 hidden w-44 shrink-0 lg:block h-full rounded-lg shadow-sm p-4 bg-white">*/}
-        {/*</aside>*/}
+        <aside
+          aria-label="Site navigation"
+          className="sticky top-8 hidden w-44 shrink-0 lg:block h-full rounded-lg shadow-sm p-4 bg-white"
+        >
+        </aside>
 
-        <main className="flex-1 h-full">
+        <main id="main-content" className="flex-1 h-full">
           {children}
         </main>
 
-        <aside className="sticky top-8 hidden w-96 shrink-0 xl:block h-full rounded-lg shadow-sm p-4 bg-white">
+        <aside
+          aria-label="Activity log"
+          className="sticky top-8 hidden w-96 shrink-0 xl:block h-full rounded-lg shadow-sm p-4 bg-white"
+        >
           <Logs />
         </aside>
       </div>

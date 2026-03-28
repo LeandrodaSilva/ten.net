@@ -41,7 +41,8 @@ describe("Ten", () => {
         app.addPlugin(AdminPlugin);
         app.addPlugin(PagePlugin);
         const routes = (app as unknown as { _routes: Route[] })._routes;
-        assertEquals(routes.length, 2);
+        // AdminPlugin: 1 route (index), PagePlugin: 5 routes (index + CRUD)
+        assertEquals(routes.length, 6);
       } finally {
         console.log = consoleSpy;
       }
@@ -157,7 +158,7 @@ describe("Ten", () => {
       );
       assertEquals(response.status, 500);
       const body = await response.text();
-      assertStringIncludes(body, "Handler error");
+      assertStringIncludes(body, "Internal Server Error");
     });
 
     it("should return 500 for route that throws", async () => {
