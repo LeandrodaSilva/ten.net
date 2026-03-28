@@ -43,7 +43,7 @@ jobs:
         run: deno cache --unstable-raw-imports src/mod.ts
 
       - name: Run tests
-        run: deno test --allow-all --unstable-raw-imports
+        run: deno test --allow-all --unstable-raw-imports --unstable-kv
 
       - name: Type check
         run: deno check **/*.ts --unstable-raw-imports
