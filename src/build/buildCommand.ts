@@ -1,10 +1,12 @@
 import { parseArgs } from "@std/cli/parse-args";
+import { printBuildHelp, printVersion } from "../cliShared.ts";
 import { build } from "./build.ts";
 
 async function main() {
   const args = parseArgs(Deno.args, {
     string: ["secret", "output", "app-path", "public-path"],
-    boolean: ["no-compile"],
+    boolean: ["help", "version", "no-compile"],
+    alias: { h: "help", v: "version" },
     default: {
       output: "./dist",
       "app-path": "./app",
@@ -12,6 +14,16 @@ async function main() {
       "no-compile": false,
     },
   });
+
+  if (args.version) {
+    printVersion();
+    return;
+  }
+
+  if (args.help) {
+    printBuildHelp();
+    return;
+  }
 
   try {
     await build({
@@ -21,8 +33,7 @@ async function main() {
       secret: args.secret,
       compile: !args["no-compile"],
     });
-  } catch (e) {
-    console.error(String(e));
+  } catch {
     Deno.exit(1);
   }
 }
