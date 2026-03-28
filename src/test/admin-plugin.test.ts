@@ -7,7 +7,7 @@ import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
 
 describe("AdminPlugin.init()", () => {
   it("should return routes and middlewares", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes, middlewares } = await admin.init();
     assertEquals(Array.isArray(routes), true);
     assertEquals(routes.length > 0, true);
@@ -16,7 +16,7 @@ describe("AdminPlugin.init()", () => {
   });
 
   it("should generate dashboard route at /admin GET", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes } = await admin.init();
     const dash = routes.find(
       (r) => r.path === "/admin" && r.method === "GET",
@@ -27,7 +27,7 @@ describe("AdminPlugin.init()", () => {
   });
 
   it("should generate favicon route", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes } = await admin.init();
     const favicon = routes.find((r) => r.path === "/admin/favicon.ico");
     assertExists(favicon);
@@ -35,7 +35,7 @@ describe("AdminPlugin.init()", () => {
   });
 
   it("should generate auth routes", async () => {
-    const admin = new AdminPlugin({ plugins: [] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [] });
     const { routes } = await admin.init();
     const loginGet = routes.find(
       (r) => r.path === "/admin/login" && r.method === "GET",
@@ -53,6 +53,7 @@ describe("AdminPlugin.init()", () => {
 
   it("should generate 6 CRUD routes per plugin", async () => {
     const admin = new AdminPlugin({
+      storage: "memory",
       plugins: [PagePlugin, PostsPlugin, CategoriesPlugin],
     });
     const { routes } = await admin.init();
@@ -65,6 +66,7 @@ describe("AdminPlugin.init()", () => {
 
   it("should expose instantiated plugins", async () => {
     const admin = new AdminPlugin({
+      storage: "memory",
       plugins: [PagePlugin, CategoriesPlugin],
     });
     await admin.init();
@@ -74,7 +76,10 @@ describe("AdminPlugin.init()", () => {
   });
 
   it("should reuse plugin instances on re-init", async () => {
-    const admin = new AdminPlugin({ plugins: [CategoriesPlugin] });
+    const admin = new AdminPlugin({
+      storage: "memory",
+      plugins: [CategoriesPlugin],
+    });
     await admin.init();
     const firstPlugin = admin.plugins[0];
     await admin.init();
@@ -82,7 +87,7 @@ describe("AdminPlugin.init()", () => {
   });
 
   it("should work with no plugins", async () => {
-    const admin = new AdminPlugin();
+    const admin = new AdminPlugin({ storage: "memory" });
     const { routes, middlewares } = await admin.init();
     // Dashboard + favicon + 3 auth routes = 5
     assertEquals(routes.length, 5);
@@ -92,7 +97,10 @@ describe("AdminPlugin.init()", () => {
 
 describe("AdminPlugin CRUD via init() routes", () => {
   it("create item returns 302 redirect", async () => {
-    const admin = new AdminPlugin({ plugins: [CategoriesPlugin] });
+    const admin = new AdminPlugin({
+      storage: "memory",
+      plugins: [CategoriesPlugin],
+    });
     const { routes } = await admin.init();
     const createRoute = routes.find(
       (r) => r.path === "/admin/plugins/category-plugin" && r.method === "POST",
@@ -120,7 +128,10 @@ describe("AdminPlugin CRUD via init() routes", () => {
   });
 
   it("list route returns HTML", async () => {
-    const admin = new AdminPlugin({ plugins: [PostsPlugin] });
+    const admin = new AdminPlugin({
+      storage: "memory",
+      plugins: [PostsPlugin],
+    });
     const { routes } = await admin.init();
     const listRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin" && r.method === "GET",
@@ -135,7 +146,10 @@ describe("AdminPlugin CRUD via init() routes", () => {
   });
 
   it("delete returns 404 when item not found", async () => {
-    const admin = new AdminPlugin({ plugins: [PostsPlugin] });
+    const admin = new AdminPlugin({
+      storage: "memory",
+      plugins: [PostsPlugin],
+    });
     const { routes } = await admin.init();
     const deleteRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin/[id]/delete",
@@ -150,7 +164,10 @@ describe("AdminPlugin CRUD via init() routes", () => {
   });
 
   it("full CRUD lifecycle via AdminPlugin routes", async () => {
-    const admin = new AdminPlugin({ plugins: [CategoriesPlugin] });
+    const admin = new AdminPlugin({
+      storage: "memory",
+      plugins: [CategoriesPlugin],
+    });
     const { routes } = await admin.init();
     const plugin = admin.plugins[0];
 

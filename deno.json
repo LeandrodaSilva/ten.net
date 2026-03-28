@@ -13,8 +13,8 @@
   },
   "tasks": {
     "dev": "deno run -P --inspect --unstable-raw-imports --watch demo.ts",
-    "test": "deno test --parallel --allow-all --unstable-raw-imports",
-    "coverage": "deno test --no-check --coverage=coverage --allow-all --unstable-raw-imports",
+    "test": "deno test --parallel --allow-all --unstable-raw-imports --unstable-kv",
+    "coverage": "deno test --no-check --coverage=coverage --allow-all --unstable-raw-imports --unstable-kv",
     "fmt": "deno fmt",
     "lint": "deno lint --unstable-raw-imports",
     "check": "deno check  **/*.ts --unstable-raw-imports",

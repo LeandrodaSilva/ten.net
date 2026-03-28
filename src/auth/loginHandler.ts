@@ -1,9 +1,10 @@
 import { Route } from "../models/Route.ts";
 import { loginPage } from "../admin/components/login-form.tsx";
 import { verifyPassword } from "./passwordHasher.ts";
-import { parseCookie, sessionStore } from "./authMiddleware.ts";
+import { parseCookie } from "./authMiddleware.ts";
 import { generateCsrfToken } from "./csrfMiddleware.ts";
 import type { Session } from "./types.ts";
+import type { SessionStore } from "./sessionStore.ts";
 import type { UserStore } from "./userStore.ts";
 
 const COOKIE_NAME = "__tennet_sid";
@@ -15,7 +16,10 @@ function cookieFlags(): string {
 }
 
 /** Create auth routes for login and logout. */
-export function createAuthRoutes(userStore: UserStore): Route[] {
+export function createAuthRoutes(
+  userStore: UserStore,
+  sessionStore: SessionStore,
+): Route[] {
   const routes: Route[] = [];
 
   // GET /admin/login — render login form

@@ -1,16 +1,8 @@
-import { afterEach, describe, it } from "@std/testing/bdd";
+import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { createAuthRoutes } from "../auth/loginHandler.ts";
 import { InMemoryUserStore, seedDefaultAdmin } from "../auth/userStore.ts";
-import { sessionStore } from "../auth/authMiddleware.ts";
-
-/** Clear all sessions between tests to prevent cross-test pollution. */
-afterEach(async () => {
-  // The global sessionStore is an InMemorySessionStore.
-  // Delete any sessions created during tests by iterating known IDs.
-  // Since we cannot enumerate, we rely on the store's delete being a no-op for
-  // unknown keys. We track session IDs via Set-Cookie headers in each test.
-});
+import { InMemorySessionStore } from "../auth/sessionStore.ts";
 
 /** Helper: extract a cookie value from a Set-Cookie header. */
 function extractSessionId(setCookie: string): string {
@@ -18,18 +10,23 @@ function extractSessionId(setCookie: string): string {
   return match ? match[1] : "";
 }
 
+/** Helper: create auth routes with default stores. */
+async function setupRoutes() {
+  const userStore = new InMemoryUserStore();
+  await seedDefaultAdmin(userStore);
+  const sessionStore = new InMemorySessionStore();
+  const routes = createAuthRoutes(userStore, sessionStore);
+  return { routes, sessionStore };
+}
+
 describe("createAuthRoutes", () => {
   it("should return exactly 3 routes", async () => {
-    const store = new InMemoryUserStore();
-    await seedDefaultAdmin(store);
-    const routes = createAuthRoutes(store);
+    const { routes } = await setupRoutes();
     assertEquals(routes.length, 3);
   });
 
   it("GET /admin/login should return 200 with login page HTML", async () => {
-    const store = new InMemoryUserStore();
-    await seedDefaultAdmin(store);
-    const routes = createAuthRoutes(store);
+    const { routes } = await setupRoutes();
 
     const loginGet = routes.find(
       (r) => r.path === "/admin/login" && r.method === "GET",
@@ -45,9 +42,7 @@ describe("createAuthRoutes", () => {
   });
 
   it("POST /admin/login with valid credentials should redirect to /admin", async () => {
-    const store = new InMemoryUserStore();
-    await seedDefaultAdmin(store);
-    const routes = createAuthRoutes(store);
+    const { routes, sessionStore } = await setupRoutes();
 
     const loginPost = routes.find(
       (r) => r.path === "/admin/login" && r.method === "POST",
@@ -76,9 +71,7 @@ describe("createAuthRoutes", () => {
   });
 
   it("POST /admin/login with invalid credentials should return 401", async () => {
-    const store = new InMemoryUserStore();
-    await seedDefaultAdmin(store);
-    const routes = createAuthRoutes(store);
+    const { routes } = await setupRoutes();
 
     const loginPost = routes.find(
       (r) => r.path === "/admin/login" && r.method === "POST",
@@ -101,9 +94,7 @@ describe("createAuthRoutes", () => {
   });
 
   it("POST /admin/logout with session cookie should delete session and redirect", async () => {
-    const store = new InMemoryUserStore();
-    await seedDefaultAdmin(store);
-    const routes = createAuthRoutes(store);
+    const { routes, sessionStore } = await setupRoutes();
 
     // First, log in to get a valid session
     const loginPost = routes.find(
@@ -146,9 +137,7 @@ describe("createAuthRoutes", () => {
   });
 
   it("POST /admin/logout without cookie should still return 302 gracefully", async () => {
-    const store = new InMemoryUserStore();
-    await seedDefaultAdmin(store);
-    const routes = createAuthRoutes(store);
+    const { routes } = await setupRoutes();
 
     const logoutPost = routes.find(
       (r) => r.path === "/admin/logout" && r.method === "POST",

@@ -4,11 +4,14 @@ import {
   authMiddleware,
   parseCookie,
   requestSession,
-  sessionStore,
 } from "../auth/authMiddleware.ts";
+import { InMemorySessionStore } from "../auth/sessionStore.ts";
 import { csrfMiddleware } from "../auth/csrfMiddleware.ts";
 import { securityHeadersMiddleware } from "../auth/securityHeaders.ts";
 import type { Session } from "../auth/types.ts";
+
+/** Shared session store for auth middleware tests. */
+const sessionStore = new InMemorySessionStore();
 
 /** Wrap a sync Response-returning callback so it satisfies () => Promise<Response>. */
 function promiseNext(
@@ -65,7 +68,7 @@ describe("parseCookie", () => {
 
 // --- Auth Middleware ---
 describe("authMiddleware — bypass", () => {
-  const auth = authMiddleware();
+  const auth = authMiddleware(sessionStore);
 
   it("should pass through non-admin routes without auth", async () => {
     const req = new Request("http://localhost/about");
@@ -105,7 +108,7 @@ describe("authMiddleware — bypass", () => {
 });
 
 describe("authMiddleware — redirect to login", () => {
-  const auth = authMiddleware();
+  const auth = authMiddleware(sessionStore);
   const next = promiseNext(() => new Response("Admin", { status: 200 }));
 
   it("should redirect /admin to /admin/login when no cookie", async () => {
@@ -126,7 +129,7 @@ describe("authMiddleware — redirect to login", () => {
 });
 
 describe("authMiddleware — valid session passes through", () => {
-  const auth = authMiddleware();
+  const auth = authMiddleware(sessionStore);
 
   it("should allow /admin with valid session", async () => {
     const session = await seedSession({
@@ -156,7 +159,7 @@ describe("authMiddleware — valid session passes through", () => {
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
     const next = promiseNext(() => new Response("OK", { status: 200 }));
-    await authMiddleware()(req, next);
+    await authMiddleware(sessionStore)(req, next);
     const attached = requestSession.get(req);
     assertEquals(attached?.id, "attach-sess");
     await sessionStore.delete("attach-sess");
@@ -170,7 +173,7 @@ describe("authMiddleware — RBAC", () => {
       userId: "viewer-user",
       role: "viewer",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request("http://localhost/admin/plugins/post-plugin", {
       method: "POST",
       headers: { cookie: `__tennet_sid=${session.id}` },
@@ -187,7 +190,7 @@ describe("authMiddleware — RBAC", () => {
       userId: "editor-user",
       role: "editor",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request(
       "http://localhost/admin/plugins/user-plugin",
       {
@@ -207,7 +210,7 @@ describe("authMiddleware — RBAC", () => {
       userId: "user-2",
       role: "admin",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request(
       "http://localhost/admin/plugins/user-plugin",
       {
@@ -232,7 +235,7 @@ describe("authMiddleware — RBAC", () => {
       userId: "viewer-user",
       role: "viewer",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request("http://localhost/admin", {
       method: "GET",
       headers: { cookie: `__tennet_sid=${session.id}` },
@@ -433,7 +436,7 @@ describe("authMiddleware — method to permission mapping", () => {
       userId: "viewer-user",
       role: "viewer",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request("http://localhost/admin/plugins/post-plugin", {
       method: "PUT",
       headers: { cookie: `__tennet_sid=${session.id}` },
@@ -450,7 +453,7 @@ describe("authMiddleware — method to permission mapping", () => {
       userId: "viewer-user",
       role: "viewer",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request("http://localhost/admin/plugins/post-plugin", {
       method: "DELETE",
       headers: { cookie: `__tennet_sid=${session.id}` },
@@ -467,7 +470,7 @@ describe("authMiddleware — method to permission mapping", () => {
       userId: "viewer-user",
       role: "viewer",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request("http://localhost/admin/plugins/post-plugin", {
       method: "PATCH",
       headers: { cookie: `__tennet_sid=${session.id}` },
@@ -484,7 +487,7 @@ describe("authMiddleware — method to permission mapping", () => {
       userId: "user-2",
       role: "admin",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request("http://localhost/admin/", {
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
@@ -505,7 +508,7 @@ describe("authMiddleware — method to permission mapping", () => {
       userId: "user-2",
       role: "admin",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request(
       "http://localhost/admin/plugins/unknown-plugin",
       {
@@ -529,7 +532,7 @@ describe("authMiddleware — method to permission mapping", () => {
       userId: "editor-user",
       role: "editor",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request(
       "http://localhost/admin/plugins/page-plugin",
       {
@@ -554,7 +557,7 @@ describe("authMiddleware — method to permission mapping", () => {
       userId: "editor-user",
       role: "editor",
     });
-    const auth = authMiddleware();
+    const auth = authMiddleware(sessionStore);
     const req = new Request(
       "http://localhost/admin/plugins/settings-plugin",
       {

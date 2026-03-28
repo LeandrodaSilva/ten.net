@@ -24,7 +24,7 @@ async function initAdmin(
   ...plugins:
     (new () => InstanceType<typeof PostsPlugin | typeof CategoriesPlugin>)[]
 ): Promise<{ routes: Route[]; admin: AdminPlugin }> {
-  const admin = new AdminPlugin({ plugins });
+  const admin = new AdminPlugin({ storage: "memory", plugins });
   const { routes } = await admin.init();
   return { routes, admin };
 }
@@ -340,7 +340,10 @@ describe("AdminPlugin CRUD route handlers", () => {
 
 describe("AdminPlugin storage integration — full CRUD flow", () => {
   it("should create, list, update, and delete an item", async () => {
-    const admin = new AdminPlugin({ plugins: [CategoriesPlugin] });
+    const admin = new AdminPlugin({
+      storage: "memory",
+      plugins: [CategoriesPlugin],
+    });
     const { routes } = await admin.init();
     const plugin = admin.plugins[0];
 

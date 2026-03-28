@@ -31,7 +31,7 @@ jobs:
         run: deno cache --unstable-raw-imports src/mod.ts
 
       - name: Run tests with coverage
-        run: deno test --allow-all --unstable-raw-imports --coverage=coverage
+        run: deno test --allow-all --unstable-raw-imports --unstable-kv --coverage=coverage
 
       - name: Generate coverage report
         run: deno coverage coverage --lcov --output=coverage/lcov.info

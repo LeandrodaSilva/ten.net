@@ -5,23 +5,23 @@ import { PagePlugin } from "../plugins/pagePlugin.ts";
 
 describe("AdminPlugin", () => {
   it("should accept plugins in constructor", () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     assertEquals(admin instanceof AdminPlugin, true);
   });
 
   it("should accept empty plugins", () => {
-    const admin = new AdminPlugin();
+    const admin = new AdminPlugin({ storage: "memory" });
     assertEquals(admin instanceof AdminPlugin, true);
   });
 
   it("should generate routes via init()", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes } = await admin.init();
     assertEquals(routes.length > 0, true);
   });
 
   it("should generate dashboard route at /admin", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes } = await admin.init();
     const dashRoute = routes.find(
       (r) => r.path === "/admin" && r.method === "GET",
@@ -32,7 +32,7 @@ describe("AdminPlugin", () => {
   });
 
   it("should have page content in dashboard route", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes } = await admin.init();
     const dashRoute = routes.find(
       (r) => r.path === "/admin" && r.method === "GET",
@@ -41,7 +41,7 @@ describe("AdminPlugin", () => {
   });
 
   it("should have a run handler on dashboard that returns JSON", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes } = await admin.init();
     const dashRoute = routes.find(
       (r) => r.path === "/admin" && r.method === "GET",
@@ -54,7 +54,7 @@ describe("AdminPlugin", () => {
   });
 
   it("should generate favicon route", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes } = await admin.init();
     const faviconRoute = routes.find(
       (r) => r.path === "/admin/favicon.ico",
@@ -63,7 +63,7 @@ describe("AdminPlugin", () => {
   });
 
   it("should generate CRUD routes for sub-plugins", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes } = await admin.init();
     const pluginRoutes = routes.filter((r) =>
       r.path.startsWith("/admin/plugins/page-plugin")
@@ -73,7 +73,7 @@ describe("AdminPlugin", () => {
   });
 
   it("should generate auth routes", async () => {
-    const admin = new AdminPlugin({ plugins: [] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [] });
     const { routes } = await admin.init();
     const loginGet = routes.find(
       (r) => r.path === "/admin/login" && r.method === "GET",
@@ -90,14 +90,14 @@ describe("AdminPlugin", () => {
   });
 
   it("should return middlewares", async () => {
-    const admin = new AdminPlugin({ plugins: [] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [] });
     const { middlewares } = await admin.init();
     // securityHeaders, authMiddleware, csrfMiddleware
     assertEquals(middlewares.length, 3);
   });
 
   it("should expose instantiated plugins after init", async () => {
-    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     await admin.init();
     assertEquals(admin.plugins.length, 1);
     assertEquals(admin.plugins[0].name, "PagePlugin");

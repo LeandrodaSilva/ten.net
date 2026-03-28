@@ -27,6 +27,7 @@ describe("Demo E2E Integration", () => {
     const app = Ten.net();
     await app.useAdmin(
       new AdminPlugin({
+        storage: "memory",
         plugins: [
           PagePlugin,
           PostsPlugin,

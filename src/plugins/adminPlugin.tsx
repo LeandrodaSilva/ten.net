@@ -9,6 +9,7 @@ import { requestSession } from "../auth/authMiddleware.ts";
 import { createAuthRoutes } from "../auth/loginHandler.ts";
 import { InMemoryUserStore, seedDefaultAdmin } from "../auth/userStore.ts";
 import { authMiddleware } from "../auth/authMiddleware.ts";
+import { InMemorySessionStore } from "../auth/sessionStore.ts";
 import { csrfMiddleware } from "../auth/csrfMiddleware.ts";
 import { securityHeadersMiddleware } from "../auth/securityHeaders.ts";
 import type { Middleware } from "../middleware/middleware.ts";
@@ -18,6 +19,10 @@ import type { SidebarNavItem } from "../admin/components/sidebar-nav.tsx";
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {
   plugins?: (new () => Plugin)[];
+  /** Storage backend: "memory" (default for tests) or "kv" (Deno KV, default). */
+  storage?: "memory" | "kv";
+  /** Path to the Deno KV database file. Undefined = default path. */
+  kvPath?: string;
 }
 
 /**
@@ -28,9 +33,15 @@ export interface AdminPluginOptions {
 export class AdminPlugin {
   private _pluginConstructors: (new () => Plugin)[];
   private _plugins: Plugin[] = [];
+  private _storageMode: "memory" | "kv";
+  private _kvPath?: string;
+  private _sessionStore?: import("../auth/sessionStore.ts").SessionStore;
+  private _userStore?: import("../auth/userStore.ts").UserStore;
 
   constructor(options?: AdminPluginOptions) {
     this._pluginConstructors = options?.plugins ?? [];
+    this._storageMode = options?.storage ?? "kv";
+    this._kvPath = options?.kvPath;
   }
 
   /** Map a model field type to a form field type. */
@@ -390,6 +401,34 @@ export class AdminPlugin {
     // Instantiate content plugins (only on first init; re-init reuses existing instances)
     if (this._plugins.length === 0) {
       this._plugins = this._pluginConstructors.map((Ctor) => new Ctor());
+
+      // Inject storage backends
+      if (this._storageMode === "kv") {
+        const { DenoKvStorage } = await import(
+          "../storage/denoKvStorage.ts"
+        );
+        const { DenoKvSessionStore } = await import(
+          "../storage/denoKvSessionStore.ts"
+        );
+        const { DenoKvUserStore } = await import(
+          "../storage/denoKvUserStore.ts"
+        );
+        const { runMigrations } = await import("../storage/schema.ts");
+
+        const kv = await Deno.openKv(this._kvPath);
+        await runMigrations(kv);
+
+        for (const plugin of this._plugins) {
+          plugin.storage = new DenoKvStorage(kv, plugin.slug, plugin.model);
+        }
+
+        this._sessionStore = new DenoKvSessionStore(kv);
+        this._userStore = new DenoKvUserStore(kv);
+      } else {
+        this._sessionStore = new InMemorySessionStore();
+        this._userStore = new InMemoryUserStore();
+      }
+      await seedDefaultAdmin(this._userStore!);
     }
 
     const routes: Route[] = [];
@@ -406,14 +445,12 @@ export class AdminPlugin {
     }
 
     // Auth routes (login/logout)
-    const userStore = new InMemoryUserStore();
-    await seedDefaultAdmin(userStore);
-    routes.push(...createAuthRoutes(userStore));
+    routes.push(...createAuthRoutes(this._userStore!, this._sessionStore!));
 
     // Middlewares in execution order
     const middlewares: Middleware[] = [
       securityHeadersMiddleware,
-      authMiddleware(),
+      authMiddleware(this._sessionStore!),
       csrfMiddleware,
     ];
 
