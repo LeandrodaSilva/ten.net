@@ -1,3 +1,5 @@
+import { evaluateModuleCode } from "../utils/evaluateModuleCode.ts";
+
 /** Represents a single route in the Ten.net application. */
 export class Route {
   /** URL path pattern (e.g. `/hello/[name]`). */
@@ -142,17 +144,7 @@ export class Route {
   > {
     if (this.run) return this.run;
     try {
-      const blob = new Blob([this.transpiledCode], {
-        type: "application/javascript",
-      });
-      const url = URL.createObjectURL(blob);
-      let module: Record<string, unknown>;
-      try {
-        module = await import(url) as unknown as Record<string, unknown>;
-      } finally {
-        URL.revokeObjectURL(url);
-      }
-      console.info("Module called:", module);
+      const module = await evaluateModuleCode(this.transpiledCode);
       const fn = module[this._method] as
         | ((
           req: Request,
