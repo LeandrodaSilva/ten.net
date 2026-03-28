@@ -32,8 +32,9 @@ async function boot() {
     new TextDecoder().decode(decompressed),
   );
 
+  const port = parseInt(Deno.env.get("PORT") ?? "8000");
   const app = Ten.net({ embedded: manifest });
-  await app.start();
+  await app.start({ port, onListen: () => console.log("READY:" + port) });
 }
 
 if (import.meta.main) {
