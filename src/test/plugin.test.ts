@@ -82,26 +82,21 @@ describe("PagePlugin", () => {
   it("should generate routes at /admin/plugins/page-plugin", () => {
     const plugin = new PagePlugin();
     const routes = plugin.getRoutes();
-    // PagePlugin now generates CRUD routes: index GET, POST create, GET [id], POST [id], POST [id]/delete
-    assertEquals(routes.length, 5);
+    // PagePlugin generates CRUD routes: index GET, POST create, GET /new, GET [id], POST [id], POST [id]/delete
+    assertEquals(routes.length, 6);
     assertEquals(routes[0].path, "/admin/plugins/page-plugin");
   });
 
-  it("should have page content with PluginList", () => {
-    const plugin = new PagePlugin();
-    const routes = plugin.getRoutes();
-    assertStringIncludes(routes[0].page, "<!DOCTYPE html>");
-    assertStringIncludes(routes[0].page, "{{plugin}}");
-  });
-
-  it("should have a run handler that returns JSON", async () => {
+  it("should have run handler that returns HTML with CrudList", async () => {
     const plugin = new PagePlugin();
     const routes = plugin.getRoutes();
     const handler = routes[0].run!;
     const req = new Request("http://localhost/admin/plugins/page-plugin");
     const response = await handler(req);
-    const body = await (response as Response).json();
-    assertEquals(body.plugin, "PagePlugin");
+    assertEquals(response.headers.get("Content-Type"), "text/html");
+    const html = await response.text();
+    assertStringIncludes(html, "<!DOCTYPE html>");
+    assertStringIncludes(html, "PagePlugin");
   });
 });
 

@@ -22,6 +22,7 @@ export interface DataTableProps {
   createLabel?: string;
   emptyTitle?: string;
   emptyDescription?: string;
+  csrfToken?: string;
 }
 
 export function DataTable({
@@ -34,6 +35,7 @@ export function DataTable({
   createLabel = "Add new",
   emptyTitle = "No items",
   emptyDescription = "Get started by creating a new item.",
+  csrfToken,
 }: DataTableProps) {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -119,6 +121,13 @@ export function DataTable({
                                       action={href}
                                       className="inline ml-4"
                                     >
+                                      {csrfToken && (
+                                        <input
+                                          type="hidden"
+                                          name="_csrf"
+                                          value={csrfToken}
+                                        />
+                                      )}
                                       <button
                                         type="submit"
                                         data-confirm={action.confirmMessage

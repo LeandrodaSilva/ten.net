@@ -15,6 +15,7 @@ export interface CrudListProps {
   totalPages: number;
   success?: string;
   error?: string;
+  csrfToken?: string;
 }
 
 export function CrudList({
@@ -27,6 +28,7 @@ export function CrudList({
   totalPages,
   success,
   error,
+  csrfToken,
 }: CrudListProps) {
   const basePath = `/admin/plugins/${pluginSlug}`;
 
@@ -65,6 +67,7 @@ export function CrudList({
         emptyDescription={`Get started by creating your first ${
           pluginName.toLowerCase().replace(/s$/, "")
         }.`}
+        csrfToken={csrfToken}
       />
       {totalPages > 1 && (
         <Pagination

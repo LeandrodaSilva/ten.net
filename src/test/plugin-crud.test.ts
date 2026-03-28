@@ -91,7 +91,7 @@ describe("Plugin.validate()", () => {
 });
 
 describe("Plugin CRUD route handlers", () => {
-  it("_listItems route returns JSON with plugin info", async () => {
+  it("_listItems route returns HTML with CrudList", async () => {
     const plugin = new PostsPlugin();
     const routes = plugin.getRoutes();
     const listRoute = routes.find(
@@ -101,15 +101,13 @@ describe("Plugin CRUD route handlers", () => {
     const req = new Request("http://localhost/admin/plugins/post-plugin");
     const res = await listRoute!.run!(req);
     assertEquals(res.status, 200);
-    assertEquals(res.headers.get("Content-Type"), "application/json");
-    const body = await res.json();
-    assertEquals(body.plugin, "PostPlugin");
-    assertExists(body.items);
-    assertExists(body.total);
-    assertExists(body.page);
+    assertEquals(res.headers.get("Content-Type"), "text/html");
+    const html = await res.text();
+    assertStringIncludes(html, "<!DOCTYPE html>");
+    assertStringIncludes(html, "PostPlugin");
   });
 
-  it("_listItems returns page number from query param", async () => {
+  it("_listItems returns HTML for page query param", async () => {
     const plugin = new PostsPlugin();
     const routes = plugin.getRoutes();
     const listRoute = routes.find(
@@ -119,8 +117,8 @@ describe("Plugin CRUD route handlers", () => {
       "http://localhost/admin/plugins/post-plugin?page=3",
     );
     const res = await listRoute!.run!(req);
-    const body = await res.json();
-    assertEquals(body.page, 3);
+    assertEquals(res.status, 200);
+    assertEquals(res.headers.get("Content-Type"), "text/html");
   });
 
   it("_createItem creates an item and returns 302 redirect", async () => {
@@ -189,7 +187,7 @@ describe("Plugin CRUD route handlers", () => {
     assertEquals(res.status, 404);
   });
 
-  it("_getItem returns 200 with item when it exists", async () => {
+  it("_getItem returns 200 with edit form when item exists", async () => {
     const plugin = new PostsPlugin();
     // Pre-seed storage with a known item
     await plugin.storage.set("known-id", {
@@ -212,9 +210,10 @@ describe("Plugin CRUD route handlers", () => {
     );
     const res = await getRoute!.run!(req, { params: { id: "known-id" } });
     assertEquals(res.status, 200);
-    const body = await res.json();
-    assertEquals(body.item.id, "known-id");
-    assertEquals(body.item.title, "Test Post");
+    assertEquals(res.headers.get("Content-Type"), "text/html");
+    const html = await res.text();
+    assertStringIncludes(html, "<!DOCTYPE html>");
+    assertStringIncludes(html, "Test Post");
   });
 
   it("_updateItem returns 404 when no id in context", async () => {
@@ -348,7 +347,7 @@ describe("Plugin storage integration — full CRUD flow", () => {
     const createRes = await createRoute!.run!(createReq);
     assertEquals(createRes.status, 302);
 
-    // LIST
+    // LIST — now returns HTML; verify item was created via storage
     const listRoute = routes.find(
       (r) => r.path === "/admin/plugins/category-plugin" && r.method === "GET",
     );
@@ -356,12 +355,13 @@ describe("Plugin storage integration — full CRUD flow", () => {
       "http://localhost/admin/plugins/category-plugin",
     );
     const listRes = await listRoute!.run!(listReq);
-    const listBody = await listRes.json();
-    assertEquals(listBody.total, 1);
-    assertEquals(listBody.items.length, 1);
-    const createdId = listBody.items[0].id as string;
+    assertEquals(listRes.status, 200);
+    assertEquals(listRes.headers.get("Content-Type"), "text/html");
+    const items = await storage.list({ page: 1, limit: 20 });
+    assertEquals(items.length, 1);
+    const createdId = items[0].id as string;
 
-    // GET single
+    // GET single — now returns HTML edit form
     const getRoute = routes.find(
       (r) =>
         r.path === "/admin/plugins/category-plugin/[id]" && r.method === "GET",
@@ -371,8 +371,9 @@ describe("Plugin storage integration — full CRUD flow", () => {
     );
     const getRes = await getRoute!.run!(getReq, { params: { id: createdId } });
     assertEquals(getRes.status, 200);
-    const getBody = await getRes.json();
-    assertEquals(getBody.item.name, "Science");
+    assertEquals(getRes.headers.get("Content-Type"), "text/html");
+    const getHtml = await getRes.text();
+    assertStringIncludes(getHtml, "Science");
 
     // UPDATE
     const updateRoutes = routes.filter(

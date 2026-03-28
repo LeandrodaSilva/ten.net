@@ -29,7 +29,7 @@ describe("PostsPlugin", () => {
   it("should generate 5 routes (list + CRUD)", () => {
     const plugin = new PostsPlugin();
     const routes = plugin.getRoutes();
-    assertEquals(routes.length, 5);
+    assertEquals(routes.length, 6);
   });
 
   it("should have correct slug", () => {
@@ -130,7 +130,7 @@ describe("CategoriesPlugin", () => {
   it("should generate 5 routes", () => {
     const plugin = new CategoriesPlugin();
     const routes = plugin.getRoutes();
-    assertEquals(routes.length, 5);
+    assertEquals(routes.length, 6);
   });
 
   it("should generate index GET route at /admin/plugins/category-plugin", () => {
@@ -140,10 +140,13 @@ describe("CategoriesPlugin", () => {
     assertEquals(routes[0].method, "GET");
   });
 
-  it("should render list page HTML in index route", () => {
+  it("should render list page HTML in index route", async () => {
     const plugin = new CategoriesPlugin();
     const routes = plugin.getRoutes();
-    assertStringIncludes(routes[0].page, "<!DOCTYPE html>");
+    const req = new Request("http://localhost/admin/plugins/category-plugin");
+    const res = await routes[0].run!(req);
+    const html = await res.text();
+    assertStringIncludes(html, "<!DOCTYPE html>");
   });
 });
 
@@ -172,7 +175,7 @@ describe("GroupsPlugin", () => {
   it("should generate 5 routes", () => {
     const plugin = new GroupsPlugin();
     const routes = plugin.getRoutes();
-    assertEquals(routes.length, 5);
+    assertEquals(routes.length, 6);
   });
 
   it("should generate index GET route at /admin/plugins/group-plugin", () => {
@@ -210,7 +213,7 @@ describe("UsersPlugin", () => {
   it("should generate 5 routes", () => {
     const plugin = new UsersPlugin();
     const routes = plugin.getRoutes();
-    assertEquals(routes.length, 5);
+    assertEquals(routes.length, 6);
   });
 
   it("should generate index GET route at /admin/plugins/user-plugin", () => {
@@ -246,7 +249,7 @@ describe("SettingsPlugin", () => {
   it("should generate 5 routes", () => {
     const plugin = new SettingsPlugin();
     const routes = plugin.getRoutes();
-    assertEquals(routes.length, 5);
+    assertEquals(routes.length, 6);
   });
 
   it("should generate index GET route at /admin/plugins/settings-plugin", () => {
