@@ -14,5 +14,12 @@
  */
 
 export { Ten } from "./ten.ts";
-export type { AppManifest } from "./build/manifest.ts";
+export type {
+  AppManifest,
+  EmbeddedAsset,
+  EmbeddedRoute,
+} from "./build/manifest.ts";
+export type { BuildOptions, BuildResult } from "./build/build.ts";
 export { decompressData, decrypt, importKeyRaw } from "./build/crypto.ts";
+export { Plugin } from "./models/Plugin.ts";
+export type { PluginModel } from "./models/Plugin.ts";

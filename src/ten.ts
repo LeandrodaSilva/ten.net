@@ -7,6 +7,7 @@ import { PagePlugin } from "./plugins/pagePlugin.ts";
 import { AdminPlugin } from "./plugins/adminPlugin.ts";
 import type { AppManifest } from "./build/manifest.ts";
 import { embeddedRouterEngine } from "./embedded/embeddedRouterEngine.ts";
+import type { BuildOptions, BuildResult } from "./build/build.ts";
 
 /**
  * Ten is a web framework class that provides routing, request handling, and server functionality.
@@ -52,6 +53,27 @@ export class Ten {
   }
 
   /**
+   * Compiles the application into an encrypted binary.
+   * Collects routes, templates, and assets, encrypts them with AES-256-GCM,
+   * and optionally compiles to a standalone Deno binary.
+   *
+   * @param options - Build configuration options
+   * @returns Build result with paths and statistics
+   *
+   * @example
+   * ```typescript
+   * import { Ten } from "@leproj/tennet";
+   *
+   * const result = await Ten.build({ output: "./dist" });
+   * console.log(`Built ${result.stats.routes} routes`);
+   * ```
+   */
+  static async build(options?: BuildOptions): Promise<BuildResult> {
+    const { build } = await import("./build/build.ts");
+    return build(options);
+  }
+
+  /**
    * Registers a plugin with the Ten application. The plugin's routes are
    * automatically added to the router and it becomes visible in the admin dashboard.
    *
@@ -77,6 +99,7 @@ export class Ten {
     });
   }
 
+  /** Route an incoming HTTP request and return the appropriate response. */
   private async _handleRequest(req: Request): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
@@ -140,6 +163,7 @@ export class Ten {
     }
   }
 
+  /** Spawn a web worker that watches the app directory for file changes. */
   private _startFileWatcher() {
     const worker = new Worker(
       new URL("./devFileWatcherWorker.ts", import.meta.url),
