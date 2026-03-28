@@ -3,11 +3,8 @@ import { assertEquals, assertStringIncludes } from "@std/assert";
 import { build } from "../build/build.ts";
 import {
   assert404,
-  assertAdminLoginPage,
-  assertAdminPage,
   assertApiHello,
   assertApiHelloDynamic,
-  assertFavicon,
   assertFormCongrats,
   assertFormGet,
   assertFormPost,
@@ -150,41 +147,6 @@ describe("Build Binary E2E", () => {
   describe("Dynamic parameter routes", () => {
     it("GET /api/hello/John should return JSON with param from binary", async () => {
       await assertApiHelloDynamic(baseUrl);
-    });
-  });
-
-  describe("Admin panel", () => {
-    it("GET /admin should render the admin dashboard from binary", async () => {
-      await assertAdminPage(baseUrl);
-    });
-
-    it("GET /admin/login should return login form from binary", async () => {
-      await assertAdminLoginPage(baseUrl);
-    });
-
-    it("POST /admin/login with valid credentials should redirect from binary", async () => {
-      const formData = new URLSearchParams({
-        username: "admin",
-        password: "admin",
-      });
-      const res = await fetch(`${baseUrl}/admin/login`, {
-        method: "POST",
-        body: formData,
-        redirect: "manual",
-      });
-      assertEquals(res.status, 302);
-      assertEquals(res.headers.get("Location"), "/admin");
-      assertStringIncludes(
-        res.headers.get("Set-Cookie") ?? "",
-        "__tennet_sid=",
-      );
-      await res.body?.cancel();
-    });
-  });
-
-  describe("Favicon", () => {
-    it("GET /admin/favicon.ico should return icon from binary", async () => {
-      await assertFavicon(baseUrl);
     });
   });
 

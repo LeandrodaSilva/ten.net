@@ -2,7 +2,8 @@ import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists, assertStringIncludes } from "@std/assert";
 import { PostsPlugin } from "../plugins/postsPlugin.ts";
 import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
-import { InMemoryStorage } from "../models/Storage.ts";
+import { AdminPlugin } from "../plugins/adminPlugin.tsx";
+import type { Route } from "../models/Route.ts";
 
 // Helper to create a POST form request
 function makeFormRequest(
@@ -16,6 +17,16 @@ function makeFormRequest(
     body: body.toString(),
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   });
+}
+
+/** Helper: init AdminPlugin and return routes. */
+async function initAdmin(
+  ...plugins:
+    (new () => InstanceType<typeof PostsPlugin | typeof CategoriesPlugin>)[]
+): Promise<{ routes: Route[]; admin: AdminPlugin }> {
+  const admin = new AdminPlugin({ plugins });
+  const { routes } = await admin.init();
+  return { routes, admin };
 }
 
 describe("Plugin.validate()", () => {
@@ -61,10 +72,7 @@ describe("Plugin.validate()", () => {
   });
 
   it("should skip validation error for boolean fields with undefined value", () => {
-    // Boolean fields can be skipped (no error when missing)
     const plugin = new PostsPlugin();
-    // PostsPlugin model has no boolean fields, but validate handles them
-    // Verify that a non-boolean model field validates correctly
     const result = plugin.validate({
       title: "My Post",
       slug: "my-post",
@@ -90,10 +98,9 @@ describe("Plugin.validate()", () => {
   });
 });
 
-describe("Plugin CRUD route handlers", () => {
-  it("_listItems route returns HTML with CrudList", async () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
+describe("AdminPlugin CRUD route handlers", () => {
+  it("list route returns HTML with CrudList", async () => {
+    const { routes } = await initAdmin(PostsPlugin);
     const listRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin" && r.method === "GET",
     );
@@ -107,9 +114,8 @@ describe("Plugin CRUD route handlers", () => {
     assertStringIncludes(html, "PostPlugin");
   });
 
-  it("_listItems returns HTML for page query param", async () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
+  it("list returns HTML for page query param", async () => {
+    const { routes } = await initAdmin(PostsPlugin);
     const listRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin" && r.method === "GET",
     );
@@ -121,9 +127,8 @@ describe("Plugin CRUD route handlers", () => {
     assertEquals(res.headers.get("Content-Type"), "text/html");
   });
 
-  it("_createItem creates an item and returns 302 redirect", async () => {
-    const plugin = new CategoriesPlugin();
-    const routes = plugin.getRoutes();
+  it("create item and return 302 redirect", async () => {
+    const { routes } = await initAdmin(CategoriesPlugin);
     const createRoute = routes.find(
       (r) => r.path === "/admin/plugins/category-plugin" && r.method === "POST",
     );
@@ -144,15 +149,14 @@ describe("Plugin CRUD route handlers", () => {
     );
   });
 
-  it("_createItem returns 400 when validation fails", async () => {
-    const plugin = new CategoriesPlugin();
-    const routes = plugin.getRoutes();
+  it("create returns 400 when validation fails", async () => {
+    const { routes } = await initAdmin(CategoriesPlugin);
     const createRoute = routes.find(
       (r) => r.path === "/admin/plugins/category-plugin" && r.method === "POST",
     );
     const req = makeFormRequest(
       "http://localhost/admin/plugins/category-plugin",
-      { name: "" }, // missing slug and description
+      { name: "" },
     );
     const res = await createRoute!.run!(req);
     assertEquals(res.status, 400);
@@ -160,9 +164,8 @@ describe("Plugin CRUD route handlers", () => {
     assertExists(body.errors);
   });
 
-  it("_getItem returns 404 when no id in context", async () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
+  it("get item returns 404 when no id in context", async () => {
+    const { routes } = await initAdmin(PostsPlugin);
     const getRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin/[id]" && r.method === "GET",
     );
@@ -172,9 +175,8 @@ describe("Plugin CRUD route handlers", () => {
     assertEquals(res.status, 404);
   });
 
-  it("_getItem returns 404 when item does not exist in storage", async () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
+  it("get item returns 404 when item does not exist", async () => {
+    const { routes } = await initAdmin(PostsPlugin);
     const getRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin/[id]" && r.method === "GET",
     );
@@ -187,9 +189,9 @@ describe("Plugin CRUD route handlers", () => {
     assertEquals(res.status, 404);
   });
 
-  it("_getItem returns 200 with edit form when item exists", async () => {
-    const plugin = new PostsPlugin();
-    // Pre-seed storage with a known item
+  it("get item returns 200 with edit form when item exists", async () => {
+    const { admin } = await initAdmin(PostsPlugin);
+    const plugin = admin.plugins[0];
     await plugin.storage.set("known-id", {
       id: "known-id",
       title: "Test Post",
@@ -201,7 +203,9 @@ describe("Plugin CRUD route handlers", () => {
       category_ids: [],
       author_id: "u1",
     });
-    const routes = plugin.getRoutes();
+
+    // Re-init to get fresh routes with seeded storage
+    const { routes } = await admin.init();
     const getRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin/[id]" && r.method === "GET",
     );
@@ -216,9 +220,8 @@ describe("Plugin CRUD route handlers", () => {
     assertStringIncludes(html, "Test Post");
   });
 
-  it("_updateItem returns 404 when no id in context", async () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
+  it("update returns 404 when no id in context", async () => {
+    const { routes } = await initAdmin(PostsPlugin);
     const updateRoutes = routes.filter(
       (r) =>
         r.path === "/admin/plugins/post-plugin/[id]" && r.method === "POST",
@@ -233,9 +236,8 @@ describe("Plugin CRUD route handlers", () => {
     assertEquals(res.status, 404);
   });
 
-  it("_updateItem returns 404 when item does not exist", async () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
+  it("update returns 404 when item does not exist", async () => {
+    const { routes } = await initAdmin(PostsPlugin);
     const updateRoutes = routes.filter(
       (r) =>
         r.path === "/admin/plugins/post-plugin/[id]" && r.method === "POST",
@@ -245,12 +247,15 @@ describe("Plugin CRUD route handlers", () => {
       "http://localhost/admin/plugins/post-plugin/no-such-id",
       { title: "Updated" },
     );
-    const res = await updateRoute!.run!(req, { params: { id: "no-such-id" } });
+    const res = await updateRoute!.run!(req, {
+      params: { id: "no-such-id" },
+    });
     assertEquals(res.status, 404);
   });
 
-  it("_updateItem updates item and redirects with 302", async () => {
-    const plugin = new PostsPlugin();
+  it("update item and redirect with 302", async () => {
+    const { admin } = await initAdmin(PostsPlugin);
+    const plugin = admin.plugins[0];
     await plugin.storage.set("update-id", {
       id: "update-id",
       title: "Original Title",
@@ -262,7 +267,8 @@ describe("Plugin CRUD route handlers", () => {
       category_ids: [],
       author_id: "u1",
     });
-    const routes = plugin.getRoutes();
+
+    const { routes } = await admin.init();
     const updateRoutes = routes.filter(
       (r) =>
         r.path === "/admin/plugins/post-plugin/[id]" && r.method === "POST",
@@ -272,7 +278,9 @@ describe("Plugin CRUD route handlers", () => {
       "http://localhost/admin/plugins/post-plugin/update-id",
       { title: "Updated Title" },
     );
-    const res = await updateRoute!.run!(req, { params: { id: "update-id" } });
+    const res = await updateRoute!.run!(req, {
+      params: { id: "update-id" },
+    });
     assertEquals(res.status, 302);
     assertStringIncludes(
       res.headers.get("Location") ?? "",
@@ -282,9 +290,8 @@ describe("Plugin CRUD route handlers", () => {
     assertEquals(updated!.title, "Updated Title");
   });
 
-  it("_deleteItem returns 404 when no id in context", async () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
+  it("delete returns 404 when no id in context", async () => {
+    const { routes } = await initAdmin(PostsPlugin);
     const deleteRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin/[id]/delete",
     );
@@ -297,8 +304,9 @@ describe("Plugin CRUD route handlers", () => {
     assertEquals(res.status, 404);
   });
 
-  it("_deleteItem deletes item and redirects with 302", async () => {
-    const plugin = new PostsPlugin();
+  it("delete item and redirect with 302", async () => {
+    const { admin } = await initAdmin(PostsPlugin);
+    const plugin = admin.plugins[0];
     await plugin.storage.set("del-id", {
       id: "del-id",
       title: "To Delete",
@@ -310,7 +318,8 @@ describe("Plugin CRUD route handlers", () => {
       category_ids: [],
       author_id: "u1",
     });
-    const routes = plugin.getRoutes();
+
+    const { routes } = await admin.init();
     const deleteRoute = routes.find(
       (r) => r.path === "/admin/plugins/post-plugin/[id]/delete",
     );
@@ -329,12 +338,11 @@ describe("Plugin CRUD route handlers", () => {
   });
 });
 
-describe("Plugin storage integration — full CRUD flow", () => {
+describe("AdminPlugin storage integration — full CRUD flow", () => {
   it("should create, list, update, and delete an item", async () => {
-    const storage = new InMemoryStorage();
-    const plugin = new CategoriesPlugin();
-    plugin.storage = storage;
-    const routes = plugin.getRoutes();
+    const admin = new AdminPlugin({ plugins: [CategoriesPlugin] });
+    const { routes } = await admin.init();
+    const plugin = admin.plugins[0];
 
     // CREATE
     const createRoute = routes.find(
@@ -347,7 +355,7 @@ describe("Plugin storage integration — full CRUD flow", () => {
     const createRes = await createRoute!.run!(createReq);
     assertEquals(createRes.status, 302);
 
-    // LIST — now returns HTML; verify item was created via storage
+    // LIST — returns HTML; verify via storage
     const listRoute = routes.find(
       (r) => r.path === "/admin/plugins/category-plugin" && r.method === "GET",
     );
@@ -357,19 +365,22 @@ describe("Plugin storage integration — full CRUD flow", () => {
     const listRes = await listRoute!.run!(listReq);
     assertEquals(listRes.status, 200);
     assertEquals(listRes.headers.get("Content-Type"), "text/html");
-    const items = await storage.list({ page: 1, limit: 20 });
+    const items = await plugin.storage.list({ page: 1, limit: 20 });
     assertEquals(items.length, 1);
     const createdId = items[0].id as string;
 
-    // GET single — now returns HTML edit form
+    // GET single — returns HTML edit form
     const getRoute = routes.find(
       (r) =>
-        r.path === "/admin/plugins/category-plugin/[id]" && r.method === "GET",
+        r.path === "/admin/plugins/category-plugin/[id]" &&
+        r.method === "GET",
     );
     const getReq = new Request(
       `http://localhost/admin/plugins/category-plugin/${createdId}`,
     );
-    const getRes = await getRoute!.run!(getReq, { params: { id: createdId } });
+    const getRes = await getRoute!.run!(getReq, {
+      params: { id: createdId },
+    });
     assertEquals(getRes.status, 200);
     assertEquals(getRes.headers.get("Content-Type"), "text/html");
     const getHtml = await getRes.text();
@@ -378,7 +389,8 @@ describe("Plugin storage integration — full CRUD flow", () => {
     // UPDATE
     const updateRoutes = routes.filter(
       (r) =>
-        r.path === "/admin/plugins/category-plugin/[id]" && r.method === "POST",
+        r.path === "/admin/plugins/category-plugin/[id]" &&
+        r.method === "POST",
     );
     const updateRoute = updateRoutes[0];
     const updateReq = makeFormRequest(
@@ -389,7 +401,7 @@ describe("Plugin storage integration — full CRUD flow", () => {
       params: { id: createdId },
     });
     assertEquals(updateRes.status, 302);
-    const updatedItem = await storage.get(createdId);
+    const updatedItem = await plugin.storage.get(createdId);
     assertEquals(updatedItem!.name, "Advanced Science");
 
     // DELETE
@@ -404,11 +416,10 @@ describe("Plugin storage integration — full CRUD flow", () => {
       params: { id: createdId },
     });
     assertEquals(deleteRes.status, 302);
-    const deletedItem = await storage.get(createdId);
+    const deletedItem = await plugin.storage.get(createdId);
     assertEquals(deletedItem, null);
 
-    // Final count should be 0
-    const finalCount = await storage.count();
+    const finalCount = await plugin.storage.count();
     assertEquals(finalCount, 0);
   });
 });

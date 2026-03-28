@@ -1,6 +1,8 @@
 import { afterAll, beforeAll, describe, it } from "@std/testing/bdd";
 import { Ten } from "../ten.ts";
 import { collectManifest } from "../build/collector.ts";
+import { AdminPlugin } from "../plugins/adminPlugin.tsx";
+import { PagePlugin } from "../plugins/pagePlugin.ts";
 import {
   assert404,
   assertAdminPage,
@@ -31,6 +33,7 @@ describe("Build Embedded Integration", () => {
 
     const manifest = await collectManifest("./app", "./public");
     const app = Ten.net({ embedded: manifest });
+    await app.useAdmin(new AdminPlugin({ plugins: [PagePlugin] }));
     server = await app.start({ port: 0, onListen: () => {} });
     const addr = server.addr as Deno.NetAddr;
     baseUrl = `http://localhost:${addr.port}`;

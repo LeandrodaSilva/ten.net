@@ -1,10 +1,11 @@
 import { describe, it } from "@std/testing/bdd";
-import { assertEquals, assertStringIncludes } from "@std/assert";
+import { assertEquals } from "@std/assert";
 import { PostsPlugin } from "../plugins/postsPlugin.ts";
 import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
 import { GroupsPlugin } from "../plugins/groupsPlugin.ts";
 import { UsersPlugin } from "../plugins/usersPlugin.ts";
 import { SettingsPlugin } from "../plugins/settingsPlugin.ts";
+import { AdminPlugin } from "../plugins/adminPlugin.tsx";
 
 describe("PostsPlugin", () => {
   it("should have correct name", () => {
@@ -26,81 +27,24 @@ describe("PostsPlugin", () => {
     assertEquals(plugin.model.category_ids, "object");
   });
 
-  it("should generate 5 routes (list + CRUD)", () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes.length, 6);
-  });
-
   it("should have correct slug", () => {
     const plugin = new PostsPlugin();
     assertEquals(plugin.slug, "post-plugin");
   });
 
-  it("should generate index GET route at /admin/plugins/post-plugin", () => {
+  it("should validate correct data", () => {
     const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
-    const indexRoute = routes.find(
-      (r) => r.path === "/admin/plugins/post-plugin" && r.method === "GET",
-    );
-    assertEquals(indexRoute?.path, "/admin/plugins/post-plugin");
-    assertEquals(indexRoute?.method, "GET");
-  });
-
-  it("should generate POST create route at /admin/plugins/post-plugin", () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
-    const createRoute = routes.find(
-      (r) => r.path === "/admin/plugins/post-plugin" && r.method === "POST",
-    );
-    assertEquals(createRoute?.path, "/admin/plugins/post-plugin");
-    assertEquals(createRoute?.method, "POST");
-  });
-
-  it("should generate GET single item route at /admin/plugins/post-plugin/[id]", () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
-    const getRoute = routes.find(
-      (r) => r.path === "/admin/plugins/post-plugin/[id]" && r.method === "GET",
-    );
-    assertEquals(
-      getRoute?.path,
-      "/admin/plugins/post-plugin/[id]",
-    );
-  });
-
-  it("should generate POST update route at /admin/plugins/post-plugin/[id]", () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
-    const updateRoutes = routes.filter(
-      (r) =>
-        r.path === "/admin/plugins/post-plugin/[id]" && r.method === "POST",
-    );
-    assertEquals(updateRoutes.length, 1);
-  });
-
-  it("should generate POST delete route at /admin/plugins/post-plugin/[id]/delete", () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
-    const deleteRoute = routes.find(
-      (r) => r.path === "/admin/plugins/post-plugin/[id]/delete",
-    );
-    assertEquals(
-      deleteRoute?.path,
-      "/admin/plugins/post-plugin/[id]/delete",
-    );
-    assertEquals(deleteRoute?.method, "POST");
-  });
-
-  it("index route regex should match /admin/plugins/post-plugin", () => {
-    const plugin = new PostsPlugin();
-    const routes = plugin.getRoutes();
-    const indexRoute = routes[0];
-    assertEquals(indexRoute.regex.test("/admin/plugins/post-plugin"), true);
-    assertEquals(
-      indexRoute.regex.test("/admin/plugins/post-plugin/123"),
-      false,
-    );
+    const result = plugin.validate({
+      title: "Test",
+      slug: "test",
+      excerpt: "e",
+      body: "b",
+      cover_image: "img.jpg",
+      status: "draft",
+      category_ids: ["1"],
+      author_id: "u1",
+    });
+    assertEquals(result.valid, true);
   });
 });
 
@@ -126,28 +70,6 @@ describe("CategoriesPlugin", () => {
     const plugin = new CategoriesPlugin();
     assertEquals(plugin.slug, "category-plugin");
   });
-
-  it("should generate 5 routes", () => {
-    const plugin = new CategoriesPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes.length, 6);
-  });
-
-  it("should generate index GET route at /admin/plugins/category-plugin", () => {
-    const plugin = new CategoriesPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes[0].path, "/admin/plugins/category-plugin");
-    assertEquals(routes[0].method, "GET");
-  });
-
-  it("should render list page HTML in index route", async () => {
-    const plugin = new CategoriesPlugin();
-    const routes = plugin.getRoutes();
-    const req = new Request("http://localhost/admin/plugins/category-plugin");
-    const res = await routes[0].run!(req);
-    const html = await res.text();
-    assertStringIncludes(html, "<!DOCTYPE html>");
-  });
 });
 
 describe("GroupsPlugin", () => {
@@ -170,19 +92,6 @@ describe("GroupsPlugin", () => {
   it("should have correct slug", () => {
     const plugin = new GroupsPlugin();
     assertEquals(plugin.slug, "group-plugin");
-  });
-
-  it("should generate 5 routes", () => {
-    const plugin = new GroupsPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes.length, 6);
-  });
-
-  it("should generate index GET route at /admin/plugins/group-plugin", () => {
-    const plugin = new GroupsPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes[0].path, "/admin/plugins/group-plugin");
-    assertEquals(routes[0].method, "GET");
   });
 });
 
@@ -209,19 +118,6 @@ describe("UsersPlugin", () => {
     const plugin = new UsersPlugin();
     assertEquals(plugin.slug, "user-plugin");
   });
-
-  it("should generate 5 routes", () => {
-    const plugin = new UsersPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes.length, 6);
-  });
-
-  it("should generate index GET route at /admin/plugins/user-plugin", () => {
-    const plugin = new UsersPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes[0].path, "/admin/plugins/user-plugin");
-    assertEquals(routes[0].method, "GET");
-  });
 });
 
 describe("SettingsPlugin", () => {
@@ -245,17 +141,57 @@ describe("SettingsPlugin", () => {
     const plugin = new SettingsPlugin();
     assertEquals(plugin.slug, "settings-plugin");
   });
+});
 
-  it("should generate 5 routes", () => {
-    const plugin = new SettingsPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes.length, 6);
+describe("AdminPlugin generates CRUD routes for each plugin", () => {
+  it("should generate 6 CRUD routes per plugin", async () => {
+    const admin = new AdminPlugin({
+      plugins: [
+        PostsPlugin,
+        CategoriesPlugin,
+        GroupsPlugin,
+        UsersPlugin,
+        SettingsPlugin,
+      ],
+    });
+    const { routes } = await admin.init();
+    // Per plugin: index GET + POST create + GET /new + GET [id] + POST [id] + POST [id]/delete = 6
+    // Plus: dashboard + favicon + 3 auth routes = 5
+    // Total: 5 * 6 + 5 = 35
+    const pluginRoutes = routes.filter((r) =>
+      r.path.startsWith("/admin/plugins/")
+    );
+    assertEquals(pluginRoutes.length, 30);
   });
 
-  it("should generate index GET route at /admin/plugins/settings-plugin", () => {
-    const plugin = new SettingsPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes[0].path, "/admin/plugins/settings-plugin");
-    assertEquals(routes[0].method, "GET");
+  it("should generate index routes for each plugin", async () => {
+    const admin = new AdminPlugin({
+      plugins: [PostsPlugin, CategoriesPlugin],
+    });
+    const { routes } = await admin.init();
+    const postIndex = routes.find(
+      (r) => r.path === "/admin/plugins/post-plugin" && r.method === "GET",
+    );
+    const catIndex = routes.find(
+      (r) => r.path === "/admin/plugins/category-plugin" && r.method === "GET",
+    );
+    assertEquals(postIndex?.method, "GET");
+    assertEquals(catIndex?.method, "GET");
+  });
+
+  it("index route regex should match correct path", async () => {
+    const admin = new AdminPlugin({ plugins: [PostsPlugin] });
+    const { routes } = await admin.init();
+    const indexRoute = routes.find(
+      (r) => r.path === "/admin/plugins/post-plugin" && r.method === "GET",
+    );
+    assertEquals(
+      indexRoute!.regex.test("/admin/plugins/post-plugin"),
+      true,
+    );
+    assertEquals(
+      indexRoute!.regex.test("/admin/plugins/post-plugin/123"),
+      false,
+    );
   });
 });

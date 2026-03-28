@@ -1,65 +1,106 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { AdminPlugin } from "../plugins/adminPlugin.ts";
+import { AdminPlugin } from "../plugins/adminPlugin.tsx";
 import { PagePlugin } from "../plugins/pagePlugin.ts";
 
 describe("AdminPlugin", () => {
-  it("should have correct name", () => {
-    const plugin = new AdminPlugin();
-    assertEquals(plugin.name, "AdminPlugin");
+  it("should accept plugins in constructor", () => {
+    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    assertEquals(admin instanceof AdminPlugin, true);
   });
 
-  it("should have correct description", () => {
-    const plugin = new AdminPlugin();
-    assertEquals(plugin.description, "A plugin for handling page rendering.");
+  it("should accept empty plugins", () => {
+    const admin = new AdminPlugin();
+    assertEquals(admin instanceof AdminPlugin, true);
   });
 
-  it("should have correct model", () => {
-    const plugin = new AdminPlugin();
-    assertEquals(plugin.model, { name: "string", html: "string" });
+  it("should generate routes via init()", async () => {
+    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const { routes } = await admin.init();
+    assertEquals(routes.length > 0, true);
   });
 
-  it("should generate routes with getRoutes()", () => {
-    const plugin = new AdminPlugin();
-    const routes = plugin.getRoutes();
-    // AdminPlugin generates only 1 route (no CRUD for admin-plugin slug)
-    assertEquals(routes.length, 1);
+  it("should generate dashboard route at /admin", async () => {
+    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const { routes } = await admin.init();
+    const dashRoute = routes.find(
+      (r) => r.path === "/admin" && r.method === "GET",
+    );
+    assertEquals(dashRoute?.path, "/admin");
+    assertEquals(dashRoute?.method, "GET");
+    assertEquals(dashRoute?.hasPage, true);
   });
 
-  it("should generate admin index route at /admin", () => {
-    const plugin = new AdminPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes[0].path, "/admin");
+  it("should have page content in dashboard route", async () => {
+    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const { routes } = await admin.init();
+    const dashRoute = routes.find(
+      (r) => r.path === "/admin" && r.method === "GET",
+    );
+    assertStringIncludes(dashRoute!.page, "<!DOCTYPE html>");
   });
 
-  it("should have page content in admin route", () => {
-    const plugin = new AdminPlugin();
-    const routes = plugin.getRoutes();
-    assertStringIncludes(routes[0].page, "<!DOCTYPE html>");
-  });
-
-  it("should have GET method on admin route", () => {
-    const plugin = new AdminPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes[0].method, "GET");
-  });
-
-  it("should have hasPage true on admin route", () => {
-    const plugin = new AdminPlugin();
-    const routes = plugin.getRoutes();
-    assertEquals(routes[0].hasPage, true);
-  });
-
-  it("should have a run handler that returns JSON response", async () => {
-    const plugin = new AdminPlugin();
-    const routes = plugin.getRoutes();
-    const handler = routes[0].run!;
+  it("should have a run handler on dashboard that returns JSON", async () => {
+    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const { routes } = await admin.init();
+    const dashRoute = routes.find(
+      (r) => r.path === "/admin" && r.method === "GET",
+    );
     const req = new Request("http://localhost/admin");
-    const response = handler(req);
+    const response = dashRoute!.run!(req);
     const body = await (response as Response).json();
     assertEquals(body.plugin, "AdminPlugin");
-    assertEquals(body.description, "A plugin for handling page rendering.");
-    assertEquals(body.model, { name: "string", html: "string" });
+    assertEquals(Array.isArray(body.plugins), true);
+  });
+
+  it("should generate favicon route", async () => {
+    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const { routes } = await admin.init();
+    const faviconRoute = routes.find(
+      (r) => r.path === "/admin/favicon.ico",
+    );
+    assertEquals(faviconRoute?.method, "GET");
+  });
+
+  it("should generate CRUD routes for sub-plugins", async () => {
+    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    const { routes } = await admin.init();
+    const pluginRoutes = routes.filter((r) =>
+      r.path.startsWith("/admin/plugins/page-plugin")
+    );
+    // index GET, POST create, GET /new, GET [id], POST [id], POST [id]/delete
+    assertEquals(pluginRoutes.length, 6);
+  });
+
+  it("should generate auth routes", async () => {
+    const admin = new AdminPlugin({ plugins: [] });
+    const { routes } = await admin.init();
+    const loginGet = routes.find(
+      (r) => r.path === "/admin/login" && r.method === "GET",
+    );
+    const loginPost = routes.find(
+      (r) => r.path === "/admin/login" && r.method === "POST",
+    );
+    const logoutPost = routes.find(
+      (r) => r.path === "/admin/logout" && r.method === "POST",
+    );
+    assertEquals(loginGet?.method, "GET");
+    assertEquals(loginPost?.method, "POST");
+    assertEquals(logoutPost?.method, "POST");
+  });
+
+  it("should return middlewares", async () => {
+    const admin = new AdminPlugin({ plugins: [] });
+    const { middlewares } = await admin.init();
+    // securityHeaders, authMiddleware, csrfMiddleware
+    assertEquals(middlewares.length, 3);
+  });
+
+  it("should expose instantiated plugins after init", async () => {
+    const admin = new AdminPlugin({ plugins: [PagePlugin] });
+    await admin.init();
+    assertEquals(admin.plugins.length, 1);
+    assertEquals(admin.plugins[0].name, "PagePlugin");
   });
 });
 
@@ -79,33 +120,8 @@ describe("PagePlugin", () => {
     assertEquals(plugin.model, { name: "string", html: "string" });
   });
 
-  it("should generate routes at /admin/plugins/page-plugin", () => {
+  it("should have correct slug", () => {
     const plugin = new PagePlugin();
-    const routes = plugin.getRoutes();
-    // PagePlugin generates CRUD routes: index GET, POST create, GET /new, GET [id], POST [id], POST [id]/delete
-    assertEquals(routes.length, 6);
-    assertEquals(routes[0].path, "/admin/plugins/page-plugin");
-  });
-
-  it("should have run handler that returns HTML with CrudList", async () => {
-    const plugin = new PagePlugin();
-    const routes = plugin.getRoutes();
-    const handler = routes[0].run!;
-    const req = new Request("http://localhost/admin/plugins/page-plugin");
-    const response = await handler(req);
-    assertEquals(response.headers.get("Content-Type"), "text/html");
-    const html = await response.text();
-    assertStringIncludes(html, "<!DOCTYPE html>");
-    assertStringIncludes(html, "PagePlugin");
-  });
-});
-
-describe("Plugin plugins setter", () => {
-  it("should accept an array of plugins", () => {
-    const admin = new AdminPlugin();
-    const page = new PagePlugin();
-    admin.plugins = [admin, page];
-    // No error thrown = success
-    assertEquals(true, true);
+    assertEquals(plugin.slug, "page-plugin");
   });
 });
