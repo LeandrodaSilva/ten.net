@@ -101,7 +101,10 @@ describe("build engine", () => {
     assertEquals(typeof result.stats.assets, "number");
     assertEquals(typeof result.stats.manifestBytes, "number");
     assertEquals(typeof result.stats.compressedBytes, "number");
-    assertEquals(result.stats.compressedBytes < result.stats.manifestBytes, true);
+    assertEquals(
+      result.stats.compressedBytes < result.stats.manifestBytes,
+      true,
+    );
 
     await cleanup();
   });

@@ -1,8 +1,14 @@
+/** Represents a single route in the Ten.net application. */
 export class Route {
+  /** URL path pattern (e.g. `/hello/[name]`). */
   public path: string;
+  /** Compiled regular expression used for URL matching. */
   public regex: RegExp;
+  /** Whether this route has an associated HTML page template. */
   public hasPage: boolean;
+  /** Transpiled JavaScript source for the route handler. */
   public transpiledCode: string;
+  /** Filesystem path to the original TypeScript source file. */
   public sourcePath: string;
   private _pageContent: string = "";
   private _method:
@@ -21,6 +27,7 @@ export class Route {
     ) => Response | Promise<Response>)
     | undefined;
 
+  /** Create a new Route. */
   constructor(args: {
     path: string;
     regex: RegExp;
@@ -35,6 +42,7 @@ export class Route {
     this.sourcePath = args.sourcePath;
   }
 
+  /** Set the HTTP method for this route. */
   set method(method: string) {
     const m = method.toUpperCase();
     if (
@@ -53,15 +61,18 @@ export class Route {
     }
   }
 
+  /** The current HTTP method. */
   get method(): string {
     return this._method;
   }
 
+  /** Whether this route lives under `/admin`. */
   get isAdmin(): boolean {
     const adminPathPattern = /^\/admin(\/|$)/;
     return adminPathPattern.test(this.path);
   }
 
+  /** The route handler function, if any. */
   get run():
     | ((
       req: Request,
@@ -71,6 +82,7 @@ export class Route {
     return this._run;
   }
 
+  /** Assign a handler function to this route. */
   set run(
     fn:
       | ((
@@ -82,14 +94,17 @@ export class Route {
     this._run = fn;
   }
 
+  /** Set the HTML page template content. */
   set page(str: string) {
     this._pageContent = str;
   }
 
+  /** The HTML page template content. */
   get page(): string {
     return this._pageContent;
   }
 
+  /** Whether this route should be rendered as an HTML page (has page + GET). */
   get isView(): boolean {
     return this.hasPage && this._method === "GET";
   }

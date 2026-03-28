@@ -1,3 +1,11 @@
+/**
+ * Build API for compiling a Ten.net application into an encrypted,
+ * standalone binary. Handles manifest collection, gzip compression,
+ * AES-256-GCM encryption, and optional `deno compile`.
+ *
+ * @module
+ */
+
 import { encodeBase64 } from "@std/encoding";
 import { collectManifest } from "./collector.ts";
 import {
@@ -50,6 +58,7 @@ function log(verbose: boolean, ...args: unknown[]) {
   if (verbose) console.log(...args);
 }
 
+/** Compile a Ten.net application into an encrypted standalone binary. */
 export async function build(options?: BuildOptions): Promise<BuildResult> {
   const appPath = options?.appPath ?? "./app";
   const publicPath = options?.publicPath ?? "./public";
