@@ -70,6 +70,7 @@ describe("Demo E2E Integration", () => {
       assertEquals(res.status, 302);
       const location = res.headers.get("Location");
       assertStringIncludes(location ?? "", "/form/congrats?name=TestUser");
+      await res.body?.cancel();
     });
 
     it("GET /form/congrats should render with query param", async () => {
