@@ -12,6 +12,7 @@ const PBKDF2_ITERATIONS = 100_000;
 const KEY_LENGTH = 256;
 const IV_LENGTH = 12;
 
+/** Derive an AES-256-GCM {@linkcode CryptoKey} from a password and salt using PBKDF2. */
 export async function deriveKey(
   secret: string,
   salt: Uint8Array,
@@ -39,6 +40,7 @@ export async function deriveKey(
   );
 }
 
+/** Encrypt data with AES-256-GCM. Returns the random IV and ciphertext. */
 export async function encrypt(
   data: Uint8Array,
   key: CryptoKey,
@@ -54,6 +56,7 @@ export async function encrypt(
   return { iv, ciphertext };
 }
 
+/** Decrypt AES-256-GCM ciphertext using the given key and IV. */
 export async function decrypt(
   ciphertext: Uint8Array,
   key: CryptoKey,
@@ -68,10 +71,12 @@ export async function decrypt(
   );
 }
 
+/** Export a {@linkcode CryptoKey} as raw bytes. */
 export async function exportKeyRaw(key: CryptoKey): Promise<Uint8Array> {
   return new Uint8Array(await crypto.subtle.exportKey("raw", key));
 }
 
+/** Import raw key bytes as a decrypt-only AES-256-GCM {@linkcode CryptoKey}. */
 export function importKeyRaw(raw: Uint8Array): Promise<CryptoKey> {
   return crypto.subtle.importKey(
     "raw",
@@ -82,15 +87,18 @@ export function importKeyRaw(raw: Uint8Array): Promise<CryptoKey> {
   );
 }
 
+/** Generate a cryptographically random 16-byte salt. */
 export function generateSalt(): Uint8Array {
   return crypto.getRandomValues(new Uint8Array(16));
 }
 
+/** Generate a cryptographically random 32-byte secret encoded as base-64. */
 export function generateSecret(): string {
   const bytes = crypto.getRandomValues(new Uint8Array(32));
   return encodeBase64(bytes);
 }
 
+/** Compress data using gzip via the Compression Streams API. */
 export async function compressData(data: Uint8Array): Promise<Uint8Array> {
   const stream = new ReadableStream({
     start(controller) {
@@ -114,6 +122,7 @@ export async function compressData(data: Uint8Array): Promise<Uint8Array> {
   return result;
 }
 
+/** Decompress gzip data via the Compression Streams API. */
 export async function decompressData(data: Uint8Array): Promise<Uint8Array> {
   const stream = new ReadableStream({
     start(controller) {
@@ -137,4 +146,8 @@ export async function decompressData(data: Uint8Array): Promise<Uint8Array> {
   return result;
 }
 
-export { decodeBase64, encodeBase64 };
+/** Decode a base-64 string to bytes. Re-exported from `@std/encoding`. */
+export { decodeBase64 };
+
+/** Encode bytes as a base-64 string. Re-exported from `@std/encoding`. */
+export { encodeBase64 };
