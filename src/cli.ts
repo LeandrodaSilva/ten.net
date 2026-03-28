@@ -7,34 +7,9 @@
  */
 
 import { parseArgs } from "@std/cli/parse-args";
-import denoJson from "../deno.json" with { type: "json" };
 import { build } from "./build/build.ts";
-
-const VERSION = denoJson.version;
-
-function printHelp() {
-  console.log(`
-Ten.net CLI v${VERSION}
-
-Usage:
-  tennet <command> [options]
-
-Commands:
-  build    Compile the application into an encrypted binary
-
-Build Options:
-  --secret <string>       Encryption secret (auto-generated if omitted)
-  --output <string>       Output directory (default: ./dist)
-  --app-path <string>     Application root directory (default: ./app)
-  --public-path <string>  Public/static assets directory (default: ./public)
-  --no-compile            Generate compiled TS only, skip binary compilation
-
-Examples:
-  deno run -A jsr:@leproj/tennet/cli build
-  deno run -A jsr:@leproj/tennet/cli build --secret=mysecret --output=./out
-  deno run -A jsr:@leproj/tennet/cli build --no-compile
-`);
-}
+import { printBuildHelp, printCliHelp, printVersion } from "./cliShared.ts";
+import { TerminalUi } from "./terminalUi.ts";
 
 async function main() {
   const args = parseArgs(Deno.args, {
@@ -50,37 +25,43 @@ async function main() {
   });
 
   if (args.version) {
-    console.log(`tennet v${VERSION}`);
+    printVersion();
     return;
   }
 
-  if (args.help || args._.length === 0) {
-    printHelp();
+  const command = args._.length > 0 ? String(args._[0]) : undefined;
+
+  if (!command) {
+    printCliHelp();
     return;
   }
 
-  const command = String(args._[0]);
+  if (command === "build" && args.help) {
+    printBuildHelp();
+    return;
+  }
+
+  if (args.help) {
+    printCliHelp();
+    return;
+  }
 
   if (command === "build") {
     try {
-      const result = await build({
+      await build({
         appPath: args["app-path"],
         publicPath: args["public-path"],
         output: args.output,
         secret: args.secret,
         compile: !args["no-compile"],
       });
-
-      console.log(
-        `\nStats: ${result.stats.routes} routes, ${result.stats.layouts} layouts, ${result.stats.assets} assets`,
-      );
-    } catch (e) {
-      console.error(String(e));
+    } catch {
       Deno.exit(1);
     }
   } else {
-    console.error(`Unknown command: ${command}`);
-    printHelp();
+    const ui = new TerminalUi();
+    ui.line(ui.danger(`Unknown command: ${command}`), "stderr");
+    printCliHelp();
     Deno.exit(1);
   }
 }

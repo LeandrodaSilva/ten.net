@@ -7,6 +7,7 @@
  */
 
 import { encodeBase64 } from "@std/encoding";
+import { BuildReporter } from "./buildReporter.ts";
 import { collectManifest } from "./collector.ts";
 import {
   compressData,
@@ -17,7 +18,9 @@ import {
   generateSecret,
 } from "./crypto.ts";
 import { generateCompiledApp } from "./codeGenerator.ts";
+import type { AppManifest } from "./manifest.ts";
 import { bundleRoutes } from "./bundleRoutes.ts";
+import { formatBytes } from "../terminalUi.ts";
 
 /** Configuration options for {@linkcode Ten.build}. */
 export interface BuildOptions {
@@ -59,8 +62,123 @@ export interface BuildResult {
   };
 }
 
-function log(verbose: boolean, ...args: unknown[]) {
-  if (verbose) console.log(...args);
+class BuildStageError extends Error {
+  stage: string;
+  details?: string;
+
+  constructor(stage: string, message: string, details?: string) {
+    super(message);
+    this.name = "BuildStageError";
+    this.stage = stage;
+    this.details = details;
+  }
+}
+
+function getTotalSteps(shouldBundle: boolean, shouldCompile: boolean): number {
+  return 5 + (shouldBundle ? 1 : 0) + (shouldCompile ? 1 : 0);
+}
+
+function getBuildMode(
+  shouldCompile: boolean,
+): "binary" | "compiled TS only" {
+  return shouldCompile ? "binary" : "compiled TS only";
+}
+
+function summarizeManifest(
+  manifest: AppManifest,
+  manifestBytes: number,
+  compressedBytes: number,
+) {
+  const routes = manifest.routes.length;
+  const pageRoutes = manifest.routes.filter((route) => route.hasPage).length;
+  const handlerOnlyRoutes =
+    manifest.routes.filter((route) =>
+      !route.hasPage && route.transpiledCode.trim().length > 0
+    ).length;
+  const staticPages =
+    manifest.routes.filter((route) =>
+      route.hasPage && route.transpiledCode.trim().length === 0
+    ).length;
+  const dynamicRoutes =
+    manifest.routes.filter((route) => /\[[^/]+\]/.test(route.path)).length;
+  const layouts = Object.values(manifest.layouts).reduce(
+    (sum, layoutEntries) => sum + layoutEntries.length,
+    0,
+  );
+  const assets = Object.keys(manifest.assets).length;
+
+  return {
+    routes,
+    pageRoutes,
+    handlerOnlyRoutes,
+    staticPages,
+    dynamicRoutes,
+    layouts,
+    assets,
+    manifestBytes,
+    compressedBytes,
+  };
+}
+
+function normalizeBuildError(stage: string, error: unknown): BuildStageError {
+  if (error instanceof BuildStageError) return error;
+  if (error instanceof Error) {
+    return new BuildStageError(stage, error.message);
+  }
+  return new BuildStageError(stage, String(error));
+}
+
+function decodeCommandOutput(bytes: Uint8Array): string {
+  return new TextDecoder().decode(bytes).trim();
+}
+
+function buildCommandDetails(
+  stdout: Uint8Array,
+  stderr: Uint8Array,
+): string | undefined {
+  const stdoutText = decodeCommandOutput(stdout);
+  const stderrText = decodeCommandOutput(stderr);
+  const sections: string[] = [];
+
+  if (stderrText) {
+    sections.push(stderrText);
+  }
+  if (stdoutText) {
+    sections.push(`stdout:\n${stdoutText}`);
+  }
+
+  return sections.length > 0 ? sections.join("\n\n") : undefined;
+}
+
+function buildNextStepMessage(
+  shouldCompile: boolean,
+  compiledPath: string,
+  binaryPath?: string,
+): string {
+  if (shouldCompile && binaryPath) {
+    return `Run \`${binaryPath}\` to start the compiled app.`;
+  }
+
+  return `Run the generated file with Deno from \`${compiledPath}\`, or rerun without \`--no-compile\` to produce a binary.`;
+}
+
+async function runBuildStep<T>(
+  reporter: BuildReporter,
+  name: string,
+  action: () => Promise<T> | T,
+  onSuccess?: (result: T) => string | undefined,
+): Promise<T> {
+  reporter.startStep(name);
+
+  try {
+    const result = await action();
+    reporter.finishStep("success", onSuccess?.(result));
+    return result;
+  } catch (error) {
+    const buildError = normalizeBuildError(name, error);
+    reporter.finishStep("failure", buildError.message);
+    throw buildError;
+  }
 }
 
 /** Compile a Ten.net application into an encrypted standalone binary. */
@@ -72,143 +190,235 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
   const shouldBundle = options?.bundle ?? false;
   const minify = options?.minify ?? false;
   const verbose = options?.verbose ?? true;
+  const reporter = new BuildReporter({ verbose });
+  const startedAt = performance.now();
   let secret = options?.secret;
+  const secretGenerated = !secret;
 
   if (!secret) {
     secret = generateSecret();
-    log(verbose, "Generated build secret (save this!):", secret);
   }
 
-  log(verbose, "\n--- Ten.net Build ---");
-  log(verbose, `App path: ${appPath}`);
-  log(verbose, `Public path: ${publicPath}`);
-  log(verbose, `Output: ${outputDir}\n`);
-
-  if (shouldBundle) {
-    log(verbose, "Bundling routes...");
-    const bundleResult = await bundleRoutes({
-      appPath,
-      outputDir,
-      minify,
-    });
-    if (bundleResult.success) {
-      log(
-        verbose,
-        `Bundled ${bundleResult.outputFiles} file(s) to ${outputDir}`,
-      );
-    } else {
-      log(verbose, "Bundle warnings/errors:", bundleResult.errors);
-    }
-  }
-
-  log(verbose, "Collecting manifest...");
-  const manifest = await collectManifest(appPath, publicPath);
-
-  const routeCount = manifest.routes.length;
-  const assetCount = Object.keys(manifest.assets).length;
-  const layoutCount = Object.values(manifest.layouts).reduce(
-    (sum, l) => sum + l.length,
-    0,
-  );
-  log(
-    verbose,
-    `Found: ${routeCount} routes, ${layoutCount} layouts, ${assetCount} assets`,
-  );
-
-  log(verbose, "Compressing...");
-  const jsonBytes = new TextEncoder().encode(JSON.stringify(manifest));
-  const compressed = await compressData(jsonBytes);
-  log(
-    verbose,
-    `Manifest: ${jsonBytes.length} bytes → ${compressed.length} bytes (compressed)`,
-  );
-
-  log(verbose, "Encrypting...");
-  const salt = generateSalt();
-  const key = await deriveKey(secret, salt);
-  const { iv, ciphertext } = await encrypt(compressed, key);
-  const keyRaw = await exportKeyRaw(key);
-
-  log(verbose, "Generating compiled app...");
-  const compiledCode = generateCompiledApp(
-    encodeBase64(ciphertext),
-    encodeBase64(iv),
-    encodeBase64(keyRaw),
-  );
+  reporter.start({
+    appPath,
+    publicPath,
+    outputDir,
+    mode: getBuildMode(shouldCompile),
+    totalSteps: getTotalSteps(shouldBundle, shouldCompile),
+  });
 
   try {
-    await Deno.mkdir(outputDir, { recursive: true });
-  } catch {
-    // Directory already exists
-  }
+    if (shouldBundle) {
+      reporter.startStep("Bundle routes");
+      try {
+        const bundleResult = await bundleRoutes({
+          appPath,
+          outputDir,
+          minify,
+        });
 
-  const compiledPath = `${outputDir}/_compiled_app.ts`;
-  await Deno.writeTextFile(compiledPath, compiledCode);
-  log(verbose, `Written: ${compiledPath}`);
-
-  const result: BuildResult = {
-    secret,
-    compiledPath,
-    stats: {
-      routes: routeCount,
-      layouts: layoutCount,
-      assets: assetCount,
-      manifestBytes: jsonBytes.length,
-      compressedBytes: compressed.length,
-    },
-  };
-
-  if (shouldCompile) {
-    log(verbose, "\nCompiling binary...");
-
-    // When running locally (file://), pass --config so deno compile can
-    // resolve @leproj/tennet imports via the project's import map.
-    // When installed from JSR (https://), skip --config and let Deno
-    // resolve the JSR specifiers automatically.
-    const compileArgs = [
-      "compile",
-      "--allow-net",
-      "--allow-env",
-    ];
-
-    if (import.meta.url.startsWith("file://")) {
-      const denoJsonPath = new URL("../../deno.json", import.meta.url)
-        .pathname;
-      compileArgs.push(`--config=${denoJsonPath}`);
+        if (bundleResult.success) {
+          reporter.finishStep(
+            "success",
+            `Bundled ${bundleResult.outputFiles} file(s) to ${outputDir}`,
+          );
+        } else {
+          reporter.finishStep(
+            "warning",
+            `${bundleResult.errors.length} warning(s) while bundling routes`,
+          );
+          reporter.warningBlock("Bundle messages", bundleResult.errors);
+        }
+      } catch (error) {
+        const buildError = normalizeBuildError("Bundle routes", error);
+        reporter.finishStep("failure", buildError.message);
+        throw buildError;
+      }
     }
 
-    compileArgs.push(`--output=${outputDir}/app`, compiledPath);
+    const manifest = await runBuildStep(
+      reporter,
+      "Collect manifest",
+      () => collectManifest(appPath, publicPath),
+      (result) => {
+        const pageRoutes = result.routes.filter((route) =>
+          route.hasPage
+        ).length;
+        const assets = Object.keys(result.assets).length;
+        const layouts = Object.values(result.layouts).reduce(
+          (sum, layoutEntries) => sum + layoutEntries.length,
+          0,
+        );
 
-    const compileCmd = new Deno.Command("deno", {
-      args: compileArgs,
-      stdout: verbose ? "inherit" : "null",
-      stderr: "inherit",
+        return `${result.routes.length} routes, ${pageRoutes} page routes, ${layouts} layouts, ${assets} assets`;
+      },
+    );
+
+    const jsonBytes = await runBuildStep(
+      reporter,
+      "Compress manifest",
+      async () => {
+        const manifestBytes = new TextEncoder().encode(
+          JSON.stringify(manifest),
+        );
+        const compressed = await compressData(manifestBytes);
+        return { manifestBytes, compressed };
+      },
+      ({ manifestBytes, compressed }) => {
+        const reduction = manifestBytes.length === 0
+          ? 0
+          : (1 - (compressed.length / manifestBytes.length)) * 100;
+
+        return `${formatBytes(manifestBytes.length)} -> ${
+          formatBytes(compressed.length)
+        } (${reduction.toFixed(1)}% smaller)`;
+      },
+    );
+
+    const encryptedPayload = await runBuildStep(
+      reporter,
+      "Encrypt manifest",
+      async () => {
+        const salt = generateSalt();
+        const key = await deriveKey(secret, salt);
+        const { iv, ciphertext } = await encrypt(jsonBytes.compressed, key);
+        const keyRaw = await exportKeyRaw(key);
+        return { iv, ciphertext, keyRaw };
+      },
+      () => "Encrypted manifest payload ready",
+    );
+
+    const compiledCode = await runBuildStep(
+      reporter,
+      "Generate compiled app",
+      () =>
+        generateCompiledApp(
+          encodeBase64(encryptedPayload.ciphertext),
+          encodeBase64(encryptedPayload.iv),
+          encodeBase64(encryptedPayload.keyRaw),
+        ),
+      () => "Embedded bootstrap created",
+    );
+
+    const compiledPath = `${outputDir}/_compiled_app.ts`;
+    await runBuildStep(
+      reporter,
+      "Write artifact",
+      async () => {
+        await Deno.mkdir(outputDir, { recursive: true });
+        await Deno.writeTextFile(compiledPath, compiledCode);
+        return compiledPath;
+      },
+      (path) => path,
+    );
+
+    const manifestSummary = summarizeManifest(
+      manifest,
+      jsonBytes.manifestBytes.length,
+      jsonBytes.compressed.length,
+    );
+
+    const result: BuildResult = {
+      secret,
+      compiledPath,
+      stats: {
+        routes: manifestSummary.routes,
+        layouts: manifestSummary.layouts,
+        assets: manifestSummary.assets,
+        manifestBytes: manifestSummary.manifestBytes,
+        compressedBytes: manifestSummary.compressedBytes,
+      },
+    };
+
+    if (shouldCompile) {
+      const compileOutcome = await runBuildStep(
+        reporter,
+        "Compile binary",
+        async () => {
+          const compileArgs = [
+            "compile",
+            "--allow-net",
+            "--allow-env",
+          ];
+
+          if (import.meta.url.startsWith("file://")) {
+            const denoJsonPath = new URL("../../deno.json", import.meta.url)
+              .pathname;
+            compileArgs.push(`--config=${denoJsonPath}`);
+          }
+
+          const binaryPath = `${outputDir}/app`;
+          compileArgs.push(`--output=${binaryPath}`, compiledPath);
+
+          const compileResult = await new Deno.Command("deno", {
+            args: compileArgs,
+            stdout: "piped",
+            stderr: "piped",
+          }).output();
+
+          if (!compileResult.success) {
+            throw new BuildStageError(
+              "Compile binary",
+              "Binary compilation failed.",
+              buildCommandDetails(compileResult.stdout, compileResult.stderr),
+            );
+          }
+
+          let binarySize: number | undefined;
+          try {
+            const stat = await Deno.stat(binaryPath);
+            binarySize = stat.size;
+          } catch {
+            // File stats are best-effort here; the summary still has the path.
+          }
+
+          return { binaryPath, binarySize };
+        },
+        ({ binaryPath, binarySize }) =>
+          binarySize
+            ? `${binaryPath} (${formatBytes(binarySize)})`
+            : binaryPath,
+      );
+
+      result.binaryPath = compileOutcome.binaryPath;
+      result.binarySize = compileOutcome.binarySize;
+    }
+
+    reporter.finish({
+      appPath,
+      publicPath,
+      outputDir,
+      compiledPath: result.compiledPath,
+      binaryPath: result.binaryPath,
+      binarySize: result.binarySize,
+      routes: manifestSummary.routes,
+      pageRoutes: manifestSummary.pageRoutes,
+      handlerOnlyRoutes: manifestSummary.handlerOnlyRoutes,
+      staticPages: manifestSummary.staticPages,
+      dynamicRoutes: manifestSummary.dynamicRoutes,
+      layouts: manifestSummary.layouts,
+      assets: manifestSummary.assets,
+      manifestBytes: manifestSummary.manifestBytes,
+      compressedBytes: manifestSummary.compressedBytes,
+      durationMs: performance.now() - startedAt,
+      secretGenerated,
+      secret,
+      nextStep: buildNextStepMessage(
+        shouldCompile,
+        compiledPath,
+        result.binaryPath,
+      ),
+      mode: getBuildMode(shouldCompile),
     });
 
-    const compileResult = await compileCmd.output();
-
-    if (compileResult.success) {
-      result.binaryPath = `${outputDir}/app`;
-      try {
-        const stat = await Deno.stat(`${outputDir}/app`);
-        result.binarySize = stat.size;
-        log(
-          verbose,
-          `\nBuild complete! Binary: ${outputDir}/app`,
-        );
-        log(
-          verbose,
-          `Binary size: ${(stat.size / 1024 / 1024).toFixed(2)} MB`,
-        );
-      } catch {
-        log(verbose, `\nBuild complete! Binary: ${outputDir}/app`);
-      }
-    } else {
-      throw new Error("Binary compilation failed.");
-    }
-  } else {
-    log(verbose, `\nBuild complete! Compiled TS: ${compiledPath}`);
+    return result;
+  } catch (error) {
+    const failure = normalizeBuildError("Build", error);
+    reporter.reportFailure({
+      stage: failure.stage,
+      message: failure.message,
+      details: failure.details,
+    });
+    throw failure;
   }
-
-  return result;
 }
