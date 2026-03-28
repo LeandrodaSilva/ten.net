@@ -27,11 +27,11 @@ export interface Storage {
 export class InMemoryStorage implements Storage {
   private _store = new Map<string, StorageItem>();
 
-  async get(id: string): Promise<StorageItem | null> {
-    return this._store.get(id) ?? null;
+  get(id: string): Promise<StorageItem | null> {
+    return Promise.resolve(this._store.get(id) ?? null);
   }
 
-  async list(options?: ListOptions): Promise<StorageItem[]> {
+  list(options?: ListOptions): Promise<StorageItem[]> {
     let items = Array.from(this._store.values());
 
     if (options?.search && options?.searchFields?.length) {
@@ -46,22 +46,23 @@ export class InMemoryStorage implements Storage {
     const page = options?.page ?? 1;
     const limit = options?.limit ?? 20;
     const start = (page - 1) * limit;
-    return items.slice(start, start + limit);
+    return Promise.resolve(items.slice(start, start + limit));
   }
 
-  async set(id: string, data: StorageItem): Promise<void> {
+  set(id: string, data: StorageItem): Promise<void> {
     this._store.set(id, { ...data, id });
+    return Promise.resolve();
   }
 
-  async delete(id: string): Promise<boolean> {
-    return this._store.delete(id);
+  delete(id: string): Promise<boolean> {
+    return Promise.resolve(this._store.delete(id));
   }
 
-  async count(
+  count(
     options?: { search?: string; searchFields?: string[] },
   ): Promise<number> {
     if (!options?.search || !options?.searchFields?.length) {
-      return this._store.size;
+      return Promise.resolve(this._store.size);
     }
     const q = options.search.toLowerCase();
     let count = 0;
@@ -74,6 +75,6 @@ export class InMemoryStorage implements Storage {
         count++;
       }
     }
-    return count;
+    return Promise.resolve(count);
   }
 }

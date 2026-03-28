@@ -12,28 +12,31 @@ export interface SessionStore {
 export class InMemorySessionStore implements SessionStore {
   private _store = new Map<string, Session>();
 
-  async get(sessionId: string): Promise<Session | null> {
+  get(sessionId: string): Promise<Session | null> {
     const session = this._store.get(sessionId) ?? null;
     if (session && session.expiresAt < Date.now()) {
       this._store.delete(sessionId);
-      return null;
+      return Promise.resolve(null);
     }
-    return session;
+    return Promise.resolve(session);
   }
 
-  async set(sessionId: string, session: Session): Promise<void> {
+  set(sessionId: string, session: Session): Promise<void> {
     this._store.set(sessionId, session);
+    return Promise.resolve();
   }
 
-  async delete(sessionId: string): Promise<void> {
+  delete(sessionId: string): Promise<void> {
     this._store.delete(sessionId);
+    return Promise.resolve();
   }
 
-  async deleteByUserId(userId: string): Promise<void> {
+  deleteByUserId(userId: string): Promise<void> {
     for (const [id, session] of this._store) {
       if (session.userId === userId) {
         this._store.delete(id);
       }
     }
+    return Promise.resolve();
   }
 }

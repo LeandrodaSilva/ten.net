@@ -128,12 +128,12 @@ export class Ten {
     const next = async (): Promise<Response> => {
       if (index < chain.length) {
         const mw = chain[index++];
-        return mw(req, next);
+        return await mw(req, next);
       }
-      return routeRequest(req);
+      return await routeRequest(req);
     };
 
-    return next();
+    return await next();
   }
 
   /** Core routing logic, extracted from the original _handleRequest. */

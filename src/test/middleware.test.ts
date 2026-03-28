@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
+import { afterEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
 import {
   authMiddleware,
@@ -9,6 +9,13 @@ import {
 import { csrfMiddleware } from "../auth/csrfMiddleware.ts";
 import { securityHeadersMiddleware } from "../auth/securityHeaders.ts";
 import type { Session } from "../auth/types.ts";
+
+/** Wrap a sync Response-returning callback so it satisfies () => Promise<Response>. */
+function promiseNext(
+  fn: () => Response,
+): () => Promise<Response> {
+  return () => Promise.resolve(fn());
+}
 
 // Helper: create a fresh session in the store
 async function seedSession(overrides?: Partial<Session>): Promise<Session> {
@@ -63,10 +70,10 @@ describe("authMiddleware — bypass", () => {
   it("should pass through non-admin routes without auth", async () => {
     const req = new Request("http://localhost/about");
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     const res = await auth(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -75,10 +82,10 @@ describe("authMiddleware — bypass", () => {
   it("should pass through /admin/login without auth", async () => {
     const req = new Request("http://localhost/admin/login");
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("Login page", { status: 200 });
-    };
+    });
     const res = await auth(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -87,10 +94,10 @@ describe("authMiddleware — bypass", () => {
   it("should pass through /admin/favicon.ico without auth", async () => {
     const req = new Request("http://localhost/admin/favicon.ico");
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("ico", { status: 200 });
-    };
+    });
     const res = await auth(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -99,7 +106,7 @@ describe("authMiddleware — bypass", () => {
 
 describe("authMiddleware — redirect to login", () => {
   const auth = authMiddleware();
-  const next = async () => new Response("Admin", { status: 200 });
+  const next = promiseNext(() => new Response("Admin", { status: 200 }));
 
   it("should redirect /admin to /admin/login when no cookie", async () => {
     const req = new Request("http://localhost/admin");
@@ -130,10 +137,10 @@ describe("authMiddleware — valid session passes through", () => {
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("Admin", { status: 200 });
-    };
+    });
     const res = await auth(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -148,7 +155,7 @@ describe("authMiddleware — valid session passes through", () => {
     const req = new Request("http://localhost/admin", {
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     await authMiddleware()(req, next);
     const attached = requestSession.get(req);
     assertEquals(attached?.id, "attach-sess");
@@ -168,7 +175,7 @@ describe("authMiddleware — RBAC", () => {
       method: "POST",
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await auth(req, next);
     assertEquals(res.status, 403);
     await sessionStore.delete("viewer-sess");
@@ -188,7 +195,7 @@ describe("authMiddleware — RBAC", () => {
         headers: { cookie: `__tennet_sid=${session.id}` },
       },
     );
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await auth(req, next);
     assertEquals(res.status, 403);
     await sessionStore.delete("editor-sess");
@@ -209,10 +216,10 @@ describe("authMiddleware — RBAC", () => {
       },
     );
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     const res = await auth(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -231,10 +238,10 @@ describe("authMiddleware — RBAC", () => {
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     const res = await auth(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -249,10 +256,10 @@ describe("csrfMiddleware", () => {
       method: "GET",
     });
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     const res = await csrfMiddleware(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -263,10 +270,10 @@ describe("csrfMiddleware", () => {
       method: "HEAD",
     });
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("", { status: 200 });
-    };
+    });
     const res = await csrfMiddleware(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -277,10 +284,10 @@ describe("csrfMiddleware", () => {
       method: "OPTIONS",
     });
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("", { status: 200 });
-    };
+    });
     const res = await csrfMiddleware(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -291,10 +298,10 @@ describe("csrfMiddleware", () => {
       method: "POST",
     });
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     const res = await csrfMiddleware(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -305,10 +312,10 @@ describe("csrfMiddleware", () => {
       method: "POST",
     });
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     const res = await csrfMiddleware(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -320,7 +327,7 @@ describe("csrfMiddleware", () => {
       body: new URLSearchParams({ title: "test" }),
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await csrfMiddleware(req, next);
     assertEquals(res.status, 401);
   });
@@ -341,7 +348,7 @@ describe("csrfMiddleware", () => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
     requestSession.set(req, session);
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await csrfMiddleware(req, next);
     assertEquals(res.status, 403);
   });
@@ -362,7 +369,7 @@ describe("csrfMiddleware", () => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
     requestSession.set(req, session);
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await csrfMiddleware(req, next);
     assertEquals(res.status, 403);
   });
@@ -384,7 +391,7 @@ describe("csrfMiddleware", () => {
       headers: { "Content-Type": "application/json" },
     });
     requestSession.set(req, session);
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await csrfMiddleware(req, next);
     assertEquals(res.status, 403);
   });
@@ -409,10 +416,10 @@ describe("csrfMiddleware", () => {
     });
     requestSession.set(req, session);
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     const res = await csrfMiddleware(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -431,7 +438,7 @@ describe("authMiddleware — method to permission mapping", () => {
       method: "PUT",
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await auth(req, next);
     assertEquals(res.status, 403);
     await sessionStore.delete("viewer-put");
@@ -448,7 +455,7 @@ describe("authMiddleware — method to permission mapping", () => {
       method: "DELETE",
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await auth(req, next);
     assertEquals(res.status, 403);
     await sessionStore.delete("viewer-delete");
@@ -465,7 +472,7 @@ describe("authMiddleware — method to permission mapping", () => {
       method: "PATCH",
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await auth(req, next);
     assertEquals(res.status, 403);
     await sessionStore.delete("viewer-patch");
@@ -482,10 +489,10 @@ describe("authMiddleware — method to permission mapping", () => {
       headers: { cookie: `__tennet_sid=${session.id}` },
     });
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     const res = await auth(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -506,10 +513,10 @@ describe("authMiddleware — method to permission mapping", () => {
       },
     );
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     await auth(req, next);
     // Admin can always read dashboard, regardless of slug
     assertEquals(called, true);
@@ -531,10 +538,10 @@ describe("authMiddleware — method to permission mapping", () => {
       },
     );
     let called = false;
-    const next = async () => {
+    const next = promiseNext(() => {
       called = true;
       return new Response("OK", { status: 200 });
-    };
+    });
     const res = await auth(req, next);
     assertEquals(called, true);
     assertEquals(res.status, 200);
@@ -555,7 +562,7 @@ describe("authMiddleware — method to permission mapping", () => {
         headers: { cookie: `__tennet_sid=${session.id}` },
       },
     );
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await auth(req, next);
     assertEquals(res.status, 403);
     await sessionStore.delete("editor-settings");
@@ -566,21 +573,21 @@ describe("authMiddleware — method to permission mapping", () => {
 describe("securityHeadersMiddleware", () => {
   it("should add X-Content-Type-Options: nosniff to all responses", async () => {
     const req = new Request("http://localhost/about");
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await securityHeadersMiddleware(req, next);
     assertEquals(res.headers.get("X-Content-Type-Options"), "nosniff");
   });
 
   it("should add X-Frame-Options: DENY to admin responses", async () => {
     const req = new Request("http://localhost/admin");
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await securityHeadersMiddleware(req, next);
     assertEquals(res.headers.get("X-Frame-Options"), "DENY");
   });
 
   it("should add Referrer-Policy to admin responses", async () => {
     const req = new Request("http://localhost/admin/plugins/posts");
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await securityHeadersMiddleware(req, next);
     assertEquals(
       res.headers.get("Referrer-Policy"),
@@ -590,28 +597,30 @@ describe("securityHeadersMiddleware", () => {
 
   it("should NOT add X-Frame-Options to non-admin responses", async () => {
     const req = new Request("http://localhost/about");
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await securityHeadersMiddleware(req, next);
     assertEquals(res.headers.get("X-Frame-Options"), null);
   });
 
   it("should NOT add Referrer-Policy to non-admin responses", async () => {
     const req = new Request("http://localhost/contact");
-    const next = async () => new Response("OK", { status: 200 });
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
     const res = await securityHeadersMiddleware(req, next);
     assertEquals(res.headers.get("Referrer-Policy"), null);
   });
 
   it("should preserve original response status", async () => {
     const req = new Request("http://localhost/admin");
-    const next = async () => new Response("Not Found", { status: 404 });
+    const next = promiseNext(() => new Response("Not Found", { status: 404 }));
     const res = await securityHeadersMiddleware(req, next);
     assertEquals(res.status, 404);
   });
 
   it("should preserve original response body", async () => {
     const req = new Request("http://localhost/admin");
-    const next = async () => new Response("Body content", { status: 200 });
+    const next = promiseNext(() =>
+      new Response("Body content", { status: 200 })
+    );
     const res = await securityHeadersMiddleware(req, next);
     const body = await res.text();
     assertEquals(body, "Body content");
