@@ -23,3 +23,4 @@ export type { BuildOptions, BuildResult } from "./build/build.ts";
 export { decompressData, decrypt, importKeyRaw } from "./build/crypto.ts";
 export { Plugin } from "./models/Plugin.ts";
 export type { PluginModel } from "./models/Plugin.ts";
+export { Route } from "./models/Route.ts";
