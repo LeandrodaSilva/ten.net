@@ -161,20 +161,26 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
   if (shouldCompile) {
     log(verbose, "\nCompiling binary...");
 
-    // Resolve deno.json config path for import map resolution.
-    // When the compiled TS is in a temp/output dir, deno compile needs
-    // an explicit --config to resolve @leproj/tennet imports.
-    const denoJsonPath = new URL("../../deno.json", import.meta.url).pathname;
+    // When running locally (file://), pass --config so deno compile can
+    // resolve @leproj/tennet imports via the project's import map.
+    // When installed from JSR (https://), skip --config and let Deno
+    // resolve the JSR specifiers automatically.
+    const compileArgs = [
+      "compile",
+      "--allow-net",
+      "--allow-env",
+    ];
+
+    if (import.meta.url.startsWith("file://")) {
+      const denoJsonPath = new URL("../../deno.json", import.meta.url)
+        .pathname;
+      compileArgs.push(`--config=${denoJsonPath}`);
+    }
+
+    compileArgs.push(`--output=${outputDir}/app`, compiledPath);
 
     const compileCmd = new Deno.Command("deno", {
-      args: [
-        "compile",
-        "--allow-net",
-        "--allow-env",
-        `--config=${denoJsonPath}`,
-        `--output=${outputDir}/app`,
-        compiledPath,
-      ],
+      args: compileArgs,
       stdout: verbose ? "inherit" : "null",
       stderr: "inherit",
     });
