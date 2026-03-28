@@ -99,6 +99,7 @@ export class Ten {
     });
   }
 
+  /** Route an incoming HTTP request and return the appropriate response. */
   private async _handleRequest(req: Request): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
@@ -162,6 +163,7 @@ export class Ten {
     }
   }
 
+  /** Spawn a web worker that watches the app directory for file changes. */
   private _startFileWatcher() {
     const worker = new Worker(
       new URL("./devFileWatcherWorker.ts", import.meta.url),
