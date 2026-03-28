@@ -143,16 +143,20 @@ export class Ten {
    * 2. Logs the loaded routes to the console for debugging purposes
    * 3. Starts the Deno HTTP server with the configured request handler
    *
-   * @returns A promise that resolves when the server startup process is complete
+   * @param options - Optional Deno.ServeTcpOptions (e.g. `{ port: 3000 }`)
+   * @returns The Deno.HttpServer instance for lifecycle control (e.g. shutdown)
    * @throws {Error} May throw if route loading fails or server cannot start
    *
    * @example
    * ```typescript
    * const app = Ten.net();
-   * await app.start();
+   * const server = await app.start({ port: 3000 });
+   * // Later: await server.shutdown();
    * ```
    */
-  public async start(): Promise<void> {
+  public async start(
+    options?: Deno.ServeTcpOptions,
+  ): Promise<Deno.HttpServer<Deno.NetAddr>> {
     this._routes.push(
       ...await routerEngine(this._appPath, this._routeFileName),
     );
@@ -164,6 +168,6 @@ export class Ten {
       this._startFileWatcher();
     }
 
-    Deno.serve(this._handleRequest.bind(this));
+    return Deno.serve(options ?? {}, this._handleRequest.bind(this));
   }
 }
