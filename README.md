@@ -260,10 +260,45 @@ Other useful commands:
 
 ```bash
 deno task test       # run tests
+deno task bench:run  # run benchmarks (human-readable output)
+deno task bench      # run benchmarks + save history + update README table
+deno task bench:check # check for performance regressions
 deno task fmt        # format code
 deno task lint       # lint code
 deno task check      # type check
 ```
+
+## Performance
+
+Benchmarks run against the demo app with `deno task bench`.
+
+<!-- BENCH:START -->
+
+| Benchmark              | Avg     | Min     | Max     | p75     | p99     | Iterations |
+| ---------------------- | ------- | ------- | ------- | ------- | ------- | ---------- |
+| findDocumentLayoutRoot | 17.3us  | 15.9us  | 541.0us | 17.0us  | 30.5us  | 28937      |
+| findOrderedLayouts     | 29.3us  | 25.4us  | 1.61ms  | 27.8us  | 74.0us  | 17085      |
+| getRegexRoute_dynamic  | 472ns   | 440ns   | 1.0us   | 467ns   | 866ns   | 120        |
+| getRegexRoute_static   | 411ns   | 380ns   | 884ns   | 409ns   | 621ns   | 132        |
+| http_404               | 108.7us | 89.4us  | 450.5us | 112.0us | 147.4us | 4610       |
+| http_admin             | 154.0us | 139.4us | 644.1us | 157.2us | 225.9us | 3257       |
+| http_api               | 112.1us | 95.5us  | 465.5us | 114.6us | 157.5us | 4472       |
+| http_dynamic_param     | 113.2us | 93.6us  | 542.6us | 114.9us | 157.3us | 4427       |
+| http_post_redirect     | 133.9us | 118.5us | 675.4us | 138.4us | 193.8us | 3744       |
+| http_static_page       | 312.6us | 256.0us | 823.0us | 337.8us | 516.5us | 1608       |
+| http_view_template     | 181.3us | 164.8us | 3.53ms  | 181.3us | 298.5us | 2768       |
+| paramsEngine           | 279ns   | 269ns   | 323ns   | 282ns   | 309ns   | 190        |
+| pathNamedParams        | 153ns   | 143ns   | 229ns   | 156ns   | 175ns   | 337        |
+| regex_test_match       | 15ns    | 14ns    | 26ns    | 15ns    | 17ns    | 3408       |
+| regex_test_nomatch     | 11ns    | 11ns    | 21ns    | 11ns    | 14ns    | 4541       |
+| routerEngine_full      | 12.65ms | 12.26ms | 13.70ms | 12.72ms | 13.70ms | 6          |
+| toSlug                 | 346ns   | 333ns   | 374ns   | 349ns   | 369ns   | 155        |
+| viewEngine_data        | 59.9us  | 55.5us  | 4.80ms  | 58.8us  | 87.5us  | 8360       |
+| viewEngine_static      | 40.2us  | 37.0us  | 448.7us | 40.0us  | 61.8us  | 12450      |
+
+<!-- BENCH:END -->
+
+> Full history tracked in [`benchmarks/history.json`](benchmarks/history.json)
 
 ## License
 

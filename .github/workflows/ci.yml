@@ -44,3 +44,34 @@ jobs:
 
       - name: Type check
         run: deno check **/*.ts --unstable-raw-imports
+
+  benchmark:
+    name: Benchmark
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v2.x
+
+      - name: Run benchmarks and update history
+        run: deno task bench
+
+      - name: Check for regressions
+        run: deno task bench:check
+
+      - name: Commit benchmark results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add benchmarks/history.json README.md
+          git diff --staged --quiet || git commit -m "ci: update benchmark results [skip ci]"
+          git push
