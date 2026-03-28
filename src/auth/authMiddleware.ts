@@ -93,6 +93,12 @@ export function authMiddleware(
     const session = await sessionStore.get(sessionId);
     if (!session) return redirectToLogin();
 
+    // Logout requires a valid session but no RBAC check
+    if (path === "/admin/logout") {
+      requestSession.set(req, session);
+      return next();
+    }
+
     // Check authorization
     const resource = extractResource(path);
     const permission = methodToPermission(req.method);

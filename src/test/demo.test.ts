@@ -116,6 +116,94 @@ describe("Demo E2E Integration", () => {
       );
       await res.body?.cancel();
     });
+
+    it("GET /admin/login should return the login form", async () => {
+      const res = await fetch(`${baseUrl}/admin/login`);
+      assertEquals(res.status, 200);
+      assertEquals(res.headers.get("Content-Type"), "text/html");
+      const body = await res.text();
+      assertStringIncludes(body, "Sign in to admin");
+      assertStringIncludes(body, 'action="/admin/login"');
+    });
+
+    it("POST /admin/login with valid credentials should redirect to /admin", async () => {
+      const formData = new URLSearchParams({
+        username: "admin",
+        password: "admin",
+      });
+      const res = await fetch(`${baseUrl}/admin/login`, {
+        method: "POST",
+        body: formData,
+        redirect: "manual",
+      });
+      assertEquals(res.status, 302);
+      assertEquals(res.headers.get("Location"), "/admin");
+      const cookie = res.headers.get("Set-Cookie") ?? "";
+      assertStringIncludes(cookie, "__tennet_sid=");
+      await res.body?.cancel();
+    });
+
+    it("POST /admin/login with invalid credentials should return 401", async () => {
+      const formData = new URLSearchParams({
+        username: "admin",
+        password: "wrong",
+      });
+      const res = await fetch(`${baseUrl}/admin/login`, {
+        method: "POST",
+        body: formData,
+      });
+      assertEquals(res.status, 401);
+      const body = await res.text();
+      assertStringIncludes(body, "Invalid username or password");
+    });
+
+    it("GET /admin with valid session should return 200", async () => {
+      // First login to get session cookie
+      const loginData = new URLSearchParams({
+        username: "admin",
+        password: "admin",
+      });
+      const loginRes = await fetch(`${baseUrl}/admin/login`, {
+        method: "POST",
+        body: loginData,
+        redirect: "manual",
+      });
+      const cookie = loginRes.headers.get("Set-Cookie") ?? "";
+      await loginRes.body?.cancel();
+
+      // Then access admin with the cookie
+      const sessionCookie = cookie.split(";")[0];
+      const res = await fetch(`${baseUrl}/admin`, {
+        headers: { cookie: sessionCookie },
+      });
+      assertEquals(res.status, 200);
+      await res.text();
+    });
+
+    it("POST /admin/logout should clear session and redirect", async () => {
+      // First login
+      const loginData = new URLSearchParams({
+        username: "admin",
+        password: "admin",
+      });
+      const loginRes = await fetch(`${baseUrl}/admin/login`, {
+        method: "POST",
+        body: loginData,
+        redirect: "manual",
+      });
+      const cookie = loginRes.headers.get("Set-Cookie") ?? "";
+      await loginRes.body?.cancel();
+
+      const sessionCookie = cookie.split(";")[0];
+      const res = await fetch(`${baseUrl}/admin/logout`, {
+        method: "POST",
+        headers: { cookie: sessionCookie },
+        redirect: "manual",
+      });
+      assertEquals(res.status, 302);
+      assertEquals(res.headers.get("Location"), "/admin/login");
+      await res.body?.cancel();
+    });
   });
 
   describe("Favicon", () => {

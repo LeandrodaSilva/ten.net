@@ -19,8 +19,10 @@ export const csrfMiddleware: Middleware = async (
   const method = req.method.toUpperCase();
   if (["GET", "HEAD", "OPTIONS"].includes(method)) return next();
 
-  // Login has no session yet — skip CSRF for login POST
-  if (url.pathname === "/admin/login") return next();
+  // Login has no session yet, logout destroys the session — skip CSRF for both
+  if (url.pathname === "/admin/login" || url.pathname === "/admin/logout") {
+    return next();
+  }
 
   const session = requestSession.get(req);
   if (!session) return new Response("Unauthorized", { status: 401 });
