@@ -17,6 +17,7 @@ import {
   generateSecret,
 } from "./crypto.ts";
 import { generateCompiledApp } from "./codeGenerator.ts";
+import { bundleRoutes } from "./bundleRoutes.ts";
 
 /** Configuration options for {@linkcode Ten.build}. */
 export interface BuildOptions {
@@ -30,6 +31,10 @@ export interface BuildOptions {
   secret?: string;
   /** Whether to compile to binary after generating TS (default: true) */
   compile?: boolean;
+  /** Whether to bundle routes to outputDir with auto-discovery (default: false) */
+  bundle?: boolean;
+  /** Whether to minify bundled output (default: false) */
+  minify?: boolean;
   /** Whether to print progress to stdout (default: true) */
   verbose?: boolean;
 }
@@ -64,6 +69,8 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
   const publicPath = options?.publicPath ?? "./public";
   const outputDir = options?.output ?? "./dist";
   const shouldCompile = options?.compile ?? true;
+  const shouldBundle = options?.bundle ?? false;
+  const minify = options?.minify ?? false;
   const verbose = options?.verbose ?? true;
   let secret = options?.secret;
 
@@ -76,6 +83,23 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
   log(verbose, `App path: ${appPath}`);
   log(verbose, `Public path: ${publicPath}`);
   log(verbose, `Output: ${outputDir}\n`);
+
+  if (shouldBundle) {
+    log(verbose, "Bundling routes...");
+    const bundleResult = await bundleRoutes({
+      appPath,
+      outputDir,
+      minify,
+    });
+    if (bundleResult.success) {
+      log(
+        verbose,
+        `Bundled ${bundleResult.outputFiles?.length ?? 0} file(s) to ${outputDir}`,
+      );
+    } else {
+      log(verbose, "Bundle warnings/errors:", bundleResult.errors);
+    }
+  }
 
   log(verbose, "Collecting manifest...");
   const manifest = await collectManifest(appPath, publicPath);
