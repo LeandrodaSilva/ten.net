@@ -1,7 +1,7 @@
 # AGENTS.md
 
-This file provides guidance to Codex (Codex.ai/code) when working with
-code in this repository.
+This file provides guidance to Codex (Codex.ai/code) when working with code in
+this repository.
 
 ## Project Overview
 
@@ -83,11 +83,11 @@ using `{{content}}`.
 **Route transpilation**: TypeScript route files are transpiled at startup via
 `@deno/emit` and loaded as dynamic data URI imports.
 
-**Build system**: `deno task build` compiles the entire application into a single
-binary. The collector scans `app/`, transpiles routes, and gathers assets into an
-`AppManifest`. The code generator produces a self-contained TypeScript file that
-uses `embeddedRouterEngine` instead of filesystem scanning. Optional AES-256-GCM
-encryption for code protection.
+**Build system**: `deno task build` compiles the entire application into a
+single binary. The collector scans `app/`, transpiles routes, and gathers assets
+into an `AppManifest`. The code generator produces a self-contained TypeScript
+file that uses `embeddedRouterEngine` instead of filesystem scanning. Optional
+AES-256-GCM encryption for code protection.
 
 **Plugin system**: Extend abstract `Plugin` class with `name`, `description`,
 `model`. Plugins auto-register admin routes and appear in the admin dashboard.
