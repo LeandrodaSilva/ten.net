@@ -14,3 +14,5 @@
  */
 
 export { Ten } from "./ten.ts";
+export type { AppManifest } from "./build/manifest.ts";
+export { decompressData, decrypt, importKeyRaw } from "./build/crypto.ts";

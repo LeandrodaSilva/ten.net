@@ -1,0 +1,66 @@
+import { encodeBase64 } from "@std/encoding";
+
+export function generateCompiledApp(
+  encryptedDataBase64: string,
+  ivBase64: string,
+  keyRawBase64: string,
+): string {
+  return `import { Ten } from "@leproj/tennet";
+import type { AppManifest } from "@leproj/tennet/build/manifest";
+import { decrypt, importKeyRaw, decompressData } from "@leproj/tennet/build/crypto";
+
+const ENCRYPTED_DATA = "${encryptedDataBase64}";
+const IV = "${ivBase64}";
+const KEY_RAW = "${keyRawBase64}";
+
+function base64ToBytes(b64: string): Uint8Array {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) {
+    bytes[i] = bin.charCodeAt(i);
+  }
+  return bytes;
+}
+
+async function boot() {
+  const key = await importKeyRaw(base64ToBytes(KEY_RAW));
+  const decrypted = await decrypt(
+    base64ToBytes(ENCRYPTED_DATA),
+    key,
+    base64ToBytes(IV),
+  );
+  const decompressed = await decompressData(decrypted);
+  const manifest: AppManifest = JSON.parse(
+    new TextDecoder().decode(decompressed),
+  );
+
+  const app = Ten.net({ embedded: manifest });
+  await app.start();
+}
+
+if (import.meta.main) {
+  boot();
+}
+`;
+}
+
+export function generateCompiledAppStandalone(
+  encryptedDataBase64: string,
+  ivBase64: string,
+  keyRawBase64: string,
+  frameworkSource: string,
+): string {
+  return `// Ten.net Compiled Application — Self-contained binary
+// All routes, templates, and assets are embedded and encrypted.
+
+${frameworkSource}
+
+const ENCRYPTED_DATA = "${encryptedDataBase64}";
+const IV = "${ivBase64}";
+const KEY_RAW = "${keyRawBase64}";
+
+if (import.meta.main) {
+  boot(ENCRYPTED_DATA, IV, KEY_RAW);
+}
+`;
+}

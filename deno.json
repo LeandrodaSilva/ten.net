@@ -4,7 +4,9 @@
   "description": "A minimalist Deno web microframework with file-based routing, HTML templating, nested layouts, and a plugin system",
   "license": "MIT",
   "exports": {
-    ".": "./src/mod.ts"
+    ".": "./src/mod.ts",
+    "./build/manifest": "./src/build/manifest.ts",
+    "./build/crypto": "./src/build/crypto.ts"
   },
   "tasks": {
     "dev": "deno run -P --inspect --unstable-bundle --unstable-raw-imports --watch demo.ts",
@@ -15,7 +17,8 @@
     "check": "deno check  **/*.ts --unstable-raw-imports",
     "bench": "deno bench --allow-all --unstable-raw-imports --unstable-bundle --json src/bench/ | deno run --allow-all src/bench/_history.ts && deno fmt README.md",
     "bench:run": "deno bench --allow-all --unstable-raw-imports --unstable-bundle src/bench/",
-    "bench:check": "deno run --allow-all src/bench/_check_thresholds.ts"
+    "bench:check": "deno run --allow-all src/bench/_check_thresholds.ts",
+    "build": "deno run --allow-read --allow-write --allow-env --allow-run --unstable-bundle src/build/buildCommand.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -29,6 +32,7 @@
     "deno-fs": "jsr:@std/fs@^1.0.19",
     "@std/path": "jsr:@std/path@^1.1.2",
     "@deno-assert": "https://deno.land/std@0.208.0/assert/mod.ts",
+    "@std/cli": "jsr:@std/cli@^1.0.0",
     "@deno-walk": "jsr:@std/fs@1/walk",
     "react": "npm:react@^19.1.1",
     "react-dom": "npm:react-dom@^19.1.1",
