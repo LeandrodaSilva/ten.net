@@ -94,7 +94,9 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
     if (bundleResult.success) {
       log(
         verbose,
-        `Bundled ${bundleResult.outputFiles?.length ?? 0} file(s) to ${outputDir}`,
+        `Bundled ${
+          bundleResult.outputFiles?.length ?? 0
+        } file(s) to ${outputDir}`,
       );
     } else {
       log(verbose, "Bundle warnings/errors:", bundleResult.errors);
