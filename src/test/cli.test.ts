@@ -1,5 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
+import denoJson from "../../deno.json" with { type: "json" };
 
 describe("cli", () => {
   it("should show help when run without arguments", async () => {
@@ -39,7 +40,7 @@ describe("cli", () => {
     const stdout = new TextDecoder().decode(output.stdout);
 
     assertEquals(output.success, true);
-    assertEquals(stdout.includes("tennet v"), true);
+    assertEquals(stdout.trim(), `tennet v${denoJson.version}`);
   });
 
   it("should exit with error for unknown command", async () => {

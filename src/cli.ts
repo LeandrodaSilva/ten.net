@@ -7,9 +7,10 @@
  */
 
 import { parseArgs } from "@std/cli/parse-args";
+import denoJson from "../deno.json" with { type: "json" };
 import { build } from "./build/build.ts";
 
-const VERSION = "0.2.7";
+const VERSION = denoJson.version;
 
 function printHelp() {
   console.log(`
