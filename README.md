@@ -27,10 +27,12 @@ Compile your entire application into a single production-ready binary with all
 routes, templates, and assets embedded. No runtime dependencies — just deploy
 and run.
 
-### Code Protection (Roadmap)
+### Code Protection
 
-Future versions will include obfuscation and encryption for bundled application
-code, preventing reverse engineering in distributed deployments.
+Application code is compressed with gzip and encrypted with AES-256-GCM
+(PBKDF2-derived keys, 100 000 iterations) before being embedded into the binary.
+This prevents casual inspection and reverse engineering of distributed
+deployments.
 
 ### Maximum Simplicity
 
@@ -248,6 +250,88 @@ import { Ten } from "@leproj/tennet";
 const app = Ten.net();
 // app.addPlugin(MyPlugin);
 await app.start();
+```
+
+## Building for Production
+
+Compile your entire application — routes, templates, and static assets — into a
+single encrypted binary. The build process:
+
+1. Collects all routes, layouts, and assets from your `app/` and `public/`
+   directories
+2. Compresses the manifest with gzip
+3. Encrypts with AES-256-GCM (PBKDF2-derived key)
+4. Compiles into a standalone Deno binary via `deno compile`
+
+The resulting binary has **zero runtime dependencies** — just deploy and run.
+
+### CLI
+
+The fastest way to build:
+
+```bash
+deno run -A jsr:@leproj/tennet/cli build
+```
+
+Add it as a task in your project's `deno.json`:
+
+```json
+{
+  "tasks": {
+    "build": "deno run -A jsr:@leproj/tennet/cli build"
+  }
+}
+```
+
+Or install globally:
+
+```bash
+deno install -A -n tennet jsr:@leproj/tennet/cli
+tennet build
+```
+
+#### CLI options
+
+| Option          | Default    | Description                                   |
+| --------------- | ---------- | --------------------------------------------- |
+| `--secret`      | (auto)     | Encryption secret (auto-generated if omitted) |
+| `--output`      | `./dist`   | Output directory                              |
+| `--app-path`    | `./app`    | Application root directory                    |
+| `--public-path` | `./public` | Public/static assets directory                |
+| `--no-compile`  | `false`    | Generate compiled TS only, skip binary        |
+
+### Programmatic API
+
+Use `Ten.build()` for full control over the build process:
+
+```ts
+import { Ten } from "@leproj/tennet";
+
+await Ten.build();
+```
+
+With options:
+
+```ts
+import { Ten } from "@leproj/tennet";
+
+const result = await Ten.build({
+  appPath: "./src/app",
+  publicPath: "./static",
+  output: "./build",
+  secret: Deno.env.get("BUILD_SECRET"),
+});
+
+console.log(`Built ${result.stats.routes} routes`);
+console.log(`Binary: ${result.binaryPath}`);
+```
+
+You can also import the build function directly:
+
+```ts
+import { build } from "@leproj/tennet/build";
+
+const result = await build({ compile: false, verbose: false });
 ```
 
 ## Development
