@@ -22,6 +22,17 @@ jobs:
         with:
           deno-version: v2.x
 
+      - name: Verify version matches tag
+        run: |
+          PACKAGE_VERSION=$(deno eval 'import meta from "./deno.json" with { type: "json" }; console.log(meta.version)')
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          echo "Package version: ${PACKAGE_VERSION}"
+          echo "Tag version: ${TAG_VERSION}"
+          if [ "${PACKAGE_VERSION}" != "${TAG_VERSION}" ]; then
+            echo "::error::deno.json version (${PACKAGE_VERSION}) does not match tag (${TAG_VERSION})"
+            exit 1
+          fi
+
       - name: Verify formatting
         run: deno fmt --check
 
