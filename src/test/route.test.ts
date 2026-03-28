@@ -254,8 +254,7 @@ describe("Route", () => {
 
     it("should set route.run after successful import", async () => {
       const route = createRoute({
-        transpiledCode:
-          'export function GET() { return new Response("ok"); }',
+        transpiledCode: 'export function GET() { return new Response("ok"); }',
       });
       route.method = "GET";
       assertEquals(route.run, undefined);
