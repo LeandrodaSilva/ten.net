@@ -8,6 +8,8 @@ export interface FormFieldProps {
   options?: { value: string; label: string }[];
   hint?: string;
   rows?: number;
+  multiple?: boolean;
+  readonly?: boolean;
 }
 
 const baseInputClass =
@@ -23,11 +25,14 @@ export function FormField({
   options,
   hint,
   rows = 4,
+  multiple,
+  readonly,
 }: FormFieldProps) {
   const outlineClass = error
     ? "outline-1 -outline-offset-1 outline-red-500"
     : "outline-1 -outline-offset-1 outline-gray-300";
-  const inputClass = `${baseInputClass} ${outlineClass}`;
+  const readonlyClass = readonly ? "bg-gray-50" : "";
+  const inputClass = `${baseInputClass} ${outlineClass} ${readonlyClass}`;
 
   if (type === "checkbox") {
     return (
@@ -66,6 +71,7 @@ export function FormField({
               rows={rows}
               defaultValue={value}
               required={required}
+              readOnly={readonly}
               aria-describedby={error
                 ? `${name}-error`
                 : hint
@@ -78,13 +84,25 @@ export function FormField({
           ? (
             <select
               id={name}
-              name={name}
-              defaultValue={value}
+              name={multiple ? `${name}[]` : name}
+              multiple={multiple}
+              size={multiple ? 5 : undefined}
+              defaultValue={multiple
+                ? (value?.startsWith("[")
+                  ? JSON.parse(value) as string[]
+                  : value
+                  ? [value]
+                  : [])
+                : value}
               required={required}
-              aria-describedby={error ? `${name}-error` : undefined}
+              aria-describedby={error
+                ? `${name}-error`
+                : hint
+                ? `${name}-hint`
+                : undefined}
               className={inputClass}
             >
-              <option value="">Select...</option>
+              {!multiple && <option value="">Select...</option>}
               {options?.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
@@ -99,6 +117,7 @@ export function FormField({
               name={name}
               defaultValue={value}
               required={required}
+              readOnly={readonly}
               aria-describedby={error
                 ? `${name}-error`
                 : hint

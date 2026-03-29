@@ -38,18 +38,17 @@ export function renderDynamicPage(
 
   // Inject SEO tags into the document <head>
   if (seoTitle) {
-    // Replace existing <title> tag content or {{seo_title}} placeholder
-    document = document.replace(
-      /(<title>)[^<]*(< \/title>)/i,
-      `$1${seoTitle}$2`,
-    );
-    document = document.replace("{{seo_title}}", seoTitle);
+    // Replace {{seo_title}} placeholder with escaped content
+    document = document.replace("{{seo_title}}", escapeHtmlContent(seoTitle));
   }
 
   if (seoDescription) {
     // Insert meta description before </head> if not already present
     if (document.includes("{{seo_description}}")) {
-      document = document.replace("{{seo_description}}", seoDescription);
+      document = document.replace(
+        "{{seo_description}}",
+        escapeAttr(seoDescription),
+      );
     } else if (!document.includes('name="description"')) {
       document = document.replace(
         "</head>",
@@ -60,7 +59,7 @@ export function renderDynamicPage(
     }
   }
 
-  // Replace <title> tag with SEO title
+  // Replace <title> tag with SEO title (escaped)
   if (seoTitle) {
     document = document.replace(
       /<title>[^<]*<\/title>/i,

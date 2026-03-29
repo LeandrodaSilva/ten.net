@@ -24,7 +24,8 @@ describe("PostsPlugin", () => {
     assertEquals(plugin.model.slug, "string");
     assertEquals(plugin.model.body, "string");
     assertEquals(plugin.model.status, "string");
-    assertEquals(plugin.model.category_ids, "object");
+    assertEquals(plugin.model.category_ids, "string");
+    assertEquals(plugin.model.published_at, "string");
   });
 
   it("should have correct slug", () => {
@@ -41,7 +42,7 @@ describe("PostsPlugin", () => {
       body: "b",
       cover_image: "img.jpg",
       status: "draft",
-      category_ids: ["1"],
+      category_ids: '["1"]',
       author_id: "u1",
     });
     assertEquals(result.valid, true);

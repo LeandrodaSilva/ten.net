@@ -345,6 +345,85 @@ describe("FormField component", () => {
     assertStringIncludes(html, 'aria-describedby="title-error"');
     assertStringIncludes(html, 'id="title-error"');
   });
+
+  it("should render textarea with custom rows", () => {
+    const html = renderToString(
+      <FormField name="body" label="Body" type="textarea" rows={10} />,
+    );
+    assertStringIncludes(html, "<textarea");
+    assertStringIncludes(html, 'rows="10"');
+  });
+
+  it("should render textarea with default rows=4", () => {
+    const html = renderToString(
+      <FormField name="body" label="Body" type="textarea" />,
+    );
+    assertStringIncludes(html, 'rows="4"');
+  });
+
+  it("should render multi-select with multiple attribute", () => {
+    const html = renderToString(
+      <FormField
+        name="categories"
+        label="Categories"
+        type="select"
+        multiple
+        options={[
+          { value: "cat-1", label: "Tech" },
+          { value: "cat-2", label: "News" },
+        ]}
+      />,
+    );
+    assertStringIncludes(html, "<select");
+    assertStringIncludes(html, "multiple");
+    assertStringIncludes(html, 'name="categories[]"');
+    assertStringIncludes(html, 'size="5"');
+  });
+
+  it("should render single select with Select... placeholder", () => {
+    const html = renderToString(
+      <FormField
+        name="status"
+        label="Status"
+        type="select"
+        options={[
+          { value: "draft", label: "Draft" },
+          { value: "published", label: "Published" },
+        ]}
+      />,
+    );
+    assertStringIncludes(html, "Select...");
+  });
+
+  it("should not render Select... placeholder for multi-select", () => {
+    const html = renderToString(
+      <FormField
+        name="tags"
+        label="Tags"
+        type="select"
+        multiple
+        options={[{ value: "a", label: "A" }]}
+      />,
+    );
+    assertEquals(html.includes("Select..."), false);
+  });
+
+  it("should apply readOnly attribute on text input", () => {
+    const html = renderToString(
+      <FormField name="id" label="ID" readonly />,
+    );
+    assertStringIncludes(html, "readOnly");
+    assertStringIncludes(html, "bg-gray-50");
+  });
+
+  it("should apply readOnly attribute on textarea", () => {
+    const html = renderToString(
+      <FormField name="body" label="Body" type="textarea" readonly />,
+    );
+    assertStringIncludes(html, "<textarea");
+    assertStringIncludes(html, "readOnly");
+    assertStringIncludes(html, "bg-gray-50");
+  });
 });
 
 // --- Alert ---
