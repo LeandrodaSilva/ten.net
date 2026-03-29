@@ -112,16 +112,133 @@ describe("PagePlugin", () => {
 
   it("should have correct description", () => {
     const plugin = new PagePlugin();
-    assertEquals(plugin.description, "A plugin for handling page rendering.");
+    assertEquals(
+      plugin.description,
+      "Dynamic pages managed from the admin panel.",
+    );
   });
 
   it("should have correct model", () => {
     const plugin = new PagePlugin();
-    assertEquals(plugin.model, { name: "string", html: "string" });
+    assertEquals(plugin.model, {
+      slug: "string",
+      title: "string",
+      body: "string",
+      status: "string",
+      seo_title: "string",
+      seo_description: "string",
+      template: "string",
+      author_id: "string",
+    });
   });
 
   it("should have correct slug", () => {
     const plugin = new PagePlugin();
     assertEquals(plugin.slug, "page-plugin");
+  });
+
+  describe("validate()", () => {
+    it("should pass for valid draft page", () => {
+      const plugin = new PagePlugin();
+      const result = plugin.validate({
+        slug: "about-us",
+        title: "About Us",
+        body: "",
+        status: "draft",
+        seo_title: "",
+        seo_description: "",
+        template: "",
+        author_id: "",
+      });
+      // body, seo_title, seo_description, template, author_id are empty but draft is ok
+      assertEquals(result.errors.slug, undefined);
+      assertEquals(result.errors.status, undefined);
+    });
+
+    it("should reject invalid slug format", () => {
+      const plugin = new PagePlugin();
+      const result = plugin.validate({
+        slug: "About Us!",
+        title: "About",
+        body: "content",
+        status: "draft",
+        seo_title: "",
+        seo_description: "",
+        template: "",
+        author_id: "",
+      });
+      assertEquals(result.valid, false);
+      assertEquals(
+        result.errors.slug,
+        "slug must be lowercase alphanumeric with hyphens (e.g. my-page)",
+      );
+    });
+
+    it("should reject invalid status", () => {
+      const plugin = new PagePlugin();
+      const result = plugin.validate({
+        slug: "test",
+        title: "Test",
+        body: "content",
+        status: "archived",
+        seo_title: "",
+        seo_description: "",
+        template: "",
+        author_id: "",
+      });
+      assertEquals(result.valid, false);
+      assertEquals(result.errors.status, "status must be draft or published");
+    });
+
+    it("should require body when status is published", () => {
+      const plugin = new PagePlugin();
+      const result = plugin.validate({
+        slug: "test",
+        title: "Test",
+        body: "",
+        status: "published",
+        seo_title: "",
+        seo_description: "",
+        template: "",
+        author_id: "",
+      });
+      assertEquals(result.valid, false);
+      assertEquals(
+        result.errors.body,
+        "body is required when status is published",
+      );
+    });
+
+    it("should pass for valid published page with body", () => {
+      const plugin = new PagePlugin();
+      const result = plugin.validate({
+        slug: "hello-world",
+        title: "Hello World",
+        body: "<p>Welcome</p>",
+        status: "published",
+        seo_title: "Hello",
+        seo_description: "A page",
+        template: "default",
+        author_id: "user-1",
+      });
+      assertEquals(result.valid, true);
+      assertEquals(Object.keys(result.errors).length, 0);
+    });
+
+    it("should allow body to be empty for draft", () => {
+      const plugin = new PagePlugin();
+      const result = plugin.validate({
+        slug: "draft-page",
+        title: "Draft",
+        body: "",
+        status: "draft",
+        seo_title: "",
+        seo_description: "",
+        template: "",
+        author_id: "",
+      });
+      // body is not required for drafts
+      assertEquals(result.errors.body, undefined);
+    });
   });
 });

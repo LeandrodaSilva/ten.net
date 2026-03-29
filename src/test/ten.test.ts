@@ -4,6 +4,9 @@ import { Ten } from "../ten.ts";
 import { Route } from "../models/Route.ts";
 import { AdminPlugin } from "../plugins/adminPlugin.tsx";
 import { PagePlugin } from "../plugins/pagePlugin.ts";
+import { DynamicRouteRegistry } from "../routing/dynamicRouteRegistry.ts";
+import { InMemoryStorage } from "../models/Storage.ts";
+import type { StorageItem } from "../models/Storage.ts";
 
 describe("Ten", () => {
   describe("Ten.net()", () => {
@@ -254,6 +257,204 @@ describe("Ten", () => {
       } finally {
         console.error = consoleSpy;
       }
+    });
+  });
+
+  describe("dynamic routes integration", () => {
+    function makePage(overrides?: Partial<StorageItem>): StorageItem {
+      return {
+        id: "page-1",
+        slug: "about",
+        title: "About Us",
+        body: "<p>About page content</p>",
+        status: "published",
+        seo_title: "About Us",
+        seo_description: "About our company",
+        template: "",
+        author_id: "",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        ...overrides,
+      };
+    }
+
+    it("should serve dynamic page when no file-based route matches", async () => {
+      const app = Ten.net();
+      const registry = new DynamicRouteRegistry();
+      registry.register(makePage({ slug: "dynamic-test" }));
+
+      // Inject registry into app
+      (app as unknown as { _dynamicRegistry: DynamicRouteRegistry })
+        ._dynamicRegistry = registry;
+
+      const handler = (app as unknown as {
+        _handleRequest: (req: Request) => Promise<Response>;
+      })._handleRequest.bind(app);
+
+      const response = await handler(
+        new Request("http://localhost/dynamic-test"),
+      );
+      assertEquals(response.status, 200);
+      assertEquals(response.headers.get("Content-Type"), "text/html");
+      const body = await response.text();
+      assertStringIncludes(body, "About page content");
+    });
+
+    it("should give file-based routes priority over dynamic routes", async () => {
+      const app = Ten.net();
+
+      // Add a file-based route at /about
+      const routes = (app as unknown as { _routes: Route[] })._routes;
+      const fileRoute = new Route({
+        path: "/about",
+        regex: /^\/about$/,
+        hasPage: false,
+        transpiledCode: "",
+        sourcePath: "",
+      });
+      fileRoute.method = "GET";
+      fileRoute.run = () =>
+        new Response("file-based response", { status: 200 });
+      routes.push(fileRoute);
+
+      // Also register a dynamic route at /about
+      const registry = new DynamicRouteRegistry();
+      registry.register(makePage({ slug: "about" }));
+      (app as unknown as { _dynamicRegistry: DynamicRouteRegistry })
+        ._dynamicRegistry = registry;
+
+      const handler = (app as unknown as {
+        _handleRequest: (req: Request) => Promise<Response>;
+      })._handleRequest.bind(app);
+
+      const response = await handler(
+        new Request("http://localhost/about"),
+      );
+      assertEquals(response.status, 200);
+      const body = await response.text();
+      assertEquals(body, "file-based response");
+    });
+
+    it("should only match dynamic routes on GET requests", async () => {
+      const app = Ten.net();
+      const registry = new DynamicRouteRegistry();
+      registry.register(makePage({ slug: "about" }));
+      (app as unknown as { _dynamicRegistry: DynamicRouteRegistry })
+        ._dynamicRegistry = registry;
+
+      const handler = (app as unknown as {
+        _handleRequest: (req: Request) => Promise<Response>;
+      })._handleRequest.bind(app);
+
+      const response = await handler(
+        new Request("http://localhost/about", { method: "POST" }),
+      );
+      assertEquals(response.status, 404);
+    });
+
+    it("should render custom 404 page when slug '404' is registered", async () => {
+      const app = Ten.net();
+      const registry = new DynamicRouteRegistry();
+      registry.register(
+        makePage({
+          id: "nf",
+          slug: "404",
+          body: "<h1>Custom Not Found</h1>",
+          title: "Not Found",
+          seo_title: "Page Not Found",
+        }),
+      );
+      (app as unknown as { _dynamicRegistry: DynamicRouteRegistry })
+        ._dynamicRegistry = registry;
+
+      const handler = (app as unknown as {
+        _handleRequest: (req: Request) => Promise<Response>;
+      })._handleRequest.bind(app);
+
+      const response = await handler(
+        new Request("http://localhost/nonexistent-page"),
+      );
+      assertEquals(response.status, 404);
+      assertEquals(response.headers.get("Content-Type"), "text/html");
+      const body = await response.text();
+      assertStringIncludes(body, "Custom Not Found");
+    });
+
+    it("should return plain 404 when no custom 404 page exists", async () => {
+      const app = Ten.net();
+      const registry = new DynamicRouteRegistry();
+      (app as unknown as { _dynamicRegistry: DynamicRouteRegistry })
+        ._dynamicRegistry = registry;
+
+      const handler = (app as unknown as {
+        _handleRequest: (req: Request) => Promise<Response>;
+      })._handleRequest.bind(app);
+
+      const response = await handler(
+        new Request("http://localhost/nonexistent"),
+      );
+      assertEquals(response.status, 404);
+      const body = await response.text();
+      assertEquals(body, "Not found");
+    });
+  });
+
+  describe("preview route integration", () => {
+    it("should return preview with banner and X-Robots-Tag header", async () => {
+      const app = Ten.net();
+      const admin = new AdminPlugin({
+        storage: "memory",
+        plugins: [PagePlugin],
+      });
+      await app.useAdmin(admin);
+
+      // Seed a page into PagePlugin storage
+      const pagePlugin = admin.plugins.find((p) => p.slug === "page-plugin");
+      await pagePlugin!.storage.set("preview-1", {
+        id: "preview-1",
+        slug: "test-preview",
+        title: "Preview Test",
+        body: "<p>Preview content</p>",
+        status: "draft",
+        seo_title: "Preview",
+        seo_description: "",
+        template: "",
+        author_id: "",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+
+      const handler = (app as unknown as {
+        _routeRequest: (req: Request) => Promise<Response>;
+      })._routeRequest.bind(app);
+
+      const response = await handler(
+        new Request("http://localhost/admin/preview/preview-1"),
+      );
+      assertEquals(response.status, 200);
+      assertEquals(response.headers.get("X-Robots-Tag"), "noindex");
+      assertEquals(response.headers.get("Content-Type"), "text/html");
+      const body = await response.text();
+      assertStringIncludes(body, "Preview Mode");
+      assertStringIncludes(body, "Preview content");
+    });
+
+    it("should return 404 for non-existent preview id", async () => {
+      const app = Ten.net();
+      const admin = new AdminPlugin({
+        storage: "memory",
+        plugins: [PagePlugin],
+      });
+      await app.useAdmin(admin);
+
+      const handler = (app as unknown as {
+        _routeRequest: (req: Request) => Promise<Response>;
+      })._routeRequest.bind(app);
+
+      const response = await handler(
+        new Request("http://localhost/admin/preview/nonexistent"),
+      );
+      assertEquals(response.status, 404);
     });
   });
 
