@@ -1,8 +1,7 @@
 # Roadmap Ten.net CMS — De Microframework a CMS Completo
 
-> Criado em: 2026-03-28
-> Atualizado em: 2026-03-29
-> Status: Fases 0-3 concluidas (v0.6.0). Proxima: Fase 4 (Blog/Posts)
+> Criado em: 2026-03-28 Atualizado em: 2026-03-29 Status: Fases 0-3 concluidas
+> (v0.6.0). Proxima: Fase 4 (Blog/Posts)
 
 ## Visao do Produto
 
