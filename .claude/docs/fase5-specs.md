@@ -15,8 +15,8 @@ tudo (comportamento atual).
 1. **RolesPlugin** — CRUD de roles (admin, editor, viewer, custom)
 2. **PermissionsMatrix** — role x plugin x acao (create/read/update/delete)
 3. **Expansao do UsersPlugin** — atribuicao de roles aos usuarios
-4. **Middleware de autorizacao dinamico** — substituir ROLE_PERMISSIONS hardcoded
-   por lookup no KV
+4. **Middleware de autorizacao dinamico** — substituir ROLE_PERMISSIONS
+   hardcoded por lookup no KV
 5. **AuditLogPlugin** — registrar quem fez o que, quando (Deno KV)
 6. **UI no admin** — telas de roles, permissoes, audit log no dashboard
 
@@ -38,8 +38,8 @@ tudo (comportamento atual).
    validacao. Campo `role` existente migra para `role_id` apontando para a role
    correspondente no RolesPlugin.
 6. **Middleware dinamico**: O `authMiddleware` consulta primeiro o KV para
-   permissoes customizadas. Se nao encontrar, fallback para
-   `ROLE_PERMISSIONS` hardcoded.
+   permissoes customizadas. Se nao encontrar, fallback para `ROLE_PERMISSIONS`
+   hardcoded.
 7. **Audit log automatico**: Intercepta todas as operacoes CRUD do AdminPlugin
    (create/update/delete) e registra no AuditLogPlugin. Nao requer acao manual
    do usuario.
@@ -148,8 +148,8 @@ model = {
 
 ### Rota customizada: Matriz de Permissoes
 
-- GET `/admin/roles/permissions` — exibir matriz de permissoes (tabela
-  role x resource x acao)
+- GET `/admin/roles/permissions` — exibir matriz de permissoes (tabela role x
+  resource x acao)
 - POST `/admin/roles/permissions` — salvar alteracoes na matriz
 
 ### AuditLogPlugin (readonly no admin)
@@ -163,8 +163,8 @@ operacoes de escrita.
 
 ### UsersPlugin (existente, expandido)
 
-- Mesmas rotas existentes, agora com campo `role_id` como select populado
-  com roles do RolesPlugin
+- Mesmas rotas existentes, agora com campo `role_id` como select populado com
+  roles do RolesPlugin
 
 ## Middleware de Autorizacao Dinamico
 
@@ -189,9 +189,9 @@ export type Role = string; // Era: "admin" | "editor" | "viewer"
 
 // ROLE_PERMISSIONS mantido como fallback
 export const ROLE_PERMISSIONS: Record<string, Record<string, Permission[]>> = {
-  admin: { /* ... mesmo conteudo atual ... */ },
-  editor: { /* ... */ },
-  viewer: { /* ... */ },
+  admin: {/* ... mesmo conteudo atual ... */},
+  editor: {/* ... */},
+  viewer: {/* ... */},
 };
 ```
 
@@ -249,14 +249,29 @@ estiver vazio, semear 3 roles built-in:
 
 ```typescript
 const builtInRoles = [
-  { name: "Admin", slug: "admin", description: "Full access to all resources", is_system: "true" },
-  { name: "Editor", slug: "editor", description: "Create and edit content", is_system: "true" },
-  { name: "Viewer", slug: "viewer", description: "Read-only access", is_system: "true" },
+  {
+    name: "Admin",
+    slug: "admin",
+    description: "Full access to all resources",
+    is_system: "true",
+  },
+  {
+    name: "Editor",
+    slug: "editor",
+    description: "Create and edit content",
+    is_system: "true",
+  },
+  {
+    name: "Viewer",
+    slug: "viewer",
+    description: "Read-only access",
+    is_system: "true",
+  },
 ];
 ```
 
-Apos semear as roles, semear as permissoes correspondentes no KV (espelhando
-o `ROLE_PERMISSIONS` hardcoded atual).
+Apos semear as roles, semear as permissoes correspondentes no KV (espelhando o
+`ROLE_PERMISSIONS` hardcoded atual).
 
 ## Ordem de Execucao
 
@@ -364,7 +379,8 @@ T3 (PermissionEntry) ────┤                                    │
   - `parsePermissions(json: string): PermissionAction[]`
   - `serializePermissions(perms: PermissionAction[]): string`
   - `buildPermissionKey(roleSlug: string, resource: string): Deno.KvKey`
-- Manter compatibilidade com o tipo `Permission` existente em `src/auth/types.ts`
+- Manter compatibilidade com o tipo `Permission` existente em
+  `src/auth/types.ts`
 
 **Criterios de aceite:**
 
@@ -386,8 +402,8 @@ T3 (PermissionEntry) ────┤                                    │
 - Substituir campo `role: "string"` por `role_id: "string"`
 - Adicionar campo `status: "string"` (se nao existir) com valores
   "active"/"inactive"
-- Implementar `validate()`: email formato basico, display_name required,
-  role_id required, status enum
+- Implementar `validate()`: email formato basico, display_name required, role_id
+  required, status enum
 - Implementar `validateAsync()`: email uniqueness via storage index, role_id
   existencia no RolesPlugin storage
 - Marcar campo `status` default "active"
@@ -410,8 +426,7 @@ T3 (PermissionEntry) ────┤                                    │
 
 **O que fazer:**
 
-- Criar classe `PermissionsStore` que encapsula operacoes no KV para
-  permissoes:
+- Criar classe `PermissionsStore` que encapsula operacoes no KV para permissoes:
   - `get(roleSlug, resource): Promise<PermissionAction[] | null>`
   - `set(roleSlug, resource, permissions): Promise<void>`
   - `getAll(roleSlug): Promise<Record<string, PermissionAction[]>>`
@@ -448,8 +463,8 @@ T3 (PermissionEntry) ────┤                                    │
   plugin slug)
 - Manter `ROLE_PERMISSIONS` como fallback quando KV nao tem dados
 - Atualizar tipo `Resource` para aceitar `string` (nao apenas union hardcoded)
-- Manter compatibilidade total: sem KV configurado, comportamento identico
-  ao atual
+- Manter compatibilidade total: sem KV configurado, comportamento identico ao
+  atual
 
 **Criterios de aceite:**
 
@@ -589,8 +604,8 @@ T3 (PermissionEntry) ────┤                                    │
 **O que fazer:**
 
 - Criar componente `AuditLogList` para exibir entradas do audit log
-- Colunas: timestamp (formatado), username, action (badge colorido),
-  resource, resource_id
+- Colunas: timestamp (formatado), username, action (badge colorido), resource,
+  resource_id
 - Paginacao (reutilizar componente `Pagination` existente)
 - Filtro por action (create/update/delete) e por resource
 - Link para detalhe do item (se existir)
@@ -701,41 +716,43 @@ T3 (PermissionEntry) ────┤                                    │
 - [ ] `deno task lint` sem warnings
 - [ ] Nenhum teste existente quebrado
 - [ ] Backward-compatibility verificada (sem roles customizadas = comportamento
-  anterior)
+      anterior)
 
 ## Resumo de Arquivos Impactados
 
-| Arquivo                                      | Tarefas            | Tipo                                      |
-| -------------------------------------------- | ------------------ | ----------------------------------------- |
-| `src/plugins/rolesPlugin.ts`                 | T1                 | NOVO — Plugin de roles                    |
-| `src/plugins/auditLogPlugin.ts`              | T2                 | NOVO — Plugin de audit log                |
-| `src/models/Permission.ts`                   | T3                 | NOVO — Interface e helpers de permissao   |
-| `src/plugins/usersPlugin.ts`                 | T4                 | Expandir com role_id e validacao          |
-| `src/auth/permissionsStore.ts`               | T5, T8             | NOVO — Store para matriz de permissoes    |
-| `src/auth/authMiddleware.ts`                 | T6                 | Middleware dinamico com KV lookup          |
-| `src/auth/types.ts`                          | T6                 | Role e Resource passam a aceitar string    |
-| `src/plugins/adminPlugin.tsx`                | T7, T8, T12, T13   | Interceptor, seed, field config, dashboard |
-| `src/admin/components/roles-list.tsx`        | T9                 | NOVO — Lista de roles                     |
-| `src/admin/components/permissions-matrix.tsx` | T10                | NOVO — Matriz de permissoes               |
-| `src/admin/components/audit-log-list.tsx`    | T11                | NOVO — Lista de audit log                 |
-| `src/admin/components/logs.tsx`              | T13                | Expandir com dados reais do audit log     |
-| `src/admin/mod.ts`                           | —                  | Exportar RolesPlugin e AuditLogPlugin     |
-| `src/test/*.test.ts`                         | T14                | 12 novos arquivos de teste                |
+| Arquivo                                       | Tarefas          | Tipo                                       |
+| --------------------------------------------- | ---------------- | ------------------------------------------ |
+| `src/plugins/rolesPlugin.ts`                  | T1               | NOVO — Plugin de roles                     |
+| `src/plugins/auditLogPlugin.ts`               | T2               | NOVO — Plugin de audit log                 |
+| `src/models/Permission.ts`                    | T3               | NOVO — Interface e helpers de permissao    |
+| `src/plugins/usersPlugin.ts`                  | T4               | Expandir com role_id e validacao           |
+| `src/auth/permissionsStore.ts`                | T5, T8           | NOVO — Store para matriz de permissoes     |
+| `src/auth/authMiddleware.ts`                  | T6               | Middleware dinamico com KV lookup          |
+| `src/auth/types.ts`                           | T6               | Role e Resource passam a aceitar string    |
+| `src/plugins/adminPlugin.tsx`                 | T7, T8, T12, T13 | Interceptor, seed, field config, dashboard |
+| `src/admin/components/roles-list.tsx`         | T9               | NOVO — Lista de roles                      |
+| `src/admin/components/permissions-matrix.tsx` | T10              | NOVO — Matriz de permissoes                |
+| `src/admin/components/audit-log-list.tsx`     | T11              | NOVO — Lista de audit log                  |
+| `src/admin/components/logs.tsx`               | T13              | Expandir com dados reais do audit log      |
+| `src/admin/mod.ts`                            | —                | Exportar RolesPlugin e AuditLogPlugin      |
+| `src/test/*.test.ts`                          | T14              | 12 novos arquivos de teste                 |
 
 ## Notas
 
-- O tipo `Role` em `src/auth/types.ts` muda de union type (`"admin" | "editor" |
-  "viewer"`) para `string`. Isso e a mudanca mais impactante em termos de
-  backward-compatibility. Todos os locais que usam `Role` precisam ser revisados,
-  mas como o TypeScript aceita `string` como superset, nao deve quebrar nada.
+- O tipo `Role` em `src/auth/types.ts` muda de union type
+  (`"admin" | "editor" |
+  "viewer"`) para `string`. Isso e a mudanca mais
+  impactante em termos de backward-compatibility. Todos os locais que usam
+  `Role` precisam ser revisados, mas como o TypeScript aceita `string` como
+  superset, nao deve quebrar nada.
 - A relacao user->role e por referencia (`role_id`). Se uma role for deletada
   (nao-system), os usuarios com essa role perdem acesso ate serem reassociados
   (comportamento seguro: deny by default).
 - O AuditLogPlugin usa `expireIn` do Deno KV para TTL automatico de 90 dias.
-  Isso significa que entradas antigas sao removidas automaticamente pelo KV,
-  sem necessidade de job de limpeza.
-- A matriz de permissoes nao usa o plugin storage padrao. As permissoes ficam
-  em chaves KV dedicadas (`["permissions", role_slug, resource]`) para lookup
+  Isso significa que entradas antigas sao removidas automaticamente pelo KV, sem
+  necessidade de job de limpeza.
+- A matriz de permissoes nao usa o plugin storage padrao. As permissoes ficam em
+  chaves KV dedicadas (`["permissions", role_slug, resource]`) para lookup
   rapido no middleware (single key get, sem scan).
 - O componente `Logs` existente ja esta preparado como placeholder. A Fase 5
   apenas popula com dados reais.
