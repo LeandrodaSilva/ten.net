@@ -7,9 +7,9 @@
           {
             "type": "command",
             "if": "Bash(git commit*)",
-            "command": "deno test --parallel --allow-all --unstable-raw-imports 2>&1 || { echo '{\"decision\":\"block\",\"reason\":\"Tests failed. Fix failing tests before committing.\"}'; exit 0; }",
+            "command": "deno fmt --check 2>&1 || { echo '{\"decision\":\"block\",\"reason\":\"Formatting check failed. Run deno fmt before committing.\"}'; exit 0; }; deno test --parallel --allow-all --unstable-raw-imports 2>&1 || { echo '{\"decision\":\"block\",\"reason\":\"Tests failed. Fix failing tests before committing.\"}'; exit 0; }",
             "timeout": 120,
-            "statusMessage": "Running tests before commit..."
+            "statusMessage": "Running fmt check + tests before commit..."
           }
         ]
       }

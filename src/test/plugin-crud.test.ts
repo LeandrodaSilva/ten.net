@@ -46,7 +46,8 @@ describe("Plugin.validate()", () => {
     const result = plugin.validate({ name: "Tech" });
     assertEquals(result.valid, false);
     assertExists(result.errors.slug);
-    assertExists(result.errors.description);
+    // description is optional in CategoriesPlugin
+    assertEquals(result.errors.description, undefined);
   });
 
   it("should return error for empty string value", () => {
@@ -80,7 +81,7 @@ describe("Plugin.validate()", () => {
       body: "body content",
       cover_image: "img.jpg",
       status: "published",
-      category_ids: ["1", "2"],
+      category_ids: '["1","2"]',
       author_id: "user-1",
     });
     assertEquals(result.valid, true);
@@ -200,7 +201,7 @@ describe("AdminPlugin CRUD route handlers", () => {
       body: "body",
       cover_image: "",
       status: "draft",
-      category_ids: [],
+      category_ids: "[]",
       author_id: "u1",
     });
 
@@ -264,7 +265,7 @@ describe("AdminPlugin CRUD route handlers", () => {
       body: "b",
       cover_image: "",
       status: "draft",
-      category_ids: [],
+      category_ids: "[]",
       author_id: "u1",
     });
 
@@ -315,7 +316,7 @@ describe("AdminPlugin CRUD route handlers", () => {
       body: "",
       cover_image: "",
       status: "draft",
-      category_ids: [],
+      category_ids: "[]",
       author_id: "u1",
     });
 
@@ -335,6 +336,111 @@ describe("AdminPlugin CRUD route handlers", () => {
     );
     const deleted = await plugin.storage.get("del-id");
     assertEquals(deleted, null);
+  });
+});
+
+describe("AdminPlugin CRUD — validateAsync integration (SEC-05)", () => {
+  it("create returns 400 when sync validation fails (validateAsync path)", async () => {
+    const { routes } = await initAdmin(PostsPlugin);
+    const createRoute = routes.find(
+      (r) => r.path === "/admin/plugins/post-plugin" && r.method === "POST",
+    );
+    assertExists(createRoute?.run);
+
+    // Invalid slug should be caught by validateAsync (which runs sync first)
+    const req = makeFormRequest(
+      "http://localhost/admin/plugins/post-plugin",
+      {
+        title: "Post",
+        slug: "INVALID SLUG!",
+        excerpt: "",
+        body: "body",
+        cover_image: "",
+        status: "published",
+        category_ids: "",
+        author_id: "",
+        published_at: "",
+      },
+    );
+    const res = await createRoute!.run!(req);
+    assertEquals(res.status, 400);
+    const body = await res.json();
+    assertExists(body.errors);
+    assertExists(body.errors.slug);
+  });
+
+  it("create returns 400 when published without body", async () => {
+    const { routes } = await initAdmin(PostsPlugin);
+    const createRoute = routes.find(
+      (r) => r.path === "/admin/plugins/post-plugin" && r.method === "POST",
+    );
+    const req = makeFormRequest(
+      "http://localhost/admin/plugins/post-plugin",
+      {
+        title: "Post",
+        slug: "valid-slug",
+        excerpt: "",
+        body: "",
+        cover_image: "",
+        status: "published",
+        category_ids: "",
+        author_id: "",
+        published_at: "",
+      },
+    );
+    const res = await createRoute!.run!(req);
+    assertEquals(res.status, 400);
+    const body = await res.json();
+    assertExists(body.errors.body);
+    assertStringIncludes(body.errors.body, "body is required");
+  });
+
+  it("update returns 400 when invalid category_ids JSON", async () => {
+    const admin = new AdminPlugin({
+      storage: "memory",
+      plugins: [PostsPlugin],
+    });
+    await admin.init();
+    const plugin = admin.plugins[0];
+
+    await plugin.storage.set("post-x", {
+      id: "post-x",
+      title: "Post X",
+      slug: "my-slug",
+      excerpt: "",
+      body: "body",
+      cover_image: "",
+      status: "published",
+      category_ids: "[]",
+      author_id: "",
+      published_at: "2025-01-01T00:00:00.000Z",
+    });
+
+    const { routes: freshRoutes } = await admin.init();
+    const updateRoutes = freshRoutes.filter(
+      (r) =>
+        r.path === "/admin/plugins/post-plugin/[id]" && r.method === "POST",
+    );
+    const updateRoute = updateRoutes[0];
+
+    const req = makeFormRequest(
+      "http://localhost/admin/plugins/post-plugin/post-x",
+      {
+        title: "Post X",
+        slug: "my-slug",
+        excerpt: "",
+        body: "body",
+        cover_image: "",
+        status: "published",
+        category_ids: "not-valid-json",
+        author_id: "",
+        published_at: "2025-01-01T00:00:00.000Z",
+      },
+    );
+    const res = await updateRoute!.run!(req, { params: { id: "post-x" } });
+    assertEquals(res.status, 400);
+    const body = await res.json();
+    assertExists(body.errors.category_ids);
   });
 });
 

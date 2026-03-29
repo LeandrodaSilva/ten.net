@@ -78,9 +78,14 @@ export function Pagination({
               <a
                 href={currentPage > 1
                   ? `${baseHref}${separator}page=${currentPage - 1}`
-                  : "#"}
+                  : undefined}
                 aria-label="Previous page"
-                className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                aria-disabled={currentPage <= 1 ? "true" : undefined}
+                className={`relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 ring-inset focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600${
+                  currentPage <= 1
+                    ? " pointer-events-none opacity-50"
+                    : " hover:bg-gray-50"
+                }`}
               >
                 <svg
                   aria-hidden="true"
@@ -121,9 +126,14 @@ export function Pagination({
               <a
                 href={currentPage < totalPages
                   ? `${baseHref}${separator}page=${currentPage + 1}`
-                  : "#"}
+                  : undefined}
                 aria-label="Next page"
-                className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                aria-disabled={currentPage >= totalPages ? "true" : undefined}
+                className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 ring-inset focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600${
+                  currentPage >= totalPages
+                    ? " pointer-events-none opacity-50"
+                    : " hover:bg-gray-50"
+                }`}
               >
                 <svg
                   aria-hidden="true"

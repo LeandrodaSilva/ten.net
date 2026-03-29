@@ -7,6 +7,7 @@ import { embeddedRouterEngine } from "./embedded/embeddedRouterEngine.ts";
 import type { BuildOptions, BuildResult } from "./build/build.ts";
 import type { Middleware } from "./middleware/middleware.ts";
 import type { DynamicRouteRegistry } from "./routing/dynamicRouteRegistry.ts";
+import type { BlogRouteRegistry } from "./routing/blogRouteRegistry.ts";
 import { renderDynamicPage } from "./routing/dynamicPageHandler.ts";
 
 /** Interface for an admin plugin that can be registered via useAdmin(). */
@@ -15,6 +16,7 @@ export interface AdminPluginLike {
     routes: Route[];
     middlewares: Middleware[];
     dynamicRegistry?: DynamicRouteRegistry;
+    blogRegistry?: BlogRouteRegistry;
   }>;
 }
 

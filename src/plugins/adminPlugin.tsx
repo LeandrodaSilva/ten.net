@@ -17,7 +17,10 @@ import type { StorageItem } from "../models/Storage.ts";
 import type { SidebarNavItem } from "../admin/components/sidebar-nav.tsx";
 import { renderDynamicPage } from "../routing/dynamicPageHandler.ts";
 import { DynamicRouteRegistry } from "../routing/dynamicRouteRegistry.ts";
+import { BlogRouteRegistry } from "../routing/blogRouteRegistry.ts";
 import { PagePlugin } from "./pagePlugin.ts";
+import { PostsPlugin } from "./postsPlugin.ts";
+import { CategoriesPlugin } from "./categoriesPlugin.ts";
 
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {
@@ -41,6 +44,7 @@ export class AdminPlugin {
   private _sessionStore?: import("../auth/sessionStore.ts").SessionStore;
   private _userStore?: import("../auth/userStore.ts").UserStore;
   private _dynamicRegistry?: DynamicRouteRegistry;
+  private _blogRegistry?: BlogRouteRegistry;
 
   constructor(options?: AdminPluginOptions) {
     this._pluginConstructors = options?.plugins ?? [];
@@ -56,6 +60,74 @@ export class AdminPlugin {
       default:
         return "text";
     }
+  }
+
+  /** Get field-specific config for smart form rendering. */
+  private async _getFieldConfig(
+    plugin: Plugin,
+    fieldName: string,
+    fieldType: string,
+  ): Promise<Partial<FormFieldProps>> {
+    if (plugin instanceof PostsPlugin) {
+      switch (fieldName) {
+        case "body":
+          return { type: "textarea", rows: 10 };
+        case "excerpt":
+          return { type: "textarea", rows: 3 };
+        case "status":
+          return {
+            type: "select",
+            options: [
+              { value: "draft", label: "Draft" },
+              { value: "published", label: "Published" },
+            ],
+          };
+        case "category_ids": {
+          const catPlugin = this._plugins.find(
+            (p) => p instanceof CategoriesPlugin,
+          );
+          const options: { value: string; label: string }[] = [];
+          if (catPlugin) {
+            const categories = await catPlugin.storage.list({
+              page: 1,
+              limit: 100,
+            });
+            for (const cat of categories) {
+              options.push({
+                value: cat.id,
+                label: String(cat.name ?? cat.id),
+              });
+            }
+          }
+          return { type: "select", multiple: true, options };
+        }
+        case "published_at":
+          return {
+            type: "text",
+            readonly: true,
+            hint: "Auto-filled on first publish",
+          };
+      }
+    }
+    return { type: this._fieldType(fieldType) };
+  }
+
+  /** Build form fields for a plugin using _getFieldConfig. */
+  private async _buildFormFields(
+    plugin: Plugin,
+  ): Promise<Omit<FormFieldProps, "error">[]> {
+    const fields: Omit<FormFieldProps, "error">[] = [];
+    for (const [key, type] of Object.entries(plugin.model)) {
+      const config = await this._getFieldConfig(plugin, key, type);
+      fields.push({
+        name: key,
+        label: (key.charAt(0).toUpperCase() + key.slice(1)).replace(/_/g, " "),
+        type: this._fieldType(type),
+        required: type !== "boolean",
+        ...config,
+      });
+    }
+    return fields;
   }
 
   /** Build nav items from registered plugins. */
@@ -188,7 +260,7 @@ export class AdminPlugin {
 
       const columns = Object.keys(plugin.model).map((key) => ({
         key,
-        label: key.charAt(0).toUpperCase() + key.slice(1),
+        label: (key.charAt(0).toUpperCase() + key.slice(1)).replace(/_/g, " "),
       }));
 
       const session = requestSession.get(req);
@@ -236,6 +308,20 @@ export class AdminPlugin {
           headers: { "Content-Type": "application/json" },
         });
       }
+      // Async validation (e.g. slug uniqueness)
+      if ("validateAsync" in plugin) {
+        const asyncResult = await (plugin as {
+          validateAsync(
+            d: Record<string, unknown>,
+          ): Promise<{ valid: boolean; errors: Record<string, string> }>;
+        }).validateAsync(data);
+        if (!asyncResult.valid) {
+          return new Response(JSON.stringify({ errors: asyncResult.errors }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+      }
       const id = crypto.randomUUID();
       const now = new Date().toISOString();
       const item: StorageItem = {
@@ -250,6 +336,13 @@ export class AdminPlugin {
       if (plugin instanceof PagePlugin && this._dynamicRegistry) {
         if (String(data.status) === "published") {
           this._dynamicRegistry.register(item);
+        }
+      }
+
+      // Hot-registration: register published posts in BlogRouteRegistry
+      if (plugin instanceof PostsPlugin && this._blogRegistry) {
+        if (String(data.status) === "published") {
+          this._blogRegistry.register(item);
         }
       }
 
@@ -269,15 +362,10 @@ export class AdminPlugin {
       sourcePath: "",
     });
     newRoute.method = "GET";
-    newRoute.run = (req: Request) => {
+    newRoute.run = async (req: Request) => {
       const session = requestSession.get(req);
       const csrfToken = session?.csrfToken;
-      const fields = Object.entries(plugin.model).map(([key, type]) => ({
-        name: key,
-        label: key.charAt(0).toUpperCase() + key.slice(1),
-        type: this._fieldType(type),
-        required: type !== "boolean",
-      }));
+      const fields = await this._buildFormFields(plugin);
       const html = renderAdminPage(CrudForm, {
         pluginName: plugin.name,
         pluginSlug: slug,
@@ -314,12 +402,7 @@ export class AdminPlugin {
       const session = requestSession.get(req);
       const csrfToken = session?.csrfToken;
 
-      const fields = Object.entries(plugin.model).map(([key, type]) => ({
-        name: key,
-        label: key.charAt(0).toUpperCase() + key.slice(1),
-        type: this._fieldType(type),
-        required: type !== "boolean",
-      }));
+      const fields = await this._buildFormFields(plugin);
 
       const values: Record<string, string> = {};
       for (const key of Object.keys(plugin.model)) {
@@ -369,6 +452,30 @@ export class AdminPlugin {
         const val = formData.get(key);
         if (val !== null) data[key] = val.toString();
       }
+      // Validate before saving
+      const { valid: syncValid, errors: syncErrors } = plugin.validate(data);
+      if (!syncValid) {
+        return new Response(JSON.stringify({ errors: syncErrors }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      // Async validation (e.g. slug uniqueness, excluding current item)
+      if ("validateAsync" in plugin) {
+        const asyncResult = await (plugin as {
+          validateAsync(
+            d: Record<string, unknown>,
+            excludeId?: string,
+          ): Promise<{ valid: boolean; errors: Record<string, string> }>;
+        }).validateAsync(data, id);
+        if (!asyncResult.valid) {
+          return new Response(JSON.stringify({ errors: asyncResult.errors }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+      }
+
       data.updated_at = new Date().toISOString();
       await plugin.storage.set(id, data as StorageItem);
 
@@ -381,6 +488,16 @@ export class AdminPlugin {
         } else {
           // Unpublished — remove from dynamic routes
           this._dynamicRegistry.unregister(id);
+        }
+      }
+
+      // Hot-registration: update blog post on status change
+      if (plugin instanceof PostsPlugin && this._blogRegistry) {
+        if (String(data.status) === "published") {
+          this._blogRegistry.unregister(id);
+          this._blogRegistry.register(data as StorageItem);
+        } else {
+          this._blogRegistry.unregister(id);
         }
       }
 
@@ -411,6 +528,11 @@ export class AdminPlugin {
       // Hot-registration: unregister deleted pages from DynamicRouteRegistry
       if (plugin instanceof PagePlugin && this._dynamicRegistry) {
         this._dynamicRegistry.unregister(id);
+      }
+
+      // Hot-registration: unregister deleted posts from BlogRouteRegistry
+      if (plugin instanceof PostsPlugin && this._blogRegistry) {
+        this._blogRegistry.unregister(id);
       }
 
       return new Response(null, {
@@ -465,6 +587,362 @@ export class AdminPlugin {
     routes.push(previewRoute);
   }
 
+  /** Render a friendly 404 page for public blog routes. */
+  private _blog404(title: string): Response {
+    const bodyHtml = `<div class="max-w-3xl mx-auto text-center py-16">
+  <h1 class="text-4xl font-bold text-gray-900 mb-4">${escapeHtml(title)}</h1>
+  <p class="text-gray-500 mb-8">The page you are looking for does not exist or has been removed.</p>
+  <a href="/blog" class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Back to Blog</a>
+</div>`;
+    const html = renderDynamicPage(
+      {
+        id: "blog-404",
+        body: bodyHtml,
+        title,
+        seo_title: title,
+        seo_description: "Page not found",
+        template: "blog-404",
+      },
+      "./app",
+    );
+    return new Response(html, {
+      status: 404,
+      headers: { "Content-Type": "text/html" },
+    });
+  }
+
+  /** Generate public blog routes (GET /blog and GET /blog/{slug}). */
+  private _addBlogRoutes(routes: Route[]): void {
+    if (!this._blogRegistry) return;
+    const registry = this._blogRegistry;
+
+    // GET /blog — paginated listing
+    const blogListRoute = new Route({
+      path: "/blog",
+      regex: /^\/blog$/,
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    blogListRoute.method = "GET";
+    blogListRoute.run = async (req: Request) => {
+      const url = new URL(req.url);
+      const page = Math.max(
+        1,
+        parseInt(url.searchParams.get("page") ?? "1", 10) || 1,
+      );
+      const { posts, total, totalPages } = registry.listPublished({
+        page,
+        limit: 10,
+      });
+
+      const postItems = await Promise.all(
+        posts.map(async (post) => {
+          const categories = await registry.getCategories(post.category_ids);
+          return `<article class="mb-8 pb-8 border-b border-gray-200">
+  <h2><a href="/blog/${
+            escapeAttrValue(post.slug)
+          }" class="text-xl font-semibold text-indigo-600 hover:text-indigo-800">${
+            escapeHtml(post.title)
+          }</a></h2>
+  ${
+            post.cover_image
+              ? `<img src="${escapeAttrValue(post.cover_image)}" alt="${
+                escapeAttrValue(post.title)
+              }" class="w-full h-48 object-cover rounded-lg mb-4" />`
+              : ""
+          }
+  <p class="text-gray-700 mb-2">${escapeHtml(post.excerpt)}</p>
+  <div class="text-sm text-gray-500 mb-2">
+    <time datetime="${escapeAttrValue(post.published_at ?? "")}">${
+            post.published_at
+              ? new Date(post.published_at).toLocaleDateString()
+              : ""
+          }</time>
+    ${
+            categories.length > 0
+              ? `<span class="flex gap-2 inline-flex">${
+                categories.map((c) =>
+                  `<a href="/blog/category/${
+                    escapeAttrValue(c.slug)
+                  }" class="text-indigo-600 hover:text-indigo-800">${
+                    escapeHtml(c.name)
+                  }</a>`
+                ).join(", ")
+              }</span>`
+              : ""
+          }
+  </div>
+</article>`;
+        }),
+      );
+
+      const prevLink = page > 1
+        ? `<a href="/blog?page=${
+          page - 1
+        }" class="text-indigo-600 hover:text-indigo-800" aria-label="Previous page">Previous</a>`
+        : "";
+      const nextLink = page < totalPages
+        ? `<a href="/blog?page=${
+          page + 1
+        }" class="text-indigo-600 hover:text-indigo-800" aria-label="Next page">Next</a>`
+        : "";
+
+      const bodyHtml = `<div class="max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">Blog</h1>
+  ${postItems.join("\n")}
+  ${total === 0 ? '<p class="text-gray-500">No posts yet.</p>' : ""}
+  <nav class="flex justify-between mt-8" aria-label="Blog pagination">${prevLink} ${nextLink}</nav>
+</div>`;
+
+      let html = renderDynamicPage(
+        {
+          id: "blog-list",
+          body: bodyHtml,
+          title: "Blog",
+          seo_title: "Blog",
+          seo_description: "Blog posts",
+          template: "blog-list",
+        },
+        "./app",
+      );
+      html = injectHeadTags(html, RSS_DISCOVERY_TAG);
+
+      return new Response(html, {
+        status: 200,
+        headers: { "Content-Type": "text/html" },
+      });
+    };
+    routes.push(blogListRoute);
+
+    // GET /blog/rss.xml — RSS 2.0 feed
+    const rssRoute = new Route({
+      path: "/blog/rss.xml",
+      regex: /^\/blog\/rss\.xml$/,
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    rssRoute.method = "GET";
+    rssRoute.run = (req: Request) => {
+      const url = new URL(req.url);
+      const siteUrl = `${url.protocol}//${url.host}`;
+      const xml = registry.generateRSS("Blog", siteUrl);
+      return new Response(xml, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/rss+xml; charset=utf-8",
+        },
+      });
+    };
+    routes.push(rssRoute);
+
+    // GET /blog/category/{slug} — posts filtered by category
+    const categoryRoute = new Route({
+      path: "/blog/category/[slug]",
+      regex: /^\/blog\/category\/([^/]+)$/,
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    categoryRoute.method = "GET";
+    categoryRoute.run = async (
+      req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const catSlug = ctx?.params?.slug;
+      if (!catSlug) return this._blog404("Category Not Found");
+
+      // Resolve category slug to category object
+      const catPlugin = this._plugins.find(
+        (p) => p instanceof CategoriesPlugin,
+      );
+      if (!catPlugin) return this._blog404("Category Not Found");
+
+      // Find category by slug (capped at 100; paginate if more categories needed)
+      const allCategories = await catPlugin.storage.list({
+        page: 1,
+        limit: 100,
+      });
+      const category = allCategories.find(
+        (c) => String(c.slug) === catSlug,
+      );
+      if (!category) return this._blog404("Category Not Found");
+
+      const url = new URL(req.url);
+      const page = Math.max(
+        1,
+        parseInt(url.searchParams.get("page") ?? "1", 10) || 1,
+      );
+      const { posts, total, totalPages } = registry.listPublished({
+        page,
+        limit: 10,
+        categoryId: category.id,
+      });
+
+      const categoryName = String(category.name ?? catSlug);
+
+      const postItems = await Promise.all(
+        posts.map(async (post) => {
+          const categories = await registry.getCategories(post.category_ids);
+          return `<article class="mb-8 pb-8 border-b border-gray-200">
+  <h2><a href="/blog/${escapeAttrValue(post.slug)}">${
+            escapeHtml(post.title)
+          }</a></h2>
+  ${
+            post.cover_image
+              ? `<img src="${escapeAttrValue(post.cover_image)}" alt="${
+                escapeAttrValue(post.title)
+              }" class="w-full h-48 object-cover rounded-lg mb-4" />`
+              : ""
+          }
+  <p>${escapeHtml(post.excerpt)}</p>
+  <div class="text-sm text-gray-500 mb-2">
+    <time datetime="${escapeAttrValue(post.published_at ?? "")}">${
+            post.published_at
+              ? new Date(post.published_at).toLocaleDateString()
+              : ""
+          }</time>
+    ${
+            categories.length > 0
+              ? `<span class="flex gap-2 inline-flex">${
+                categories.map((c) =>
+                  `<a href="/blog/category/${escapeAttrValue(c.slug)}">${
+                    escapeHtml(c.name)
+                  }</a>`
+                ).join(", ")
+              }</span>`
+              : ""
+          }
+  </div>
+</article>`;
+        }),
+      );
+
+      const prevLink = page > 1
+        ? `<a href="/blog/category/${escapeAttrValue(catSlug)}?page=${
+          page - 1
+        }" aria-label="Previous page">Previous</a>`
+        : "";
+      const nextLink = page < totalPages
+        ? `<a href="/blog/category/${escapeAttrValue(catSlug)}?page=${
+          page + 1
+        }" aria-label="Next page">Next</a>`
+        : "";
+
+      const bodyHtml = `<div class="max-w-3xl mx-auto">
+  <h1>Blog — ${escapeHtml(categoryName)}</h1>
+  ${postItems.join("\n")}
+  ${total === 0 ? "<p>No posts in this category.</p>" : ""}
+  <nav class="flex justify-between mt-8" aria-label="Category pagination">${prevLink} ${nextLink}</nav>
+</div>`;
+
+      let html = renderDynamicPage(
+        {
+          id: `blog-category-${catSlug}`,
+          body: bodyHtml,
+          title: `Blog — ${categoryName}`,
+          seo_title: `Blog — ${categoryName}`,
+          seo_description: `Posts in category: ${categoryName}`,
+          template: "blog-list",
+        },
+        "./app",
+      );
+      html = injectHeadTags(html, RSS_DISCOVERY_TAG);
+
+      return new Response(html, {
+        status: 200,
+        headers: { "Content-Type": "text/html" },
+      });
+    };
+    routes.push(categoryRoute);
+
+    // GET /blog/{slug} — single post
+    const blogPostRoute = new Route({
+      path: "/blog/[slug]",
+      regex: /^\/blog\/([^/]+)$/,
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    blogPostRoute.method = "GET";
+    blogPostRoute.run = async (
+      _req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const slug = ctx?.params?.slug;
+      if (!slug) return this._blog404("Post Not Found");
+
+      const post = registry.match(`/blog/${slug}`);
+      if (!post) return this._blog404("Post Not Found");
+
+      const categories = await registry.getCategories(post.category_ids);
+
+      const categoryHtml = categories.length > 0
+        ? `<div class="flex gap-2 inline-flex">${
+          categories.map((c) =>
+            `<a href="/blog/category/${
+              escapeAttrValue(c.slug)
+            }" class="text-indigo-600 hover:text-indigo-800">${
+              escapeHtml(c.name)
+            }</a>`
+          ).join(", ")
+        }</div>`
+        : "";
+
+      const bodyHtml = `<article class="max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-900 mb-4">${
+        escapeHtml(post.title)
+      }</h1>
+  ${
+        post.cover_image
+          ? `<img src="${escapeAttrValue(post.cover_image)}" alt="${
+            escapeAttrValue(post.title)
+          }" class="w-full h-48 object-cover rounded-lg mb-4" />`
+          : ""
+      }
+  <div class="text-sm text-gray-500 mb-2">
+    <time datetime="${escapeAttrValue(post.published_at ?? "")}">${
+        post.published_at
+          ? new Date(post.published_at).toLocaleDateString()
+          : ""
+      }</time>
+    ${categoryHtml}
+  </div>
+  <div class="mt-6 leading-relaxed text-gray-800 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-4 [&>h2]:text-xl [&>h2]:font-semibold [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-medium [&>h3]:mb-2 [&>p]:mb-4 [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:mb-4 [&>blockquote]:border-l-4 [&>blockquote]:border-gray-300 [&>blockquote]:pl-4 [&>blockquote]:italic">${
+        sanitizeHtml(post.body)
+      }</div>
+</article>`;
+
+      const seoDescription = post.excerpt || post.title;
+
+      let html = renderDynamicPage(
+        {
+          id: post.id,
+          body: bodyHtml,
+          title: post.title,
+          seo_title: post.title,
+          seo_description: seoDescription,
+          template: "blog-post",
+        },
+        "./app",
+      );
+      let headTags = RSS_DISCOVERY_TAG;
+      if (post.cover_image) {
+        headTags += `\n<meta property="og:image" content="${
+          escapeAttrValue(post.cover_image)
+        }">`;
+      }
+      html = injectHeadTags(html, headTags);
+
+      return new Response(html, {
+        status: 200,
+        headers: { "Content-Type": "text/html" },
+      });
+    };
+    routes.push(blogPostRoute);
+  }
+
   /**
    * Initialize the admin panel. Instantiates plugins, generates all routes
    * (dashboard, CRUD, auth, favicon), and returns routes + middlewares.
@@ -473,6 +951,7 @@ export class AdminPlugin {
     routes: Route[];
     middlewares: Middleware[];
     dynamicRegistry?: DynamicRouteRegistry;
+    blogRegistry?: BlogRouteRegistry;
   }> {
     // Instantiate content plugins (only on first init; re-init reuses existing instances)
     if (this._plugins.length === 0) {
@@ -543,7 +1022,26 @@ export class AdminPlugin {
       dynamicRegistry = this._dynamicRegistry;
     }
 
-    return { routes, middlewares, dynamicRegistry };
+    // Initialize BlogRouteRegistry with PostsPlugin + CategoriesPlugin storage
+    const postsPlugin = this._plugins.find((p) => p instanceof PostsPlugin);
+    const categoriesPlugin = this._plugins.find(
+      (p) => p instanceof CategoriesPlugin,
+    );
+    let blogRegistry: BlogRouteRegistry | undefined;
+    if (postsPlugin && categoriesPlugin) {
+      this._blogRegistry = new BlogRouteRegistry();
+      this._blogRegistry.setStorage(
+        postsPlugin.storage,
+        categoriesPlugin.storage,
+      );
+      await this._blogRegistry.loadFromStorage();
+      blogRegistry = this._blogRegistry;
+
+      // Add public blog routes (no auth required — /blog does not start with /admin)
+      this._addBlogRoutes(routes);
+    }
+
+    return { routes, middlewares, dynamicRegistry, blogRegistry };
   }
 
   /** Get the list of instantiated plugins (available after init). */
@@ -555,4 +1053,51 @@ export class AdminPlugin {
   get dynamicRegistry(): DynamicRouteRegistry | undefined {
     return this._dynamicRegistry;
   }
+
+  /** Get the BlogRouteRegistry instance (available after init). */
+  get blogRegistry(): BlogRouteRegistry | undefined {
+    return this._blogRegistry;
+  }
+}
+
+/** RSS auto-discovery link tag for blog pages. */
+const RSS_DISCOVERY_TAG =
+  `<link rel="alternate" type="application/rss+xml" title="Blog" href="/blog/rss.xml">`;
+
+/** Inject extra tags into the <head> of an HTML string (before </head>). */
+function injectHeadTags(html: string, tags: string): string {
+  return html.replace("</head>", `${tags}\n</head>`);
+}
+
+/** Escape a string for safe HTML text content. */
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/** Escape a string for use in an HTML attribute value. */
+function escapeAttrValue(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
+ * Sanitize rich HTML content by stripping dangerous elements.
+ * Removes <script>, <iframe>, <object>, <embed>, <form>, <base> tags
+ * and on* event handler attributes.
+ */
+function sanitizeHtml(s: string): string {
+  return s
+    .replace(
+      /<\s*(script|iframe|object|embed|form|base)\b[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi,
+      "",
+    )
+    .replace(/<\s*(script|iframe|object|embed|form|base)\b[^>]*\/?>/gi, "")
+    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "");
 }
