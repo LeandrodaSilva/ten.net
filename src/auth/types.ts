@@ -1,5 +1,5 @@
-/** User roles for RBAC. */
-export type Role = "admin" | "editor" | "viewer";
+/** User roles for RBAC. Accepts custom role strings beyond built-in roles. */
+export type Role = string;
 
 /** A registered admin user. */
 export interface User {
@@ -31,17 +31,11 @@ export interface AuthConfig {
 }
 
 export type Permission = "read" | "create" | "update" | "delete";
-export type Resource =
-  | "pages"
-  | "posts"
-  | "categories"
-  | "groups"
-  | "users"
-  | "settings"
-  | "dashboard";
+/** Resources for RBAC. Accepts dynamic plugin slugs beyond built-in resources. */
+export type Resource = string;
 
-/** RBAC permission map. */
-export const ROLE_PERMISSIONS: Record<Role, Record<Resource, Permission[]>> = {
+/** RBAC permission map (fallback when KV has no custom permissions). */
+export const ROLE_PERMISSIONS: Record<string, Record<string, Permission[]>> = {
   admin: {
     dashboard: ["read"],
     pages: ["read", "create", "update", "delete"],
