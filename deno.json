@@ -12,7 +12,7 @@
     "./admin": "./src/admin/mod.ts"
   },
   "tasks": {
-    "dev": "deno run -P --inspect --unstable-raw-imports --watch demo.ts",
+    "dev": "deno run -P --inspect --unstable-kv --unstable-raw-imports --watch demo.ts",
     "test": "deno test --parallel --allow-all --unstable-raw-imports --unstable-kv",
     "coverage": "deno test --no-check --coverage=coverage --allow-all --unstable-raw-imports --unstable-kv",
     "fmt": "deno fmt",

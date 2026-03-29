@@ -15,6 +15,9 @@ import { securityHeadersMiddleware } from "../auth/securityHeaders.ts";
 import type { Middleware } from "../middleware/middleware.ts";
 import type { StorageItem } from "../models/Storage.ts";
 import type { SidebarNavItem } from "../admin/components/sidebar-nav.tsx";
+import { renderDynamicPage } from "../routing/dynamicPageHandler.ts";
+import { DynamicRouteRegistry } from "../routing/dynamicRouteRegistry.ts";
+import { PagePlugin } from "./pagePlugin.ts";
 
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {
@@ -37,6 +40,7 @@ export class AdminPlugin {
   private _kvPath?: string;
   private _sessionStore?: import("../auth/sessionStore.ts").SessionStore;
   private _userStore?: import("../auth/userStore.ts").UserStore;
+  private _dynamicRegistry?: DynamicRouteRegistry;
 
   constructor(options?: AdminPluginOptions) {
     this._pluginConstructors = options?.plugins ?? [];
@@ -241,6 +245,14 @@ export class AdminPlugin {
         updated_at: now,
       };
       await plugin.storage.set(id, item);
+
+      // Hot-registration: register published pages in DynamicRouteRegistry
+      if (plugin instanceof PagePlugin && this._dynamicRegistry) {
+        if (String(data.status) === "published") {
+          this._dynamicRegistry.register(item);
+        }
+      }
+
       return new Response(null, {
         status: 302,
         headers: { Location: `${basePath}?success=created` },
@@ -359,6 +371,19 @@ export class AdminPlugin {
       }
       data.updated_at = new Date().toISOString();
       await plugin.storage.set(id, data as StorageItem);
+
+      // Hot-registration: update dynamic route on status change
+      if (plugin instanceof PagePlugin && this._dynamicRegistry) {
+        if (String(data.status) === "published") {
+          // Re-register (or register for the first time)
+          this._dynamicRegistry.unregister(id);
+          this._dynamicRegistry.register(data as StorageItem);
+        } else {
+          // Unpublished — remove from dynamic routes
+          this._dynamicRegistry.unregister(id);
+        }
+      }
+
       return new Response(null, {
         status: 302,
         headers: { Location: `${basePath}?success=updated` },
@@ -382,12 +407,62 @@ export class AdminPlugin {
       const id = ctx?.params?.id;
       if (!id) return new Response("Not found", { status: 404 });
       await plugin.storage.delete(id);
+
+      // Hot-registration: unregister deleted pages from DynamicRouteRegistry
+      if (plugin instanceof PagePlugin && this._dynamicRegistry) {
+        this._dynamicRegistry.unregister(id);
+      }
+
       return new Response(null, {
         status: 302,
         headers: { Location: `${basePath}?success=deleted` },
       });
     };
     routes.push(deleteRoute);
+  }
+
+  /** Generate the preview route (GET /admin/preview/[id]). */
+  private _addPreviewRoute(routes: Route[]): void {
+    const pagePlugin = this._plugins.find((p) => p.slug === "page-plugin");
+    if (!pagePlugin) return;
+
+    const previewRoute = new Route({
+      path: "/admin/preview/[id]",
+      regex: /^\/admin\/preview\/([^/]+)$/,
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    previewRoute.method = "GET";
+    previewRoute.run = async (
+      _req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const id = ctx?.params?.id;
+      if (!id) return new Response("Not found", { status: 404 });
+
+      const item = await pagePlugin.storage.get(id);
+      if (!item) return new Response("Not found", { status: 404 });
+
+      let html = renderDynamicPage(item, "./app");
+
+      // Inject preview banner at the top of <body>
+      const banner =
+        `<div style="background:#f59e0b;color:#000;padding:8px 16px;text-align:center;font-family:sans-serif;font-size:14px;font-weight:600;position:sticky;top:0;z-index:9999;">Preview Mode — This page is not published</div>`;
+      html = html.replace(
+        /(<body[^>]*>)/i,
+        `$1${banner}`,
+      );
+
+      return new Response(html, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/html",
+          "X-Robots-Tag": "noindex",
+        },
+      });
+    };
+    routes.push(previewRoute);
   }
 
   /**
@@ -397,6 +472,7 @@ export class AdminPlugin {
   public async init(): Promise<{
     routes: Route[];
     middlewares: Middleware[];
+    dynamicRegistry?: DynamicRouteRegistry;
   }> {
     // Instantiate content plugins (only on first init; re-init reuses existing instances)
     if (this._plugins.length === 0) {
@@ -444,6 +520,9 @@ export class AdminPlugin {
       this._addPluginCrudRoutes(plugin, routes);
     }
 
+    // Preview route for PagePlugin pages
+    this._addPreviewRoute(routes);
+
     // Auth routes (login/logout)
     routes.push(...createAuthRoutes(this._userStore!, this._sessionStore!));
 
@@ -454,11 +533,26 @@ export class AdminPlugin {
       csrfMiddleware,
     ];
 
-    return { routes, middlewares };
+    // Initialize DynamicRouteRegistry with PagePlugin storage
+    const pagePlugin = this._plugins.find((p) => p instanceof PagePlugin);
+    let dynamicRegistry: DynamicRouteRegistry | undefined;
+    if (pagePlugin) {
+      this._dynamicRegistry = new DynamicRouteRegistry();
+      this._dynamicRegistry.setStorage(pagePlugin.storage);
+      await this._dynamicRegistry.loadFromStorage();
+      dynamicRegistry = this._dynamicRegistry;
+    }
+
+    return { routes, middlewares, dynamicRegistry };
   }
 
   /** Get the list of instantiated plugins (available after init). */
   get plugins(): Plugin[] {
     return this._plugins;
+  }
+
+  /** Get the DynamicRouteRegistry instance (available after init). */
+  get dynamicRegistry(): DynamicRouteRegistry | undefined {
+    return this._dynamicRegistry;
   }
 }
