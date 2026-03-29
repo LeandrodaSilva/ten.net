@@ -27,6 +27,8 @@ export { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
 export { GroupsPlugin } from "../plugins/groupsPlugin.ts";
 export { UsersPlugin } from "../plugins/usersPlugin.ts";
 export { SettingsPlugin } from "../plugins/settingsPlugin.ts";
+export { RolesPlugin } from "../plugins/rolesPlugin.ts";
+export { AuditLogPlugin } from "../plugins/auditLogPlugin.ts";
 
 // Base for custom plugins
 export { Plugin } from "../models/Plugin.ts";

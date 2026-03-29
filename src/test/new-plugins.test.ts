@@ -111,7 +111,7 @@ describe("UsersPlugin", () => {
     const plugin = new UsersPlugin();
     assertEquals(plugin.model.email, "string");
     assertEquals(plugin.model.display_name, "string");
-    assertEquals(plugin.model.role, "string");
+    assertEquals(plugin.model.role_id, "string");
     assertEquals(plugin.model.status, "string");
   });
 

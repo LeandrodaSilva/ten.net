@@ -502,7 +502,7 @@ describe("authMiddleware — method to permission mapping", () => {
     await sessionStore.delete("admin-slash");
   });
 
-  it("should use dashboard resource for unknown plugin slugs", async () => {
+  it("should use plugin slug as resource for unknown plugin slugs", async () => {
     const session = await seedSession({
       id: "admin-unknown-slug",
       userId: "user-2",
@@ -515,14 +515,10 @@ describe("authMiddleware — method to permission mapping", () => {
         headers: { cookie: `__tennet_sid=${session.id}` },
       },
     );
-    let called = false;
-    const next = promiseNext(() => {
-      called = true;
-      return new Response("OK", { status: 200 });
-    });
-    await auth(req, next);
-    // Admin can always read dashboard, regardless of slug
-    assertEquals(called, true);
+    const next = promiseNext(() => new Response("OK", { status: 200 }));
+    const res = await auth(req, next);
+    // Unknown plugin slug is used as resource; admin has no hardcoded permission for it
+    assertEquals(res.status, 403);
     await sessionStore.delete("admin-unknown-slug");
   });
 

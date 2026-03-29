@@ -1,7 +1,9 @@
 import type { Middleware } from "../middleware/middleware.ts";
-import type { Permission, Resource, Session } from "./types.ts";
+import type { Permission, Session } from "./types.ts";
 import { ROLE_PERMISSIONS } from "./types.ts";
 import type { SessionStore } from "./sessionStore.ts";
+import { buildPermissionKey } from "../models/Permission.ts";
+import type { PermissionAction } from "../models/Permission.ts";
 
 /** WeakMap associating requests with their authenticated sessions. */
 export const requestSession = new WeakMap<Request, Session>();
@@ -29,34 +31,60 @@ function methodToPermission(method: string): Permission {
   }
 }
 
+/** Map from plugin slug to resource name for built-in plugins. */
+const SLUG_TO_RESOURCE: Record<string, string> = {
+  "page-plugin": "pages",
+  "post-plugin": "posts",
+  "category-plugin": "categories",
+  "group-plugin": "groups",
+  "user-plugin": "users",
+  "settings-plugin": "settings",
+};
+
 /** Extract the resource name from an admin URL path. */
-function extractResource(path: string): Resource {
+function extractResource(path: string): string {
   if (path === "/admin" || path === "/admin/") return "dashboard";
   const match = path.match(/^\/admin\/plugins\/([^/]+)/);
   if (!match) return "dashboard";
   const slug = match[1];
-  const slugToResource: Record<string, Resource> = {
-    "page-plugin": "pages",
-    "post-plugin": "posts",
-    "category-plugin": "categories",
-    "group-plugin": "groups",
-    "user-plugin": "users",
-    "settings-plugin": "settings",
-  };
-  return slugToResource[slug] ?? "dashboard";
+  // Return mapped resource for built-in plugins, or the slug itself for dynamic plugins
+  return SLUG_TO_RESOURCE[slug] ?? slug;
 }
 
-/** Check if a role has a specific permission on a resource. */
+/** Check if a role has a specific permission on a resource (hardcoded fallback). */
 function hasPermission(
   role: string,
-  resource: Resource,
+  resource: string,
   permission: Permission,
 ): boolean {
-  const rolePerms = ROLE_PERMISSIONS[role as keyof typeof ROLE_PERMISSIONS];
+  const rolePerms = ROLE_PERMISSIONS[role];
   if (!rolePerms) return false;
   const resourcePerms = rolePerms[resource];
   if (!resourcePerms) return false;
   return resourcePerms.includes(permission);
+}
+
+/** Check permissions dynamically: KV first, then hardcoded fallback. */
+async function hasPermissionDynamic(
+  kv: Deno.Kv | null,
+  role: string,
+  resource: string,
+  permission: Permission,
+): Promise<boolean> {
+  if (kv) {
+    try {
+      const key = buildPermissionKey(role, resource);
+      const entry = await kv.get<PermissionAction[]>(key);
+      if (entry.value) {
+        return entry.value.includes(permission as PermissionAction);
+      }
+    } catch {
+      // KV failure: deny access (fail-closed)
+      return false;
+    }
+  }
+  // Fallback to hardcoded permissions
+  return hasPermission(role, resource, permission);
 }
 
 /** Redirect response to the login page. */
@@ -71,6 +99,7 @@ function redirectToLogin(): Response {
 export function authMiddleware(
   store: SessionStore,
   cookieName = DEFAULT_COOKIE_NAME,
+  kv: Deno.Kv | null = null,
 ): Middleware {
   return async (req: Request, next: () => Promise<Response>) => {
     const url = new URL(req.url);
@@ -96,10 +125,16 @@ export function authMiddleware(
       return next();
     }
 
-    // Check authorization
+    // Check authorization (dynamic KV lookup with hardcoded fallback)
     const resource = extractResource(path);
     const permission = methodToPermission(req.method);
-    if (!hasPermission(session.role, resource, permission)) {
+    const allowed = await hasPermissionDynamic(
+      kv,
+      session.role,
+      resource,
+      permission,
+    );
+    if (!allowed) {
       return new Response("Forbidden", { status: 403 });
     }
 

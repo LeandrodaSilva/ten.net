@@ -21,6 +21,12 @@ import { BlogRouteRegistry } from "../routing/blogRouteRegistry.ts";
 import { PagePlugin } from "./pagePlugin.ts";
 import { PostsPlugin } from "./postsPlugin.ts";
 import { CategoriesPlugin } from "./categoriesPlugin.ts";
+import { RolesPlugin } from "./rolesPlugin.ts";
+import { AUDIT_LOG_TTL, AuditLogPlugin } from "./auditLogPlugin.ts";
+import { PermissionsStore } from "../auth/permissionsStore.ts";
+import { ROLE_PERMISSIONS } from "../auth/types.ts";
+import type { PermissionAction } from "../models/Permission.ts";
+import { UsersPlugin } from "./usersPlugin.ts";
 
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {
@@ -45,6 +51,8 @@ export class AdminPlugin {
   private _userStore?: import("../auth/userStore.ts").UserStore;
   private _dynamicRegistry?: DynamicRouteRegistry;
   private _blogRegistry?: BlogRouteRegistry;
+  private _kv: Deno.Kv | null = null;
+  private _auditLogPlugin?: AuditLogPlugin;
 
   constructor(options?: AdminPluginOptions) {
     this._pluginConstructors = options?.plugins ?? [];
@@ -106,6 +114,37 @@ export class AdminPlugin {
             type: "text",
             readonly: true,
             hint: "Auto-filled on first publish",
+          };
+      }
+    }
+    if (plugin instanceof UsersPlugin) {
+      switch (fieldName) {
+        case "role_id": {
+          const rolesPlugin = this._plugins.find(
+            (p) => p instanceof RolesPlugin,
+          );
+          const options: { value: string; label: string }[] = [];
+          if (rolesPlugin) {
+            const roles = await rolesPlugin.storage.list({
+              page: 1,
+              limit: 100,
+            });
+            for (const role of roles) {
+              options.push({
+                value: role.id,
+                label: String(role.name ?? role.id),
+              });
+            }
+          }
+          return { type: "select", options };
+        }
+        case "status":
+          return {
+            type: "select",
+            options: [
+              { value: "active", label: "Active" },
+              { value: "inactive", label: "Inactive" },
+            ],
           };
       }
     }
@@ -240,10 +279,17 @@ export class AdminPlugin {
     return { items, total, page, totalPages: Math.ceil(total / 20) };
   }
 
+  /** Check if a plugin is the AuditLogPlugin (readonly — block writes). */
+  private _isReadonlyPlugin(plugin: Plugin): boolean {
+    return plugin instanceof AuditLogPlugin;
+  }
+
   /** Generate CRUD routes for a single plugin. */
   private _addPluginCrudRoutes(plugin: Plugin, routes: Route[]): void {
     const slug = plugin.slug;
     const basePath = `/admin/plugins/${slug}`;
+    const isReadonly = this._isReadonlyPlugin(plugin);
+    const isAuditTarget = !this._isReadonlyPlugin(plugin);
 
     // GET — list items (index)
     const indexRoute = new Route({
@@ -296,6 +342,11 @@ export class AdminPlugin {
     });
     createRoute.method = "POST";
     createRoute.run = async (req: Request) => {
+      // Block writes for readonly plugins (e.g. AuditLogPlugin)
+      if (isReadonly) {
+        return new Response("Forbidden", { status: 403 });
+      }
+
       const formData = await req.formData();
       const data: Record<string, unknown> = {};
       for (const key of Object.keys(plugin.model)) {
@@ -344,6 +395,17 @@ export class AdminPlugin {
         if (String(data.status) === "published") {
           this._blogRegistry.register(item);
         }
+      }
+
+      // Audit log
+      if (isAuditTarget) {
+        await this._logAudit(
+          "create",
+          slug,
+          id,
+          req,
+          JSON.stringify({ title: data.title ?? data.name ?? "" }),
+        );
       }
 
       return new Response(null, {
@@ -442,6 +504,11 @@ export class AdminPlugin {
       req: Request,
       ctx?: { params: Record<string, string> },
     ) => {
+      // Block writes for readonly plugins (e.g. AuditLogPlugin)
+      if (isReadonly) {
+        return new Response("Forbidden", { status: 403 });
+      }
+
       const id = ctx?.params?.id;
       if (!id) return new Response("Not found", { status: 404 });
       const existing = await plugin.storage.get(id);
@@ -501,6 +568,17 @@ export class AdminPlugin {
         }
       }
 
+      // Audit log
+      if (isAuditTarget) {
+        await this._logAudit(
+          "update",
+          slug,
+          id,
+          req,
+          JSON.stringify({ title: data.title ?? data.name ?? "" }),
+        );
+      }
+
       return new Response(null, {
         status: 302,
         headers: { Location: `${basePath}?success=updated` },
@@ -518,11 +596,30 @@ export class AdminPlugin {
     });
     deleteRoute.method = "POST";
     deleteRoute.run = async (
-      _req: Request,
+      req: Request,
       ctx?: { params: Record<string, string> },
     ) => {
+      // Block writes for readonly plugins (e.g. AuditLogPlugin)
+      if (isReadonly) {
+        return new Response("Forbidden", { status: 403 });
+      }
+
       const id = ctx?.params?.id;
       if (!id) return new Response("Not found", { status: 404 });
+
+      // Prevent deletion of system roles
+      if (plugin instanceof RolesPlugin) {
+        const item = await plugin.storage.get(id);
+        if (item && plugin.isSystemRole(item)) {
+          return new Response(null, {
+            status: 302,
+            headers: {
+              Location: `${basePath}?error=Cannot+delete+system+role`,
+            },
+          });
+        }
+      }
+
       await plugin.storage.delete(id);
 
       // Hot-registration: unregister deleted pages from DynamicRouteRegistry
@@ -533,6 +630,11 @@ export class AdminPlugin {
       // Hot-registration: unregister deleted posts from BlogRouteRegistry
       if (plugin instanceof PostsPlugin && this._blogRegistry) {
         this._blogRegistry.unregister(id);
+      }
+
+      // Audit log
+      if (isAuditTarget) {
+        await this._logAudit("delete", slug, id, req);
       }
 
       return new Response(null, {
@@ -947,6 +1049,152 @@ export class AdminPlugin {
    * Initialize the admin panel. Instantiates plugins, generates all routes
    * (dashboard, CRUD, auth, favicon), and returns routes + middlewares.
    */
+  /** Log an audit entry if AuditLogPlugin is registered. */
+  private async _logAudit(
+    action: "create" | "update" | "delete",
+    resource: string,
+    resourceId: string,
+    req: Request,
+    details?: string,
+  ): Promise<void> {
+    if (!this._auditLogPlugin) return;
+
+    try {
+      const session = requestSession.get(req);
+      const entry = this._auditLogPlugin.log({
+        action,
+        resource,
+        resource_id: resourceId,
+        user_id: session?.userId ?? "unknown",
+        username: session?.username ?? "unknown",
+        details,
+      });
+
+      const id = crypto.randomUUID();
+      const now = new Date().toISOString();
+      const item: StorageItem = {
+        id,
+        ...entry,
+        created_at: now,
+        updated_at: now,
+      };
+
+      if (this._kv) {
+        // Write directly to KV with TTL
+        const key = [
+          "plugins",
+          this._auditLogPlugin.slug,
+          "items",
+          id,
+        ];
+        await this._kv.set(key, item, { expireIn: AUDIT_LOG_TTL });
+
+        // Write indexes for action, resource, user_id
+        await this._kv.set(
+          [
+            "plugins",
+            this._auditLogPlugin.slug,
+            "index",
+            "action",
+            entry.action,
+            id,
+          ],
+          id,
+          { expireIn: AUDIT_LOG_TTL },
+        );
+        await this._kv.set(
+          [
+            "plugins",
+            this._auditLogPlugin.slug,
+            "index",
+            "resource",
+            entry.resource,
+            id,
+          ],
+          id,
+          { expireIn: AUDIT_LOG_TTL },
+        );
+        await this._kv.set(
+          [
+            "plugins",
+            this._auditLogPlugin.slug,
+            "index",
+            "user_id",
+            entry.user_id,
+            id,
+          ],
+          id,
+          { expireIn: AUDIT_LOG_TTL },
+        );
+      } else {
+        await this._auditLogPlugin.storage.set(id, item);
+      }
+    } catch {
+      // Audit failure must not block the CRUD operation
+    }
+  }
+
+  /** Seed built-in roles and their permissions on first init. */
+  private async _seedBuiltInRoles(): Promise<void> {
+    const rolesPlugin = this._plugins.find(
+      (p) => p instanceof RolesPlugin,
+    ) as RolesPlugin | undefined;
+    if (!rolesPlugin) return;
+
+    // Check if roles already exist
+    const existingCount = await rolesPlugin.storage.count({});
+    if (existingCount > 0) return;
+
+    const builtInRoles = [
+      {
+        name: "Admin",
+        slug: "admin",
+        description: "Full access to all resources",
+        is_system: "true",
+      },
+      {
+        name: "Editor",
+        slug: "editor",
+        description: "Create and edit content",
+        is_system: "true",
+      },
+      {
+        name: "Viewer",
+        slug: "viewer",
+        description: "Read-only access",
+        is_system: "true",
+      },
+    ];
+
+    for (const role of builtInRoles) {
+      const id = crypto.randomUUID();
+      const now = new Date().toISOString();
+      const item: StorageItem = {
+        id,
+        ...role,
+        created_at: now,
+        updated_at: now,
+      };
+      await rolesPlugin.storage.set(id, item);
+    }
+
+    // Seed permissions from ROLE_PERMISSIONS hardcoded
+    if (this._kv) {
+      const permissionsStore = new PermissionsStore(this._kv);
+      for (
+        const [roleSlug, resources] of Object.entries(ROLE_PERMISSIONS)
+      ) {
+        for (const [resource, perms] of Object.entries(resources)) {
+          await permissionsStore.set(
+            roleSlug,
+            resource,
+            perms as PermissionAction[],
+          );
+        }
+      }
+    }
+  }
+
   public async init(): Promise<{
     routes: Route[];
     middlewares: Middleware[];
@@ -971,6 +1219,7 @@ export class AdminPlugin {
         const { runMigrations } = await import("../storage/schema.ts");
 
         const kv = await Deno.openKv(this._kvPath);
+        this._kv = kv;
         await runMigrations(kv);
 
         for (const plugin of this._plugins) {
@@ -984,6 +1233,14 @@ export class AdminPlugin {
         this._userStore = new InMemoryUserStore();
       }
       await seedDefaultAdmin(this._userStore!);
+
+      // Detect AuditLogPlugin
+      this._auditLogPlugin = this._plugins.find(
+        (p) => p instanceof AuditLogPlugin,
+      ) as AuditLogPlugin | undefined;
+
+      // Seed built-in roles and permissions
+      await this._seedBuiltInRoles();
     }
 
     const routes: Route[] = [];
@@ -1008,7 +1265,7 @@ export class AdminPlugin {
     // Middlewares in execution order
     const middlewares: Middleware[] = [
       securityHeadersMiddleware,
-      authMiddleware(this._sessionStore!),
+      authMiddleware(this._sessionStore!, undefined, this._kv),
       csrfMiddleware,
     ];
 
