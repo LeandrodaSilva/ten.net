@@ -6,10 +6,16 @@ import type { AppManifest } from "./build/manifest.ts";
 import { embeddedRouterEngine } from "./embedded/embeddedRouterEngine.ts";
 import type { BuildOptions, BuildResult } from "./build/build.ts";
 import type { Middleware } from "./middleware/middleware.ts";
+import type { DynamicRouteRegistry } from "./routing/dynamicRouteRegistry.ts";
+import { renderDynamicPage } from "./routing/dynamicPageHandler.ts";
 
 /** Interface for an admin plugin that can be registered via useAdmin(). */
 export interface AdminPluginLike {
-  init(): Promise<{ routes: Route[]; middlewares: Middleware[] }>;
+  init(): Promise<{
+    routes: Route[];
+    middlewares: Middleware[];
+    dynamicRegistry?: DynamicRouteRegistry;
+  }>;
 }
 
 /**
@@ -29,6 +35,7 @@ export class Ten {
   private _routes: Route[] = [];
   private _embedded?: AppManifest;
   private _middlewares: Middleware[] = [];
+  private _dynamicRegistry?: DynamicRouteRegistry;
 
   /**
    * Creates and returns a new instance of the Ten class.
@@ -88,6 +95,8 @@ export class Ten {
 
   /**
    * Registers an admin plugin, initializing its routes and middlewares.
+   * If the admin plugin returns a DynamicRouteRegistry, it is stored
+   * for dynamic page matching in the request pipeline.
    * Call this before start() to enable the admin panel.
    *
    * @param admin - An AdminPlugin instance (or any object implementing AdminPluginLike)
@@ -103,11 +112,71 @@ export class Ten {
    * ```
    */
   public async useAdmin(admin: AdminPluginLike): Promise<void> {
-    const { routes, middlewares } = await admin.init();
+    const { routes, middlewares, dynamicRegistry } = await admin.init();
     this._routes.push(...routes);
     for (const mw of middlewares) {
       this.use(mw);
     }
+    if (dynamicRegistry) {
+      this._dynamicRegistry = dynamicRegistry;
+    }
+  }
+
+  /**
+   * Handle a matched dynamic page by rendering it through the template engine.
+   * Returns a full HTML response with layouts and SEO meta tags applied.
+   */
+  private _handleDynamicPage(
+    dynamicRoute: {
+      id: string;
+      body: string;
+      title: string;
+      seo_title: string;
+      seo_description: string;
+      template: string;
+    },
+  ): Response {
+    const html = renderDynamicPage(
+      {
+        id: dynamicRoute.id,
+        body: dynamicRoute.body,
+        title: dynamicRoute.title,
+        seo_title: dynamicRoute.seo_title,
+        seo_description: dynamicRoute.seo_description,
+        template: dynamicRoute.template,
+      },
+      this._appPath,
+    );
+    return new Response(html, {
+      status: 200,
+      headers: { "Content-Type": "text/html" },
+    });
+  }
+
+  /**
+   * Handle 404 responses. If the DynamicRouteRegistry has a custom 404 page
+   * (slug "404"), render it. Otherwise, return a plain text "Not found" response.
+   */
+  private _handle404(): Response {
+    if (this._dynamicRegistry?.notFoundPage) {
+      const notFound = this._dynamicRegistry.notFoundPage;
+      const html = renderDynamicPage(
+        {
+          id: notFound.id,
+          body: notFound.body,
+          title: notFound.title,
+          seo_title: notFound.seo_title,
+          seo_description: notFound.seo_description,
+          template: notFound.template,
+        },
+        this._appPath,
+      );
+      return new Response(html, {
+        status: 404,
+        headers: { "Content-Type": "text/html" },
+      });
+    }
+    return new Response("Not found", { status: 404 });
   }
 
   /** Route an incoming HTTP request through the middleware chain and router. */
@@ -127,7 +196,10 @@ export class Ten {
     return await next();
   }
 
-  /** Core routing logic. */
+  /**
+   * Core routing logic.
+   * Priority: embedded assets > file-based + admin routes > dynamic pages (GET) > custom 404 > plain 404
+   */
   private async _routeRequest(req: Request): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
@@ -151,7 +223,16 @@ export class Ten {
       return true;
     });
 
-    if (!route) return new Response("Not found", { status: 404 });
+    if (!route) {
+      // After file-based + admin route miss, try dynamic pages (GET only)
+      if (req.method === "GET" && this._dynamicRegistry) {
+        const dynamicRoute = this._dynamicRegistry.match(path);
+        if (dynamicRoute) {
+          return this._handleDynamicPage(dynamicRoute);
+        }
+      }
+      return this._handle404();
+    }
 
     const originalMethod = route.method;
     route.method = req.method;
@@ -189,7 +270,7 @@ export class Ten {
       }
 
       route.method = originalMethod;
-      return new Response("Not found", { status: 404 });
+      return this._handle404();
     } catch (e) {
       route.method = originalMethod;
       console.error(e);

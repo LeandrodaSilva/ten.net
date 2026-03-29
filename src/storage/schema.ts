@@ -17,7 +17,7 @@ export interface Migration {
 const SCHEMA_VERSION_KEY: Deno.KvKey = ["_meta", "schema_version"];
 
 /** Current schema version — increment when adding new migrations. */
-export const CURRENT_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 2;
 
 /** All registered migrations, ordered by version. */
 const migrations: Migration[] = [
@@ -27,6 +27,49 @@ const migrations: Migration[] = [
     migrate: async (_kv: Deno.Kv) => {
       // v1 is the baseline — no data transformation needed.
       // This migration exists so the schema version is set on first run.
+    },
+  },
+  {
+    version: 2,
+    description:
+      "Migrate PagePlugin items from {name, html} to expanded model with slug, title, body, status, seo fields",
+    migrate: async (kv: Deno.Kv) => {
+      const prefix: Deno.KvKey = ["plugins", "page-plugin", "items"];
+      for await (const entry of kv.list<Record<string, unknown>>({ prefix })) {
+        const item = entry.value;
+        if (!item || typeof item !== "object") continue;
+
+        // Skip items that already have the new schema fields
+        if ("slug" in item && "status" in item) continue;
+
+        const id = item.id as string;
+        const oldName = (item.name as string) ?? "";
+        const oldHtml = (item.html as string) ?? "";
+
+        // Convert old {name, html} → new expanded model
+        const migrated = {
+          ...item,
+          id,
+          slug: oldName
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "") || id,
+          title: oldName,
+          body: oldHtml,
+          status: "draft" as const,
+          seo_title: "",
+          seo_description: "",
+          template: "",
+          author_id: "",
+          updated_at: new Date().toISOString(),
+        };
+
+        // Remove old fields
+        delete (migrated as Record<string, unknown>).name;
+        delete (migrated as Record<string, unknown>).html;
+
+        await kv.set(["plugins", "page-plugin", "items", id], migrated);
+      }
     },
   },
 ];
