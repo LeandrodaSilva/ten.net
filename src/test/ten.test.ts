@@ -5,7 +5,6 @@ import { Route } from "../models/Route.ts";
 import { AdminPlugin } from "../plugins/adminPlugin.tsx";
 import { PagePlugin } from "../plugins/pagePlugin.ts";
 import { DynamicRouteRegistry } from "../routing/dynamicRouteRegistry.ts";
-import { InMemoryStorage } from "../models/Storage.ts";
 import type { StorageItem } from "../models/Storage.ts";
 
 describe("Ten", () => {
