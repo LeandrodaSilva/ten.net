@@ -27,6 +27,8 @@ import { PermissionsStore } from "../auth/permissionsStore.ts";
 import { ROLE_PERMISSIONS } from "../auth/types.ts";
 import type { PermissionAction } from "../models/Permission.ts";
 import { UsersPlugin } from "./usersPlugin.ts";
+import { WidgetStore } from "../widgets/widgetStore.ts";
+import type { WidgetType } from "../widgets/types.ts";
 
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {
@@ -668,7 +670,7 @@ export class AdminPlugin {
       const item = await pagePlugin.storage.get(id);
       if (!item) return new Response("Not found", { status: 404 });
 
-      let html = renderDynamicPage(item, "./app");
+      let html = await renderDynamicPage(item, "./app", this._kv ?? undefined);
 
       // Inject preview banner at the top of <body>
       const banner =
@@ -690,13 +692,13 @@ export class AdminPlugin {
   }
 
   /** Render a friendly 404 page for public blog routes. */
-  private _blog404(title: string): Response {
+  private async _blog404(title: string): Promise<Response> {
     const bodyHtml = `<div class="max-w-3xl mx-auto text-center py-16">
   <h1 class="text-4xl font-bold text-gray-900 mb-4">${escapeHtml(title)}</h1>
   <p class="text-gray-500 mb-8">The page you are looking for does not exist or has been removed.</p>
   <a href="/blog" class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Back to Blog</a>
 </div>`;
-    const html = renderDynamicPage(
+    const html = await renderDynamicPage(
       {
         id: "blog-404",
         body: bodyHtml,
@@ -797,7 +799,7 @@ export class AdminPlugin {
   <nav class="flex justify-between mt-8" aria-label="Blog pagination">${prevLink} ${nextLink}</nav>
 </div>`;
 
-      let html = renderDynamicPage(
+      let html = await renderDynamicPage(
         {
           id: "blog-list",
           body: bodyHtml,
@@ -853,13 +855,13 @@ export class AdminPlugin {
       ctx?: { params: Record<string, string> },
     ) => {
       const catSlug = ctx?.params?.slug;
-      if (!catSlug) return this._blog404("Category Not Found");
+      if (!catSlug) return await this._blog404("Category Not Found");
 
       // Resolve category slug to category object
       const catPlugin = this._plugins.find(
         (p) => p instanceof CategoriesPlugin,
       );
-      if (!catPlugin) return this._blog404("Category Not Found");
+      if (!catPlugin) return await this._blog404("Category Not Found");
 
       // Find category by slug (capped at 100; paginate if more categories needed)
       const allCategories = await catPlugin.storage.list({
@@ -869,7 +871,7 @@ export class AdminPlugin {
       const category = allCategories.find(
         (c) => String(c.slug) === catSlug,
       );
-      if (!category) return this._blog404("Category Not Found");
+      if (!category) return await this._blog404("Category Not Found");
 
       const url = new URL(req.url);
       const page = Math.max(
@@ -939,7 +941,7 @@ export class AdminPlugin {
   <nav class="flex justify-between mt-8" aria-label="Category pagination">${prevLink} ${nextLink}</nav>
 </div>`;
 
-      let html = renderDynamicPage(
+      let html = await renderDynamicPage(
         {
           id: `blog-category-${catSlug}`,
           body: bodyHtml,
@@ -973,10 +975,10 @@ export class AdminPlugin {
       ctx?: { params: Record<string, string> },
     ) => {
       const slug = ctx?.params?.slug;
-      if (!slug) return this._blog404("Post Not Found");
+      if (!slug) return await this._blog404("Post Not Found");
 
       const post = registry.match(`/blog/${slug}`);
-      if (!post) return this._blog404("Post Not Found");
+      if (!post) return await this._blog404("Post Not Found");
 
       const categories = await registry.getCategories(post.category_ids);
 
@@ -1018,7 +1020,7 @@ export class AdminPlugin {
 
       const seoDescription = post.excerpt || post.title;
 
-      let html = renderDynamicPage(
+      let html = await renderDynamicPage(
         {
           id: post.id,
           body: bodyHtml,
@@ -1043,6 +1045,231 @@ export class AdminPlugin {
       });
     };
     routes.push(blogPostRoute);
+  }
+
+  /**
+   * Generate Page Builder routes for managing widgets on pages.
+   *
+   * Routes:
+   *   GET  /admin/pages/[id]/widgets           — list widgets for a page
+   *   POST /admin/pages/[id]/widgets           — create a widget
+   *   POST /admin/pages/[id]/widgets/[wid]     — update a widget
+   *   POST /admin/pages/[id]/widgets/[wid]/delete — delete a widget
+   *   POST /admin/pages/[id]/widgets/reorder   — reorder widgets
+   *
+   * Requires KV storage — only called when this._kv is set.
+   */
+  private _addPageBuilderRoutes(routes: Route[]): void {
+    const kv = this._kv!;
+    const basePath = "/admin/pages";
+
+    // GET /admin/pages/[id]/widgets — list widgets
+    const listRoute = new Route({
+      path: `${basePath}/[id]/widgets`,
+      regex: new RegExp(`^${basePath}/([^/]+)/widgets$`),
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    listRoute.method = "GET";
+    listRoute.run = async (
+      _req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const pageId = ctx?.params?.id;
+      if (!pageId) return new Response("Not found", { status: 404 });
+
+      const store = new WidgetStore(kv);
+      const instances = await store.loadForPage(pageId);
+      return new Response(JSON.stringify(instances), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    };
+    routes.push(listRoute);
+
+    // POST /admin/pages/[id]/widgets — create widget
+    const createRoute = new Route({
+      path: `${basePath}/[id]/widgets`,
+      regex: new RegExp(`^${basePath}/([^/]+)/widgets$`),
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    createRoute.method = "POST";
+    createRoute.run = async (
+      req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const pageId = ctx?.params?.id;
+      if (!pageId) return new Response("Not found", { status: 404 });
+
+      let body: Record<string, unknown>;
+      try {
+        body = await req.json() as Record<string, unknown>;
+      } catch {
+        return new Response(
+          JSON.stringify({ error: "Invalid JSON body" }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
+        );
+      }
+
+      const type = body.type as WidgetType | undefined;
+      const placeholder = typeof body.placeholder === "string"
+        ? body.placeholder
+        : "main";
+      const order = typeof body.order === "number" ? body.order : 0;
+      const data = (typeof body.data === "object" && body.data !== null)
+        ? body.data as Record<string, unknown>
+        : {};
+
+      if (!type) {
+        return new Response(
+          JSON.stringify({ error: "type is required" }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
+        );
+      }
+
+      const store = new WidgetStore(kv);
+      const instance = await store.create(pageId, {
+        type,
+        placeholder,
+        order,
+        data,
+      });
+      return new Response(JSON.stringify(instance), {
+        status: 201,
+        headers: { "Content-Type": "application/json" },
+      });
+    };
+    routes.push(createRoute);
+
+    // POST /admin/pages/[id]/widgets/reorder — must be before /[wid]
+    const reorderRoute = new Route({
+      path: `${basePath}/[id]/widgets/reorder`,
+      regex: new RegExp(`^${basePath}/([^/]+)/widgets/reorder$`),
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    reorderRoute.method = "POST";
+    reorderRoute.run = async (
+      req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const pageId = ctx?.params?.id;
+      if (!pageId) return new Response("Not found", { status: 404 });
+
+      let body: unknown;
+      try {
+        body = await req.json();
+      } catch {
+        return new Response(
+          JSON.stringify({ error: "Invalid JSON body" }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
+        );
+      }
+
+      if (!Array.isArray(body)) {
+        return new Response(
+          JSON.stringify({ error: "Expected array of {widgetId, order}" }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
+        );
+      }
+
+      const order = (body as Array<{ widgetId: string; order: number }>).filter(
+        (item) =>
+          typeof item.widgetId === "string" && typeof item.order === "number",
+      );
+
+      const store = new WidgetStore(kv);
+      await store.reorder(pageId, order);
+      return new Response(null, { status: 204 });
+    };
+    routes.push(reorderRoute);
+
+    // POST /admin/pages/[id]/widgets/[wid] — update widget
+    const updateRoute = new Route({
+      path: `${basePath}/[id]/widgets/[wid]`,
+      regex: new RegExp(`^${basePath}/([^/]+)/widgets/([^/]+)$`),
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    updateRoute.method = "POST";
+    updateRoute.run = async (
+      req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const pageId = ctx?.params?.id;
+      const widgetId = ctx?.params?.wid;
+      if (!pageId || !widgetId) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      let body: Record<string, unknown>;
+      try {
+        body = await req.json() as Record<string, unknown>;
+      } catch {
+        return new Response(
+          JSON.stringify({ error: "Invalid JSON body" }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
+        );
+      }
+
+      const patch: Partial<
+        Pick<
+          import("../widgets/types.ts").WidgetInstance,
+          "type" | "placeholder" | "order" | "data"
+        >
+      > = {};
+      if (typeof body.type === "string") patch.type = body.type as WidgetType;
+      if (typeof body.placeholder === "string") {
+        patch.placeholder = body.placeholder;
+      }
+      if (typeof body.order === "number") patch.order = body.order;
+      if (typeof body.data === "object" && body.data !== null) {
+        patch.data = body.data as Record<string, unknown>;
+      }
+
+      const store = new WidgetStore(kv);
+      try {
+        const updated = await store.update(pageId, widgetId, patch);
+        return new Response(JSON.stringify(updated), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch {
+        return new Response("Not found", { status: 404 });
+      }
+    };
+    routes.push(updateRoute);
+
+    // POST /admin/pages/[id]/widgets/[wid]/delete — delete widget
+    const deleteRoute = new Route({
+      path: `${basePath}/[id]/widgets/[wid]/delete`,
+      regex: new RegExp(`^${basePath}/([^/]+)/widgets/([^/]+)/delete$`),
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    deleteRoute.method = "POST";
+    deleteRoute.run = async (
+      _req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const pageId = ctx?.params?.id;
+      const widgetId = ctx?.params?.wid;
+      if (!pageId || !widgetId) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      const store = new WidgetStore(kv);
+      const deleted = await store.delete(pageId, widgetId);
+      if (!deleted) return new Response("Not found", { status: 404 });
+      return new Response(null, { status: 204 });
+    };
+    routes.push(deleteRoute);
   }
 
   /**
@@ -1200,6 +1427,7 @@ export class AdminPlugin {
     middlewares: Middleware[];
     dynamicRegistry?: DynamicRouteRegistry;
     blogRegistry?: BlogRouteRegistry;
+    kv?: Deno.Kv;
   }> {
     // Instantiate content plugins (only on first init; re-init reuses existing instances)
     if (this._plugins.length === 0) {
@@ -1259,6 +1487,11 @@ export class AdminPlugin {
     // Preview route for PagePlugin pages
     this._addPreviewRoute(routes);
 
+    // Page Builder widget routes (requires KV storage)
+    if (this._kv) {
+      this._addPageBuilderRoutes(routes);
+    }
+
     // Auth routes (login/logout)
     routes.push(...createAuthRoutes(this._userStore!, this._sessionStore!));
 
@@ -1298,7 +1531,13 @@ export class AdminPlugin {
       this._addBlogRoutes(routes);
     }
 
-    return { routes, middlewares, dynamicRegistry, blogRegistry };
+    return {
+      routes,
+      middlewares,
+      dynamicRegistry,
+      blogRegistry,
+      kv: this._kv ?? undefined,
+    };
   }
 
   /** Get the list of instantiated plugins (available after init). */
@@ -1346,15 +1585,31 @@ function escapeAttrValue(s: string): string {
 
 /**
  * Sanitize rich HTML content by stripping dangerous elements.
- * Removes <script>, <iframe>, <object>, <embed>, <form>, <base> tags
- * and on* event handler attributes.
+ * Removes <script>, <iframe>, <object>, <embed>, <form>, <base>, <link>, <style>,
+ * <meta>, <svg> (can contain scripts), <math> tags, on* event handler attributes,
+ * and javascript:/data:/vbscript: URLs in href/src/action attributes.
+ *
+ * NOTE: Regex-based sanitization is inherently imperfect. For untrusted user input,
+ * a DOM-based sanitizer (e.g. DOMPurify) should be used instead. This function
+ * is a defense-in-depth layer for admin-authored content.
  */
 function sanitizeHtml(s: string): string {
   return s
+    // Remove matched open+close tag pairs for dangerous elements
     .replace(
-      /<\s*(script|iframe|object|embed|form|base)\b[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi,
+      /<\s*(script|iframe|object|embed|form|base|link|style|meta|svg|math)\b[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi,
       "",
     )
-    .replace(/<\s*(script|iframe|object|embed|form|base)\b[^>]*\/?>/gi, "")
-    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "");
+    // Remove self-closing or unclosed dangerous tags
+    .replace(
+      /<\s*(script|iframe|object|embed|form|base|link|style|meta|svg|math)\b[^>]*\/?>/gi,
+      "",
+    )
+    // Remove on* event handlers (onclick, onerror, onload, etc.)
+    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+    // Remove javascript:/vbscript:/data: in href, src, action attributes
+    .replace(
+      /(href|src|action)\s*=\s*(?:"[^"]*(?:javascript|vbscript|data)\s*:[^"]*"|'[^']*(?:javascript|vbscript|data)\s*:[^']*')/gi,
+      "",
+    );
 }
