@@ -35,6 +35,7 @@ export class PagePlugin extends Plugin {
       seo_description: "string",
       template: "string",
       author_id: "string",
+      widgets_enabled: "boolean",
     };
   }
 

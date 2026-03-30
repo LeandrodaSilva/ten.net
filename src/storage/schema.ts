@@ -17,7 +17,7 @@ export interface Migration {
 const SCHEMA_VERSION_KEY: Deno.KvKey = ["_meta", "schema_version"];
 
 /** Current schema version — increment when adding new migrations. */
-export const CURRENT_SCHEMA_VERSION = 2;
+export const CURRENT_SCHEMA_VERSION = 3;
 
 /** All registered migrations, ordered by version. */
 const migrations: Migration[] = [
@@ -69,6 +69,24 @@ const migrations: Migration[] = [
         delete (migrated as Record<string, unknown>).html;
 
         await kv.set(["plugins", "page-plugin", "items", id], migrated);
+      }
+    },
+  },
+  {
+    version: 3,
+    description:
+      "Add widgets_enabled field (default false) to all existing PagePlugin items",
+    migrate: async (kv: Deno.Kv) => {
+      const prefix: Deno.KvKey = ["plugins", "page-plugin", "items"];
+      for await (const entry of kv.list<Record<string, unknown>>({ prefix })) {
+        const item = entry.value;
+        if (!item || typeof item !== "object") continue;
+
+        // Skip items that already have the field
+        if ("widgets_enabled" in item) continue;
+
+        const updated = { ...item, widgets_enabled: false };
+        await kv.set(entry.key, updated);
       }
     },
   },
