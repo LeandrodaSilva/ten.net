@@ -12,6 +12,7 @@ export interface DynamicRoute {
   seo_title: string;
   seo_description: string;
   template: string;
+  widgets_enabled?: string;
   route: Route;
 }
 
@@ -67,6 +68,9 @@ export class DynamicRouteRegistry {
       seo_title: String(page.seo_title ?? ""),
       seo_description: String(page.seo_description ?? ""),
       template: String(page.template ?? ""),
+      widgets_enabled: page.widgets_enabled !== undefined
+        ? String(page.widgets_enabled)
+        : undefined,
       route,
     };
 
