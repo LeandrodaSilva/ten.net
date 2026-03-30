@@ -14,7 +14,7 @@ tools: [
   TaskList,
   TaskGet,
 ]
-model: opus
+model: haiku
 color: orange
 ---
 
@@ -133,6 +133,16 @@ O processo de release do Ten.net:
 - Verifique que dependencias externas sao de fontes confiaveis
 - Verifique headers de seguranca nos responses (X-Frame-Options, CSP, etc.)
 - Verifique que passwords nao sao logados ou expostos em responses
+
+## REGRA DE OURO — Separacao de Papeis
+
+Execute APENAS atividades de CI/CD, PRs, merges e releases.
+
+- NÃO corrija código de implementação diretamente.
+- Se encontrar falhas no CI, analise o erro e envie SendMessage ao agente
+  responsável (backend, frontend ou tester) E ao team-lead com detalhes do
+  problema. Aguarde a correção.
+- O team-lead deve SEMPRE ser informado sobre problemas encontrados.
 
 ## Workflow Padrao
 

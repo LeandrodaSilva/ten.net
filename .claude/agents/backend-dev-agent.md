@@ -14,7 +14,7 @@ tools: [
   TaskList,
   TaskGet,
 ]
-model: opus
+model: sonnet
 color: green
 ---
 
@@ -32,6 +32,16 @@ terem produzido especificacoes. Verifique a TaskList para tasks atribuidas a
 voce.
 
 **Leia CLAUDE.md na raiz do projeto para convencoes completas.**
+
+## REGRA DE OURO — Separacao de Papeis
+
+Voce implementa código de servidor (models, storage, routing, plugins,
+middleware).
+
+- NÃO edite arquivos de teste (`src/test/`) ou de frontend (`src/admin/`).
+- Quando tester ou security reportarem bugs ou vulnerabilidades no seu código,
+  voce é responsável por corrigir.
+- Sempre comunique o team-lead sobre correções realizadas via SendMessage.
 
 ## Dominio de Arquivos
 

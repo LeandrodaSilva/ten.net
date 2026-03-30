@@ -27,15 +27,20 @@ export const csrfMiddleware: Middleware = async (
   const session = requestSession.get(req);
   if (!session) return new Response("Unauthorized", { status: 401 });
 
-  try {
-    const cloned = req.clone();
-    const formData = await cloned.formData();
-    const submittedToken = formData.get("_csrf")?.toString();
+  // Check for CSRF token: first in X-CSRF-Token header (JSON APIs), then in form body
+  let submittedToken = req.headers.get("X-CSRF-Token");
 
-    if (!submittedToken || submittedToken !== session.csrfToken) {
-      return new Response("Invalid CSRF token", { status: 403 });
+  if (!submittedToken) {
+    try {
+      const cloned = req.clone();
+      const formData = await cloned.formData();
+      submittedToken = formData.get("_csrf")?.toString() ?? null;
+    } catch {
+      // Body is not form data (e.g. JSON) and no header token was provided
     }
-  } catch {
+  }
+
+  if (!submittedToken || submittedToken !== session.csrfToken) {
     return new Response("Invalid CSRF token", { status: 403 });
   }
 

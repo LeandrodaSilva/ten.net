@@ -1,29 +1,38 @@
 import { findDocumentLayoutRoot } from "../utils/findDocumentLayoutRoot.ts";
 import { findOrderedLayouts } from "../utils/findOrderedLayouts.ts";
 import type { StorageItem } from "../models/Storage.ts";
+import { renderWidgetPage } from "./widgetPageHandler.ts";
 
 /**
  * Render a dynamic page (from PagePlugin storage) into a full HTML document.
  *
  * Pipeline:
  * 1. Start with the item's `body` HTML (unescaped).
- * 2. Apply root layout.html (from app/) if it exists, wrapping the body.
- * 3. Apply document.html, injecting SEO meta tags.
- * 4. Fallback: if document.html doesn't exist, use a minimal wrapper.
+ * 2. If widgets_enabled === "true" and kv is provided, resolve {{widgets:name}} placeholders.
+ * 3. Apply root layout.html (from app/) if it exists, wrapping the body.
+ * 4. Apply document.html, injecting SEO meta tags.
+ * 5. Fallback: if document.html doesn't exist, use a minimal wrapper.
  *
  * @param item - The StorageItem representing a page (must have body, title, seo_title, seo_description, template).
  * @param appPath - Path to the app/ directory (for loading layouts and document.html).
+ * @param kv - Optional Deno KV instance. Required when widgets_enabled === "true".
  * @returns The fully rendered HTML string.
  */
-export function renderDynamicPage(
+export async function renderDynamicPage(
   item: StorageItem,
   appPath: string,
-): string {
-  const body = String(item.body ?? "");
+  kv?: Deno.Kv,
+): Promise<string> {
+  let body = String(item.body ?? "");
   const seoTitle = String(item.seo_title ?? item.title ?? "");
   const seoDescription = String(item.seo_description ?? "");
 
-  // Start with the raw body HTML (unescaped — this is intentional for rich content)
+  // Widget pipeline: resolve {{widgets:name}} placeholders when enabled
+  if (String(item.widgets_enabled) === "true" && kv && item.id) {
+    body = await renderWidgetPage(String(item.id), body, kv);
+  }
+
+  // Start with the resolved body HTML (unescaped — this is intentional for rich content)
   let html = body;
 
   // Apply layout.html files from the root (same as file-based routing for "/")

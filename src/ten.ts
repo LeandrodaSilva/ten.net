@@ -17,6 +17,7 @@ export interface AdminPluginLike {
     middlewares: Middleware[];
     dynamicRegistry?: DynamicRouteRegistry;
     blogRegistry?: BlogRouteRegistry;
+    kv?: Deno.Kv;
   }>;
 }
 
@@ -38,6 +39,7 @@ export class Ten {
   private _embedded?: AppManifest;
   private _middlewares: Middleware[] = [];
   private _dynamicRegistry?: DynamicRouteRegistry;
+  private _kv?: Deno.Kv;
 
   /**
    * Creates and returns a new instance of the Ten class.
@@ -114,7 +116,7 @@ export class Ten {
    * ```
    */
   public async useAdmin(admin: AdminPluginLike): Promise<void> {
-    const { routes, middlewares, dynamicRegistry } = await admin.init();
+    const { routes, middlewares, dynamicRegistry, kv } = await admin.init();
     this._routes.push(...routes);
     for (const mw of middlewares) {
       this.use(mw);
@@ -122,13 +124,16 @@ export class Ten {
     if (dynamicRegistry) {
       this._dynamicRegistry = dynamicRegistry;
     }
+    if (kv) {
+      this._kv = kv;
+    }
   }
 
   /**
    * Handle a matched dynamic page by rendering it through the template engine.
    * Returns a full HTML response with layouts and SEO meta tags applied.
    */
-  private _handleDynamicPage(
+  private async _handleDynamicPage(
     dynamicRoute: {
       id: string;
       body: string;
@@ -136,9 +141,10 @@ export class Ten {
       seo_title: string;
       seo_description: string;
       template: string;
+      widgets_enabled?: string;
     },
-  ): Response {
-    const html = renderDynamicPage(
+  ): Promise<Response> {
+    const html = await renderDynamicPage(
       {
         id: dynamicRoute.id,
         body: dynamicRoute.body,
@@ -146,8 +152,10 @@ export class Ten {
         seo_title: dynamicRoute.seo_title,
         seo_description: dynamicRoute.seo_description,
         template: dynamicRoute.template,
+        widgets_enabled: dynamicRoute.widgets_enabled,
       },
       this._appPath,
+      this._kv,
     );
     return new Response(html, {
       status: 200,
@@ -159,10 +167,10 @@ export class Ten {
    * Handle 404 responses. If the DynamicRouteRegistry has a custom 404 page
    * (slug "404"), render it. Otherwise, return a plain text "Not found" response.
    */
-  private _handle404(): Response {
+  private async _handle404(): Promise<Response> {
     if (this._dynamicRegistry?.notFoundPage) {
       const notFound = this._dynamicRegistry.notFoundPage;
-      const html = renderDynamicPage(
+      const html = await renderDynamicPage(
         {
           id: notFound.id,
           body: notFound.body,
@@ -172,6 +180,7 @@ export class Ten {
           template: notFound.template,
         },
         this._appPath,
+        this._kv,
       );
       return new Response(html, {
         status: 404,
@@ -230,10 +239,10 @@ export class Ten {
       if (req.method === "GET" && this._dynamicRegistry) {
         const dynamicRoute = this._dynamicRegistry.match(path);
         if (dynamicRoute) {
-          return this._handleDynamicPage(dynamicRoute);
+          return await this._handleDynamicPage(dynamicRoute);
         }
       }
-      return this._handle404();
+      return await this._handle404();
     }
 
     const originalMethod = route.method;

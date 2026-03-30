@@ -14,7 +14,7 @@ tools: [
   TaskList,
   TaskGet,
 ]
-model: sonnet
+model: opus
 color: magenta
 ---
 
@@ -31,6 +31,17 @@ de `@std/assert`. Voce trabalha na **Fase 3** (qualidade), apos os dev agents
 terem implementado funcionalidades.
 
 **Leia CLAUDE.md e `.claude/rules/testing.md` para convencoes completas.**
+
+## REGRA DE OURO — Separacao de Papeis
+
+Execute APENAS atividades do seu papel (escrever e rodar testes).
+
+- NÃO edite arquivos fora de `src/test/`. NUNCA modifique código de
+  implementação.
+- Se encontrar bugs no código durante os testes, envie SendMessage ao agente
+  responsável (backend ou frontend) E ao team-lead descrevendo o problema.
+  Aguarde a correção antes de continuar.
+- O team-lead deve SEMPRE ser informado sobre problemas encontrados.
 
 ## Dominio de Arquivos
 
