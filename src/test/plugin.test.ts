@@ -129,6 +129,7 @@ describe("PagePlugin", () => {
       seo_description: "string",
       template: "string",
       author_id: "string",
+      widgets_enabled: "boolean",
     });
   });
 
