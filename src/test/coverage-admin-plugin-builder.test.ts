@@ -5,11 +5,7 @@
  *         _buildNavItems, _fieldType
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
-import {
-  assertEquals,
-  assertExists,
-  assertStringIncludes,
-} from "@std/assert";
+import { assertEquals, assertExists, assertStringIncludes } from "@std/assert";
 import { AdminPlugin } from "../plugins/adminPlugin.tsx";
 import { PagePlugin } from "../plugins/pagePlugin.ts";
 import { PostsPlugin } from "../plugins/postsPlugin.ts";

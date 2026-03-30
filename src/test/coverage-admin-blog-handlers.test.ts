@@ -3,11 +3,7 @@
  * preview route, update/delete with hot-registration, audit logging
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
-import {
-  assertEquals,
-  assertExists,
-  assertStringIncludes,
-} from "@std/assert";
+import { assertEquals, assertExists, assertStringIncludes } from "@std/assert";
 import { AdminPlugin } from "../plugins/adminPlugin.tsx";
 import { PagePlugin } from "../plugins/pagePlugin.ts";
 import { PostsPlugin } from "../plugins/postsPlugin.ts";
@@ -71,8 +67,7 @@ describe("AdminPlugin — blog route handlers", () => {
   it("GET /blog/[slug] — should render published post", async () => {
     // Create a published post via CRUD route (triggers hot-registration)
     const createRoute = routes.find(
-      (r) =>
-        r.path === "/admin/plugins/post-plugin" && r.method === "POST",
+      (r) => r.path === "/admin/plugins/post-plugin" && r.method === "POST",
     );
     assertExists(createRoute?.run);
     const now = new Date().toISOString();
@@ -207,8 +202,7 @@ describe("AdminPlugin — blog route handlers", () => {
   it("POST update page — should hot-register on publish and unregister on unpublish", async () => {
     // Create a draft page via CRUD
     const createRoute = routes.find(
-      (r) =>
-        r.path === "/admin/plugins/page-plugin" && r.method === "POST",
+      (r) => r.path === "/admin/plugins/page-plugin" && r.method === "POST",
     );
     assertExists(createRoute?.run);
     await createRoute!.run!(

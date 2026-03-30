@@ -4,11 +4,7 @@
  *         _seedBuiltInRoles, _addPageBuilderRoutes integration
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
-import {
-  assertEquals,
-  assertExists,
-  assertStringIncludes,
-} from "@std/assert";
+import { assertEquals, assertExists, assertStringIncludes } from "@std/assert";
 import { AdminPlugin } from "../plugins/adminPlugin.tsx";
 import { PagePlugin } from "../plugins/pagePlugin.ts";
 import { PostsPlugin } from "../plugins/postsPlugin.ts";
@@ -92,8 +88,7 @@ describe("AdminPlugin — blog routes with KV (PostsPlugin + CategoriesPlugin)",
     });
 
     const newRoute = routes.find(
-      (r) =>
-        r.path === "/admin/plugins/post-plugin/new" && r.method === "GET",
+      (r) => r.path === "/admin/plugins/post-plugin/new" && r.method === "GET",
     );
     assertExists(newRoute?.run);
     const res = await newRoute!.run!(
@@ -112,8 +107,7 @@ describe("AdminPlugin — blog routes with KV (PostsPlugin + CategoriesPlugin)",
 
   it("POST create — should create a post via CRUD route", async () => {
     const createRoute = routes.find(
-      (r) =>
-        r.path === "/admin/plugins/post-plugin" && r.method === "POST",
+      (r) => r.path === "/admin/plugins/post-plugin" && r.method === "POST",
     );
     assertExists(createRoute?.run);
 
@@ -139,8 +133,7 @@ describe("AdminPlugin — blog routes with KV (PostsPlugin + CategoriesPlugin)",
 
   it("POST create page with published status — should register in dynamic registry", async () => {
     const createRoute = routes.find(
-      (r) =>
-        r.path === "/admin/plugins/page-plugin" && r.method === "POST",
+      (r) => r.path === "/admin/plugins/page-plugin" && r.method === "POST",
     );
     assertExists(createRoute?.run);
 
@@ -190,8 +183,7 @@ describe("AdminPlugin — UsersPlugin with RolesPlugin field config", () => {
     });
 
     const newRoute = routes.find(
-      (r) =>
-        r.path === "/admin/plugins/user-plugin/new" && r.method === "GET",
+      (r) => r.path === "/admin/plugins/user-plugin/new" && r.method === "GET",
     );
     assertExists(newRoute?.run);
     const res = await newRoute!.run!(
