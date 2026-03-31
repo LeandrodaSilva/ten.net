@@ -38,7 +38,6 @@ export function FormField({
     return (
       <div className="flex gap-x-3">
         <div className="flex h-6 items-center">
-          <input type="hidden" name={name} value="false" />
           <input
             id={name}
             name={name}

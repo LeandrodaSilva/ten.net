@@ -346,8 +346,7 @@ describe("FormField component", () => {
         value="true"
       />,
     );
-    assertStringIncludes(html, 'type="hidden"');
-    assertStringIncludes(html, 'value="false"');
+    assertStringIncludes(html, 'type="checkbox"');
     assertStringIncludes(html, 'value="true"');
     assertStringIncludes(html, "checked");
   });
@@ -361,7 +360,7 @@ describe("FormField component", () => {
         value="false"
       />,
     );
-    assertStringIncludes(html, 'type="hidden"');
+    assertStringIncludes(html, 'type="checkbox"');
     assertEquals(html.includes("checked"), false);
   });
 
