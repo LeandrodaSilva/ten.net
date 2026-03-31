@@ -1,9 +1,15 @@
 import { Route } from "../models/Route.ts";
 import type { Plugin } from "../models/Plugin.ts";
-import { appWithChildren, renderAdminPage } from "../admin/app.tsx";
+import {
+  appWithChildren,
+  renderAdminPage,
+  renderBuilderPage,
+} from "../admin/app.tsx";
 import { Plugins } from "../admin/components/plugins.tsx";
 import { CrudList } from "../admin/components/crud-list.tsx";
 import { CrudForm } from "../admin/components/crud-form.tsx";
+import type { CrudFormProps } from "../admin/components/crud-form.tsx";
+import { Button } from "../admin/components/button.tsx";
 import type { FormFieldProps } from "../admin/components/form-field.tsx";
 import { requestSession } from "../auth/authMiddleware.ts";
 import { createAuthRoutes } from "../auth/loginHandler.ts";
@@ -28,7 +34,26 @@ import { ROLE_PERMISSIONS } from "../auth/types.ts";
 import type { PermissionAction } from "../models/Permission.ts";
 import { UsersPlugin } from "./usersPlugin.ts";
 import { WidgetStore } from "../widgets/widgetStore.ts";
-import type { WidgetType } from "../widgets/types.ts";
+import type { PlaceholderMap, WidgetType } from "../widgets/types.ts";
+import { widgetRegistry } from "../widgets/widgetRegistry.ts";
+import { PageBuilderEditor } from "../admin/components/page-builder-editor.tsx";
+
+/** Edit form for PagePlugin — extends CrudForm with an optional Page Builder link. */
+type PageEditProps = CrudFormProps & { builderHref?: string };
+function PagePluginEditPage({ builderHref, ...formProps }: PageEditProps) {
+  return (
+    <>
+      <CrudForm {...(formProps as CrudFormProps)} />
+      {builderHref && (
+        <div className="mx-auto max-w-2xl flex justify-end pt-2">
+          <Button variant="secondary" href={builderHref}>
+            Page Builder
+          </Button>
+        </div>
+      )}
+    </>
+  );
+}
 
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {
@@ -476,16 +501,34 @@ export class AdminPlugin {
         }
       }
 
-      const html = renderAdminPage(CrudForm, {
-        pluginName: plugin.name,
-        pluginSlug: slug,
-        fields,
-        values,
-        action: `${basePath}/${id}`,
-        isEdit: true,
-        itemId: id,
-        csrfToken,
-      });
+      let html: string;
+      if (plugin instanceof PagePlugin) {
+        const builderHref = values.widgets_enabled === "true"
+          ? `/admin/pages/${id}/builder`
+          : undefined;
+        html = renderAdminPage(PagePluginEditPage, {
+          pluginName: plugin.name,
+          pluginSlug: slug,
+          fields,
+          values,
+          action: `${basePath}/${id}`,
+          isEdit: true,
+          itemId: id,
+          csrfToken,
+          builderHref,
+        });
+      } else {
+        html = renderAdminPage(CrudForm, {
+          pluginName: plugin.name,
+          pluginSlug: slug,
+          fields,
+          values,
+          action: `${basePath}/${id}`,
+          isEdit: true,
+          itemId: id,
+          csrfToken,
+        });
+      }
       return new Response(html, {
         status: 200,
         headers: { "Content-Type": "text/html" },
@@ -1048,6 +1091,86 @@ export class AdminPlugin {
   }
 
   /**
+   * Generate the Page Builder UI route.
+   *
+   * Route:
+   *   GET /admin/pages/[id]/builder — renders the drag-and-drop page builder
+   *
+   * Registered BEFORE /[wid] routes to avoid regex conflicts.
+   * Requires KV storage — only called when this._kv is set.
+   */
+  private _addBuilderUIRoutes(routes: Route[]): void {
+    const kv = this._kv!;
+
+    const builderRoute = new Route({
+      path: "/admin/pages/[id]/builder",
+      regex: /^\/admin\/pages\/([^/]+)\/builder$/,
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    builderRoute.method = "GET";
+    builderRoute.run = async (
+      req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const id = ctx?.params?.id;
+      if (!id) return new Response("Not found", { status: 404 });
+
+      const pagePlugin = this._plugins.find((p) => p instanceof PagePlugin);
+      if (!pagePlugin) return new Response("Not found", { status: 404 });
+
+      const page = await pagePlugin.storage.get(id);
+      if (!page) return new Response("Not found", { status: 404 });
+
+      const store = new WidgetStore(kv);
+      const instances = await store.loadForPage(id);
+
+      // Group instances into PlaceholderMap, sorted by order
+      const placeholders: PlaceholderMap = {};
+      for (const w of instances) {
+        if (!placeholders[w.placeholder]) {
+          placeholders[w.placeholder] = [];
+        }
+        placeholders[w.placeholder].push(w);
+      }
+      for (const arr of Object.values(placeholders)) {
+        arr.sort((a, b) => a.order - b.order);
+      }
+
+      const availableWidgets = widgetRegistry.all();
+
+      const url = new URL(req.url);
+      const editWidgetId = url.searchParams.get("edit") ?? undefined;
+      const editingWidget = editWidgetId
+        ? instances.find((w) => w.id === editWidgetId)
+        : undefined;
+      const editingDefinition = editingWidget
+        ? (widgetRegistry.get(editingWidget.type) ?? undefined)
+        : undefined;
+
+      const session = requestSession.get(req);
+      const csrfToken = session?.csrfToken;
+
+      const html = renderBuilderPage(PageBuilderEditor, {
+        pageId: id,
+        pageTitle: String(page.title ?? id),
+        placeholders,
+        availableWidgets,
+        editingWidget,
+        editingDefinition,
+        csrfToken,
+      });
+
+      return new Response(html, {
+        status: 200,
+        headers: { "Content-Type": "text/html" },
+      });
+    };
+    routes.push(builderRoute);
+  }
+
+  /**
    * Generate Page Builder routes for managing widgets on pages.
    *
    * Routes:
@@ -1487,8 +1610,10 @@ export class AdminPlugin {
     // Preview route for PagePlugin pages
     this._addPreviewRoute(routes);
 
-    // Page Builder widget routes (requires KV storage)
+    // Page Builder routes (requires KV storage)
     if (this._kv) {
+      // UI route registered BEFORE widget API routes to avoid regex conflicts
+      this._addBuilderUIRoutes(routes);
       this._addPageBuilderRoutes(routes);
     }
 

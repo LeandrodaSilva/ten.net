@@ -1,6 +1,7 @@
 import { renderToString } from "react-dom/server";
 import { Script } from "./components/script.tsx";
 import Dashboard from "../layout/dashboard.tsx";
+import { BuilderLayout } from "./layout/builder-layout.tsx";
 import { Plugins } from "./components/plugins.tsx";
 import type { SidebarNavItem } from "./components/sidebar-nav.tsx";
 import type { ReactElement } from "react";
@@ -93,6 +94,21 @@ export function renderAdminPage<P extends Record<string, unknown>>(
       <App navItems={navItems}>
         <Component {...props} />
       </App>,
+    )
+  }`;
+}
+
+export function renderBuilderPage<
+  P extends { pageId: string; pageTitle?: string },
+>(
+  Component: (props: P) => React.ReactElement,
+  props: P,
+): string {
+  return `<!DOCTYPE html>${
+    renderToString(
+      <BuilderLayout pageId={props.pageId} pageTitle={props.pageTitle}>
+        <Component {...props} />
+      </BuilderLayout>,
     )
   }`;
 }
