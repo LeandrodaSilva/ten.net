@@ -109,6 +109,13 @@ export function PageBuilderEditor(
           </nav>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            id="btn-preview"
+            type="button"
+            className="inline-flex items-center gap-1.5 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500"
+          >
+            👁 Preview
+          </button>
           <a
             href={`/admin/plugins/page-plugin/${pageId}`}
             className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -264,6 +271,8 @@ export function PageBuilderEditor(
                       "X-CSRF-Token": csrf,
                     },
                     body: JSON.stringify(order),
+                  }).then(() => {
+                    refreshPreview();
                   }).catch(() => {
                     // Revert on failure: reload page
                     // @ts-ignore: location
@@ -303,6 +312,7 @@ export function PageBuilderEditor(
               }).then(() => {
                 // @ts-ignore: reload
                 globalThis.location.reload();
+                refreshPreview();
               }).catch(() => {
                 // @ts-ignore: reload
                 globalThis.location.reload();
@@ -336,6 +346,7 @@ export function PageBuilderEditor(
               }).then(() => {
                 // @ts-ignore: reload
                 globalThis.location.reload();
+                refreshPreview();
               }).catch(() => {
                 // @ts-ignore: reload
                 globalThis.location.reload();
@@ -364,9 +375,115 @@ export function PageBuilderEditor(
               globalThis.location.href =
                 `/admin/pages/${pageId}/builder?edit=${widgetId}`;
             });
+
+            // Preview modal
+            // @ts-ignore: getElementById
+            const previewModal = doc.getElementById("preview-modal");
+            // @ts-ignore: getElementById
+            const previewIframe = doc.getElementById("preview-iframe");
+            // @ts-ignore: getElementById
+            const btnPreview = doc.getElementById("btn-preview");
+            // @ts-ignore: getElementById
+            const btnClose = doc.getElementById("preview-close");
+
+            function refreshPreview() {
+              // @ts-ignore: classList / src
+              if (
+                previewModal && !previewModal.classList.contains("hidden") &&
+                previewIframe
+              ) {
+                // @ts-ignore: src
+                const currentSrc = previewIframe.src;
+                previewIframe.setAttribute("src", currentSrc);
+              }
+            }
+
+            if (btnPreview && previewModal) {
+              btnPreview.addEventListener("click", () => {
+                // @ts-ignore: classList
+                previewModal.classList.remove("hidden");
+                refreshPreview();
+              });
+            }
+            if (btnClose && previewModal) {
+              btnClose.addEventListener("click", () => {
+                // @ts-ignore: classList
+                previewModal.classList.add("hidden");
+              });
+            }
+
+            // Toggle responsivo
+            // @ts-ignore: record
+            const WIDTHS = {
+              desktop: "100%",
+              tablet: "768px",
+              mobile: "375px",
+            };
+            ["desktop", "tablet", "mobile"].forEach((mode) => {
+              // @ts-ignore: getElementById
+              const btn = doc.getElementById("preview-" + mode);
+              if (btn && previewIframe) {
+                btn.addEventListener("click", () => {
+                  // @ts-ignore: style
+                  previewIframe.style.maxWidth = WIDTHS[mode];
+                });
+              }
+            });
           })();
         }}
       </Script>
+
+      {/* Modal Preview */}
+      <div
+        id="preview-modal"
+        className="hidden fixed inset-0 z-50 flex flex-col bg-black/50"
+      >
+        <div className="flex items-center justify-between bg-gray-900 px-4 py-2 shrink-0">
+          <div className="flex gap-2">
+            <button
+              id="preview-desktop"
+              type="button"
+              className="rounded px-3 py-1 text-sm text-white bg-indigo-600"
+            >
+              🖥 Desktop
+            </button>
+            <button
+              id="preview-tablet"
+              type="button"
+              className="rounded px-3 py-1 text-sm text-white/70 hover:text-white"
+            >
+              📱 Tablet
+            </button>
+            <button
+              id="preview-mobile"
+              type="button"
+              className="rounded px-3 py-1 text-sm text-white/70 hover:text-white"
+            >
+              📱 Mobile
+            </button>
+          </div>
+          <button
+            id="preview-close"
+            type="button"
+            className="text-white/70 hover:text-white text-xl"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="flex-1 flex items-center justify-center p-4 overflow-auto">
+          <iframe
+            id="preview-iframe"
+            src={`/admin/pages/${pageId}/builder/preview`}
+            className="bg-white shadow-2xl rounded-lg border border-gray-200"
+            style={{
+              width: "100%",
+              height: "100%",
+              maxWidth: "100%",
+              transition: "max-width 0.3s ease",
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }

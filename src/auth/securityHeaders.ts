@@ -12,7 +12,10 @@ export const securityHeadersMiddleware: Middleware = async (
   headers.set("X-Content-Type-Options", "nosniff");
 
   if (url.pathname.startsWith("/admin")) {
-    headers.set("X-Frame-Options", "DENY");
+    const xFrameValue = url.pathname.includes("/builder/preview")
+      ? "SAMEORIGIN"
+      : "DENY";
+    headers.set("X-Frame-Options", xFrameValue);
     headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   }
 

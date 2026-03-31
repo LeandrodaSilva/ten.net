@@ -729,6 +729,8 @@ export class AdminPlugin {
         headers: {
           "Content-Type": "text/html",
           "X-Robots-Tag": "noindex",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Cache-Control": "no-store",
         },
       });
     };
@@ -1089,6 +1091,54 @@ export class AdminPlugin {
       });
     };
     routes.push(blogPostRoute);
+  }
+
+  /**
+   * Generate the builder preview route.
+   *
+   * Route:
+   *   GET /admin/pages/[id]/builder/preview — renders the page as it would appear publicly
+   *
+   * Registered BEFORE /builder to avoid regex conflicts.
+   * Requires KV storage — only called when this._kv is set.
+   */
+  private _addBuilderPreviewRoute(routes: Route[]): void {
+    const pagePlugin = this._plugins.find((p) => p instanceof PagePlugin);
+    if (!pagePlugin) return;
+
+    const appPath = "./app";
+    const kv = this._kv ?? undefined;
+
+    const previewRoute = new Route({
+      path: "/admin/pages/[id]/builder/preview",
+      regex: /^\/admin\/pages\/([^/]+)\/builder\/preview$/,
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    previewRoute.method = "GET";
+    previewRoute.run = async (
+      _req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const id = ctx?.params?.id;
+      if (!id) return new Response("Not found", { status: 404 });
+
+      const page = await pagePlugin.storage.get(id);
+      if (!page) return new Response("Not found", { status: 404 });
+
+      const html = await renderDynamicPage(page, appPath, kv);
+
+      return new Response(html, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/html",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Cache-Control": "no-store",
+        },
+      });
+    };
+    routes.push(previewRoute);
   }
 
   /**
@@ -1625,6 +1675,8 @@ export class AdminPlugin {
     // Page Builder routes (requires KV storage)
     if (this._kv) {
       registerBuiltinWidgets();
+      // Preview route registered BEFORE builder UI to avoid regex conflicts
+      this._addBuilderPreviewRoute(routes);
       // UI route registered BEFORE widget API routes to avoid regex conflicts
       this._addBuilderUIRoutes(routes);
       this._addPageBuilderRoutes(routes);
