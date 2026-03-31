@@ -1201,6 +1201,72 @@ describe("Admin E2E Integration", () => {
       // Widget palette should have data-widget-type
       assertStringIncludes(body, "data-widget-type");
     });
+
+    // ── Preview ──────────────────────────────────────────────────────────
+
+    describe("Preview", () => {
+      it("GET /admin/pages/[id]/builder/preview should return 200", async () => {
+        const res = await fetchAuth(
+          baseUrl,
+          `/admin/pages/${pageId}/builder/preview`,
+          cookie,
+        );
+        assertEquals(res.status, 200);
+        await res.text();
+      });
+
+      it("preview response should have X-Frame-Options header", async () => {
+        const res = await fetchAuth(
+          baseUrl,
+          `/admin/pages/${pageId}/builder/preview`,
+          cookie,
+        );
+        // Preview route sets SAMEORIGIN so the builder iframe can embed it.
+        const xfo = res.headers.get("X-Frame-Options");
+        assert(xfo !== null, "X-Frame-Options header should be present");
+        assertEquals(xfo, "SAMEORIGIN");
+        await res.text();
+      });
+
+      it("preview response should have Cache-Control header", async () => {
+        const res = await fetchAuth(
+          baseUrl,
+          `/admin/pages/${pageId}/builder/preview`,
+          cookie,
+        );
+        assertEquals(
+          res.headers.get("Cache-Control"),
+          "no-store",
+        );
+        await res.text();
+      });
+
+      it("builder HTML should have btn-preview button", async () => {
+        const res = await fetchAuth(
+          baseUrl,
+          `/admin/pages/${pageId}/builder`,
+          cookie,
+        );
+        const body = await res.text();
+        assertStringIncludes(body, 'id="btn-preview"');
+      });
+
+      it("builder HTML should have preview-modal with hidden class", async () => {
+        const res = await fetchAuth(
+          baseUrl,
+          `/admin/pages/${pageId}/builder`,
+          cookie,
+        );
+        const body = await res.text();
+        assertStringIncludes(body, 'id="preview-modal"');
+        // The modal should have the hidden class by default
+        assert(
+          body.includes('id="preview-modal"') &&
+            body.match(/id="preview-modal"[^>]*class="[^"]*hidden/),
+          "preview-modal should have hidden class",
+        );
+      });
+    });
   });
 
   // ──────────────────────────────────────────────────────────────────────────

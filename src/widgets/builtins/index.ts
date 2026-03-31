@@ -12,10 +12,18 @@ import { widgetRegistry } from "../widgetRegistry.ts";
 import { heroWidget } from "./hero.ts";
 import { richTextWidget } from "./richText.ts";
 import { imageWidget } from "./image.ts";
+import { ctaButtonWidget } from "./ctaButton.ts";
+import { spacerWidget } from "./spacer.ts";
+import { galleryWidget } from "./gallery.ts";
+import { contactFormWidget } from "./contactForm.ts";
 
 export { heroWidget } from "./hero.ts";
 export { richTextWidget } from "./richText.ts";
 export { imageWidget } from "./image.ts";
+export { ctaButtonWidget } from "./ctaButton.ts";
+export { spacerWidget } from "./spacer.ts";
+export { galleryWidget } from "./gallery.ts";
+export { contactFormWidget } from "./contactForm.ts";
 
 /**
  * Register all built-in widget definitions with the global widgetRegistry.
@@ -25,4 +33,8 @@ export function registerBuiltinWidgets(): void {
   widgetRegistry.register(heroWidget);
   widgetRegistry.register(richTextWidget);
   widgetRegistry.register(imageWidget);
+  widgetRegistry.register(ctaButtonWidget);
+  widgetRegistry.register(spacerWidget);
+  widgetRegistry.register(galleryWidget);
+  widgetRegistry.register(contactFormWidget);
 }
