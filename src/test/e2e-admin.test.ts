@@ -1191,6 +1191,50 @@ describe("Admin E2E Integration", () => {
       await res.body?.cancel();
     });
 
+    it("POST duplicate widget should return 201 with new ID", async () => {
+      // Create a widget to duplicate
+      const createRes = await fetch(
+        `${baseUrl}/admin/pages/${pageId}/widgets`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            type: "hero",
+            placeholder: "main",
+            order: 0,
+            data: { heading: "Original" },
+          }),
+          headers: {
+            cookie,
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
+          },
+        },
+      );
+      const original = await createRes.json();
+
+      const res = await fetch(
+        `${baseUrl}/admin/pages/${pageId}/widgets/${original.id}/duplicate`,
+        {
+          method: "POST",
+          headers: {
+            cookie,
+            "X-CSRF-Token": csrfToken,
+          },
+        },
+      );
+      assertEquals(res.status, 201);
+      const duplicate = await res.json();
+
+      // New ID, same type and data
+      assert(duplicate.id !== original.id, "duplicate should have new ID");
+      assertEquals(duplicate.type, original.type);
+      assertEquals(duplicate.data.heading, "Original");
+      assertEquals(duplicate.placeholder, original.placeholder);
+      // Timestamps should be fresh
+      assert(duplicate.created_at, "should have created_at");
+      assert(duplicate.updated_at, "should have updated_at");
+    });
+
     it("builder page should have data-widget attributes", async () => {
       const res = await fetchAuth(
         baseUrl,
@@ -1200,6 +1244,16 @@ describe("Admin E2E Integration", () => {
       const body = await res.text();
       // Widget palette should have data-widget-type
       assertStringIncludes(body, "data-widget-type");
+    });
+
+    it("palette should show Restrito badge for html and embed widgets", async () => {
+      const res = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${pageId}/builder`,
+        cookie,
+      );
+      const body = await res.text();
+      assertStringIncludes(body, "Restrito");
     });
 
     // ── Preview ──────────────────────────────────────────────────────────

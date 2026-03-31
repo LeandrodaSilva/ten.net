@@ -402,7 +402,7 @@ describe("contactFormWidget", () => {
 // ── registerBuiltinWidgets ──────────────────────────────────────────────────
 
 describe("registerBuiltinWidgets", () => {
-  it("should register all 7 built-in widgets", () => {
+  it("should register all 10 built-in widgets", () => {
     registerBuiltinWidgets();
     const all = widgetRegistry.all();
     const types = all.map((d) => d.type);
@@ -412,14 +412,19 @@ describe("registerBuiltinWidgets", () => {
     assert(types.includes("rich-text"), "should include rich-text");
     assert(types.includes("image"), "should include image");
 
-    // New 4
+    // Phase 6b: 4
     assert(types.includes("cta-button"), "should include cta-button");
     assert(types.includes("spacer"), "should include spacer");
     assert(types.includes("gallery"), "should include gallery");
     assert(types.includes("contact-form"), "should include contact-form");
 
-    // Total count: at least 7 (may include others registered in other tests)
-    assert(all.length >= 7, `expected at least 7 widgets, got ${all.length}`);
+    // Phase 6e: 3
+    assert(types.includes("html"), "should include html");
+    assert(types.includes("embed"), "should include embed");
+    assert(types.includes("columns"), "should include columns");
+
+    // Total count: at least 10
+    assert(all.length >= 10, `expected at least 10 widgets, got ${all.length}`);
   });
 
   it("should be idempotent (safe to call multiple times)", () => {

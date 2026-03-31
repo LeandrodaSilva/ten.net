@@ -353,6 +353,33 @@ export function PageBuilderEditor(
               });
             });
 
+            // Listener: duplicar widget
+            // @ts-ignore: event delegation
+            doc.addEventListener("click", (e) => {
+              // @ts-ignore: closest
+              const btn = e.target.closest("[data-duplicate-widget]");
+              if (!btn) return;
+
+              // @ts-ignore: dataset
+              const widgetId = btn.dataset.duplicateWidget;
+              // @ts-ignore: canvas
+              const canvas = doc.getElementById("builder-canvas");
+              // @ts-ignore: dataset
+              const pageId = canvas ? canvas.dataset.pageId : "";
+              if (!pageId || !widgetId) return;
+              if (!/^[\w-]+$/.test(pageId)) return;
+              if (!/^[\w-]+$/.test(widgetId)) return;
+              fetch(`/admin/pages/${pageId}/widgets/${widgetId}/duplicate`, {
+                method: "POST",
+                headers: { "X-CSRF-Token": csrf },
+              }).then(() => {
+                globalThis.location.reload();
+              })
+                .catch(() => {
+                  globalThis.location.reload();
+                });
+            });
+
             // Listener: editar widget (navega para URL de edição inline)
             // @ts-ignore: event delegation
             doc.addEventListener("click", (e) => {

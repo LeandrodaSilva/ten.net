@@ -9,7 +9,8 @@
     "./build": "./src/build/build.ts",
     "./build/manifest": "./src/build/manifest.ts",
     "./build/crypto": "./src/build/crypto.ts",
-    "./admin": "./src/admin/mod.ts"
+    "./admin": "./src/admin/mod.ts",
+    "./widgets": "./src/widgets/mod.ts"
   },
   "tasks": {
     "dev": "deno run -P --inspect --unstable-kv --unstable-raw-imports --watch demo.ts",

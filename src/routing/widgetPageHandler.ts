@@ -1,6 +1,10 @@
 import { WidgetStore } from "../widgets/widgetStore.ts";
 import { widgetRegistry } from "../widgets/widgetRegistry.ts";
-import type { PlaceholderMap, WidgetInstance } from "../widgets/types.ts";
+import type {
+  PlaceholderMap,
+  WidgetInstance,
+  WidgetRenderContext,
+} from "../widgets/types.ts";
 
 /**
  * Resolve all {{widgets:name}} placeholders in an HTML body string.
@@ -41,12 +45,15 @@ export async function renderWidgetPage(
   // Group instances by placeholder name
   const placeholderMap = groupByPlaceholder(instances);
 
+  // Build render context with the full placeholder map (used by columns widget)
+  const context: WidgetRenderContext = { subWidgets: placeholderMap };
+
   // Replace each {{widgets:name}} placeholder with rendered HTML
   let result = body;
   for (const name of placeholderNames) {
     const placeholder = "{{widgets:" + name + "}}";
     const widgetInstances = placeholderMap[name] ?? [];
-    const html = renderPlaceholder(widgetInstances);
+    const html = renderPlaceholder(widgetInstances, context);
     result = result.replaceAll(placeholder, html);
   }
 
@@ -85,13 +92,16 @@ function groupByPlaceholder(instances: WidgetInstance[]): PlaceholderMap {
  * Render all widget instances in a placeholder to an HTML string.
  * Unregistered widget types are silently skipped.
  */
-function renderPlaceholder(instances: WidgetInstance[]): string {
+function renderPlaceholder(
+  instances: WidgetInstance[],
+  context: WidgetRenderContext,
+): string {
   const parts: string[] = [];
   for (const instance of instances) {
     const definition = widgetRegistry.get(instance.type);
     if (!definition) continue;
     try {
-      parts.push(definition.render(instance));
+      parts.push(definition.render(instance, context));
     } catch {
       // Rendering errors must not break the page
     }

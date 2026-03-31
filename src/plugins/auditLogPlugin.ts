@@ -1,9 +1,20 @@
 import { Plugin, type PluginModel } from "../models/Plugin.ts";
 
 /** Valid audit log actions. */
-export type AuditAction = "create" | "update" | "delete";
+export type AuditAction =
+  | "create"
+  | "update"
+  | "delete"
+  | "reorder"
+  | "duplicate";
 
-const VALID_ACTIONS: AuditAction[] = ["create", "update", "delete"];
+const VALID_ACTIONS: AuditAction[] = [
+  "create",
+  "update",
+  "delete",
+  "reorder",
+  "duplicate",
+];
 
 /** Fields that are optional (not required even for non-boolean types). */
 const OPTIONAL_FIELDS = new Set(["details"]);
@@ -58,7 +69,7 @@ export class AuditLogPlugin extends Plugin {
       delete errors[field];
     }
 
-    // action: must be create, update, or delete
+    // action: must be one of the valid audit actions
     const action = data.action;
     if (typeof action === "string" && action !== "") {
       if (!VALID_ACTIONS.includes(action as AuditAction)) {

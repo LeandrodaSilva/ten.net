@@ -16,7 +16,8 @@ export type BuiltinWidgetType =
   | "cta-button"
   | "spacer"
   | "html"
-  | "embed";
+  | "embed"
+  | "columns";
 
 /** A widget type — either built-in or a custom prefixed type. */
 export type WidgetType = BuiltinWidgetType | `custom:${string}`;
@@ -68,6 +69,16 @@ export interface WidgetFieldSchema {
 }
 
 /**
+ * Context passed to a widget's render function.
+ * Carries the full PlaceholderMap for widgets that need to render sub-widgets
+ * (e.g. the "columns" widget).
+ */
+export interface WidgetRenderContext {
+  /** Full page placeholder map, used to render nested/child widgets. */
+  subWidgets?: PlaceholderMap;
+}
+
+/**
  * A widget definition — registered in WidgetRegistry.
  * Describes a widget type, its fields, and how to render it.
  */
@@ -82,11 +93,13 @@ export interface WidgetDefinition {
   icon?: string;
   /** Field schemas describing editable content. */
   fields: WidgetFieldSchema[];
+  /** Whether this widget type is restricted to certain roles. */
+  restricted?: boolean;
   /**
    * Render the widget to an HTML string.
-   * Receives the widget instance data.
+   * Receives the widget instance data and an optional render context.
    */
-  render(instance: WidgetInstance): string;
+  render(instance: WidgetInstance, context?: WidgetRenderContext): string;
   /** Default placeholder name if not specified when inserting. */
   defaultPlaceholder?: string;
 }
