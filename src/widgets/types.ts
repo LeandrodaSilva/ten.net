@@ -13,6 +13,8 @@ export type BuiltinWidgetType =
   | "image"
   | "gallery"
   | "contact-form"
+  | "cta-button"
+  | "spacer"
   | "html"
   | "embed";
 
