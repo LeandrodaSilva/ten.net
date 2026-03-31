@@ -1714,19 +1714,20 @@ describe("Admin E2E Integration", () => {
       }, csrf);
       await createRes.body?.cancel();
 
-      // Find the newly created page
+      // Find the newly created page by locating its slug in the list HTML
+      // and extracting the UUID from the same table row.
       const listRes = await fetchAuth(
         baseUrl,
         "/admin/plugins/page-plugin",
         cookie,
       );
       const listBody = await listRes.text();
-      const ids = [
-        ...listBody.matchAll(
-          /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/g,
-        ),
-      ];
-      const pageId = ids[ids.length - 1]?.[1];
+      // Find the <tr> block that contains the slug "nav-builder-test" and
+      // extract the UUID from the edit/delete href within that row.
+      const trMatch = listBody.match(
+        /<tr[^>]*>(?:(?!<\/tr>)[\s\S])*?nav-builder-test[\s\S]*?\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})[\s\S]*?<\/tr>/,
+      );
+      const pageId = trMatch?.[1];
       assert(pageId, "should find page ID for builder link test");
 
       const editRes = await fetchAuth(
