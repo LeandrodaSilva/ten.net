@@ -1221,11 +1221,10 @@ describe("Admin E2E Integration", () => {
           `/admin/pages/${pageId}/builder/preview`,
           cookie,
         );
-        // BUG: Route sets SAMEORIGIN but securityHeaders middleware overwrites to DENY.
-        // Preview iframe needs SAMEORIGIN to work. Filed as bug to team-lead.
+        // Preview route sets SAMEORIGIN so the builder iframe can embed it.
         const xfo = res.headers.get("X-Frame-Options");
         assert(xfo !== null, "X-Frame-Options header should be present");
-        assertEquals(xfo, "DENY");
+        assertEquals(xfo, "SAMEORIGIN");
         await res.text();
       });
 
