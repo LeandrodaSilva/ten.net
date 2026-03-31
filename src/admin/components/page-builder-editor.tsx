@@ -92,7 +92,10 @@ export function PageBuilderEditor(
             Voltar
           </a>
           <span className="text-gray-300" aria-hidden="true">/</span>
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm">
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-1.5 text-sm"
+          >
             <a
               href="/admin/pages"
               className="text-gray-500 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 rounded"
@@ -234,9 +237,12 @@ export function PageBuilderEditor(
                 // @ts-ignore: dataset
                 const placeholder = list.dataset.placeholder;
                 // @ts-ignore: children array
-                const cards = Array.from(list.querySelectorAll("[data-widget-id]"));
+                const cards = Array.from(
+                  list.querySelectorAll("[data-widget-id]"),
+                );
                 // @ts-ignore: map
                 const order = cards.map((card, i) => ({
+                  // @ts-ignore: dataset property
                   widgetId: card.dataset.widgetId,
                   order: i,
                 }));

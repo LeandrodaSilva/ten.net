@@ -1,14 +1,11 @@
 import { describe, it } from "@std/testing/bdd";
-import { assertEquals, assertStringIncludes } from "@std/assert";
+import { assertStringIncludes } from "@std/assert";
 import { renderToString } from "react-dom/server";
 import { WidgetPalette } from "../admin/components/widget-palette.tsx";
 import { BuilderWidgetCard } from "../admin/components/builder-widget-card.tsx";
 import { PageBuilderEditor } from "../admin/components/page-builder-editor.tsx";
 import { BuilderLayout } from "../admin/layout/builder-layout.tsx";
-import type {
-  WidgetDefinition,
-  WidgetInstance,
-} from "../widgets/types.ts";
+import type { WidgetDefinition, WidgetInstance } from "../widgets/types.ts";
 
 // --- Fixtures ---
 
@@ -57,7 +54,9 @@ const fakeWidgetUnknown: WidgetInstance = {
 describe("WidgetPalette component", () => {
   it("should render widget list items for each available widget", () => {
     const html = renderToString(
-      <WidgetPalette availableWidgets={[fakeDefinition, fakeDefinitionNoIcon]} />,
+      <WidgetPalette
+        availableWidgets={[fakeDefinition, fakeDefinitionNoIcon]}
+      />,
     );
     assertStringIncludes(html, "Hero Banner");
     assertStringIncludes(html, "Rich Text");
