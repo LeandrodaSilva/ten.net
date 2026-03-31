@@ -1466,4 +1466,399 @@ describe("Admin E2E Integration", () => {
       await res.text();
     });
   });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // Navigation Links
+  // ──────────────────────────────────────────────────────────────────────────
+  describe("Navigation Links", () => {
+    const pluginSlugs = [
+      "page-plugin",
+      "post-plugin",
+      "category-plugin",
+      "group-plugin",
+      "user-plugin",
+      "settings-plugin",
+      "role-plugin",
+      "audit-log-plugin",
+    ];
+
+    it("dashboard plugin cards should link to /admin/plugins/{slug} and return 200", async () => {
+      const dashRes = await fetchAuth(baseUrl, "/admin", cookie);
+      const dashBody = await dashRes.text();
+
+      for (const slug of pluginSlugs) {
+        const expectedHref = `/admin/plugins/${slug}`;
+        assertStringIncludes(
+          dashBody,
+          expectedHref,
+          `Dashboard missing link to ${expectedHref}`,
+        );
+        const res = await fetchAuth(baseUrl, expectedHref, cookie);
+        assertEquals(
+          res.status,
+          200,
+          `GET ${expectedHref} should return 200`,
+        );
+        await res.text();
+      }
+    });
+
+    it("plugin list 'Add' link should point to /admin/plugins/{slug}/new and return 200", async () => {
+      for (const slug of pluginSlugs) {
+        const listRes = await fetchAuth(
+          baseUrl,
+          `/admin/plugins/${slug}`,
+          cookie,
+        );
+        const listBody = await listRes.text();
+        const newHref = `/admin/plugins/${slug}/new`;
+        assertStringIncludes(
+          listBody,
+          newHref,
+          `Plugin list ${slug} missing 'Add' link to ${newHref}`,
+        );
+        const res = await fetchAuth(baseUrl, newHref, cookie);
+        assertEquals(res.status, 200, `GET ${newHref} should return 200`);
+        await res.text();
+      }
+    });
+
+    it("plugin list 'Edit' link should point to /admin/plugins/{slug}/{id} and return 200", async () => {
+      // Use page-plugin which already has items from CRUD tests
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const idMatch = listBody.match(
+        /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/,
+      );
+      assert(idMatch, "should find page ID in list for edit link");
+      const editHref = `/admin/plugins/page-plugin/${idMatch![1]}`;
+      assertStringIncludes(listBody, editHref);
+
+      const res = await fetchAuth(baseUrl, editHref, cookie);
+      assertEquals(res.status, 200, `GET ${editHref} should return 200`);
+      await res.text();
+    });
+
+    it("edit form 'Cancel' should link back to /admin/plugins/{slug} and return 200", async () => {
+      // Get a page ID
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const idMatch = listBody.match(
+        /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/,
+      );
+      assert(idMatch, "should find page ID for edit form test");
+
+      const editRes = await fetchAuth(
+        baseUrl,
+        `/admin/plugins/page-plugin/${idMatch![1]}`,
+        cookie,
+      );
+      const editBody = await editRes.text();
+      const cancelHref = "/admin/plugins/page-plugin";
+      assertStringIncludes(
+        editBody,
+        cancelHref,
+        "Edit form should contain Cancel link back to plugin list",
+      );
+
+      const res = await fetchAuth(baseUrl, cancelHref, cookie);
+      assertEquals(
+        res.status,
+        200,
+        `GET ${cancelHref} should return 200`,
+      );
+      await res.text();
+    });
+
+    it("page edit should link to Page Builder and return 200", async () => {
+      // Create a page with widgets_enabled so the builder link appears
+      const csrf = await getCsrf(baseUrl, cookie, "page-plugin");
+      const createRes = await createItem(baseUrl, cookie, "page-plugin", {
+        slug: "nav-builder-test",
+        title: "Nav Builder Test",
+        body: "test",
+        status: "published",
+        seo_title: "",
+        seo_description: "",
+        template: "",
+        author_id: "",
+        widgets_enabled: "true",
+      }, csrf);
+      await createRes.body?.cancel();
+
+      // Find the newly created page
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const ids = [
+        ...listBody.matchAll(
+          /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/g,
+        ),
+      ];
+      const pageId = ids[ids.length - 1]?.[1];
+      assert(pageId, "should find page ID for builder link test");
+
+      const editRes = await fetchAuth(
+        baseUrl,
+        `/admin/plugins/page-plugin/${pageId}`,
+        cookie,
+      );
+      const editBody = await editRes.text();
+      const builderHref = `/admin/pages/${pageId}/builder`;
+      assertStringIncludes(
+        editBody,
+        builderHref,
+        "Edit form should contain Page Builder link when widgets_enabled",
+      );
+
+      const builderRes = await fetchAuth(baseUrl, builderHref, cookie);
+      assertEquals(
+        builderRes.status,
+        200,
+        `GET ${builderHref} should return 200`,
+      );
+      await builderRes.text();
+    });
+
+    it("builder 'Voltar' should link to /admin/plugins/page-plugin and return 200", async () => {
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const idMatch = listBody.match(
+        /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/,
+      );
+      assert(idMatch, "should find page ID for builder Voltar test");
+      const pageId = idMatch![1];
+
+      const builderRes = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${pageId}/builder`,
+        cookie,
+      );
+      const builderBody = await builderRes.text();
+      const voltarHref = "/admin/plugins/page-plugin";
+      assertStringIncludes(
+        builderBody,
+        `href="${voltarHref}"`,
+        "Builder should contain 'Voltar' link to plugin list",
+      );
+
+      const res = await fetchAuth(baseUrl, voltarHref, cookie);
+      assertEquals(res.status, 200, `GET ${voltarHref} should return 200`);
+      await res.text();
+    });
+
+    it("builder 'Configurações' should link to /admin/plugins/page-plugin/{id} and return 200", async () => {
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const idMatch = listBody.match(
+        /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/,
+      );
+      assert(idMatch, "should find page ID for builder Configurações test");
+      const pageId = idMatch![1];
+
+      const builderRes = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${pageId}/builder`,
+        cookie,
+      );
+      const builderBody = await builderRes.text();
+      const configHref = `/admin/plugins/page-plugin/${pageId}`;
+      assertStringIncludes(
+        builderBody,
+        configHref,
+        "Builder should contain 'Configurações' link to edit page",
+      );
+
+      const res = await fetchAuth(baseUrl, configHref, cookie);
+      assertEquals(res.status, 200, `GET ${configHref} should return 200`);
+      await res.text();
+    });
+
+    it("breadcrumb 'Home' should link to /admin and return 200", async () => {
+      const pluginRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const pluginBody = await pluginRes.text();
+      assertStringIncludes(
+        pluginBody,
+        'href="/admin"',
+        "Breadcrumb should contain Home link to /admin",
+      );
+
+      const res = await fetchAuth(baseUrl, "/admin", cookie);
+      assertEquals(res.status, 200, "GET /admin should return 200");
+      await res.text();
+    });
+
+    it("sidebar 'Dashboard' should link to /admin and return 200", async () => {
+      const dashRes = await fetchAuth(baseUrl, "/admin", cookie);
+      const dashBody = await dashRes.text();
+      assertStringIncludes(
+        dashBody,
+        'href="/admin"',
+        "Sidebar should contain Dashboard link to /admin",
+      );
+    });
+
+    it("GET /admin/pages/{id} (without /builder) should return 404", async () => {
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const idMatch = listBody.match(
+        /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/,
+      );
+      assert(idMatch, "should find page ID for 404 test");
+
+      const res = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${idMatch![1]}`,
+        cookie,
+      );
+      assertEquals(
+        res.status,
+        404,
+        "GET /admin/pages/{id} without /builder should return 404",
+      );
+      await res.text();
+    });
+
+    it("GET /admin/plugins/nonexistent should return 403 or 404", async () => {
+      const res = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/nonexistent",
+        cookie,
+      );
+      // RBAC middleware intercepts before plugin lookup, returning 403
+      assert(
+        res.status === 403 || res.status === 404,
+        `GET /admin/plugins/nonexistent should return 403 or 404, got ${res.status}`,
+      );
+      await res.text();
+    });
+  });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // Navigation Regression
+  // ──────────────────────────────────────────────────────────────────────────
+  describe("Navigation Regression", () => {
+    it("builder HTML should contain correct 'Voltar' href", async () => {
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const idMatch = listBody.match(
+        /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/,
+      );
+      assert(idMatch, "should find page ID for regression test");
+      const pageId = idMatch![1];
+
+      const builderRes = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${pageId}/builder`,
+        cookie,
+      );
+      const builderBody = await builderRes.text();
+
+      // Voltar must point to /admin/plugins/page-plugin (NOT /admin/pages)
+      assertMatch(
+        builderBody,
+        /href="\/admin\/plugins\/page-plugin"/,
+        "Voltar link must use /admin/plugins/page-plugin",
+      );
+    });
+
+    it("builder HTML should contain correct 'Configurações' href", async () => {
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const idMatch = listBody.match(
+        /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/,
+      );
+      assert(idMatch, "should find page ID for regression test");
+      const pageId = idMatch![1];
+
+      const builderRes = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${pageId}/builder`,
+        cookie,
+      );
+      const builderBody = await builderRes.text();
+
+      // Configurações must point to /admin/plugins/page-plugin/{id}
+      assertStringIncludes(
+        builderBody,
+        `/admin/plugins/page-plugin/${pageId}`,
+        "Configurações link must use /admin/plugins/page-plugin/{id}",
+      );
+    });
+
+    it("following corrected builder links should return 200", async () => {
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const idMatch = listBody.match(
+        /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/,
+      );
+      assert(idMatch, "should find page ID for follow-link test");
+      const pageId = idMatch![1];
+
+      // Follow Voltar link
+      const voltarRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      assertEquals(
+        voltarRes.status,
+        200,
+        "Voltar link /admin/plugins/page-plugin should return 200",
+      );
+      await voltarRes.text();
+
+      // Follow Configurações link
+      const configRes = await fetchAuth(
+        baseUrl,
+        `/admin/plugins/page-plugin/${pageId}`,
+        cookie,
+      );
+      assertEquals(
+        configRes.status,
+        200,
+        `Configurações link /admin/plugins/page-plugin/${pageId} should return 200`,
+      );
+      await configRes.text();
+    });
+  });
 });
