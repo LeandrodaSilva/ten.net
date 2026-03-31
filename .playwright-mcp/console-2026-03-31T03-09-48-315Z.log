@@ -28,3 +28,53 @@
 [  694552ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
 [  950581ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
 [ 1462641ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[31716319ms] [ERROR] Failed to load resource: net::ERR_INVALID_HANDLE @ https://www.googletagmanager.com/gtag/js?id=G-66D9CB2YXQ:0
+[31720915ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:328480
+[31721098ms] [WARNING] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information. @ http://localhost:3000/static/js/bundle.js:43142
+[31721184ms] [ERROR] Expectation Violation: Duplicate atom key "matriculasSelector". This is a FATAL ERROR in
+      production. But it is safe to ignore this warning if it occurred because of
+      hot module replacement.
+    at expectationViolation (http://localhost:3000/static/js/bundle.js:359555:17)
+    at checkForDuplicateAtomKey (http://localhost:3000/static/js/bundle.js:359644:9)
+    at registerNode (http://localhost:3000/static/js/bundle.js:359652:5)
+    at selector (http://localhost:3000/static/js/bundle.js:366270:26)
+    at ./src/recoil/selectors/matriculasFilterSelector.ts (http://localhost:3000/static/js/bundle.js:498524:80)
+    at options.factory (http://localhost:3000/static/js/bundle.js:514918:31)
+    at __webpack_require__ (http://localhost:3000/static/js/bundle.js:514296:32)
+    at fn (http://localhost:3000/static/js/bundle.js:514577:21)
+    at ./src/pages/CadastroConcluido/Filtros.tsx (http://localhost:3000/static/js/bundle.js:471708:101)
+    at options.factory (http://localhost:3000/static/js/bundle.js:514918:31) @ http://localhost:3000/static/js/bundle.js:359556
+[31721211ms] [WARNING] Datadog Browser SDK: Ignoring Premium Sample Rate because Session Replay Sample Rate is set @ http://localhost:3000/static/js/bundle.js:21381
+[31721281ms] [WARNING] Limpando dados do usuário... @ http://localhost:3000/static/js/bundle.js:419171
+[31721283ms] [WARNING] Dados do usuário limpos com sucesso! @ http://localhost:3000/static/js/bundle.js:419197
+[31731242ms] [LOG] Download the Apollo DevTools for a better development experience: %s https://chrome.google.com/webstore/detail/apollo-client-developer-t/jdkknkkbebbapilgoeccciglkfbmbnfm @ http://localhost:3000/static/js/bundle.js:383293
+[31815782ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[31817803ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[31821887ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[31829918ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[31846017ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[31878113ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[31942195ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[32070441ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[32326501ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[32838576ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[33016517ms] [ERROR] Failed to load resource: net::ERR_NETWORK_CHANGED @ https://rum.browser-intake-us3-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A4.50.1%2Capi%3Afetch%2Cenv%3Aprod%2Cservice%3Astatic-familyportal-front-prd%2Cversion%3A2.0.0&dd-api-key=pub81fd57a3b7de12ef650569bccc29b04f&dd-evp-origin-version=4.50.1&dd-evp-origin=browser&dd-request-id=86689dfc-f3ed-416f-b76f-7e3ac05b35cc&batch_time=1774959604521:0
+[34045843ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:328480
+[34045976ms] [WARNING] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information. @ http://localhost:3000/static/js/bundle.js:43142
+[34046062ms] [ERROR] Expectation Violation: Duplicate atom key "matriculasSelector". This is a FATAL ERROR in
+      production. But it is safe to ignore this warning if it occurred because of
+      hot module replacement.
+    at expectationViolation (http://localhost:3000/static/js/bundle.js:359555:17)
+    at checkForDuplicateAtomKey (http://localhost:3000/static/js/bundle.js:359644:9)
+    at registerNode (http://localhost:3000/static/js/bundle.js:359652:5)
+    at selector (http://localhost:3000/static/js/bundle.js:366270:26)
+    at ./src/recoil/selectors/matriculasFilterSelector.ts (http://localhost:3000/static/js/bundle.js:498546:80)
+    at options.factory (http://localhost:3000/static/js/bundle.js:514940:31)
+    at __webpack_require__ (http://localhost:3000/static/js/bundle.js:514318:32)
+    at fn (http://localhost:3000/static/js/bundle.js:514599:21)
+    at ./src/pages/CadastroConcluido/Filtros.tsx (http://localhost:3000/static/js/bundle.js:471737:101)
+    at options.factory (http://localhost:3000/static/js/bundle.js:514940:31) @ http://localhost:3000/static/js/bundle.js:359556
+[34046095ms] [WARNING] Datadog Browser SDK: Ignoring Premium Sample Rate because Session Replay Sample Rate is set @ http://localhost:3000/static/js/bundle.js:21381
+[34046174ms] [WARNING] Limpando dados do usuário... @ http://localhost:3000/static/js/bundle.js:419200
+[34046175ms] [WARNING] Dados do usuário limpos com sucesso! @ http://localhost:3000/static/js/bundle.js:419226
+[34056126ms] [LOG] Download the Apollo DevTools for a better development experience: %s https://chrome.google.com/webstore/detail/apollo-client-developer-t/jdkknkkbebbapilgoeccciglkfbmbnfm @ http://localhost:3000/static/js/bundle.js:383293
