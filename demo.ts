@@ -1,10 +1,12 @@
 import { Ten } from "./src/mod.ts";
 import {
   AdminPlugin,
+  AuditLogPlugin,
   CategoriesPlugin,
   GroupsPlugin,
   PagePlugin,
   PostsPlugin,
+  RolesPlugin,
   SettingsPlugin,
   UsersPlugin,
 } from "./src/admin/mod.ts";
@@ -20,6 +22,8 @@ if (import.meta.main) {
         GroupsPlugin,
         UsersPlugin,
         SettingsPlugin,
+        RolesPlugin,
+        AuditLogPlugin,
       ],
     }),
   );

@@ -208,161 +208,163 @@ export function PageBuilderEditor(
       {/* Script: Sortable.js + add/delete listeners */}
       <Script>
         {() => {
-          // @ts-ignore: DOM APIs available at runtime in browser
-          const doc = globalThis.document;
-          if (!doc) return;
+          (function () {
+            // @ts-ignore: DOM APIs available at runtime in browser
+            const doc = globalThis.document;
+            if (!doc) return;
 
-          // Ler CSRF token do meta tag
-          // @ts-ignore: querySelector
-          const csrfMeta = doc.querySelector('meta[name="csrf-token"]');
-          // @ts-ignore: content
-          const csrf = csrfMeta ? csrfMeta.content : "";
+            // Ler CSRF token do meta tag
+            // @ts-ignore: querySelector
+            const csrfMeta = doc.querySelector('meta[name="csrf-token"]');
+            // @ts-ignore: content
+            const csrf = csrfMeta ? csrfMeta.content : "";
 
-          // @ts-ignore: Sortable loaded via CDN
-          const SortableLib = globalThis.Sortable;
+            // @ts-ignore: Sortable loaded via CDN
+            const SortableLib = globalThis.Sortable;
 
-          // Inicializar Sortable em cada placeholder
-          // @ts-ignore: querySelectorAll return
-          const lists = doc.querySelectorAll("[data-placeholder]");
-          // @ts-ignore: forEach
-          lists.forEach((list) => {
-            if (!SortableLib) return;
-            // @ts-ignore: Sortable constructor
-            new SortableLib(list, {
-              handle: "[data-drag-handle]",
-              animation: 150,
-              ghostClass: "opacity-50",
-              // @ts-ignore: SortableEvent
-              onEnd: (evt) => {
-                // @ts-ignore: dataset
-                const placeholder = list.dataset.placeholder;
-                // @ts-ignore: children array
-                const cards = Array.from(
-                  list.querySelectorAll("[data-widget-id]"),
-                );
-                // @ts-ignore: map
-                const order = cards.map((card, i) => ({
-                  // @ts-ignore: dataset property
-                  widgetId: card.dataset.widgetId,
-                  order: i,
-                }));
+            // Inicializar Sortable em cada placeholder
+            // @ts-ignore: querySelectorAll return
+            const lists = doc.querySelectorAll("[data-placeholder]");
+            // @ts-ignore: forEach
+            lists.forEach((list) => {
+              if (!SortableLib) return;
+              // @ts-ignore: Sortable constructor
+              new SortableLib(list, {
+                handle: "[data-drag-handle]",
+                animation: 150,
+                ghostClass: "opacity-50",
+                // @ts-ignore: SortableEvent
+                onEnd: (evt) => {
+                  // @ts-ignore: dataset
+                  const placeholder = list.dataset.placeholder;
+                  // @ts-ignore: children array
+                  const cards = Array.from(
+                    list.querySelectorAll("[data-widget-id]"),
+                  );
+                  // @ts-ignore: map
+                  const order = cards.map((card, i) => ({
+                    // @ts-ignore: dataset property
+                    widgetId: card.dataset.widgetId,
+                    order: i,
+                  }));
 
-                // @ts-ignore: pageId from canvas
-                const canvas = doc.getElementById("builder-canvas");
-                // @ts-ignore: dataset
-                const pageId = canvas ? canvas.dataset.pageId : "";
+                  // @ts-ignore: pageId from canvas
+                  const canvas = doc.getElementById("builder-canvas");
+                  // @ts-ignore: dataset
+                  const pageId = canvas ? canvas.dataset.pageId : "";
 
-                if (!pageId || !placeholder) return;
-                // Validar pageId contra injeção em URL
-                if (!/^[\w-]+$/.test(pageId)) return;
+                  if (!pageId || !placeholder) return;
+                  // Validar pageId contra injeção em URL
+                  if (!/^[\w-]+$/.test(pageId)) return;
 
-                fetch(`/admin/pages/${pageId}/widgets/reorder`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-Token": csrf,
-                  },
-                  body: JSON.stringify(order),
-                }).catch(() => {
-                  // Revert on failure: reload page
-                  // @ts-ignore: location
-                  globalThis.location.reload();
-                });
+                  fetch(`/admin/pages/${pageId}/widgets/reorder`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      "X-CSRF-Token": csrf,
+                    },
+                    body: JSON.stringify(order),
+                  }).catch(() => {
+                    // Revert on failure: reload page
+                    // @ts-ignore: location
+                    globalThis.location.reload();
+                  });
 
-                // Suppress unused variable warning
-                void evt;
-              },
+                  // Suppress unused variable warning
+                  void evt;
+                },
+              });
             });
-          });
 
-          // Listener: adicionar widget via palette
-          // @ts-ignore: event delegation
-          doc.addEventListener("click", (e) => {
-            // @ts-ignore: closest
-            const btn = e.target.closest("[data-add-widget]");
-            if (!btn) return;
+            // Listener: adicionar widget via palette
+            // @ts-ignore: event delegation
+            doc.addEventListener("click", (e) => {
+              // @ts-ignore: closest
+              const btn = e.target.closest("[data-add-widget]");
+              if (!btn) return;
 
-            // @ts-ignore: dataset
-            const widgetType = btn.dataset.widgetType;
-            // @ts-ignore: canvas
-            const canvas = doc.getElementById("builder-canvas");
-            // @ts-ignore: dataset
-            const pageId = canvas ? canvas.dataset.pageId : "";
-            if (!pageId || !widgetType) return;
-            // Validar pageId contra injeção em URL
-            if (!/^[\w-]+$/.test(pageId)) return;
+              // @ts-ignore: dataset
+              const widgetType = btn.dataset.widgetType;
+              // @ts-ignore: canvas
+              const canvas = doc.getElementById("builder-canvas");
+              // @ts-ignore: dataset
+              const pageId = canvas ? canvas.dataset.pageId : "";
+              if (!pageId || !widgetType) return;
+              // Validar pageId contra injeção em URL
+              if (!/^[\w-]+$/.test(pageId)) return;
 
-            fetch(`/admin/pages/${pageId}/widgets`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-Token": csrf,
-              },
-              body: JSON.stringify({ type: widgetType }),
-            }).then(() => {
-              // @ts-ignore: reload
-              globalThis.location.reload();
-            }).catch(() => {
-              // @ts-ignore: reload
-              globalThis.location.reload();
+              fetch(`/admin/pages/${pageId}/widgets`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRF-Token": csrf,
+                },
+                body: JSON.stringify({ type: widgetType }),
+              }).then(() => {
+                // @ts-ignore: reload
+                globalThis.location.reload();
+              }).catch(() => {
+                // @ts-ignore: reload
+                globalThis.location.reload();
+              });
             });
-          });
 
-          // Listener: deletar widget
-          // @ts-ignore: event delegation
-          doc.addEventListener("click", (e) => {
-            // @ts-ignore: closest
-            const btn = e.target.closest("[data-delete-widget]");
-            if (!btn) return;
+            // Listener: deletar widget
+            // @ts-ignore: event delegation
+            doc.addEventListener("click", (e) => {
+              // @ts-ignore: closest
+              const btn = e.target.closest("[data-delete-widget]");
+              if (!btn) return;
 
-            // @ts-ignore: dataset
-            const widgetId = btn.dataset.deleteWidget;
-            // @ts-ignore: canvas
-            const canvas = doc.getElementById("builder-canvas");
-            // @ts-ignore: dataset
-            const pageId = canvas ? canvas.dataset.pageId : "";
-            if (!pageId || !widgetId) return;
-            // Validar pageId e widgetId contra injeção em URL
-            if (!/^[\w-]+$/.test(pageId)) return;
-            if (!/^[\w-]+$/.test(widgetId)) return;
+              // @ts-ignore: dataset
+              const widgetId = btn.dataset.deleteWidget;
+              // @ts-ignore: canvas
+              const canvas = doc.getElementById("builder-canvas");
+              // @ts-ignore: dataset
+              const pageId = canvas ? canvas.dataset.pageId : "";
+              if (!pageId || !widgetId) return;
+              // Validar pageId e widgetId contra injeção em URL
+              if (!/^[\w-]+$/.test(pageId)) return;
+              if (!/^[\w-]+$/.test(widgetId)) return;
 
-            // @ts-ignore: confirm
-            if (!globalThis.confirm("Excluir este widget?")) return;
+              // @ts-ignore: confirm
+              if (!globalThis.confirm("Excluir este widget?")) return;
 
-            fetch(`/admin/pages/${pageId}/widgets/${widgetId}/delete`, {
-              method: "POST",
-              headers: { "X-CSRF-Token": csrf },
-            }).then(() => {
-              // @ts-ignore: reload
-              globalThis.location.reload();
-            }).catch(() => {
-              // @ts-ignore: reload
-              globalThis.location.reload();
+              fetch(`/admin/pages/${pageId}/widgets/${widgetId}/delete`, {
+                method: "POST",
+                headers: { "X-CSRF-Token": csrf },
+              }).then(() => {
+                // @ts-ignore: reload
+                globalThis.location.reload();
+              }).catch(() => {
+                // @ts-ignore: reload
+                globalThis.location.reload();
+              });
             });
-          });
 
-          // Listener: editar widget (navega para URL de edição inline)
-          // @ts-ignore: event delegation
-          doc.addEventListener("click", (e) => {
-            // @ts-ignore: closest
-            const btn = e.target.closest("[data-edit-widget]");
-            if (!btn) return;
+            // Listener: editar widget (navega para URL de edição inline)
+            // @ts-ignore: event delegation
+            doc.addEventListener("click", (e) => {
+              // @ts-ignore: closest
+              const btn = e.target.closest("[data-edit-widget]");
+              if (!btn) return;
 
-            // @ts-ignore: dataset
-            const widgetId = btn.dataset.editWidget;
-            // @ts-ignore: canvas
-            const canvas = doc.getElementById("builder-canvas");
-            // @ts-ignore: dataset
-            const pageId = canvas ? canvas.dataset.pageId : "";
-            if (!pageId || !widgetId) return;
-            // Validar pageId e widgetId contra injeção em URL
-            if (!/^[\w-]+$/.test(pageId)) return;
-            if (!/^[\w-]+$/.test(widgetId)) return;
+              // @ts-ignore: dataset
+              const widgetId = btn.dataset.editWidget;
+              // @ts-ignore: canvas
+              const canvas = doc.getElementById("builder-canvas");
+              // @ts-ignore: dataset
+              const pageId = canvas ? canvas.dataset.pageId : "";
+              if (!pageId || !widgetId) return;
+              // Validar pageId e widgetId contra injeção em URL
+              if (!/^[\w-]+$/.test(pageId)) return;
+              if (!/^[\w-]+$/.test(widgetId)) return;
 
-            // @ts-ignore: location
-            globalThis.location.href =
-              `/admin/pages/${pageId}/builder?edit=${widgetId}`;
-          });
+              // @ts-ignore: location
+              globalThis.location.href =
+                `/admin/pages/${pageId}/builder?edit=${widgetId}`;
+            });
+          })();
         }}
       </Script>
     </div>
