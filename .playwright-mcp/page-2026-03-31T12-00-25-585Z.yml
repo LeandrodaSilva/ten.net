@@ -1,0 +1,158 @@
+- generic [active] [ref=e1]:
+    - link "Skip to content" [ref=e2] [cursor=pointer]:
+        - /url: "#main-content"
+    - generic [ref=e3]:
+        - banner [ref=e4]:
+            - generic [ref=e5]:
+                - img "Ten.net" [ref=e6]
+                - generic [ref=e7]:
+                    - button "View notifications" [ref=e8]:
+                        - generic [ref=e9]: View notifications
+                        - img [ref=e10]
+                    - link "Your profile" [ref=e12] [cursor=pointer]:
+                        - /url: "#"
+                        - generic [ref=e13]: Your profile
+        - generic [ref=e14]:
+            - complementary "Site navigation" [ref=e15]:
+                - navigation "Admin navigation" [ref=e16]:
+                    - list [ref=e17]:
+                        - listitem [ref=e18]:
+                            - link "Dashboard" [ref=e19] [cursor=pointer]:
+                                - /url: /admin
+                                - img [ref=e20]
+                                - text: Dashboard
+            - main [ref=e22]:
+                - navigation "Breadcrumb" [ref=e23]:
+                    - list [ref=e24]:
+                        - listitem [ref=e25]:
+                            - link "Home" [ref=e27] [cursor=pointer]:
+                                - /url: /admin
+                                - img [ref=e28]
+                                - generic [ref=e30]: Home
+                        - listitem [ref=e31]:
+                            - generic [ref=e32]:
+                                - img [ref=e33]
+                                - generic [ref=e35]: PagePlugin
+                - alert [ref=e36]:
+                    - generic [ref=e37]:
+                        - img [ref=e39]
+                        - heading "Item created successfully" [level=3] [ref=e42]
+                        - button "Dismiss" [ref=e44]:
+                            - img [ref=e45]
+                - generic [ref=e47]:
+                    - generic [ref=e48]:
+                        - generic [ref=e49]:
+                            - heading "PagePlugin" [level=1] [ref=e50]
+                            - paragraph [ref=e51]: Manage all pageplugin.
+                        - link "Add pageplugin" [ref=e53] [cursor=pointer]:
+                            - /url: /admin/plugins/page-plugin/new
+                    - table "PagePlugin list" [ref=e58]:
+                        - rowgroup [ref=e59]:
+                            - row "Slug Title Body Status Seo title Seo description Template Author id Widgets enabled Actions" [ref=e60]:
+                                - columnheader "Slug" [ref=e61]
+                                - columnheader "Title" [ref=e62]
+                                - columnheader "Body" [ref=e63]
+                                - columnheader "Status" [ref=e64]
+                                - columnheader "Seo title" [ref=e65]
+                                - columnheader "Seo description" [ref=e66]
+                                - columnheader "Template" [ref=e67]
+                                - columnheader "Author id" [ref=e68]
+                                - columnheader "Widgets enabled" [ref=e69]
+                                - columnheader "Actions" [ref=e70]:
+                                    - generic [ref=e71]: Actions
+                        - rowgroup [ref=e72]:
+                            - 'row "demo-builder Demo Page Builder {{widgets:main}} published Demo Demo page default admin true Edit , demo-builder Delete , demo-builder" [ref=e73]':
+                                - cell "demo-builder" [ref=e74]
+                                - cell "Demo Page Builder" [ref=e75]
+                                - 'cell "{{widgets:main}}" [ref=e76]'
+                                - cell "published" [ref=e77]
+                                - cell "Demo" [ref=e78]
+                                - cell "Demo page" [ref=e79]
+                                - cell "default" [ref=e80]
+                                - cell "admin" [ref=e81]
+                                - cell "true" [ref=e82]
+                                - cell "Edit , demo-builder Delete , demo-builder" [ref=e83]:
+                                    - link "Edit , demo-builder" [ref=e84] [cursor=pointer]:
+                                        - /url: /admin/plugins/page-plugin/0b99518b-818b-40b3-a7e6-81fad1d9032d
+                                        - text: Edit
+                                        - generic [ref=e85]: ", demo-builder"
+                                    - button "Delete , demo-builder" [ref=e87]:
+                                        - text: Delete
+                                        - generic [ref=e88]: ", demo-builder"
+                            - row "teste teste <div class=\"bg-white py-24 sm:py-32\"> <div class=\"mx-auto max-w-7xl px-6 lg:px… published teste a a 1 false Edit , teste Delete , teste" [ref=e89]:
+                                - cell "teste" [ref=e90]
+                                - cell "teste" [ref=e91]
+                                - cell "<div class=\"bg-white py-24 sm:py-32\"> <div class=\"mx-auto max-w-7xl px-6 lg:px…" [ref=e92]
+                                - cell "published" [ref=e93]
+                                - cell "teste" [ref=e94]
+                                - cell "a" [ref=e95]
+                                - cell "a" [ref=e96]
+                                - cell "1" [ref=e97]
+                                - cell "false" [ref=e98]
+                                - cell "Edit , teste Delete , teste" [ref=e99]:
+                                    - link "Edit , teste" [ref=e100] [cursor=pointer]:
+                                        - /url: /admin/plugins/page-plugin/315f7987-1a8c-4972-b5cc-6bbcbb21d065
+                                        - text: Edit
+                                        - generic [ref=e101]: ", teste"
+                                    - button "Delete , teste" [ref=e103]:
+                                        - text: Delete
+                                        - generic [ref=e104]: ", teste"
+                            - 'row "pagina-widgets Pagina com Widgets {{widgets:main}} published Pagina Widgets Teste de widgets default admin false Edit , pagina-widgets Delete , pagina-widgets" [ref=e105]':
+                                - cell "pagina-widgets" [ref=e106]
+                                - cell "Pagina com Widgets" [ref=e107]
+                                - 'cell "{{widgets:main}}" [ref=e108]'
+                                - cell "published" [ref=e109]
+                                - cell "Pagina Widgets" [ref=e110]
+                                - cell "Teste de widgets" [ref=e111]
+                                - cell "default" [ref=e112]
+                                - cell "admin" [ref=e113]
+                                - cell "false" [ref=e114]
+                                - cell "Edit , pagina-widgets Delete , pagina-widgets" [ref=e115]:
+                                    - link "Edit , pagina-widgets" [ref=e116] [cursor=pointer]:
+                                        - /url: /admin/plugins/page-plugin/5d629e47-573d-4884-8a74-1b166d9d5e5f
+                                        - text: Edit
+                                        - generic [ref=e117]: ", pagina-widgets"
+                                    - button "Delete , pagina-widgets" [ref=e119]:
+                                        - text: Delete
+                                        - generic [ref=e120]: ", pagina-widgets"
+                            - 'row "minha-pagina Minha Pagina de Teste {{widgets:main}} published Minha Pagina Pagina de teste default admin Edit , minha-pagina Delete , minha-pagina" [ref=e121]':
+                                - cell "minha-pagina" [ref=e122]
+                                - cell "Minha Pagina de Teste" [ref=e123]
+                                - 'cell "{{widgets:main}}" [ref=e124]'
+                                - cell "published" [ref=e125]
+                                - cell "Minha Pagina" [ref=e126]
+                                - cell "Pagina de teste" [ref=e127]
+                                - cell "default" [ref=e128]
+                                - cell "admin" [ref=e129]
+                                - cell [ref=e130]
+                                - cell "Edit , minha-pagina Delete , minha-pagina" [ref=e131]:
+                                    - link "Edit , minha-pagina" [ref=e132] [cursor=pointer]:
+                                        - /url: /admin/plugins/page-plugin/d75662ea-dc39-44d3-bcbc-da03e080b657
+                                        - text: Edit
+                                        - generic [ref=e133]: ", minha-pagina"
+                                    - button "Delete , minha-pagina" [ref=e135]:
+                                        - text: Delete
+                                        - generic [ref=e136]: ", minha-pagina"
+                            - 'row "teste-builder Teste Page Builder {{widgets:main}} published Teste Builder Teste default admin true Edit , teste-builder Delete , teste-builder" [ref=e137]':
+                                - cell "teste-builder" [ref=e138]
+                                - cell "Teste Page Builder" [ref=e139]
+                                - 'cell "{{widgets:main}}" [ref=e140]'
+                                - cell "published" [ref=e141]
+                                - cell "Teste Builder" [ref=e142]
+                                - cell "Teste" [ref=e143]
+                                - cell "default" [ref=e144]
+                                - cell "admin" [ref=e145]
+                                - cell "true" [ref=e146]
+                                - cell "Edit , teste-builder Delete , teste-builder" [ref=e147]:
+                                    - link "Edit , teste-builder" [ref=e148] [cursor=pointer]:
+                                        - /url: /admin/plugins/page-plugin/ecf4750b-9716-4a57-bceb-328087acf355
+                                        - text: Edit
+                                        - generic [ref=e149]: ", teste-builder"
+                                    - button "Delete , teste-builder" [ref=e151]:
+                                        - text: Delete
+                                        - generic [ref=e152]: ", teste-builder"
+            - complementary "Activity log" [ref=e153]:
+                - generic [ref=e154]:
+                    - img [ref=e155]
+                    - heading "No recent activity" [level=3] [ref=e157]
+                    - paragraph [ref=e158]: Activity will appear here as you use the admin panel.
