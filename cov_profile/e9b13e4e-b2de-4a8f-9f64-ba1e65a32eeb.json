@@ -1,0 +1,27 @@
+{
+  "scriptId": "345",
+  "url": "file:///Users/gruposeb/Library/Caches/deno/npm/registry.npmjs.org/react-dom/19.1.1/server.browser.js",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 583,
+          "count": 1
+        },
+        {
+          "startOffset": 68,
+          "endOffset": 204,
+          "count": 0
+        },
+        {
+          "startOffset": 550,
+          "endOffset": 582,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

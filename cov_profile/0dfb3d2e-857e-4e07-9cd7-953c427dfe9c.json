@@ -1,0 +1,39 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/embedded/embeddedRouterEngine.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 393,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "embeddedRouterEngine",
+      "ranges": [
+        {
+          "startOffset": 51,
+          "endOffset": 392,
+          "count": 7
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 122,
+          "endOffset": 388,
+          "count": 21
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/auth/userStore.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 828,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 122,
+          "endOffset": 140,
+          "count": 6
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get",
+      "ranges": [
+        {
+          "startOffset": 144,
+          "endOffset": 226,
+          "count": 11
+        },
+        {
+          "startOffset": 213,
+          "endOffset": 220,
+          "count": 5
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "set",
+      "ranges": [
+        {
+          "startOffset": 229,
+          "endOffset": 321,
+          "count": 5
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "delete",
+      "ranges": [
+        {
+          "startOffset": 324,
+          "endOffset": 410,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "seedDefaultAdmin",
+      "ranges": [
+        {
+          "startOffset": 469,
+          "endOffset": 827,
+          "count": 4
+        },
+        {
+          "startOffset": 571,
+          "endOffset": 578,
+          "count": 1
+        },
+        {
+          "startOffset": 578,
+          "endOffset": 826,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

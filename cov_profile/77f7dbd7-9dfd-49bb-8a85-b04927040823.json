@@ -1,0 +1,185 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/storage/schema.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3778,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "migrate",
+      "ranges": [
+        {
+          "startOffset": 630,
+          "endOffset": 781,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "migrate",
+      "ranges": [
+        {
+          "startOffset": 944,
+          "endOffset": 2115,
+          "count": 3
+        },
+        {
+          "startOffset": 1197,
+          "endOffset": 1206,
+          "count": 0
+        },
+        {
+          "startOffset": 1296,
+          "endOffset": 1315,
+          "count": 1
+        },
+        {
+          "startOffset": 1317,
+          "endOffset": 1326,
+          "count": 1
+        },
+        {
+          "startOffset": 1326,
+          "endOffset": 1389,
+          "count": 2
+        },
+        {
+          "startOffset": 1389,
+          "endOffset": 1394,
+          "count": 1
+        },
+        {
+          "startOffset": 1430,
+          "endOffset": 1435,
+          "count": 1
+        },
+        {
+          "startOffset": 1642,
+          "endOffset": 1647,
+          "count": 1
+        },
+        {
+          "startOffset": 2101,
+          "endOffset": 2109,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "migrate",
+      "ranges": [
+        {
+          "startOffset": 2249,
+          "endOffset": 2755,
+          "count": 6
+        },
+        {
+          "startOffset": 2473,
+          "endOffset": 2500,
+          "count": 5
+        },
+        {
+          "startOffset": 2502,
+          "endOffset": 2511,
+          "count": 1
+        },
+        {
+          "startOffset": 2511,
+          "endOffset": 2601,
+          "count": 5
+        },
+        {
+          "startOffset": 2601,
+          "endOffset": 2610,
+          "count": 1
+        },
+        {
+          "startOffset": 2610,
+          "endOffset": 2749,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getSchemaVersion",
+      "ranges": [
+        {
+          "startOffset": 2839,
+          "endOffset": 2955,
+          "count": 6
+        },
+        {
+          "startOffset": 2948,
+          "endOffset": 2952,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "setSchemaVersion",
+      "ranges": [
+        {
+          "startOffset": 2993,
+          "endOffset": 3086,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "runMigrations",
+      "ranges": [
+        {
+          "startOffset": 3333,
+          "endOffset": 3777,
+          "count": 6
+        },
+        {
+          "startOffset": 3469,
+          "endOffset": 3501,
+          "count": 0
+        },
+        {
+          "startOffset": 3653,
+          "endOffset": 3742,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 3538,
+          "endOffset": 3569,
+          "count": 18
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 3587,
+          "endOffset": 3616,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

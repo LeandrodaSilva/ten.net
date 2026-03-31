@@ -1,0 +1,61 @@
+{
+  "scriptId": "360",
+  "url": "file:///Users/gruposeb/www/ten.net/src/plugins/postsPlugin.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3908,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 478,
+          "endOffset": 506,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "PostsPlugin",
+      "ranges": [
+        {
+          "startOffset": 510,
+          "endOffset": 885,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "validate",
+      "ranges": [
+        {
+          "startOffset": 1114,
+          "endOffset": 2998,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "validateAsync",
+      "ranges": [
+        {
+          "startOffset": 3265,
+          "endOffset": 3905,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

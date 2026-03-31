@@ -1,0 +1,33 @@
+{
+  "scriptId": "573",
+  "url": "file:///Users/gruposeb/Library/Caches/deno/npm/registry.npmjs.org/react-dom/19.1.1/index.js",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1359,
+          "count": 1
+        },
+        {
+          "startOffset": 1080,
+          "endOffset": 1287,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "checkDCE",
+      "ranges": [
+        {
+          "startOffset": 15,
+          "endOffset": 1035,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

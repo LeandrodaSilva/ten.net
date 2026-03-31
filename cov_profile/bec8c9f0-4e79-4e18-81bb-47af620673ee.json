@@ -1,0 +1,226 @@
+{
+  "scriptId": "356",
+  "url": "file:///Users/gruposeb/www/ten.net/src/auth/authMiddleware.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3869,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "parseCookie",
+      "ranges": [
+        {
+          "startOffset": 342,
+          "endOffset": 491,
+          "count": 7
+        },
+        {
+          "startOffset": 466,
+          "endOffset": 476,
+          "count": 3
+        },
+        {
+          "startOffset": 477,
+          "endOffset": 488,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "methodToPermission",
+      "ranges": [
+        {
+          "startOffset": 535,
+          "endOffset": 783,
+          "count": 1
+        },
+        {
+          "startOffset": 609,
+          "endOffset": 644,
+          "count": 0
+        },
+        {
+          "startOffset": 649,
+          "endOffset": 660,
+          "count": 0
+        },
+        {
+          "startOffset": 665,
+          "endOffset": 701,
+          "count": 0
+        },
+        {
+          "startOffset": 706,
+          "endOffset": 743,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "extractResource",
+      "ranges": [
+        {
+          "startOffset": 1111,
+          "endOffset": 1459,
+          "count": 1
+        },
+        {
+          "startOffset": 1168,
+          "endOffset": 1189,
+          "count": 0
+        },
+        {
+          "startOffset": 1210,
+          "endOffset": 1456,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "hasPermission",
+      "ranges": [
+        {
+          "startOffset": 1545,
+          "endOffset": 1801,
+          "count": 1
+        },
+        {
+          "startOffset": 1660,
+          "endOffset": 1673,
+          "count": 0
+        },
+        {
+          "startOffset": 1741,
+          "endOffset": 1754,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "hasPermissionDynamic",
+      "ranges": [
+        {
+          "startOffset": 1875,
+          "endOffset": 2326,
+          "count": 1
+        },
+        {
+          "startOffset": 1955,
+          "endOffset": 2233,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "redirectToLogin",
+      "ranges": [
+        {
+          "startOffset": 2371,
+          "endOffset": 2506,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "authMiddleware",
+      "ranges": [
+        {
+          "startOffset": 2575,
+          "endOffset": 3868,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 2662,
+          "endOffset": 3865,
+          "count": 18
+        },
+        {
+          "startOffset": 2815,
+          "endOffset": 2955,
+          "count": 9
+        },
+        {
+          "startOffset": 2955,
+          "endOffset": 2969,
+          "count": 6
+        },
+        {
+          "startOffset": 2969,
+          "endOffset": 3051,
+          "count": 3
+        },
+        {
+          "startOffset": 3051,
+          "endOffset": 3056,
+          "count": 1
+        },
+        {
+          "startOffset": 3139,
+          "endOffset": 3164,
+          "count": 1
+        },
+        {
+          "startOffset": 3164,
+          "endOffset": 3231,
+          "count": 2
+        },
+        {
+          "startOffset": 3231,
+          "endOffset": 3256,
+          "count": 0
+        },
+        {
+          "startOffset": 3256,
+          "endOffset": 3348,
+          "count": 2
+        },
+        {
+          "startOffset": 3348,
+          "endOffset": 3693,
+          "count": 1
+        },
+        {
+          "startOffset": 3693,
+          "endOffset": 3771,
+          "count": 0
+        },
+        {
+          "startOffset": 3771,
+          "endOffset": 3864,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 2937,
+          "endOffset": 2952,
+          "count": 13
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "scriptId": "313",
+  "url": "file:///Users/gruposeb/www/ten.net/src/widgets/builtins/richText.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1081,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "render",
+      "ranges": [
+        {
+          "startOffset": 825,
+          "endOffset": 1077,
+          "count": 5
+        },
+        {
+          "startOffset": 974,
+          "endOffset": 979,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

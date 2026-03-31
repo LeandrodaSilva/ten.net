@@ -1,0 +1,92 @@
+{
+  "scriptId": "320",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/crud-list.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2152,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "CrudList",
+      "ranges": [
+        {
+          "startOffset": 310,
+          "endOffset": 2151,
+          "count": 6
+        },
+        {
+          "startOffset": 994,
+          "endOffset": 1104,
+          "count": 1
+        },
+        {
+          "startOffset": 1118,
+          "endOffset": 1201,
+          "count": 1
+        },
+        {
+          "startOffset": 1742,
+          "endOffset": 1921,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "href",
+      "ranges": [
+        {
+          "startOffset": 535,
+          "endOffset": 565,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "href",
+      "ranges": [
+        {
+          "startOffset": 614,
+          "endOffset": 651,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "confirmMessage",
+      "ranges": [
+        {
+          "startOffset": 700,
+          "endOffset": 780,
+          "count": 1
+        },
+        {
+          "startOffset": 739,
+          "endOffset": 753,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "children",
+      "ranges": [
+        {
+          "startOffset": 1976,
+          "endOffset": 2128,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

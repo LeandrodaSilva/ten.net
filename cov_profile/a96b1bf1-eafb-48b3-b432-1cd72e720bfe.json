@@ -1,0 +1,560 @@
+{
+  "scriptId": "310",
+  "url": "file:///Users/gruposeb/www/ten.net/src/plugins/adminPlugin.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 47666,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 1724,
+          "endOffset": 1888,
+          "count": 5
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "AdminPlugin",
+      "ranges": [
+        {
+          "startOffset": 1892,
+          "endOffset": 2058,
+          "count": 5
+        },
+        {
+          "startOffset": 1962,
+          "endOffset": 1967,
+          "count": 0
+        },
+        {
+          "startOffset": 2010,
+          "endOffset": 2017,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "_fieldType",
+      "ranges": [
+        {
+          "startOffset": 2113,
+          "endOffset": 2246,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_getFieldConfig",
+      "ranges": [
+        {
+          "startOffset": 2308,
+          "endOffset": 4882,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_buildFormFields",
+      "ranges": [
+        {
+          "startOffset": 4946,
+          "endOffset": 5381,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_buildNavItems",
+      "ranges": [
+        {
+          "startOffset": 5432,
+          "endOffset": 7140,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_addDashboardRoute",
+      "ranges": [
+        {
+          "startOffset": 7193,
+          "endOffset": 8088,
+          "count": 5
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "route.run",
+      "ranges": [
+        {
+          "startOffset": 7418,
+          "endOffset": 7812,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 7856,
+          "endOffset": 7951,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 7987,
+          "endOffset": 8058,
+          "count": 5
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "_addFaviconRoute",
+      "ranges": [
+        {
+          "startOffset": 8126,
+          "endOffset": 8656,
+          "count": 5
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "faviconRoute.run",
+      "ranges": [
+        {
+          "startOffset": 8397,
+          "endOffset": 8620,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "_listItems",
+      "ranges": [
+        {
+          "startOffset": 8717,
+          "endOffset": 9309,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_isReadonlyPlugin",
+      "ranges": [
+        {
+          "startOffset": 9386,
+          "endOffset": 9462,
+          "count": 8
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "_addPluginCrudRoutes",
+      "ranges": [
+        {
+          "startOffset": 9514,
+          "endOffset": 20275,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "indexRoute.run",
+      "ranges": [
+        {
+          "startOffset": 10004,
+          "endOffset": 10897,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "createRoute.run",
+      "ranges": [
+        {
+          "startOffset": 11186,
+          "endOffset": 13341,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "newRoute.run",
+      "ranges": [
+        {
+          "startOffset": 13682,
+          "endOffset": 14182,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "getRoute.run",
+      "ranges": [
+        {
+          "startOffset": 14479,
+          "endOffset": 15487,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "updateRoute.run",
+      "ranges": [
+        {
+          "startOffset": 15792,
+          "endOffset": 18536,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "deleteRoute.run",
+      "ranges": [
+        {
+          "startOffset": 18858,
+          "endOffset": 20240,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_addPreviewRoute",
+      "ranges": [
+        {
+          "startOffset": 20339,
+          "endOffset": 21630,
+          "count": 5
+        },
+        {
+          "startOffset": 20461,
+          "endOffset": 20468,
+          "count": 1
+        },
+        {
+          "startOffset": 20468,
+          "endOffset": 21629,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 20408,
+          "endOffset": 20437,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "previewRoute.run",
+      "ranges": [
+        {
+          "startOffset": 20718,
+          "endOffset": 21594,
+          "count": 2
+        },
+        {
+          "startOffset": 20788,
+          "endOffset": 20852,
+          "count": 0
+        },
+        {
+          "startOffset": 20923,
+          "endOffset": 21065,
+          "count": 1
+        },
+        {
+          "startOffset": 21067,
+          "endOffset": 21593,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "_blog404",
+      "ranges": [
+        {
+          "startOffset": 21691,
+          "endOffset": 22429,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_addBlogRoutes",
+      "ranges": [
+        {
+          "startOffset": 22501,
+          "endOffset": 31757,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_addPageBuilderRoutes",
+      "ranges": [
+        {
+          "startOffset": 32260,
+          "endOffset": 38621,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_logAudit",
+      "ranges": [
+        {
+          "startOffset": 38842,
+          "endOffset": 40599,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "_seedBuiltInRoles",
+      "ranges": [
+        {
+          "startOffset": 40666,
+          "endOffset": 42036,
+          "count": 5
+        },
+        {
+          "startOffset": 40798,
+          "endOffset": 42032,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 40737,
+          "endOffset": 40766,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "init",
+      "ranges": [
+        {
+          "startOffset": 42039,
+          "endOffset": 45345,
+          "count": 5
+        },
+        {
+          "startOffset": 42326,
+          "endOffset": 43006,
+          "count": 0
+        },
+        {
+          "startOffset": 43593,
+          "endOffset": 43649,
+          "count": 4
+        },
+        {
+          "startOffset": 43801,
+          "endOffset": 43850,
+          "count": 0
+        },
+        {
+          "startOffset": 44329,
+          "endOffset": 44554,
+          "count": 4
+        },
+        {
+          "startOffset": 44837,
+          "endOffset": 44856,
+          "count": 0
+        },
+        {
+          "startOffset": 44858,
+          "endOffset": 45213,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 42234,
+          "endOffset": 42252,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 43256,
+          "endOffset": 43288,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 44253,
+          "endOffset": 44281,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 44678,
+          "endOffset": 44707,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 44758,
+          "endOffset": 44792,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get plugins",
+      "ranges": [
+        {
+          "startOffset": 45416,
+          "endOffset": 45461,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get dynamicRegistry",
+      "ranges": [
+        {
+          "startOffset": 45533,
+          "endOffset": 45594,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "get blogRegistry",
+      "ranges": [
+        {
+          "startOffset": 45663,
+          "endOffset": 45718,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "injectHeadTags",
+      "ranges": [
+        {
+          "startOffset": 45962,
+          "endOffset": 46055,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "escapeHtml",
+      "ranges": [
+        {
+          "startOffset": 46107,
+          "endOffset": 46212,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "escapeAttrValue",
+      "ranges": [
+        {
+          "startOffset": 46272,
+          "endOffset": 46430,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "sanitizeHtml",
+      "ranges": [
+        {
+          "startOffset": 46966,
+          "endOffset": 47665,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

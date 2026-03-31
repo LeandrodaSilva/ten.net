@@ -1,0 +1,90 @@
+{
+  "scriptId": "360",
+  "url": "file:///Users/gruposeb/www/ten.net/src/auth/csrfMiddleware.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1501,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "generateCsrfToken",
+      "ranges": [
+        {
+          "startOffset": 98,
+          "endOffset": 274,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 225,
+          "endOffset": 261,
+          "count": 96
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "csrfMiddleware",
+      "ranges": [
+        {
+          "startOffset": 379,
+          "endOffset": 1499,
+          "count": 17
+        },
+        {
+          "startOffset": 474,
+          "endOffset": 488,
+          "count": 9
+        },
+        {
+          "startOffset": 488,
+          "endOffset": 599,
+          "count": 8
+        },
+        {
+          "startOffset": 599,
+          "endOffset": 613,
+          "count": 3
+        },
+        {
+          "startOffset": 613,
+          "endOffset": 732,
+          "count": 5
+        },
+        {
+          "startOffset": 732,
+          "endOffset": 767,
+          "count": 1
+        },
+        {
+          "startOffset": 769,
+          "endOffset": 793,
+          "count": 5
+        },
+        {
+          "startOffset": 793,
+          "endOffset": 1399,
+          "count": 0
+        },
+        {
+          "startOffset": 1401,
+          "endOffset": 1498,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

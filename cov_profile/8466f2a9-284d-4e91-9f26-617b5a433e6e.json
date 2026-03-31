@@ -1,0 +1,138 @@
+{
+  "scriptId": "344",
+  "url": "file:///Users/gruposeb/www/ten.net/src/models/Route.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3352,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 201,
+          "endOffset": 549,
+          "count": 542
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "Route",
+      "ranges": [
+        {
+          "startOffset": 580,
+          "endOffset": 777,
+          "count": 542
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "set method",
+      "ranges": [
+        {
+          "startOffset": 823,
+          "endOffset": 1058,
+          "count": 542
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get method",
+      "ranges": [
+        {
+          "startOffset": 1093,
+          "endOffset": 1136,
+          "count": 16
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get isAdmin",
+      "ranges": [
+        {
+          "startOffset": 1187,
+          "endOffset": 1298,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "get run",
+      "ranges": [
+        {
+          "startOffset": 1344,
+          "endOffset": 1381,
+          "count": 29
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "set run",
+      "ranges": [
+        {
+          "startOffset": 1432,
+          "endOffset": 1469,
+          "count": 540
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "set page",
+      "ranges": [
+        {
+          "startOffset": 1515,
+          "endOffset": 1563,
+          "count": 12
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get page",
+      "ranges": [
+        {
+          "startOffset": 1605,
+          "endOffset": 1651,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "get isView",
+      "ranges": [
+        {
+          "startOffset": 1733,
+          "endOffset": 1802,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "import",
+      "ranges": [
+        {
+          "startOffset": 2951,
+          "endOffset": 3349,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

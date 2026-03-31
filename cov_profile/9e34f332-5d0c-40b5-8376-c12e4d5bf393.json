@@ -1,0 +1,196 @@
+{
+  "scriptId": "309",
+  "url": "file:///Users/gruposeb/www/ten.net/src/test/_build_test_helpers.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3700,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertNoRawTemplateVars",
+      "ranges": [
+        {
+          "startOffset": 169,
+          "endOffset": 353,
+          "count": 2
+        },
+        {
+          "startOffset": 343,
+          "endOffset": 347,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertHomePage",
+      "ranges": [
+        {
+          "startOffset": 361,
+          "endOffset": 622,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertHelloPage",
+      "ranges": [
+        {
+          "startOffset": 630,
+          "endOffset": 943,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertFormGet",
+      "ranges": [
+        {
+          "startOffset": 951,
+          "endOffset": 1158,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertFormPost",
+      "ranges": [
+        {
+          "startOffset": 1166,
+          "endOffset": 1583,
+          "count": 1
+        },
+        {
+          "startOffset": 1509,
+          "endOffset": 1514,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertFormCongrats",
+      "ranges": [
+        {
+          "startOffset": 1591,
+          "endOffset": 1904,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertApiHello",
+      "ranges": [
+        {
+          "startOffset": 1912,
+          "endOffset": 2108,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertApiHelloDynamic",
+      "ranges": [
+        {
+          "startOffset": 2116,
+          "endOffset": 2331,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertAdminPage",
+      "ranges": [
+        {
+          "startOffset": 2339,
+          "endOffset": 2595,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "assertAdminLoginPage",
+      "ranges": [
+        {
+          "startOffset": 2603,
+          "endOffset": 2882,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "assertFavicon",
+      "ranges": [
+        {
+          "startOffset": 2890,
+          "endOffset": 3116,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "assert404",
+      "ranges": [
+        {
+          "startOffset": 3124,
+          "endOffset": 3323,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "waitForServer",
+      "ranges": [
+        {
+          "startOffset": 3331,
+          "endOffset": 3699,
+          "count": 1
+        },
+        {
+          "startOffset": 3438,
+          "endOffset": 3612,
+          "count": 2
+        },
+        {
+          "startOffset": 3489,
+          "endOffset": 3518,
+          "count": 1
+        },
+        {
+          "startOffset": 3521,
+          "endOffset": 3608,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 3575,
+          "endOffset": 3600,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

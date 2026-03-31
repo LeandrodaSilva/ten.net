@@ -1,0 +1,28 @@
+{
+  "scriptId": "355",
+  "url": "file:///Users/gruposeb/www/ten.net/src/utils/pathNamedParams.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 915,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "pathNamedParams",
+      "ranges": [
+        {
+          "startOffset": 536,
+          "endOffset": 914,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

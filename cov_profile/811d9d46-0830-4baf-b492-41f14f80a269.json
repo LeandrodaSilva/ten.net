@@ -1,0 +1,48 @@
+{
+  "scriptId": "310",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/button.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1268,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "Button",
+      "ranges": [
+        {
+          "startOffset": 717,
+          "endOffset": 1267,
+          "count": 34
+        },
+        {
+          "startOffset": 927,
+          "endOffset": 981,
+          "count": 1
+        },
+        {
+          "startOffset": 982,
+          "endOffset": 986,
+          "count": 33
+        },
+        {
+          "startOffset": 1002,
+          "endOffset": 1132,
+          "count": 10
+        },
+        {
+          "startOffset": 1132,
+          "endOffset": 1266,
+          "count": 24
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

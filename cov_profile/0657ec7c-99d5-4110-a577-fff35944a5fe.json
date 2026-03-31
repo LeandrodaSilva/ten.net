@@ -1,0 +1,28 @@
+{
+  "scriptId": "315",
+  "url": "file:///Users/gruposeb/www/ten.net/src/routerEngine.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2714,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "routerEngine",
+      "ranges": [
+        {
+          "startOffset": 1436,
+          "endOffset": 2713,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

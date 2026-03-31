@@ -1,0 +1,39 @@
+{
+  "scriptId": "309",
+  "url": "file:///Users/gruposeb/www/ten.net/src/build/codeGenerator.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1614,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "generateCompiledApp",
+      "ranges": [
+        {
+          "startOffset": 7,
+          "endOffset": 1172,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "generateCompiledAppStandalone",
+      "ranges": [
+        {
+          "startOffset": 1180,
+          "endOffset": 1613,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

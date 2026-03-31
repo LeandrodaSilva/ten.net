@@ -1,0 +1,81 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/models/Permission.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1015,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "parsePermissions",
+      "ranges": [
+        {
+          "startOffset": 125,
+          "endOffset": 428,
+          "count": 9
+        },
+        {
+          "startOffset": 236,
+          "endOffset": 246,
+          "count": 1
+        },
+        {
+          "startOffset": 246,
+          "endOffset": 399,
+          "count": 6
+        },
+        {
+          "startOffset": 399,
+          "endOffset": 426,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 272,
+          "endOffset": 392,
+          "count": 16
+        },
+        {
+          "startOffset": 299,
+          "endOffset": 392,
+          "count": 14
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "serializePermissions",
+      "ranges": [
+        {
+          "startOffset": 506,
+          "endOffset": 578,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "buildPermissionKey",
+      "ranges": [
+        {
+          "startOffset": 709,
+          "endOffset": 822,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -100,13 +100,16 @@ export function DataTable({
                           {columns.map((col, colIndex) => (
                             <td
                               key={col.key}
-                              className={`px-3 py-4 text-sm whitespace-nowrap ${
+                              className={`px-3 py-4 text-sm max-w-xs truncate overflow-hidden text-ellipsis ${
                                 colIndex === 0
                                   ? "font-medium text-gray-900 pl-4 sm:pl-6"
                                   : "text-gray-500"
                               }`}
                             >
-                              {String(row[col.key] ?? "")}
+                              {(() => {
+                                const v = String(row[col.key] ?? "");
+                                return v.length > 80 ? v.slice(0, 80) + "…" : v;
+                              })()}
                             </td>
                           ))}
                           {actions && actions.length > 0 && (

@@ -1,0 +1,28 @@
+{
+  "scriptId": "343",
+  "url": "file:///Users/gruposeb/www/ten.net/src/utils/getRegexRoute.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1026,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getRegexRoute",
+      "ranges": [
+        {
+          "startOffset": 745,
+          "endOffset": 1025,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

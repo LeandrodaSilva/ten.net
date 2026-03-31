@@ -1,0 +1,28 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/utils/toSlug.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 708,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "toSlug",
+      "ranges": [
+        {
+          "startOffset": 69,
+          "endOffset": 707,
+          "count": 19
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

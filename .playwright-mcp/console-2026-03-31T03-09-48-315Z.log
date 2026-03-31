@@ -1,0 +1,30 @@
+[     511ms] [ERROR] Failed to load resource: net::ERR_INVALID_HANDLE @ https://www.googletagmanager.com/gtag/js?id=G-66D9CB2YXQ:0
+[    2612ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:328480
+[    2729ms] [WARNING] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information. @ http://localhost:3000/static/js/bundle.js:43142
+[    2786ms] [ERROR] Expectation Violation: Duplicate atom key "matriculasSelector". This is a FATAL ERROR in
+      production. But it is safe to ignore this warning if it occurred because of
+      hot module replacement.
+    at expectationViolation (http://localhost:3000/static/js/bundle.js:359555:17)
+    at checkForDuplicateAtomKey (http://localhost:3000/static/js/bundle.js:359644:9)
+    at registerNode (http://localhost:3000/static/js/bundle.js:359652:5)
+    at selector (http://localhost:3000/static/js/bundle.js:366270:26)
+    at ./src/recoil/selectors/matriculasFilterSelector.ts (http://localhost:3000/static/js/bundle.js:498500:80)
+    at options.factory (http://localhost:3000/static/js/bundle.js:514892:31)
+    at __webpack_require__ (http://localhost:3000/static/js/bundle.js:514270:32)
+    at fn (http://localhost:3000/static/js/bundle.js:514551:21)
+    at ./src/pages/CadastroConcluido/Filtros.tsx (http://localhost:3000/static/js/bundle.js:471708:101)
+    at options.factory (http://localhost:3000/static/js/bundle.js:514892:31) @ http://localhost:3000/static/js/bundle.js:359556
+[    2810ms] [WARNING] Datadog Browser SDK: Ignoring Premium Sample Rate because Session Replay Sample Rate is set @ http://localhost:3000/static/js/bundle.js:21381
+[    2923ms] [WARNING] Limpando dados do usuário... @ http://localhost:3000/static/js/bundle.js:419171
+[    2925ms] [WARNING] Dados do usuário limpos com sucesso! @ http://localhost:3000/static/js/bundle.js:419197
+[   12840ms] [LOG] Download the Apollo DevTools for a better development experience: %s https://chrome.google.com/webstore/detail/apollo-client-developer-t/jdkknkkbebbapilgoeccciglkfbmbnfm @ http://localhost:3000/static/js/bundle.js:383293
+[  440122ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[  442163ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[  446208ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[  454268ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[  470346ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[  502425ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[  566445ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[  694552ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[  950581ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433
+[ 1462641ms] [ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/static/js/bundle.js:343433

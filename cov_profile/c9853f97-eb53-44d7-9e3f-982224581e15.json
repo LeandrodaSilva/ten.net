@@ -1,0 +1,28 @@
+{
+  "scriptId": "351",
+  "url": "file:///Users/gruposeb/www/ten.net/src/auth/htmlEscape.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 219,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "escapeHtml",
+      "ranges": [
+        {
+          "startOffset": 61,
+          "endOffset": 218,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

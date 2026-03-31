@@ -1,0 +1,33 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/build/mimeTypes.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 983,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getMimeType",
+      "ranges": [
+        {
+          "startOffset": 823,
+          "endOffset": 982,
+          "count": 19
+        },
+        {
+          "startOffset": 950,
+          "endOffset": 979,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

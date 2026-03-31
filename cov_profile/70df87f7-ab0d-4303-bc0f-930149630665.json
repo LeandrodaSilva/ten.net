@@ -1,0 +1,61 @@
+{
+  "scriptId": "356",
+  "url": "file:///Users/gruposeb/www/ten.net/src/routing/widgetPageHandler.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3057,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "renderWidgetPage",
+      "ranges": [
+        {
+          "startOffset": 908,
+          "endOffset": 1861,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "extractPlaceholderNames",
+      "ranges": [
+        {
+          "startOffset": 1954,
+          "endOffset": 2215,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "groupByPlaceholder",
+      "ranges": [
+        {
+          "startOffset": 2369,
+          "endOffset": 2585,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "renderPlaceholder",
+      "ranges": [
+        {
+          "startOffset": 2712,
+          "endOffset": 3056,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

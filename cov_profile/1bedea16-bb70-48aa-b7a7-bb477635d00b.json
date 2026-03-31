@@ -1,0 +1,125 @@
+{
+  "scriptId": "417",
+  "url": "file:///Users/gruposeb/www/ten.net/src/storage/schema.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3778,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "migrate",
+      "ranges": [
+        {
+          "startOffset": 630,
+          "endOffset": 781,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "migrate",
+      "ranges": [
+        {
+          "startOffset": 944,
+          "endOffset": 2115,
+          "count": 9
+        },
+        {
+          "startOffset": 1114,
+          "endOffset": 2109,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "migrate",
+      "ranges": [
+        {
+          "startOffset": 2249,
+          "endOffset": 2755,
+          "count": 9
+        },
+        {
+          "startOffset": 2419,
+          "endOffset": 2749,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getSchemaVersion",
+      "ranges": [
+        {
+          "startOffset": 2839,
+          "endOffset": 2955,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "setSchemaVersion",
+      "ranges": [
+        {
+          "startOffset": 2993,
+          "endOffset": 3086,
+          "count": 27
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "runMigrations",
+      "ranges": [
+        {
+          "startOffset": 3333,
+          "endOffset": 3777,
+          "count": 9
+        },
+        {
+          "startOffset": 3469,
+          "endOffset": 3501,
+          "count": 0
+        },
+        {
+          "startOffset": 3653,
+          "endOffset": 3742,
+          "count": 27
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 3538,
+          "endOffset": 3569,
+          "count": 27
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 3587,
+          "endOffset": 3616,
+          "count": 18
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

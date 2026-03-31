@@ -101,14 +101,22 @@ Quando o CI falha, analise o erro e delegue:
 
 ### 5. Merge de PRs
 
-Apos todos os checks passarem:
+**CRITICO: NUNCA faça merge sem CI verde no GitHub.**
 
-1. `gh pr review --approve` (se voce e o reviewer)
-2. Aguarde aprovacao do owner se necessario
-3. `gh pr merge --squash` (preferido para manter historico limpo) OU
-   `gh pr merge --merge` (se o PR tem commits semanticos importantes)
+Antes de fazer merge:
+
+1. Apos push, AGUARDE o CI do GitHub rodar: `gh pr checks <PR_NUMBER> --watch`
+2. Se CI falhar no GitHub, analise o erro: `gh run view --log-failed`
+3. Delegue correcao ao agent responsavel e AGUARDE fix + novo push
+4. Somente apos CI verde no GitHub:
+   - `gh pr review --approve` (se voce e o reviewer)
+   - Aguarde aprovacao do owner se necessario
+   - `gh pr merge --squash` (preferido para manter historico limpo) OU
+     `gh pr merge --merge` (se o PR tem commits semanticos importantes)
 
 ### 6. Releases
+
+**CRITICO: NUNCA crie tag/release sem CI verde no GitHub.**
 
 O processo de release do Ten.net:
 
@@ -118,13 +126,18 @@ O processo de release do Ten.net:
    - `major` (X.0.0) — breaking changes
 2. Atualize a versao em `deno.json` (campo `version`)
 3. Crie commit: `release: vX.Y.Z`
-4. Crie tag: `git tag vX.Y.Z`
-5. Push: `git push && git push --tags`
-6. O CI automaticamente:
-   - Roda checks
+4. Push: `git push` (SEM tag ainda)
+5. **AGUARDE CI do GitHub passar**:
+   `gh run list --branch main --limit 1 --json status`
+6. Se CI falhar, delegue correcao e AGUARDE. NAO prossiga.
+7. Somente apos CI verde, crie a tag: `git tag vX.Y.Z && git push --tags`
+8. O CI automaticamente:
+   - Roda checks na tag
    - Publica no JSR via `deno publish`
    - Cria GitHub Release
-7. Verifique que o JSR score esta OK (use o skill `/jsr-score` se disponivel)
+9. **MONITORE o CI da tag**: `gh run list --limit 1 --json status,conclusion`
+10. Se CI da tag falhar, reporte IMEDIATAMENTE ao team-lead com o link do run
+11. Verifique que o JSR score esta OK (use o skill `/jsr-score` se disponivel)
 
 ### 7. Seguranca (DevSecOps)
 

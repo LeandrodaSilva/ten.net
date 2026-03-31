@@ -1,0 +1,28 @@
+{
+  "scriptId": "311",
+  "url": "file:///Users/gruposeb/www/ten.net/src/widgets/builtins/index.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 891,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "registerBuiltinWidgets",
+      "ranges": [
+        {
+          "startOffset": 731,
+          "endOffset": 890,
+          "count": 7
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

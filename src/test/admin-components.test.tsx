@@ -257,6 +257,34 @@ describe("DataTable component", () => {
     );
     assertStringIncludes(html, "Posts List list");
   });
+
+  it("should truncate long cell values at 80 characters", () => {
+    const longValue = "A".repeat(100);
+    const html = renderToString(
+      <DataTable
+        title="Items"
+        description="items"
+        columns={[{ key: "name", label: "Name" }]}
+        rows={[{ id: "1", name: longValue }]}
+      />,
+    );
+    assertStringIncludes(html, "A".repeat(80) + "\u2026");
+    assertEquals(html.includes("A".repeat(100)), false);
+  });
+
+  it("should add overflow-x-auto and truncate classes for horizontal scroll", () => {
+    const html = renderToString(
+      <DataTable
+        title="Items"
+        description="items"
+        columns={columns}
+        rows={[{ id: "1", name: "X", status: "ok" }]}
+      />,
+    );
+    assertStringIncludes(html, "overflow-x-auto");
+    assertStringIncludes(html, "max-w-xs");
+    assertStringIncludes(html, "truncate");
+  });
 });
 
 // --- FormField ---
@@ -307,6 +335,34 @@ describe("FormField component", () => {
       <FormField name="active" label="Active" type="checkbox" />,
     );
     assertStringIncludes(html, 'type="checkbox"');
+  });
+
+  it("should render checkbox with hidden field value=false and checkbox value=true", () => {
+    const html = renderToString(
+      <FormField
+        name="widgets_enabled"
+        label="Enable Widgets"
+        type="checkbox"
+        value="true"
+      />,
+    );
+    assertStringIncludes(html, 'type="hidden"');
+    assertStringIncludes(html, 'value="false"');
+    assertStringIncludes(html, 'value="true"');
+    assertStringIncludes(html, "checked");
+  });
+
+  it("should render checkbox unchecked when value is not true", () => {
+    const html = renderToString(
+      <FormField
+        name="widgets_enabled"
+        label="Enable Widgets"
+        type="checkbox"
+        value="false"
+      />,
+    );
+    assertStringIncludes(html, 'type="hidden"');
+    assertEquals(html.includes("checked"), false);
   });
 
   it("should render password input when type is password", () => {

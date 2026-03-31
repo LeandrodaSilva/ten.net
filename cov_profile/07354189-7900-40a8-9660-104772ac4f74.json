@@ -1,0 +1,22 @@
+{
+  "scriptId": "309",
+  "url": "file:///Users/gruposeb/Library/Caches/deno/npm/registry.npmjs.org/react/19.1.1/index.js",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2566,
+          "count": 1
+        },
+        {
+          "startOffset": 189,
+          "endOffset": 319,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

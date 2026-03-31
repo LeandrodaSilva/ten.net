@@ -1,0 +1,28 @@
+{
+  "scriptId": "371",
+  "url": "file:///Users/gruposeb/www/ten.net/src/layout/dashboard.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 4874,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "Dashboard",
+      "ranges": [
+        {
+          "startOffset": 198,
+          "endOffset": 4873,
+          "count": 7
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

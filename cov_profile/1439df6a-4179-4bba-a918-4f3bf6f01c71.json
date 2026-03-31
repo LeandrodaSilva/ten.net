@@ -1,0 +1,136 @@
+{
+  "scriptId": "309",
+  "url": "file:///Users/gruposeb/www/ten.net/src/widgets/builtins/image.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2511,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "render",
+      "ranges": [
+        {
+          "startOffset": 977,
+          "endOffset": 1986,
+          "count": 4
+        },
+        {
+          "startOffset": 1041,
+          "endOffset": 1046,
+          "count": 0
+        },
+        {
+          "startOffset": 1090,
+          "endOffset": 1095,
+          "count": 0
+        },
+        {
+          "startOffset": 1208,
+          "endOffset": 1213,
+          "count": 2
+        },
+        {
+          "startOffset": 1379,
+          "endOffset": 1434,
+          "count": 2
+        },
+        {
+          "startOffset": 1434,
+          "endOffset": 1445,
+          "count": 0
+        },
+        {
+          "startOffset": 1446,
+          "endOffset": 1527,
+          "count": 2
+        },
+        {
+          "startOffset": 1470,
+          "endOffset": 1481,
+          "count": 0
+        },
+        {
+          "startOffset": 1505,
+          "endOffset": 1515,
+          "count": 0
+        },
+        {
+          "startOffset": 1689,
+          "endOffset": 1739,
+          "count": 0
+        },
+        {
+          "startOffset": 1740,
+          "endOffset": 1748,
+          "count": 2
+        },
+        {
+          "startOffset": 1782,
+          "endOffset": 1880,
+          "count": 0
+        },
+        {
+          "startOffset": 1881,
+          "endOffset": 1885,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "escapeHtml",
+      "ranges": [
+        {
+          "startOffset": 1990,
+          "endOffset": 2095,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "escapeAttr",
+      "ranges": [
+        {
+          "startOffset": 2096,
+          "endOffset": 2225,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "sanitizeUrl",
+      "ranges": [
+        {
+          "startOffset": 2295,
+          "endOffset": 2510,
+          "count": 8
+        },
+        {
+          "startOffset": 2407,
+          "endOffset": 2437,
+          "count": 6
+        },
+        {
+          "startOffset": 2438,
+          "endOffset": 2472,
+          "count": 5
+        },
+        {
+          "startOffset": 2474,
+          "endOffset": 2509,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

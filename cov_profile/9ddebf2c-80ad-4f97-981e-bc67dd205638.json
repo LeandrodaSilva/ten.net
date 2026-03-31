@@ -1,0 +1,48 @@
+{
+  "scriptId": "299",
+  "url": "file:///Users/gruposeb/www/ten.net/src/cli.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1615,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "main",
+      "ranges": [
+        {
+          "startOffset": 411,
+          "endOffset": 1578,
+          "count": 1
+        },
+        {
+          "startOffset": 886,
+          "endOffset": 942,
+          "count": 0
+        },
+        {
+          "startOffset": 943,
+          "endOffset": 954,
+          "count": 0
+        },
+        {
+          "startOffset": 972,
+          "endOffset": 1048,
+          "count": 0
+        },
+        {
+          "startOffset": 1050,
+          "endOffset": 1576,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

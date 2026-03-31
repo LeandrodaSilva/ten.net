@@ -1,0 +1,109 @@
+{
+  "scriptId": "347",
+  "url": "file:///Users/gruposeb/www/ten.net/src/utils/evaluateModuleCode.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2734,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 604,
+          "endOffset": 623,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "evaluateModuleCode",
+      "ranges": [
+        {
+          "startOffset": 1027,
+          "endOffset": 2733,
+          "count": 3
+        },
+        {
+          "startOffset": 2328,
+          "endOffset": 2348,
+          "count": 2
+        },
+        {
+          "startOffset": 2348,
+          "endOffset": 2732,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1312,
+          "endOffset": 1420,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1528,
+          "endOffset": 1608,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1745,
+          "endOffset": 2085,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 2208,
+          "endOffset": 2297,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 2489,
+          "endOffset": 2581,
+          "count": 1
+        },
+        {
+          "startOffset": 2540,
+          "endOffset": 2581,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

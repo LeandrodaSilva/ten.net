@@ -1,0 +1,43 @@
+{
+  "scriptId": "388",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/alert.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3523,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "Alert",
+      "ranges": [
+        {
+          "startOffset": 916,
+          "endOffset": 3522,
+          "count": 1
+        },
+        {
+          "startOffset": 1521,
+          "endOffset": 1814,
+          "count": 0
+        },
+        {
+          "startOffset": 2471,
+          "endOffset": 2600,
+          "count": 0
+        },
+        {
+          "startOffset": 2645,
+          "endOffset": 3499,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

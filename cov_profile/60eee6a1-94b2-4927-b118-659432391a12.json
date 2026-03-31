@@ -1,0 +1,104 @@
+{
+  "scriptId": "314",
+  "url": "file:///Users/gruposeb/www/ten.net/src/auth/authMiddleware.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3869,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "parseCookie",
+      "ranges": [
+        {
+          "startOffset": 342,
+          "endOffset": 491,
+          "count": 2
+        },
+        {
+          "startOffset": 466,
+          "endOffset": 476,
+          "count": 1
+        },
+        {
+          "startOffset": 477,
+          "endOffset": 488,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "methodToPermission",
+      "ranges": [
+        {
+          "startOffset": 535,
+          "endOffset": 783,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "extractResource",
+      "ranges": [
+        {
+          "startOffset": 1111,
+          "endOffset": 1459,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "hasPermission",
+      "ranges": [
+        {
+          "startOffset": 1545,
+          "endOffset": 1801,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "hasPermissionDynamic",
+      "ranges": [
+        {
+          "startOffset": 1875,
+          "endOffset": 2326,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "redirectToLogin",
+      "ranges": [
+        {
+          "startOffset": 2371,
+          "endOffset": 2506,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "authMiddleware",
+      "ranges": [
+        {
+          "startOffset": 2575,
+          "endOffset": 3868,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}
