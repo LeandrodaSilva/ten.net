@@ -1,0 +1,273 @@
+{
+  "scriptId": "357",
+  "url": "file:///Users/gruposeb/Library/Caches/deno/npm/registry.npmjs.org/react-dom/19.1.1/cjs/react-dom.development.js",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 17673,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 299,
+          "endOffset": 17668,
+          "count": 1
+        },
+        {
+          "startOffset": 2937,
+          "endOffset": 3034,
+          "count": 0
+        },
+        {
+          "startOffset": 3035,
+          "endOffset": 3111,
+          "count": 0
+        },
+        {
+          "startOffset": 4024,
+          "endOffset": 4205,
+          "count": 0
+        },
+        {
+          "startOffset": 17491,
+          "endOffset": 17587,
+          "count": 0
+        },
+        {
+          "startOffset": 17588,
+          "endOffset": 17663,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "noop",
+      "ranges": [
+        {
+          "startOffset": 317,
+          "endOffset": 335,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "testStringCoercion",
+      "ranges": [
+        {
+          "startOffset": 340,
+          "endOffset": 407,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "createPortal$1",
+      "ranges": [
+        {
+          "startOffset": 412,
+          "endOffset": 1339,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "getCrossOriginStringAs",
+      "ranges": [
+        {
+          "startOffset": 1344,
+          "endOffset": 1524,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "getValueDescriptorExpectingObjectForWarning",
+      "ranges": [
+        {
+          "startOffset": 1529,
+          "endOffset": 1813,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "getValueDescriptorExpectingEnumForWarning",
+      "ranges": [
+        {
+          "startOffset": 1818,
+          "endOffset": 2260,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "resolveDispatcher",
+      "ranges": [
+        {
+          "startOffset": 2265,
+          "endOffset": 2878,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "r",
+      "ranges": [
+        {
+          "startOffset": 3212,
+          "endOffset": 3382,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.createPortal",
+      "ranges": [
+        {
+          "startOffset": 4326,
+          "endOffset": 4736,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.flushSync",
+      "ranges": [
+        {
+          "startOffset": 4762,
+          "endOffset": 5373,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.preconnect",
+      "ranges": [
+        {
+          "startOffset": 5400,
+          "endOffset": 6825,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.prefetchDNS",
+      "ranges": [
+        {
+          "startOffset": 6853,
+          "endOffset": 8331,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.preinit",
+      "ranges": [
+        {
+          "startOffset": 8355,
+          "endOffset": 10557,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.preinitModule",
+      "ranges": [
+        {
+          "startOffset": 10587,
+          "endOffset": 13038,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.preload",
+      "ranges": [
+        {
+          "startOffset": 13062,
+          "endOffset": 15313,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.preloadModule",
+      "ranges": [
+        {
+          "startOffset": 15343,
+          "endOffset": 16964,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.requestFormReset",
+      "ranges": [
+        {
+          "startOffset": 16997,
+          "endOffset": 17047,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.unstable_batchedUpdates",
+      "ranges": [
+        {
+          "startOffset": 17087,
+          "endOffset": 17131,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.useFormState",
+      "ranges": [
+        {
+          "startOffset": 17160,
+          "endOffset": 17290,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "process.env.NODE_ENV.exports.useFormStatus",
+      "ranges": [
+        {
+          "startOffset": 17320,
+          "endOffset": 17399,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

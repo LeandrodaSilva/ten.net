@@ -1,0 +1,28 @@
+{
+  "scriptId": "339",
+  "url": "file:///Users/gruposeb/www/ten.net/src/viewEngine.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1755,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "viewEngine",
+      "ranges": [
+        {
+          "startOffset": 202,
+          "endOffset": 1754,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

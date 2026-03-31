@@ -1,0 +1,17 @@
+{
+  "scriptId": "309",
+  "url": "file:///Users/gruposeb/www/ten.net/src/version.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 102,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

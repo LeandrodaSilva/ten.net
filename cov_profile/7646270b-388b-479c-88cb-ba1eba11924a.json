@@ -1,0 +1,28 @@
+{
+  "scriptId": "377",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/form-field.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3878,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "FormField",
+      "ranges": [
+        {
+          "startOffset": 268,
+          "endOffset": 3877,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

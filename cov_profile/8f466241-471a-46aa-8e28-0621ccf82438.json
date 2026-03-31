@@ -1,0 +1,83 @@
+{
+  "scriptId": "386",
+  "url": "file:///Users/gruposeb/www/ten.net/src/models/Storage.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1312,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 134,
+          "endOffset": 152,
+          "count": 60
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get",
+      "ranges": [
+        {
+          "startOffset": 156,
+          "endOffset": 226,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "list",
+      "ranges": [
+        {
+          "startOffset": 229,
+          "endOffset": 713,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "set",
+      "ranges": [
+        {
+          "startOffset": 716,
+          "endOffset": 823,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "delete",
+      "ranges": [
+        {
+          "startOffset": 826,
+          "endOffset": 894,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "count",
+      "ranges": [
+        {
+          "startOffset": 897,
+          "endOffset": 1309,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

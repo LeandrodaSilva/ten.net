@@ -1,0 +1,59 @@
+{
+  "scriptId": "340",
+  "url": "file:///Users/gruposeb/www/ten.net/src/utils/getRegexRoute.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1026,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getRegexRoute",
+      "ranges": [
+        {
+          "startOffset": 745,
+          "endOffset": 1025,
+          "count": 20
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 816,
+          "endOffset": 974,
+          "count": 40
+        },
+        {
+          "startOffset": 839,
+          "endOffset": 878,
+          "count": 20
+        },
+        {
+          "startOffset": 878,
+          "endOffset": 898,
+          "count": 0
+        },
+        {
+          "startOffset": 900,
+          "endOffset": 915,
+          "count": 0
+        },
+        {
+          "startOffset": 915,
+          "endOffset": 973,
+          "count": 20
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

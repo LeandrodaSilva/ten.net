@@ -1,0 +1,17 @@
+{
+  "scriptId": "339",
+  "url": "file:///Users/gruposeb/www/ten.net/src/auth/types.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1343,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

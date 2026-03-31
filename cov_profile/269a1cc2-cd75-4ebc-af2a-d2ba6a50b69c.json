@@ -1,0 +1,121 @@
+{
+  "scriptId": "305",
+  "url": "file:///Users/gruposeb/www/ten.net/src/test/embeddedRouterEngine.test.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3413,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "createTestManifest",
+      "ranges": [
+        {
+          "startOffset": 169,
+          "endOffset": 1247,
+          "count": 7
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1281,
+          "endOffset": 3410,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1337,
+          "endOffset": 1476,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1525,
+          "endOffset": 1764,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1810,
+          "endOffset": 2321,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 2361,
+          "endOffset": 2594,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 2641,
+          "endOffset": 2878,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 2923,
+          "endOffset": 3173,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 3222,
+          "endOffset": 3406,
+          "count": 1
+        },
+        {
+          "startOffset": 3353,
+          "endOffset": 3402,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

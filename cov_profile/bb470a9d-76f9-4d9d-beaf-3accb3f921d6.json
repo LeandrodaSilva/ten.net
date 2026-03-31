@@ -1,0 +1,172 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/build/collector.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3275,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "collectManifest",
+      "ranges": [
+        {
+          "startOffset": 400,
+          "endOffset": 772,
+          "count": 5
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "collectRoutes",
+      "ranges": [
+        {
+          "startOffset": 773,
+          "endOffset": 2212,
+          "count": 5
+        },
+        {
+          "startOffset": 921,
+          "endOffset": 1636,
+          "count": 85
+        },
+        {
+          "startOffset": 951,
+          "endOffset": 960,
+          "count": 50
+        },
+        {
+          "startOffset": 960,
+          "endOffset": 1133,
+          "count": 35
+        },
+        {
+          "startOffset": 1133,
+          "endOffset": 1168,
+          "count": 10
+        },
+        {
+          "startOffset": 1168,
+          "endOffset": 1277,
+          "count": 35
+        },
+        {
+          "startOffset": 1277,
+          "endOffset": 1311,
+          "count": 15
+        },
+        {
+          "startOffset": 1311,
+          "endOffset": 1330,
+          "count": 35
+        },
+        {
+          "startOffset": 1330,
+          "endOffset": 1341,
+          "count": 10
+        },
+        {
+          "startOffset": 1343,
+          "endOffset": 1352,
+          "count": 5
+        },
+        {
+          "startOffset": 1352,
+          "endOffset": 1457,
+          "count": 30
+        },
+        {
+          "startOffset": 1457,
+          "endOffset": 1462,
+          "count": 25
+        },
+        {
+          "startOffset": 1463,
+          "endOffset": 1468,
+          "count": 5
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1684,
+          "endOffset": 2190,
+          "count": 30
+        },
+        {
+          "startOffset": 1787,
+          "endOffset": 2001,
+          "count": 25
+        },
+        {
+          "startOffset": 1908,
+          "endOffset": 1995,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "collectLayouts",
+      "ranges": [
+        {
+          "startOffset": 2213,
+          "endOffset": 2699,
+          "count": 5
+        },
+        {
+          "startOffset": 2309,
+          "endOffset": 2677,
+          "count": 30
+        },
+        {
+          "startOffset": 2335,
+          "endOffset": 2344,
+          "count": 10
+        },
+        {
+          "startOffset": 2344,
+          "endOffset": 2482,
+          "count": 20
+        },
+        {
+          "startOffset": 2482,
+          "endOffset": 2629,
+          "count": 0
+        },
+        {
+          "startOffset": 2629,
+          "endOffset": 2677,
+          "count": 20
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "collectAssets",
+      "ranges": [
+        {
+          "startOffset": 2700,
+          "endOffset": 3274,
+          "count": 5
+        },
+        {
+          "startOffset": 2839,
+          "endOffset": 3273,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

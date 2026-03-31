@@ -1,0 +1,17 @@
+{
+  "scriptId": "365",
+  "url": "file:///Users/gruposeb/www/ten.net/src/test/__snapshots__/audit-log-list.test.ts.snap",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 16418,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

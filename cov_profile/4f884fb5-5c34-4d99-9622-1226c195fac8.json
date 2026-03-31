@@ -1,0 +1,38 @@
+{
+  "scriptId": "299",
+  "url": "file:///Users/gruposeb/www/ten.net/src/build/buildCommand.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 950,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "main",
+      "ranges": [
+        {
+          "startOffset": 149,
+          "endOffset": 913,
+          "count": 1
+        },
+        {
+          "startOffset": 587,
+          "endOffset": 624,
+          "count": 0
+        },
+        {
+          "startOffset": 681,
+          "endOffset": 911,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "scriptId": "353",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/form-field.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3878,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "FormField",
+      "ranges": [
+        {
+          "startOffset": 268,
+          "endOffset": 3877,
+          "count": 4
+        },
+        {
+          "startOffset": 419,
+          "endOffset": 466,
+          "count": 0
+        },
+        {
+          "startOffset": 550,
+          "endOffset": 564,
+          "count": 0
+        },
+        {
+          "startOffset": 673,
+          "endOffset": 1585,
+          "count": 0
+        },
+        {
+          "startOffset": 2054,
+          "endOffset": 2377,
+          "count": 0
+        },
+        {
+          "startOffset": 2398,
+          "endOffset": 3198,
+          "count": 0
+        },
+        {
+          "startOffset": 3422,
+          "endOffset": 3439,
+          "count": 0
+        },
+        {
+          "startOffset": 3447,
+          "endOffset": 3463,
+          "count": 0
+        },
+        {
+          "startOffset": 3542,
+          "endOffset": 3703,
+          "count": 0
+        },
+        {
+          "startOffset": 3726,
+          "endOffset": 3863,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 3039,
+          "endOffset": 3174,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

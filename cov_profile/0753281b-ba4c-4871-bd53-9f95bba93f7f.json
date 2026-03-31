@@ -1,0 +1,33 @@
+{
+  "scriptId": "389",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/empty-state.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2088,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "EmptyState",
+      "ranges": [
+        {
+          "startOffset": 71,
+          "endOffset": 2087,
+          "count": 2
+        },
+        {
+          "startOffset": 249,
+          "endOffset": 255,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

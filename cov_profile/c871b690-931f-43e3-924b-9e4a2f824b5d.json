@@ -1,0 +1,28 @@
+{
+  "scriptId": "375",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/data-table.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 7091,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "DataTable",
+      "ranges": [
+        {
+          "startOffset": 119,
+          "endOffset": 7090,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "scriptId": "344",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/app.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3318,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "App",
+      "ranges": [
+        {
+          "startOffset": 285,
+          "endOffset": 2911,
+          "count": 7
+        },
+        {
+          "startOffset": 1621,
+          "endOffset": 1655,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "children",
+      "ranges": [
+        {
+          "startOffset": 1731,
+          "endOffset": 2865,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "appWithChildren",
+      "ranges": [
+        {
+          "startOffset": 2944,
+          "endOffset": 3083,
+          "count": 7
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "renderAdminPage",
+      "ranges": [
+        {
+          "startOffset": 3092,
+          "endOffset": 3317,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

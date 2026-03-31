@@ -1,0 +1,140 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/storage/denoKvSessionStore.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1863,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 252,
+          "endOffset": 255,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "DenoKvSessionStore",
+      "ranges": [
+        {
+          "startOffset": 259,
+          "endOffset": 298,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "_sessionKey",
+      "ranges": [
+        {
+          "startOffset": 301,
+          "endOffset": 397,
+          "count": 13
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "_userIndexKey",
+      "ranges": [
+        {
+          "startOffset": 400,
+          "endOffset": 528,
+          "count": 6
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get",
+      "ranges": [
+        {
+          "startOffset": 531,
+          "endOffset": 799,
+          "count": 4
+        },
+        {
+          "startOffset": 653,
+          "endOffset": 660,
+          "count": 3
+        },
+        {
+          "startOffset": 678,
+          "endOffset": 711,
+          "count": 1
+        },
+        {
+          "startOffset": 713,
+          "endOffset": 775,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "set",
+      "ranges": [
+        {
+          "startOffset": 802,
+          "endOffset": 1254,
+          "count": 3
+        },
+        {
+          "startOffset": 923,
+          "endOffset": 934,
+          "count": 0
+        },
+        {
+          "startOffset": 1180,
+          "endOffset": 1250,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "delete",
+      "ranges": [
+        {
+          "startOffset": 1257,
+          "endOffset": 1543,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "deleteByUserId",
+      "ranges": [
+        {
+          "startOffset": 1546,
+          "endOffset": 1860,
+          "count": 1
+        },
+        {
+          "startOffset": 1744,
+          "endOffset": 1780,
+          "count": 2
+        },
+        {
+          "startOffset": 1813,
+          "endOffset": 1856,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

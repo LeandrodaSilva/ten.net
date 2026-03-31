@@ -1,0 +1,61 @@
+{
+  "scriptId": "307",
+  "url": "file:///Users/gruposeb/www/ten.net/src/build/collector.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3275,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "collectManifest",
+      "ranges": [
+        {
+          "startOffset": 400,
+          "endOffset": 772,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "collectRoutes",
+      "ranges": [
+        {
+          "startOffset": 773,
+          "endOffset": 2212,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "collectLayouts",
+      "ranges": [
+        {
+          "startOffset": 2213,
+          "endOffset": 2699,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "collectAssets",
+      "ranges": [
+        {
+          "startOffset": 2700,
+          "endOffset": 3274,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

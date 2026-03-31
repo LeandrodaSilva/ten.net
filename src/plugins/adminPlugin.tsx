@@ -36,6 +36,7 @@ import { UsersPlugin } from "./usersPlugin.ts";
 import { WidgetStore } from "../widgets/widgetStore.ts";
 import type { PlaceholderMap, WidgetType } from "../widgets/types.ts";
 import { widgetRegistry } from "../widgets/widgetRegistry.ts";
+import { registerBuiltinWidgets } from "../widgets/builtins/index.ts";
 import { PageBuilderEditor } from "../admin/components/page-builder-editor.tsx";
 
 /** Edit form for PagePlugin — extends CrudForm with an optional Page Builder link. */
@@ -1126,8 +1127,19 @@ export class AdminPlugin {
       const store = new WidgetStore(kv);
       const instances = await store.loadForPage(id);
 
+      // Detect placeholders declared in the page body (e.g. {{widgets:main}})
+      const body = typeof page.body === "string" ? page.body : "";
+      const bodyMatches = [...body.matchAll(/\{\{widgets:(\w+)\}\}/g)];
+      const declaredPlaceholders = bodyMatches.length > 0
+        ? bodyMatches.map((m) => m[1])
+        : ["main"];
+
       // Group instances into PlaceholderMap, sorted by order
       const placeholders: PlaceholderMap = {};
+      // Seed declared placeholders so the canvas always shows them
+      for (const name of declaredPlaceholders) {
+        placeholders[name] = [];
+      }
       for (const w of instances) {
         if (!placeholders[w.placeholder]) {
           placeholders[w.placeholder] = [];
@@ -1612,6 +1624,7 @@ export class AdminPlugin {
 
     // Page Builder routes (requires KV storage)
     if (this._kv) {
+      registerBuiltinWidgets();
       // UI route registered BEFORE widget API routes to avoid regex conflicts
       this._addBuilderUIRoutes(routes);
       this._addPageBuilderRoutes(routes);

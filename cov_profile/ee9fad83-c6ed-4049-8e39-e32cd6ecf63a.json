@@ -1,0 +1,28 @@
+{
+  "scriptId": "311",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/card.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1928,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "Card",
+      "ranges": [
+        {
+          "startOffset": 71,
+          "endOffset": 1927,
+          "count": 5
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

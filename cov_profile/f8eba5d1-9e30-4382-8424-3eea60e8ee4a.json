@@ -1,0 +1,91 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/routing/widgetPageHandler.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3057,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "renderWidgetPage",
+      "ranges": [
+        {
+          "startOffset": 908,
+          "endOffset": 1861,
+          "count": 2
+        },
+        {
+          "startOffset": 1043,
+          "endOffset": 1065,
+          "count": 0
+        },
+        {
+          "startOffset": 1224,
+          "endOffset": 1842,
+          "count": 1
+        },
+        {
+          "startOffset": 1728,
+          "endOffset": 1733,
+          "count": 0
+        },
+        {
+          "startOffset": 1842,
+          "endOffset": 1860,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "extractPlaceholderNames",
+      "ranges": [
+        {
+          "startOffset": 1954,
+          "endOffset": 2215,
+          "count": 2
+        },
+        {
+          "startOffset": 2177,
+          "endOffset": 2193,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "groupByPlaceholder",
+      "ranges": [
+        {
+          "startOffset": 2369,
+          "endOffset": 2585,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "renderPlaceholder",
+      "ranges": [
+        {
+          "startOffset": 2712,
+          "endOffset": 3056,
+          "count": 1
+        },
+        {
+          "startOffset": 2888,
+          "endOffset": 2897,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "scriptId": "315",
+  "url": "file:///Users/gruposeb/www/ten.net/src/plugins/settingsPlugin.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 320,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 93,
+          "endOffset": 121,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "SettingsPlugin",
+      "ranges": [
+        {
+          "startOffset": 125,
+          "endOffset": 317,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

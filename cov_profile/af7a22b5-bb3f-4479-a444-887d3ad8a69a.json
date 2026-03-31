@@ -1,0 +1,112 @@
+{
+  "scriptId": "310",
+  "url": "file:///Users/gruposeb/www/ten.net/src/plugins/postsPlugin.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3908,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 478,
+          "endOffset": 506,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "PostsPlugin",
+      "ranges": [
+        {
+          "startOffset": 510,
+          "endOffset": 885,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "validate",
+      "ranges": [
+        {
+          "startOffset": 1114,
+          "endOffset": 2998,
+          "count": 2
+        },
+        {
+          "startOffset": 1257,
+          "endOffset": 1292,
+          "count": 10
+        },
+        {
+          "startOffset": 1437,
+          "endOffset": 1535,
+          "count": 0
+        },
+        {
+          "startOffset": 1715,
+          "endOffset": 1785,
+          "count": 0
+        },
+        {
+          "startOffset": 1862,
+          "endOffset": 2043,
+          "count": 0
+        },
+        {
+          "startOffset": 2324,
+          "endOffset": 2612,
+          "count": 0
+        },
+        {
+          "startOffset": 2710,
+          "endOffset": 2914,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "validateAsync",
+      "ranges": [
+        {
+          "startOffset": 3265,
+          "endOffset": 3905,
+          "count": 1
+        },
+        {
+          "startOffset": 3371,
+          "endOffset": 3412,
+          "count": 0
+        },
+        {
+          "startOffset": 3679,
+          "endOffset": 3815,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 3627,
+          "endOffset": 3656,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

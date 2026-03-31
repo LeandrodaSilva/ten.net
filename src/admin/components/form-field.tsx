@@ -38,10 +38,12 @@ export function FormField({
     return (
       <div className="flex gap-x-3">
         <div className="flex h-6 items-center">
+          <input type="hidden" name={name} value="false" />
           <input
             id={name}
             name={name}
             type="checkbox"
+            value="true"
             defaultChecked={value === "true"}
             className="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
           />

@@ -1,0 +1,95 @@
+{
+  "scriptId": "311",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/crud-form.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2480,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "CrudForm",
+      "ranges": [
+        {
+          "startOffset": 302,
+          "endOffset": 2479,
+          "count": 2
+        },
+        {
+          "startOffset": 591,
+          "endOffset": 599,
+          "count": 1
+        },
+        {
+          "startOffset": 600,
+          "endOffset": 607,
+          "count": 1
+        },
+        {
+          "startOffset": 794,
+          "endOffset": 902,
+          "count": 0
+        },
+        {
+          "startOffset": 1156,
+          "endOffset": 1293,
+          "count": 1
+        },
+        {
+          "startOffset": 1314,
+          "endOffset": 1323,
+          "count": 1
+        },
+        {
+          "startOffset": 1324,
+          "endOffset": 1459,
+          "count": 0
+        },
+        {
+          "startOffset": 2148,
+          "endOffset": 2156,
+          "count": 1
+        },
+        {
+          "startOffset": 2157,
+          "endOffset": 2167,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1484,
+          "endOffset": 1679,
+          "count": 2
+        },
+        {
+          "startOffset": 1593,
+          "endOffset": 1607,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "children",
+      "ranges": [
+        {
+          "startOffset": 2304,
+          "endOffset": 2456,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

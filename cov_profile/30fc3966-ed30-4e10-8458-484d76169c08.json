@@ -1,0 +1,133 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/plugins/rolesPlugin.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2539,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 361,
+          "endOffset": 389,
+          "count": 30
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "RolesPlugin",
+      "ranges": [
+        {
+          "startOffset": 393,
+          "endOffset": 644,
+          "count": 30
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "validate",
+      "ranges": [
+        {
+          "startOffset": 772,
+          "endOffset": 1463,
+          "count": 22
+        },
+        {
+          "startOffset": 876,
+          "endOffset": 902,
+          "count": 21
+        },
+        {
+          "startOffset": 903,
+          "endOffset": 927,
+          "count": 20
+        },
+        {
+          "startOffset": 929,
+          "endOffset": 968,
+          "count": 20
+        },
+        {
+          "startOffset": 1275,
+          "endOffset": 1373,
+          "count": 7
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "validateAsync",
+      "ranges": [
+        {
+          "startOffset": 1730,
+          "endOffset": 2370,
+          "count": 4
+        },
+        {
+          "startOffset": 1836,
+          "endOffset": 1877,
+          "count": 1
+        },
+        {
+          "startOffset": 1877,
+          "endOffset": 1951,
+          "count": 3
+        },
+        {
+          "startOffset": 1953,
+          "endOffset": 2286,
+          "count": 3
+        },
+        {
+          "startOffset": 2144,
+          "endOffset": 2280,
+          "count": 1
+        },
+        {
+          "startOffset": 2286,
+          "endOffset": 2369,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 2092,
+          "endOffset": 2121,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "isSystemRole",
+      "ranges": [
+        {
+          "startOffset": 2447,
+          "endOffset": 2536,
+          "count": 4
+        },
+        {
+          "startOffset": 2505,
+          "endOffset": 2531,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "scriptId": "309",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/roles-list.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 12464,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "RolesList",
+      "ranges": [
+        {
+          "startOffset": 264,
+          "endOffset": 12463,
+          "count": 4
+        },
+        {
+          "startOffset": 624,
+          "endOffset": 734,
+          "count": 1
+        },
+        {
+          "startOffset": 748,
+          "endOffset": 831,
+          "count": 1
+        },
+        {
+          "startOffset": 2724,
+          "endOffset": 4006,
+          "count": 2
+        },
+        {
+          "startOffset": 4007,
+          "endOffset": 11999,
+          "count": 2
+        },
+        {
+          "startOffset": 12054,
+          "endOffset": 12233,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 6608,
+          "endOffset": 11879,
+          "count": 4
+        },
+        {
+          "startOffset": 6688,
+          "endOffset": 6713,
+          "count": 1
+        },
+        {
+          "startOffset": 7111,
+          "endOffset": 7116,
+          "count": 0
+        },
+        {
+          "startOffset": 7526,
+          "endOffset": 7531,
+          "count": 0
+        },
+        {
+          "startOffset": 7802,
+          "endOffset": 7807,
+          "count": 0
+        },
+        {
+          "startOffset": 8033,
+          "endOffset": 8325,
+          "count": 3
+        },
+        {
+          "startOffset": 8326,
+          "endOffset": 8618,
+          "count": 1
+        },
+        {
+          "startOffset": 9559,
+          "endOffset": 9564,
+          "count": 0
+        },
+        {
+          "startOffset": 9768,
+          "endOffset": 10055,
+          "count": 3
+        },
+        {
+          "startOffset": 10056,
+          "endOffset": 11705,
+          "count": 1
+        },
+        {
+          "startOffset": 10824,
+          "endOffset": 10838,
+          "count": 0
+        },
+        {
+          "startOffset": 11450,
+          "endOffset": 11455,
+          "count": 0
+        },
+        {
+          "startOffset": 11846,
+          "endOffset": 11850,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "children",
+      "ranges": [
+        {
+          "startOffset": 12288,
+          "endOffset": 12440,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

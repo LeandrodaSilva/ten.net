@@ -1,0 +1,127 @@
+{
+  "scriptId": "309",
+  "url": "file:///Users/gruposeb/www/ten.net/src/routing/dynamicRouteRegistry.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3668,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 389,
+          "endOffset": 451,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "setStorage",
+      "ranges": [
+        {
+          "startOffset": 512,
+          "endOffset": 566,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getStorage",
+      "ranges": [
+        {
+          "startOffset": 609,
+          "endOffset": 653,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "register",
+      "ranges": [
+        {
+          "startOffset": 805,
+          "endOffset": 1896,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "unregister",
+      "ranges": [
+        {
+          "startOffset": 1976,
+          "endOffset": 2165,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "match",
+      "ranges": [
+        {
+          "startOffset": 2290,
+          "endOffset": 2449,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "loadFromStorage",
+      "ranges": [
+        {
+          "startOffset": 2640,
+          "endOffset": 3316,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "get notFoundPage",
+      "ranges": [
+        {
+          "startOffset": 3375,
+          "endOffset": 3430,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "all",
+      "ranges": [
+        {
+          "startOffset": 3491,
+          "endOffset": 3548,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "get size",
+      "ranges": [
+        {
+          "startOffset": 3619,
+          "endOffset": 3665,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

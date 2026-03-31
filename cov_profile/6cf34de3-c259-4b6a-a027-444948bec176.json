@@ -1,0 +1,96 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/gruposeb/www/ten.net/src/plugins/postsPlugin.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3908,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 478,
+          "endOffset": 506,
+          "count": 8
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "PostsPlugin",
+      "ranges": [
+        {
+          "startOffset": 510,
+          "endOffset": 885,
+          "count": 8
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "validate",
+      "ranges": [
+        {
+          "startOffset": 1114,
+          "endOffset": 2998,
+          "count": 1
+        },
+        {
+          "startOffset": 1257,
+          "endOffset": 1292,
+          "count": 5
+        },
+        {
+          "startOffset": 1437,
+          "endOffset": 1535,
+          "count": 0
+        },
+        {
+          "startOffset": 1715,
+          "endOffset": 1785,
+          "count": 0
+        },
+        {
+          "startOffset": 1862,
+          "endOffset": 2043,
+          "count": 0
+        },
+        {
+          "startOffset": 2422,
+          "endOffset": 2508,
+          "count": 0
+        },
+        {
+          "startOffset": 2517,
+          "endOffset": 2606,
+          "count": 0
+        },
+        {
+          "startOffset": 2710,
+          "endOffset": 2914,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "validateAsync",
+      "ranges": [
+        {
+          "startOffset": 3265,
+          "endOffset": 3905,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

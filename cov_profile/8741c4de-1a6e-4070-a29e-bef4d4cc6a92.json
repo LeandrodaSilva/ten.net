@@ -1,0 +1,48 @@
+{
+  "scriptId": "316",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/empty-state.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2088,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "EmptyState",
+      "ranges": [
+        {
+          "startOffset": 71,
+          "endOffset": 2087,
+          "count": 14
+        },
+        {
+          "startOffset": 249,
+          "endOffset": 255,
+          "count": 1
+        },
+        {
+          "startOffset": 256,
+          "endOffset": 914,
+          "count": 13
+        },
+        {
+          "startOffset": 1185,
+          "endOffset": 1198,
+          "count": 9
+        },
+        {
+          "startOffset": 1199,
+          "endOffset": 2073,
+          "count": 7
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

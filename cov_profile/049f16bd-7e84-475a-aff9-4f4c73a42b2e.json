@@ -1,0 +1,202 @@
+{
+  "scriptId": "312",
+  "url": "file:///Users/gruposeb/www/ten.net/src/routing/dynamicRouteRegistry.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3668,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 389,
+          "endOffset": 451,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "setStorage",
+      "ranges": [
+        {
+          "startOffset": 512,
+          "endOffset": 566,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getStorage",
+      "ranges": [
+        {
+          "startOffset": 609,
+          "endOffset": 653,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "register",
+      "ranges": [
+        {
+          "startOffset": 805,
+          "endOffset": 1896,
+          "count": 4
+        },
+        {
+          "startOffset": 856,
+          "endOffset": 861,
+          "count": 0
+        },
+        {
+          "startOffset": 902,
+          "endOffset": 912,
+          "count": 0
+        },
+        {
+          "startOffset": 956,
+          "endOffset": 968,
+          "count": 0
+        },
+        {
+          "startOffset": 1266,
+          "endOffset": 1271,
+          "count": 0
+        },
+        {
+          "startOffset": 1303,
+          "endOffset": 1308,
+          "count": 0
+        },
+        {
+          "startOffset": 1377,
+          "endOffset": 1382,
+          "count": 0
+        },
+        {
+          "startOffset": 1436,
+          "endOffset": 1441,
+          "count": 0
+        },
+        {
+          "startOffset": 1481,
+          "endOffset": 1486,
+          "count": 0
+        },
+        {
+          "startOffset": 1547,
+          "endOffset": 1577,
+          "count": 0
+        },
+        {
+          "startOffset": 1681,
+          "endOffset": 1822,
+          "count": 1
+        },
+        {
+          "startOffset": 1822,
+          "endOffset": 1895,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "unregister",
+      "ranges": [
+        {
+          "startOffset": 1976,
+          "endOffset": 2165,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "match",
+      "ranges": [
+        {
+          "startOffset": 2290,
+          "endOffset": 2449,
+          "count": 3
+        },
+        {
+          "startOffset": 2351,
+          "endOffset": 2428,
+          "count": 1
+        },
+        {
+          "startOffset": 2428,
+          "endOffset": 2448,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "loadFromStorage",
+      "ranges": [
+        {
+          "startOffset": 2640,
+          "endOffset": 3316,
+          "count": 4
+        },
+        {
+          "startOffset": 2690,
+          "endOffset": 2786,
+          "count": 0
+        },
+        {
+          "startOffset": 3151,
+          "endOffset": 3306,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get notFoundPage",
+      "ranges": [
+        {
+          "startOffset": 3375,
+          "endOffset": 3430,
+          "count": 4
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "all",
+      "ranges": [
+        {
+          "startOffset": 3491,
+          "endOffset": 3548,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "get size",
+      "ranges": [
+        {
+          "startOffset": 3619,
+          "endOffset": 3665,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

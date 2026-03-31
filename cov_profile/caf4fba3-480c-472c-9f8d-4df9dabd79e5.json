@@ -1,0 +1,48 @@
+{
+  "scriptId": "323",
+  "url": "file:///Users/gruposeb/www/ten.net/src/utils/transpileRoute.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 875,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "transpileRoute",
+      "ranges": [
+        {
+          "startOffset": 473,
+          "endOffset": 874,
+          "count": 5
+        },
+        {
+          "startOffset": 528,
+          "endOffset": 538,
+          "count": 0
+        },
+        {
+          "startOffset": 700,
+          "endOffset": 710,
+          "count": 0
+        },
+        {
+          "startOffset": 783,
+          "endOffset": 811,
+          "count": 0
+        },
+        {
+          "startOffset": 845,
+          "endOffset": 872,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

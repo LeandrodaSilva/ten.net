@@ -1,0 +1,59 @@
+{
+  "scriptId": "318",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/sidebar-nav.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 900,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "SidebarNav",
+      "ranges": [
+        {
+          "startOffset": 71,
+          "endOffset": 899,
+          "count": 6
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 296,
+          "endOffset": 883,
+          "count": 11
+        },
+        {
+          "startOffset": 447,
+          "endOffset": 455,
+          "count": 5
+        },
+        {
+          "startOffset": 456,
+          "endOffset": 467,
+          "count": 6
+        },
+        {
+          "startOffset": 582,
+          "endOffset": 612,
+          "count": 5
+        },
+        {
+          "startOffset": 613,
+          "endOffset": 669,
+          "count": 6
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

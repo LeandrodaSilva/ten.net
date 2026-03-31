@@ -1,0 +1,149 @@
+{
+  "scriptId": "305",
+  "url": "file:///Users/gruposeb/www/ten.net/src/build/buildReporter.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 5648,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "countLabel",
+      "ranges": [
+        {
+          "startOffset": 216,
+          "endOffset": 337,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 369,
+          "endOffset": 449,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "BuildReporter",
+      "ranges": [
+        {
+          "startOffset": 453,
+          "endOffset": 790,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "start",
+      "ranges": [
+        {
+          "startOffset": 793,
+          "endOffset": 1340,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "startStep",
+      "ranges": [
+        {
+          "startOffset": 1343,
+          "endOffset": 1720,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "finishStep",
+      "ranges": [
+        {
+          "startOffset": 1723,
+          "endOffset": 2162,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "warningBlock",
+      "ranges": [
+        {
+          "startOffset": 2165,
+          "endOffset": 2362,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "reportFailure",
+      "ranges": [
+        {
+          "startOffset": 2365,
+          "endOffset": 2980,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "finish",
+      "ranges": [
+        {
+          "startOffset": 2983,
+          "endOffset": 4867,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "#renderSpinnerFrame",
+      "ranges": [
+        {
+          "startOffset": 4870,
+          "endOffset": 5230,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "#stepPrefix",
+      "ranges": [
+        {
+          "startOffset": 5233,
+          "endOffset": 5317,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "#formatStepLine",
+      "ranges": [
+        {
+          "startOffset": 5320,
+          "endOffset": 5645,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

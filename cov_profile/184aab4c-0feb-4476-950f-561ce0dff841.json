@@ -1,0 +1,44 @@
+{
+  "scriptId": "319",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/login-form.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3193,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "LoginForm",
+      "ranges": [
+        {
+          "startOffset": 244,
+          "endOffset": 3055,
+          "count": 7
+        },
+        {
+          "startOffset": 1901,
+          "endOffset": 2052,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "loginPage",
+      "ranges": [
+        {
+          "startOffset": 3063,
+          "endOffset": 3192,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

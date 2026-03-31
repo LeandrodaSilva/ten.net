@@ -1,0 +1,33 @@
+{
+  "scriptId": "361",
+  "url": "file:///Users/gruposeb/www/ten.net/src/auth/securityHeaders.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 581,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "securityHeadersMiddleware",
+      "ranges": [
+        {
+          "startOffset": 106,
+          "endOffset": 579,
+          "count": 18
+        },
+        {
+          "startOffset": 334,
+          "endOffset": 454,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

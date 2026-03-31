@@ -1,0 +1,28 @@
+{
+  "scriptId": "345",
+  "url": "file:///Users/gruposeb/www/ten.net/src/admin/components/crud-form.tsx",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2480,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "CrudForm",
+      "ranges": [
+        {
+          "startOffset": 302,
+          "endOffset": 2479,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

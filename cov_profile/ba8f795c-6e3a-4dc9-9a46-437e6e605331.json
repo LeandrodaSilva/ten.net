@@ -1,0 +1,72 @@
+{
+  "scriptId": "336",
+  "url": "file:///Users/gruposeb/www/ten.net/src/auth/sessionStore.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 756,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 100,
+          "endOffset": 118,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get",
+      "ranges": [
+        {
+          "startOffset": 122,
+          "endOffset": 367,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "set",
+      "ranges": [
+        {
+          "startOffset": 370,
+          "endOffset": 470,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "delete",
+      "ranges": [
+        {
+          "startOffset": 473,
+          "endOffset": 561,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "deleteByUserId",
+      "ranges": [
+        {
+          "startOffset": 564,
+          "endOffset": 753,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}
