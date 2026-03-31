@@ -60,6 +60,13 @@ export function BuilderWidgetCard(
         </button>
         <button
           type="button"
+          data-duplicate-widget={widget.id}
+          className="text-sm text-indigo-600 hover:text-indigo-800"
+        >
+          Duplicar
+        </button>
+        <button
+          type="button"
           data-delete-widget={widget.id}
           className="text-sm font-medium text-red-600 hover:text-red-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 rounded"
         >

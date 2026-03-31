@@ -31,8 +31,13 @@ export function WidgetPalette({ availableWidgets }: WidgetPaletteProps) {
                 </span>
               )}
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm font-medium text-gray-900 flex items-center gap-1.5">
                   {widget.label}
+                  {widget.restricted && (
+                    <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">
+                      Restrito
+                    </span>
+                  )}
                 </p>
                 <p className="mt-0.5 text-xs text-gray-500 line-clamp-2">
                   {widget.description}

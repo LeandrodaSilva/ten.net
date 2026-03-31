@@ -16,6 +16,9 @@ import { ctaButtonWidget } from "./ctaButton.ts";
 import { spacerWidget } from "./spacer.ts";
 import { galleryWidget } from "./gallery.ts";
 import { contactFormWidget } from "./contactForm.ts";
+import { htmlWidget } from "./html.ts";
+import { embedWidget } from "./embed.ts";
+import { columnsWidget } from "./columns.ts";
 
 export { heroWidget } from "./hero.ts";
 export { richTextWidget } from "./richText.ts";
@@ -24,6 +27,9 @@ export { ctaButtonWidget } from "./ctaButton.ts";
 export { spacerWidget } from "./spacer.ts";
 export { galleryWidget } from "./gallery.ts";
 export { contactFormWidget } from "./contactForm.ts";
+export { htmlWidget } from "./html.ts";
+export { embedWidget } from "./embed.ts";
+export { columnsWidget } from "./columns.ts";
 
 /**
  * Register all built-in widget definitions with the global widgetRegistry.
@@ -37,4 +43,7 @@ export function registerBuiltinWidgets(): void {
   widgetRegistry.register(spacerWidget);
   widgetRegistry.register(galleryWidget);
   widgetRegistry.register(contactFormWidget);
+  widgetRegistry.register(htmlWidget);
+  widgetRegistry.register(embedWidget);
+  widgetRegistry.register(columnsWidget);
 }

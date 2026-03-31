@@ -37,6 +37,8 @@ import { WidgetStore } from "../widgets/widgetStore.ts";
 import type { PlaceholderMap, WidgetType } from "../widgets/types.ts";
 import { widgetRegistry } from "../widgets/widgetRegistry.ts";
 import { registerBuiltinWidgets } from "../widgets/builtins/index.ts";
+import { WidgetPermissionsStore } from "../widgets/widgetPermissionsStore.ts";
+import { WidgetAuditLogger } from "../widgets/widgetAuditLogger.ts";
 import { PageBuilderEditor } from "../admin/components/page-builder-editor.tsx";
 
 /** Edit form for PagePlugin — extends CrudForm with an optional Page Builder link. */
@@ -1200,7 +1202,12 @@ export class AdminPlugin {
         arr.sort((a, b) => a.order - b.order);
       }
 
-      const availableWidgets = widgetRegistry.all();
+      const session = requestSession.get(req);
+      const csrfToken = session?.csrfToken;
+
+      const permissionsStore = new WidgetPermissionsStore(kv);
+      const role = session?.role ?? "viewer";
+      const availableWidgets = await permissionsStore.getAllowedWidgets(role);
 
       const url = new URL(req.url);
       const editWidgetId = url.searchParams.get("edit") ?? undefined;
@@ -1210,9 +1217,6 @@ export class AdminPlugin {
       const editingDefinition = editingWidget
         ? (widgetRegistry.get(editingWidget.type) ?? undefined)
         : undefined;
-
-      const session = requestSession.get(req);
-      const csrfToken = session?.csrfToken;
 
       const html = renderBuilderPage(PageBuilderEditor, {
         pageId: id,
@@ -1236,17 +1240,21 @@ export class AdminPlugin {
    * Generate Page Builder routes for managing widgets on pages.
    *
    * Routes:
-   *   GET  /admin/pages/[id]/widgets           — list widgets for a page
-   *   POST /admin/pages/[id]/widgets           — create a widget
-   *   POST /admin/pages/[id]/widgets/[wid]     — update a widget
-   *   POST /admin/pages/[id]/widgets/[wid]/delete — delete a widget
-   *   POST /admin/pages/[id]/widgets/reorder   — reorder widgets
+   *   GET  /admin/pages/[id]/widgets                    — list widgets for a page
+   *   POST /admin/pages/[id]/widgets                    — create a widget
+   *   POST /admin/pages/[id]/widgets/[wid]              — update a widget
+   *   POST /admin/pages/[id]/widgets/[wid]/delete       — delete a widget
+   *   POST /admin/pages/[id]/widgets/[wid]/duplicate    — duplicate a widget
+   *   POST /admin/pages/[id]/widgets/reorder            — reorder widgets
    *
    * Requires KV storage — only called when this._kv is set.
    */
   private _addPageBuilderRoutes(routes: Route[]): void {
     const kv = this._kv!;
     const basePath = "/admin/pages";
+    const auditLogger = this._auditLogPlugin
+      ? new WidgetAuditLogger(this._auditLogPlugin)
+      : null;
 
     // GET /admin/pages/[id]/widgets — list widgets
     const listRoute = new Route({
@@ -1315,6 +1323,31 @@ export class AdminPlugin {
         );
       }
 
+      // [Fix 1] Permission check: verify role is allowed to use this widget type
+      const session = requestSession.get(req);
+      const permissionsStore = new WidgetPermissionsStore(kv);
+      const canUse = await permissionsStore.canUse(
+        session?.role ?? "viewer",
+        type,
+      );
+      if (!canUse) {
+        return new Response(
+          JSON.stringify({ error: "Permission denied for widget type" }),
+          { status: 403, headers: { "Content-Type": "application/json" } },
+        );
+      }
+
+      // Prevent columns nested inside columns: placeholder must not start with "columns:"
+      if (type === "columns" && placeholder.startsWith("columns:")) {
+        return new Response(
+          JSON.stringify({
+            error:
+              "columns widget cannot be nested inside another columns widget",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
+        );
+      }
+
       const store = new WidgetStore(kv);
       const instance = await store.create(pageId, {
         type,
@@ -1322,6 +1355,17 @@ export class AdminPlugin {
         order,
         data,
       });
+
+      if (auditLogger) {
+        await auditLogger.logCreate(
+          pageId,
+          instance.id,
+          String(type),
+          session?.userId ?? "unknown",
+          session?.username ?? "unknown",
+        );
+      }
+
       return new Response(JSON.stringify(instance), {
         status: 201,
         headers: { "Content-Type": "application/json" },
@@ -1369,6 +1413,16 @@ export class AdminPlugin {
 
       const store = new WidgetStore(kv);
       await store.reorder(pageId, order);
+
+      if (auditLogger) {
+        const session = requestSession.get(req);
+        await auditLogger.logReorder(
+          pageId,
+          session?.userId ?? "unknown",
+          session?.username ?? "unknown",
+        );
+      }
+
       return new Response(null, { status: 204 });
     };
     routes.push(reorderRoute);
@@ -1417,9 +1471,60 @@ export class AdminPlugin {
         patch.data = body.data as Record<string, unknown>;
       }
 
+      // [Fix 2] Permission check: verify role is allowed to use the new widget type
+      if (patch.type !== undefined) {
+        const session = requestSession.get(req);
+        const permissionsStore = new WidgetPermissionsStore(kv);
+        const canUse = await permissionsStore.canUse(
+          session?.role ?? "viewer",
+          patch.type,
+        );
+        if (!canUse) {
+          return new Response(
+            JSON.stringify({ error: "Permission denied for widget type" }),
+            { status: 403, headers: { "Content-Type": "application/json" } },
+          );
+        }
+      }
+
+      // [Fix 4] Prevent moving/changing a columns widget into a nested columns placeholder
+      if (patch.type !== undefined || patch.placeholder !== undefined) {
+        const existing = await kv.get<
+          import("../widgets/types.ts").WidgetInstance
+        >(["widgets", pageId, "instance", widgetId]);
+        if (existing.value) {
+          const effectiveType = patch.type ?? existing.value.type;
+          const effectivePlaceholder = patch.placeholder ??
+            existing.value.placeholder;
+          if (
+            effectiveType === "columns" &&
+            effectivePlaceholder.startsWith("columns:")
+          ) {
+            return new Response(
+              JSON.stringify({
+                error:
+                  "columns widget cannot be nested inside another columns widget",
+              }),
+              { status: 422, headers: { "Content-Type": "application/json" } },
+            );
+          }
+        }
+      }
+
       const store = new WidgetStore(kv);
       try {
         const updated = await store.update(pageId, widgetId, patch);
+
+        if (auditLogger) {
+          const session = requestSession.get(req);
+          await auditLogger.logUpdate(
+            pageId,
+            widgetId,
+            session?.userId ?? "unknown",
+            session?.username ?? "unknown",
+          );
+        }
+
         return new Response(JSON.stringify(updated), {
           status: 200,
           headers: { "Content-Type": "application/json" },
@@ -1440,7 +1545,7 @@ export class AdminPlugin {
     });
     deleteRoute.method = "POST";
     deleteRoute.run = async (
-      _req: Request,
+      req: Request,
       ctx?: { params: Record<string, string> },
     ) => {
       const pageId = ctx?.params?.id;
@@ -1452,9 +1557,90 @@ export class AdminPlugin {
       const store = new WidgetStore(kv);
       const deleted = await store.delete(pageId, widgetId);
       if (!deleted) return new Response("Not found", { status: 404 });
+
+      if (auditLogger) {
+        const session = requestSession.get(req);
+        await auditLogger.logDelete(
+          pageId,
+          widgetId,
+          session?.userId ?? "unknown",
+          session?.username ?? "unknown",
+        );
+      }
+
       return new Response(null, { status: 204 });
     };
     routes.push(deleteRoute);
+
+    // POST /admin/pages/[id]/widgets/[wid]/duplicate — duplicate widget
+    const duplicateRoute = new Route({
+      path: `${basePath}/[id]/widgets/[wid]/duplicate`,
+      regex: new RegExp(`^${basePath}/([^/]+)/widgets/([^/]+)/duplicate$`),
+      hasPage: false,
+      transpiledCode: "",
+      sourcePath: "",
+    });
+    duplicateRoute.method = "POST";
+    duplicateRoute.run = async (
+      req: Request,
+      ctx?: { params: Record<string, string> },
+    ) => {
+      const pageId = ctx?.params?.id;
+      const widgetId = ctx?.params?.wid;
+      if (!pageId || !widgetId) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      const store = new WidgetStore(kv);
+
+      // Load the source widget
+      const existing = await kv.get<
+        import("../widgets/types.ts").WidgetInstance
+      >(["widgets", pageId, "instance", widgetId]);
+      if (!existing.value) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      const source = existing.value;
+
+      // [Fix 3] Permission check: verify role is allowed to duplicate this widget type
+      const dupSession = requestSession.get(req);
+      const dupPermissionsStore = new WidgetPermissionsStore(kv);
+      const canDuplicate = await dupPermissionsStore.canUse(
+        dupSession?.role ?? "viewer",
+        source.type,
+      );
+      if (!canDuplicate) {
+        return new Response(
+          JSON.stringify({ error: "Permission denied for widget type" }),
+          { status: 403, headers: { "Content-Type": "application/json" } },
+        );
+      }
+
+      const duplicate = await store.create(pageId, {
+        type: source.type,
+        placeholder: source.placeholder,
+        order: source.order + 1,
+        data: { ...source.data },
+      });
+
+      if (auditLogger) {
+        const session = requestSession.get(req);
+        await auditLogger.logDuplicate(
+          pageId,
+          widgetId,
+          duplicate.id,
+          session?.userId ?? "unknown",
+          session?.username ?? "unknown",
+        );
+      }
+
+      return new Response(JSON.stringify(duplicate), {
+        status: 201,
+        headers: { "Content-Type": "application/json" },
+      });
+    };
+    routes.push(duplicateRoute);
   }
 
   /**

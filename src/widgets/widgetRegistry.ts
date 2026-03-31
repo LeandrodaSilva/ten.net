@@ -32,4 +32,4 @@ class WidgetRegistry {
 }
 
 /** Global widget registry singleton. */
-export const widgetRegistry = new WidgetRegistry();
+export const widgetRegistry: WidgetRegistry = new WidgetRegistry();
