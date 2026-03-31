@@ -74,7 +74,7 @@ export function PageBuilderEditor(
       <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 shrink-0">
         <div className="flex items-center gap-3">
           <a
-            href={`/admin/pages`}
+            href={`/admin/plugins/page-plugin`}
             className="inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             <svg
@@ -97,7 +97,7 @@ export function PageBuilderEditor(
             className="flex items-center gap-1.5 text-sm"
           >
             <a
-              href="/admin/pages"
+              href="/admin/plugins/page-plugin"
               className="text-gray-500 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 rounded"
             >
               Páginas
@@ -110,7 +110,7 @@ export function PageBuilderEditor(
         </div>
         <div className="flex items-center gap-2">
           <a
-            href={`/admin/pages/${pageId}`}
+            href={`/admin/plugins/page-plugin/${pageId}`}
             className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Configurações da página
