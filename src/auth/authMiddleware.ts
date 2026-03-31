@@ -44,11 +44,34 @@ const SLUG_TO_RESOURCE: Record<string, string> = {
 /** Extract the resource name from an admin URL path. */
 function extractResource(path: string): string {
   if (path === "/admin" || path === "/admin/") return "dashboard";
-  const match = path.match(/^\/admin\/plugins\/([^/]+)/);
-  if (!match) return "dashboard";
-  const slug = match[1];
-  // Return mapped resource for built-in plugins, or the slug itself for dynamic plugins
-  return SLUG_TO_RESOURCE[slug] ?? slug;
+
+  // Plugin routes: /admin/plugins/<slug>/...
+  const pluginMatch = path.match(/^\/admin\/plugins\/([^/]+)/);
+  if (pluginMatch) {
+    const slug = pluginMatch[1];
+    // Return mapped resource for built-in plugins, or the slug itself for dynamic plugins
+    return SLUG_TO_RESOURCE[slug] ?? slug;
+  }
+
+  // Direct admin sub-routes: /admin/<resource>/...
+  // e.g. /admin/pages/[id]/widgets → "pages"
+  //      /admin/users/[id]         → "users"
+  const directMatch = path.match(/^\/admin\/([^/]+)/);
+  if (directMatch) {
+    const segment = directMatch[1];
+    // Map known segments to resource names
+    const SEGMENT_TO_RESOURCE: Record<string, string> = {
+      pages: "pages",
+      posts: "posts",
+      categories: "categories",
+      groups: "groups",
+      users: "users",
+      settings: "settings",
+    };
+    return SEGMENT_TO_RESOURCE[segment] ?? "dashboard";
+  }
+
+  return "dashboard";
 }
 
 /** Check if a role has a specific permission on a resource (hardcoded fallback). */
