@@ -1,9 +1,5 @@
 import { describe, it } from "@std/testing/bdd";
-import {
-  assert,
-  assertEquals,
-  assertStringIncludes,
-} from "@std/assert";
+import { assert, assertEquals, assertStringIncludes } from "@std/assert";
 import { widgetRegistry } from "../widgets/widgetRegistry.ts";
 import { ctaButtonWidget } from "../widgets/builtins/ctaButton.ts";
 import { spacerWidget } from "../widgets/builtins/spacer.ts";
@@ -33,7 +29,10 @@ function makeInstance(
 describe("ctaButtonWidget", () => {
   it("should render with text and url", () => {
     const html = ctaButtonWidget.render(
-      makeInstance("cta-button", { text: "Click Me", url: "https://example.com" }),
+      makeInstance("cta-button", {
+        text: "Click Me",
+        url: "https://example.com",
+      }),
     );
     assertStringIncludes(html, "Click Me");
     assertStringIncludes(html, 'href="https://example.com"');
@@ -50,7 +49,10 @@ describe("ctaButtonWidget", () => {
 
   it("should sanitize data: URLs", () => {
     const html = ctaButtonWidget.render(
-      makeInstance("cta-button", { text: "XSS", url: "data:text/html,<script>alert(1)</script>" }),
+      makeInstance("cta-button", {
+        text: "XSS",
+        url: "data:text/html,<script>alert(1)</script>",
+      }),
     );
     assertStringIncludes(html, 'href=""');
   });
@@ -64,7 +66,10 @@ describe("ctaButtonWidget", () => {
 
   it("should escape HTML in text", () => {
     const html = ctaButtonWidget.render(
-      makeInstance("cta-button", { text: "<script>alert(1)</script>", url: "https://ok.com" }),
+      makeInstance("cta-button", {
+        text: "<script>alert(1)</script>",
+        url: "https://ok.com",
+      }),
     );
     assert(!html.includes("<script>"));
     assertStringIncludes(html, "&lt;script&gt;");
@@ -197,7 +202,10 @@ describe("spacerWidget", () => {
 
 describe("galleryWidget", () => {
   it("should render with array of image URLs", () => {
-    const urls = JSON.stringify(["https://img1.com/a.jpg", "https://img2.com/b.jpg"]);
+    const urls = JSON.stringify([
+      "https://img1.com/a.jpg",
+      "https://img2.com/b.jpg",
+    ]);
     const html = galleryWidget.render(
       makeInstance("gallery", { images: urls }),
     );
@@ -207,7 +215,10 @@ describe("galleryWidget", () => {
   });
 
   it("should sanitize javascript: URLs in images", () => {
-    const urls = JSON.stringify(["javascript:alert(1)", "https://safe.com/img.jpg"]);
+    const urls = JSON.stringify([
+      "javascript:alert(1)",
+      "https://safe.com/img.jpg",
+    ]);
     const html = galleryWidget.render(
       makeInstance("gallery", { images: urls }),
     );
