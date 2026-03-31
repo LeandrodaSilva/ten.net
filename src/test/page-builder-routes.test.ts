@@ -46,8 +46,7 @@ describe("Page Builder routes", () => {
     });
 
     const builderRoute = routes.find(
-      (r) =>
-        r.path === "/admin/pages/[id]/builder" && r.method === "GET",
+      (r) => r.path === "/admin/pages/[id]/builder" && r.method === "GET",
     );
     assertExists(builderRoute?.run);
 
@@ -66,8 +65,7 @@ describe("Page Builder routes", () => {
 
   it("GET /admin/pages/[id]/builder returns 404 for non-existent page", async () => {
     const builderRoute = routes.find(
-      (r) =>
-        r.path === "/admin/pages/[id]/builder" && r.method === "GET",
+      (r) => r.path === "/admin/pages/[id]/builder" && r.method === "GET",
     );
     assertExists(builderRoute?.run);
 
@@ -103,8 +101,7 @@ describe("Page Builder routes", () => {
 
     // Find the edit route (GET /admin/plugins/page-plugin/[id])
     const editRoute = routes.find(
-      (r) =>
-        r.path === "/admin/plugins/page-plugin/[id]" && r.method === "GET",
+      (r) => r.path === "/admin/plugins/page-plugin/[id]" && r.method === "GET",
     );
     assertExists(editRoute?.run);
 
