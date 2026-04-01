@@ -1,19 +1,11 @@
 {
-  "name": "@leproj/tennet",
-  "version": "0.8.0",
-  "description": "A minimalist Deno web microframework with file-based routing, HTML templating, nested layouts, and a plugin system",
-  "license": "MIT",
-  "exports": {
-    ".": "./src/mod.ts",
-    "./cli": "./src/cli.ts",
-    "./build": "./src/build/build.ts",
-    "./build/manifest": "./src/build/manifest.ts",
-    "./build/crypto": "./src/build/crypto.ts",
-    "./admin": "./src/admin/mod.ts",
-    "./widgets": "./src/widgets/mod.ts"
-  },
+  "workspace": [
+    "packages/core",
+    "packages/admin",
+    "packages/widgets"
+  ],
   "tasks": {
-    "dev": "deno run -P --inspect --unstable-kv --unstable-raw-imports --watch demo.ts",
+    "dev": "deno run -P --inspect --unstable-kv --unstable-raw-imports --watch app/demo.ts",
     "test": "deno test --parallel --allow-all --unstable-raw-imports --unstable-kv",
     "coverage": "deno test --no-check --coverage=coverage --allow-all --unstable-raw-imports --unstable-kv",
     "fmt": "deno fmt",
@@ -22,7 +14,7 @@
     "bench": "deno bench --allow-all --unstable-raw-imports --json src/bench/ | deno run --allow-all src/bench/_history.ts && deno fmt README.md",
     "bench:run": "deno bench --allow-all --unstable-raw-imports src/bench/",
     "bench:check": "deno run --allow-all src/bench/_check_thresholds.ts",
-    "build": "deno run --allow-read --allow-write --allow-env --allow-run src/build/buildCommand.ts"
+    "build": "deno run --allow-read --allow-write --allow-env --allow-run packages/core/src/build/buildCommand.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -60,13 +52,5 @@
       "env": true,
       "net": true
     }
-  },
-  "publish": {
-    "include": [
-      "src/",
-      "README.md",
-      "LICENSE",
-      "deno.json"
-    ]
   }
 }

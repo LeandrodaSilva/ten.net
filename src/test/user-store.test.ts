@@ -1,7 +1,10 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists, assertNotEquals } from "@std/assert";
-import { InMemoryUserStore, seedDefaultAdmin } from "../auth/userStore.ts";
-import { verifyPassword } from "../auth/passwordHasher.ts";
+import {
+  InMemoryUserStore,
+  seedDefaultAdmin,
+} from "../../packages/admin/src/auth/userStore.ts";
+import { verifyPassword } from "../../packages/admin/src/auth/passwordHasher.ts";
 
 describe("InMemoryUserStore", () => {
   it("should return null for non-existent user", async () => {

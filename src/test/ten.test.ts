@@ -1,11 +1,11 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { Ten } from "../ten.ts";
-import { Route } from "../models/Route.ts";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { PagePlugin } from "../plugins/pagePlugin.ts";
-import { DynamicRouteRegistry } from "../routing/dynamicRouteRegistry.ts";
-import type { StorageItem } from "../models/Storage.ts";
+import { Ten } from "../../packages/core/src/ten.ts";
+import { Route } from "../../packages/core/src/models/Route.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
+import { DynamicRouteRegistry } from "../../packages/core/src/routing/dynamicRouteRegistry.ts";
+import type { StorageItem } from "../../packages/core/src/models/Storage.ts";
 
 describe("Ten", () => {
   describe("Ten.net()", () => {

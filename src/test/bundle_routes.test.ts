@@ -3,7 +3,7 @@ import { assertEquals } from "@std/assert";
 import {
   bundleRoutes,
   discoverRouteEntrypoints,
-} from "../build/bundleRoutes.ts";
+} from "../../packages/core/src/build/bundleRoutes.ts";
 
 describe("discoverRouteEntrypoints", () => {
   it("should discover all route.ts files in app directory", async () => {

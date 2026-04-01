@@ -1,11 +1,14 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertStringIncludes } from "@std/assert";
 import { renderToString } from "react-dom/server";
-import { WidgetPalette } from "../admin/components/widget-palette.tsx";
-import { BuilderWidgetCard } from "../admin/components/builder-widget-card.tsx";
-import { PageBuilderEditor } from "../admin/components/page-builder-editor.tsx";
-import { BuilderLayout } from "../admin/layout/builder-layout.tsx";
-import type { WidgetDefinition, WidgetInstance } from "../widgets/types.ts";
+import { WidgetPalette } from "../../packages/admin/src/components/widget-palette.tsx";
+import { BuilderWidgetCard } from "../../packages/admin/src/components/builder-widget-card.tsx";
+import { PageBuilderEditor } from "../../packages/admin/src/components/page-builder-editor.tsx";
+import { BuilderLayout } from "../../packages/admin/src/layout/builder-layout.tsx";
+import type {
+  WidgetDefinition,
+  WidgetInstance,
+} from "../../packages/widgets/src/types.ts";
 
 // --- Fixtures ---
 

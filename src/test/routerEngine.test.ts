@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { routerEngine } from "../routerEngine.ts";
+import { routerEngine } from "../../packages/core/src/routerEngine.ts";
 
 describe("routerEngine", () => {
   it("should return empty array for directory with no routes", async () => {

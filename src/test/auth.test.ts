@@ -5,9 +5,9 @@ import {
   generateSalt,
   hashPassword,
   verifyPassword,
-} from "../auth/passwordHasher.ts";
-import { InMemorySessionStore } from "../auth/sessionStore.ts";
-import type { Session } from "../auth/types.ts";
+} from "../../packages/admin/src/auth/passwordHasher.ts";
+import { InMemorySessionStore } from "../../packages/admin/src/auth/sessionStore.ts";
+import type { Session } from "../../packages/admin/src/auth/types.ts";
 
 function makeSession(overrides?: Partial<Session>): Session {
   return {

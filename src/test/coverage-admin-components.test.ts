@@ -10,20 +10,23 @@ import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { renderToString } from "react-dom/server";
 
-import { AuditLogList } from "../admin/components/audit-log-list.tsx";
-import { FormField } from "../admin/components/form-field.tsx";
-import { CrudForm } from "../admin/components/crud-form.tsx";
-import { CrudList } from "../admin/components/crud-list.tsx";
-import { DataTable } from "../admin/components/data-table.tsx";
-import { Pagination } from "../admin/components/pagination.tsx";
-import { RolesList } from "../admin/components/roles-list.tsx";
-import { PermissionsMatrix } from "../admin/components/permissions-matrix.tsx";
+import { AuditLogList } from "../../packages/admin/src/components/audit-log-list.tsx";
+import { FormField } from "../../packages/admin/src/components/form-field.tsx";
+import { CrudForm } from "../../packages/admin/src/components/crud-form.tsx";
+import { CrudList } from "../../packages/admin/src/components/crud-list.tsx";
+import { DataTable } from "../../packages/admin/src/components/data-table.tsx";
+import { Pagination } from "../../packages/admin/src/components/pagination.tsx";
+import { RolesList } from "../../packages/admin/src/components/roles-list.tsx";
+import { PermissionsMatrix } from "../../packages/admin/src/components/permissions-matrix.tsx";
 import {
   WidgetCard,
   WidgetForm,
   WidgetTypeSelector,
-} from "../admin/components/widget-form.tsx";
-import type { WidgetDefinition, WidgetInstance } from "../widgets/types.ts";
+} from "../../packages/admin/src/components/widget-form.tsx";
+import type {
+  WidgetDefinition,
+  WidgetInstance,
+} from "../../packages/widgets/src/types.ts";
 
 describe("AuditLogList — formatTimestamp branches", () => {
   it("should render with entries and format valid timestamp", () => {

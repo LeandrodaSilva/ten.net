@@ -1,15 +1,18 @@
 import { afterEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists } from "@std/assert";
-import { authMiddleware, requestSession } from "../auth/authMiddleware.ts";
-import { InMemorySessionStore } from "../auth/sessionStore.ts";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { RolesPlugin } from "../plugins/rolesPlugin.ts";
-import { AuditLogPlugin } from "../plugins/auditLogPlugin.ts";
-import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
-import { PermissionsStore } from "../auth/permissionsStore.ts";
-import type { Session } from "../auth/types.ts";
-import { InMemoryStorage } from "../models/Storage.ts";
-import type { StorageItem } from "../models/Storage.ts";
+import {
+  authMiddleware,
+  requestSession,
+} from "../../packages/admin/src/auth/authMiddleware.ts";
+import { InMemorySessionStore } from "../../packages/admin/src/auth/sessionStore.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { RolesPlugin } from "../../packages/admin/src/plugins/rolesPlugin.ts";
+import { AuditLogPlugin } from "../../packages/admin/src/plugins/auditLogPlugin.ts";
+import { CategoriesPlugin } from "../../packages/admin/src/plugins/categoriesPlugin.ts";
+import { PermissionsStore } from "../../packages/admin/src/auth/permissionsStore.ts";
+import type { Session } from "../../packages/admin/src/auth/types.ts";
+import { InMemoryStorage } from "../../packages/core/src/models/Storage.ts";
+import type { StorageItem } from "../../packages/core/src/models/Storage.ts";
 
 /** Wrap a sync Response-returning callback. */
 function promiseNext(

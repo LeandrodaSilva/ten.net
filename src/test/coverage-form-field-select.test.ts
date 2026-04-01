@@ -4,7 +4,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertStringIncludes } from "@std/assert";
 import { renderToString } from "react-dom/server";
-import { FormField } from "../admin/components/form-field.tsx";
+import { FormField } from "../../packages/admin/src/components/form-field.tsx";
 
 describe("FormField select multiple — defaultValue branches", () => {
   const options = [

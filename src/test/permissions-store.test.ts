@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { PermissionsStore } from "../auth/permissionsStore.ts";
-import type { PermissionAction } from "../models/Permission.ts";
+import { PermissionsStore } from "../../packages/admin/src/auth/permissionsStore.ts";
+import type { PermissionAction } from "../../packages/core/src/models/Permission.ts";
 
 describe("PermissionsStore with KV", () => {
   let kv: Deno.Kv;

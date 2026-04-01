@@ -4,8 +4,8 @@ import {
   buildPermissionKey,
   parsePermissions,
   serializePermissions,
-} from "../models/Permission.ts";
-import type { PermissionAction } from "../models/Permission.ts";
+} from "../../packages/core/src/models/Permission.ts";
+import type { PermissionAction } from "../../packages/core/src/models/Permission.ts";
 
 describe("parsePermissions", () => {
   it("should parse valid JSON array of permissions", () => {

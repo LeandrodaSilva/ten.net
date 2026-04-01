@@ -3,7 +3,10 @@
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { CURRENT_SCHEMA_VERSION, runMigrations } from "../storage/schema.ts";
+import {
+  CURRENT_SCHEMA_VERSION,
+  runMigrations,
+} from "../../packages/admin/src/storage/schema.ts";
 
 describe("Schema migrations — v2 page migration", () => {
   let kv: Deno.Kv;

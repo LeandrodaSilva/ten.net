@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { authMiddleware } from "../auth/authMiddleware.ts";
-import { InMemorySessionStore } from "../auth/sessionStore.ts";
-import type { Session } from "../auth/types.ts";
+import { authMiddleware } from "../../packages/admin/src/auth/authMiddleware.ts";
+import { InMemorySessionStore } from "../../packages/admin/src/auth/sessionStore.ts";
+import type { Session } from "../../packages/admin/src/auth/types.ts";
 
 /** Wrap a sync Response-returning callback so it satisfies () => Promise<Response>. */
 function promiseNext(

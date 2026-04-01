@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists } from "@std/assert";
-import { DenoKvStorage } from "../storage/denoKvStorage.ts";
+import { DenoKvStorage } from "../../packages/admin/src/storage/denoKvStorage.ts";
 
 describe("DenoKvStorage", () => {
   let kv: Deno.Kv;

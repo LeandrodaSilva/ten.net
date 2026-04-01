@@ -1,19 +1,19 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { renderToString } from "react-dom/server";
-import { Button } from "../admin/components/button.tsx";
-import { Card } from "../admin/components/card.tsx";
-import { DataTable } from "../admin/components/data-table.tsx";
-import { FormField } from "../admin/components/form-field.tsx";
-import { Alert } from "../admin/components/alert.tsx";
-import { Pagination } from "../admin/components/pagination.tsx";
-import { EmptyState } from "../admin/components/empty-state.tsx";
-import { Breadcrumb } from "../admin/components/breadcrumb.tsx";
-import { SidebarNav } from "../admin/components/sidebar-nav.tsx";
-import { LoginForm } from "../admin/components/login-form.tsx";
-import { CrudList } from "../admin/components/crud-list.tsx";
-import { CrudForm } from "../admin/components/crud-form.tsx";
-import type { DataTableColumn } from "../admin/components/data-table.tsx";
+import { Button } from "../../packages/admin/src/components/button.tsx";
+import { Card } from "../../packages/admin/src/components/card.tsx";
+import { DataTable } from "../../packages/admin/src/components/data-table.tsx";
+import { FormField } from "../../packages/admin/src/components/form-field.tsx";
+import { Alert } from "../../packages/admin/src/components/alert.tsx";
+import { Pagination } from "../../packages/admin/src/components/pagination.tsx";
+import { EmptyState } from "../../packages/admin/src/components/empty-state.tsx";
+import { Breadcrumb } from "../../packages/admin/src/components/breadcrumb.tsx";
+import { SidebarNav } from "../../packages/admin/src/components/sidebar-nav.tsx";
+import { LoginForm } from "../../packages/admin/src/components/login-form.tsx";
+import { CrudList } from "../../packages/admin/src/components/crud-list.tsx";
+import { CrudForm } from "../../packages/admin/src/components/crud-form.tsx";
+import type { DataTableColumn } from "../../packages/admin/src/components/data-table.tsx";
 
 // --- Button ---
 describe("Button component", () => {

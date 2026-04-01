@@ -5,8 +5,8 @@ import {
   assertNotMatch,
   assertStringIncludes,
 } from "@std/assert";
-import { stripAnsi } from "../terminalUi.ts";
-import { VERSION } from "../version.ts";
+import { stripAnsi } from "../../packages/core/src/terminalUi.ts";
+import { VERSION } from "../../packages/core/src/version.ts";
 
 function runBuildCommand(args: string[]) {
   return new Deno.Command("deno", {

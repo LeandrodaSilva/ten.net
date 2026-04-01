@@ -1,12 +1,12 @@
 import { describe, it } from "@std/testing/bdd";
 import { assert, assertEquals, assertStringIncludes } from "@std/assert";
-import { widgetRegistry } from "../widgets/widgetRegistry.ts";
-import { ctaButtonWidget } from "../widgets/builtins/ctaButton.ts";
-import { spacerWidget } from "../widgets/builtins/spacer.ts";
-import { galleryWidget } from "../widgets/builtins/gallery.ts";
-import { contactFormWidget } from "../widgets/builtins/contactForm.ts";
-import { registerBuiltinWidgets } from "../widgets/builtins/index.ts";
-import type { WidgetInstance } from "../widgets/types.ts";
+import { widgetRegistry } from "../../packages/widgets/src/widgetRegistry.ts";
+import { ctaButtonWidget } from "../../packages/widgets/src/builtins/ctaButton.ts";
+import { spacerWidget } from "../../packages/widgets/src/builtins/spacer.ts";
+import { galleryWidget } from "../../packages/widgets/src/builtins/gallery.ts";
+import { contactFormWidget } from "../../packages/widgets/src/builtins/contactForm.ts";
+import { registerBuiltinWidgets } from "../../packages/widgets/src/builtins/index.ts";
+import type { WidgetInstance } from "../../packages/widgets/src/types.ts";
 
 /** Helper: create a minimal WidgetInstance with overrides. */
 function makeInstance(

@@ -4,8 +4,8 @@
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { DenoKvSessionStore } from "../storage/denoKvSessionStore.ts";
-import { DenoKvStorage } from "../storage/denoKvStorage.ts";
+import { DenoKvSessionStore } from "../../packages/admin/src/storage/denoKvSessionStore.ts";
+import { DenoKvStorage } from "../../packages/admin/src/storage/denoKvStorage.ts";
 
 describe("DenoKvSessionStore — edge cases", () => {
   let kv: Deno.Kv;

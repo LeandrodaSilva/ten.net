@@ -1,8 +1,8 @@
 import { describe, it } from "@std/testing/bdd";
 import { assert, assertEquals, assertStringIncludes } from "@std/assert";
-import { WidgetAuditLogger } from "../widgets/widgetAuditLogger.ts";
-import { AuditLogPlugin } from "../plugins/auditLogPlugin.ts";
-import type { StorageItem } from "../models/Storage.ts";
+import { WidgetAuditLogger } from "../../packages/widgets/src/widgetAuditLogger.ts";
+import { AuditLogPlugin } from "../../packages/admin/src/plugins/auditLogPlugin.ts";
+import type { StorageItem } from "../../packages/core/src/models/Storage.ts";
 
 function createAuditLogger(): {
   logger: WidgetAuditLogger;

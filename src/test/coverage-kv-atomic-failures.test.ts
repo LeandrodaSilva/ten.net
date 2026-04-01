@@ -6,7 +6,7 @@
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertRejects } from "@std/assert";
-import { WidgetStore } from "../widgets/widgetStore.ts";
+import { WidgetStore } from "../../packages/widgets/src/widgetStore.ts";
 
 describe("WidgetStore — atomic commit failure (create)", () => {
   let kv: Deno.Kv;

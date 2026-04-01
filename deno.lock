@@ -508,6 +508,56 @@
       "npm:@types/react@^19.1.1",
       "npm:react-dom@^19.1.1",
       "npm:react@^19.1.1"
-    ]
+    ],
+    "members": {
+      "packages/admin": {
+        "dependencies": [
+          "jsr:@deno/emit@0.46",
+          "jsr:@std/assert@^1.0.14",
+          "jsr:@std/async@^1.0.14",
+          "jsr:@std/cli@1",
+          "jsr:@std/encoding@^1.0.10",
+          "jsr:@std/fs@1",
+          "jsr:@std/fs@^1.0.19",
+          "jsr:@std/path@^1.1.2",
+          "jsr:@std/testing@^1.0.15",
+          "npm:@types/react-dom@^19.1.1",
+          "npm:@types/react@^19.1.1",
+          "npm:react-dom@^19.1.1",
+          "npm:react@^19.1.1"
+        ]
+      },
+      "packages/core": {
+        "dependencies": [
+          "jsr:@deno/emit@0.46",
+          "jsr:@std/assert@^1.0.14",
+          "jsr:@std/async@^1.0.14",
+          "jsr:@std/cli@1",
+          "jsr:@std/encoding@^1.0.10",
+          "jsr:@std/fs@1",
+          "jsr:@std/fs@^1.0.19",
+          "jsr:@std/path@^1.1.2",
+          "jsr:@std/testing@^1.0.15",
+          "npm:@types/react-dom@^19.1.1",
+          "npm:@types/react@^19.1.1",
+          "npm:react-dom@^19.1.1",
+          "npm:react@^19.1.1"
+        ]
+      },
+      "packages/widgets": {
+        "dependencies": [
+          "jsr:@std/assert@^1.0.14",
+          "jsr:@std/async@^1.0.14",
+          "jsr:@std/encoding@^1.0.10",
+          "jsr:@std/fs@^1.0.19",
+          "jsr:@std/path@^1.1.2",
+          "jsr:@std/testing@^1.0.15",
+          "npm:@types/react-dom@^19.1.1",
+          "npm:@types/react@^19.1.1",
+          "npm:react-dom@^19.1.1",
+          "npm:react@^19.1.1"
+        ]
+      }
+    }
   }
 }

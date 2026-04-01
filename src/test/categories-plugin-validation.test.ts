@@ -1,8 +1,8 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
-import { InMemoryStorage } from "../models/Storage.ts";
-import type { StorageItem } from "../models/Storage.ts";
+import { CategoriesPlugin } from "../../packages/admin/src/plugins/categoriesPlugin.ts";
+import { InMemoryStorage } from "../../packages/core/src/models/Storage.ts";
+import type { StorageItem } from "../../packages/core/src/models/Storage.ts";
 
 /** InMemoryStorage with listByIndex support for slug uniqueness tests. */
 class IndexedInMemoryStorage extends InMemoryStorage {

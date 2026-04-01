@@ -7,14 +7,14 @@
  */
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists } from "@std/assert";
-import { verifyPassword } from "../auth/passwordHasher.ts";
-import { DynamicRouteRegistry } from "../routing/dynamicRouteRegistry.ts";
-import { createAuthRoutes } from "../auth/loginHandler.ts";
-import { authMiddleware } from "../auth/authMiddleware.ts";
-import type { Session, User } from "../auth/types.ts";
-import type { SessionStore } from "../auth/sessionStore.ts";
-import type { UserStore } from "../auth/userStore.ts";
-import { createPasswordHash } from "../auth/passwordHasher.ts";
+import { verifyPassword } from "../../packages/admin/src/auth/passwordHasher.ts";
+import { DynamicRouteRegistry } from "../../packages/core/src/routing/dynamicRouteRegistry.ts";
+import { createAuthRoutes } from "../../packages/admin/src/auth/loginHandler.ts";
+import { authMiddleware } from "../../packages/admin/src/auth/authMiddleware.ts";
+import type { Session, User } from "../../packages/admin/src/auth/types.ts";
+import type { SessionStore } from "../../packages/admin/src/auth/sessionStore.ts";
+import type { UserStore } from "../../packages/admin/src/auth/userStore.ts";
+import { createPasswordHash } from "../../packages/admin/src/auth/passwordHasher.ts";
 
 describe("verifyPassword — length mismatch branch", () => {
   it("should return false when stored hash has different length", async () => {

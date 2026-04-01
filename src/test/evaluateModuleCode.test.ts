@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertRejects } from "@std/assert";
-import { evaluateModuleCode } from "../utils/evaluateModuleCode.ts";
+import { evaluateModuleCode } from "../../packages/core/src/utils/evaluateModuleCode.ts";
 
 describe("evaluateModuleCode", () => {
   describe("direct export function", () => {

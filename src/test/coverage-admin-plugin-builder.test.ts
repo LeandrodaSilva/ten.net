@@ -6,14 +6,14 @@
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists, assertStringIncludes } from "@std/assert";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { PagePlugin } from "../plugins/pagePlugin.ts";
-import { PostsPlugin } from "../plugins/postsPlugin.ts";
-import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
-import { UsersPlugin } from "../plugins/usersPlugin.ts";
-import { RolesPlugin } from "../plugins/rolesPlugin.ts";
-import { AuditLogPlugin } from "../plugins/auditLogPlugin.ts";
-import type { Route } from "../models/Route.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
+import { PostsPlugin } from "../../packages/admin/src/plugins/postsPlugin.ts";
+import { CategoriesPlugin } from "../../packages/admin/src/plugins/categoriesPlugin.ts";
+import { UsersPlugin } from "../../packages/admin/src/plugins/usersPlugin.ts";
+import { RolesPlugin } from "../../packages/admin/src/plugins/rolesPlugin.ts";
+import { AuditLogPlugin } from "../../packages/admin/src/plugins/auditLogPlugin.ts";
+import type { Route } from "../../packages/core/src/models/Route.ts";
 
 describe("AdminPlugin — Page Builder routes (KV mode)", () => {
   let admin: AdminPlugin;

@@ -6,7 +6,7 @@ import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { renderToString } from "react-dom/server";
 import React from "react";
-import { Logs } from "../admin/components/logs.tsx";
+import { Logs } from "../../packages/admin/src/components/logs.tsx";
 
 describe("Logs component", () => {
   it("should render empty state when no entries", () => {

@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { embeddedRouterEngine } from "../embedded/embeddedRouterEngine.ts";
-import type { AppManifest } from "../build/manifest.ts";
+import { embeddedRouterEngine } from "../../packages/core/src/embedded/embeddedRouterEngine.ts";
+import type { AppManifest } from "../../packages/core/src/build/manifest.ts";
 
 function createTestManifest(): AppManifest {
   return {

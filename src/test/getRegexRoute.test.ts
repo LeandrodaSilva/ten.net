@@ -1,5 +1,5 @@
 import { assertEquals } from "@deno-assert";
-import { getRegexRoute } from "../utils/getRegexRoute.ts";
+import { getRegexRoute } from "../../packages/core/src/utils/getRegexRoute.ts";
 
 Deno.test("getRegexRoute - static routes - should match exact static routes", () => {
   const regex = getRegexRoute("/users/posts");

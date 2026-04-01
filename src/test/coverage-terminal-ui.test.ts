@@ -8,7 +8,7 @@ import {
   formatDuration,
   formatPercent,
   TerminalUi,
-} from "../terminalUi.ts";
+} from "../../packages/core/src/terminalUi.ts";
 
 describe("TerminalUi — color disabled", () => {
   it("should not wrap ANSI codes when color is disabled", () => {

@@ -1,9 +1,9 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists } from "@std/assert";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { RolesPlugin } from "../plugins/rolesPlugin.ts";
-import { AuditLogPlugin } from "../plugins/auditLogPlugin.ts";
-import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { RolesPlugin } from "../../packages/admin/src/plugins/rolesPlugin.ts";
+import { AuditLogPlugin } from "../../packages/admin/src/plugins/auditLogPlugin.ts";
+import { CategoriesPlugin } from "../../packages/admin/src/plugins/categoriesPlugin.ts";
 
 describe("Built-in roles seed", () => {
   it("should seed 3 built-in roles on first init", async () => {

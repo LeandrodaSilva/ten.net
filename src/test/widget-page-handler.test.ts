@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { renderWidgetPage } from "../routing/widgetPageHandler.ts";
-import { WidgetStore } from "../widgets/widgetStore.ts";
-import { widgetRegistry } from "../widgets/widgetRegistry.ts";
-import { registerBuiltinWidgets } from "../widgets/builtins/index.ts";
-import { heroWidget } from "../widgets/builtins/hero.ts";
-import { richTextWidget } from "../widgets/builtins/richText.ts";
-import { imageWidget } from "../widgets/builtins/image.ts";
-import type { WidgetInstance } from "../widgets/types.ts";
+import { renderWidgetPage } from "../../packages/core/src/routing/widgetPageHandler.ts";
+import { WidgetStore } from "../../packages/widgets/src/widgetStore.ts";
+import { widgetRegistry } from "../../packages/widgets/src/widgetRegistry.ts";
+import { registerBuiltinWidgets } from "../../packages/widgets/src/builtins/index.ts";
+import { heroWidget } from "../../packages/widgets/src/builtins/hero.ts";
+import { richTextWidget } from "../../packages/widgets/src/builtins/richText.ts";
+import { imageWidget } from "../../packages/widgets/src/builtins/image.ts";
+import type { WidgetInstance } from "../../packages/widgets/src/types.ts";
 
 describe("renderWidgetPage", () => {
   let kv: Deno.Kv;

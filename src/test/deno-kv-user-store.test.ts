@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertNotEquals } from "@std/assert";
-import { DenoKvUserStore } from "../storage/denoKvUserStore.ts";
-import { seedDefaultAdmin } from "../auth/userStore.ts";
-import type { User } from "../auth/types.ts";
+import { DenoKvUserStore } from "../../packages/admin/src/storage/denoKvUserStore.ts";
+import { seedDefaultAdmin } from "../../packages/admin/src/auth/userStore.ts";
+import type { User } from "../../packages/admin/src/auth/types.ts";
 
 describe("DenoKvUserStore", () => {
   let kv: Deno.Kv;

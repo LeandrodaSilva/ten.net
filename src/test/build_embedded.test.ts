@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, it } from "@std/testing/bdd";
-import { Ten } from "../ten.ts";
-import { collectManifest } from "../build/collector.ts";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { PagePlugin } from "../plugins/pagePlugin.ts";
+import { Ten } from "../../packages/core/src/ten.ts";
+import { collectManifest } from "../../packages/core/src/build/collector.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
 import {
   assert404,
   assertAdminPage,

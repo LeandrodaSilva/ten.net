@@ -1,8 +1,11 @@
 import { describe, it } from "@std/testing/bdd";
 import { assert, assertEquals, assertStringIncludes } from "@std/assert";
-import { columnsWidget } from "../widgets/builtins/columns.ts";
-import { registerBuiltinWidgets } from "../widgets/builtins/index.ts";
-import type { WidgetInstance, WidgetRenderContext } from "../widgets/types.ts";
+import { columnsWidget } from "../../packages/widgets/src/builtins/columns.ts";
+import { registerBuiltinWidgets } from "../../packages/widgets/src/builtins/index.ts";
+import type {
+  WidgetInstance,
+  WidgetRenderContext,
+} from "../../packages/widgets/src/types.ts";
 
 // Ensure hero/rich-text etc. are registered so sub-widget rendering works
 registerBuiltinWidgets();

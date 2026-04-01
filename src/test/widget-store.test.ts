@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists, assertRejects } from "@std/assert";
-import { WidgetStore } from "../widgets/widgetStore.ts";
+import { WidgetStore } from "../../packages/widgets/src/widgetStore.ts";
 
 describe("WidgetStore", () => {
   let kv: Deno.Kv;

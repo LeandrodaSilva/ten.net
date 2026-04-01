@@ -1,5 +1,5 @@
 import { assertEquals } from "@deno-assert";
-import { findOrderedLayouts } from "../utils/findOrderedLayouts.ts";
+import { findOrderedLayouts } from "../../packages/core/src/utils/findOrderedLayouts.ts";
 
 Deno.test("findOrderedLayouts - should return empty array when no layouts exist", () => {
   const result = findOrderedLayouts("/nonexistent", "/users/profile");
