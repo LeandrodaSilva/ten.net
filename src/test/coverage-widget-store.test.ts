@@ -4,7 +4,7 @@
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertRejects } from "@std/assert";
-import { WidgetStore } from "../widgets/widgetStore.ts";
+import { WidgetStore } from "../../packages/widgets/src/widgetStore.ts";
 
 describe("WidgetStore — _validateId error paths", () => {
   let kv: Deno.Kv;

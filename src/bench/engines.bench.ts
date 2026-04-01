@@ -1,5 +1,5 @@
-import { routerEngine } from "../routerEngine.ts";
-import { viewEngine } from "../viewEngine.ts";
+import { routerEngine } from "../../packages/core/src/routerEngine.ts";
+import { viewEngine } from "../../packages/core/src/viewEngine.ts";
 import { createRoute, restoreConsole, suppressConsole } from "./_helpers.ts";
 
 suppressConsole();

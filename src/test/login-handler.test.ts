@@ -1,8 +1,11 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { createAuthRoutes } from "../auth/loginHandler.ts";
-import { InMemoryUserStore, seedDefaultAdmin } from "../auth/userStore.ts";
-import { InMemorySessionStore } from "../auth/sessionStore.ts";
+import { createAuthRoutes } from "../../packages/admin/src/auth/loginHandler.ts";
+import {
+  InMemoryUserStore,
+  seedDefaultAdmin,
+} from "../../packages/admin/src/auth/userStore.ts";
+import { InMemorySessionStore } from "../../packages/admin/src/auth/sessionStore.ts";
 
 /** Helper: extract a cookie value from a Set-Cookie header. */
 function extractSessionId(setCookie: string): string {

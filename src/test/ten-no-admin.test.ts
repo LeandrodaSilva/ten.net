@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { Ten } from "../ten.ts";
-import type { Route } from "../models/Route.ts";
+import { Ten } from "../../packages/core/src/ten.ts";
+import type { Route } from "../../packages/core/src/models/Route.ts";
 
 describe("Ten without admin (no useAdmin)", () => {
   it("should start with only file-based routes", async () => {

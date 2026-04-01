@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists, assertStringIncludes } from "@std/assert";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { PagePlugin } from "../plugins/pagePlugin.ts";
-import type { Route } from "../models/Route.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
+import type { Route } from "../../packages/core/src/models/Route.ts";
 
 describe("Page Builder routes", () => {
   let admin: AdminPlugin;

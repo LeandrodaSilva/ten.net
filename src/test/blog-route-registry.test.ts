@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { BlogRouteRegistry } from "../routing/blogRouteRegistry.ts";
-import { InMemoryStorage } from "../models/Storage.ts";
+import { BlogRouteRegistry } from "../../packages/core/src/routing/blogRouteRegistry.ts";
+import { InMemoryStorage } from "../../packages/core/src/models/Storage.ts";
 
 /** Helper: create a published StorageItem for the registry. */
 function publishedItem(overrides?: Record<string, unknown>) {

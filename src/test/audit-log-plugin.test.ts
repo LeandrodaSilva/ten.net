@@ -1,6 +1,9 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists } from "@std/assert";
-import { AUDIT_LOG_TTL, AuditLogPlugin } from "../plugins/auditLogPlugin.ts";
+import {
+  AUDIT_LOG_TTL,
+  AuditLogPlugin,
+} from "../../packages/admin/src/plugins/auditLogPlugin.ts";
 
 describe("AuditLogPlugin", () => {
   it("should have correct name", () => {

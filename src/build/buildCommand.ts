@@ -1,42 +1,5 @@
-import { parseArgs } from "@std/cli/parse-args";
-import { printBuildHelp, printVersion } from "../cliShared.ts";
-import { build } from "./build.ts";
-
-async function main() {
-  const args = parseArgs(Deno.args, {
-    string: ["secret", "output", "app-path", "public-path"],
-    boolean: ["help", "version", "no-compile"],
-    alias: { h: "help", v: "version" },
-    default: {
-      output: "./dist",
-      "app-path": "./app",
-      "public-path": "./public",
-      "no-compile": false,
-    },
-  });
-
-  if (args.version) {
-    printVersion();
-    return;
-  }
-
-  if (args.help) {
-    printBuildHelp();
-    return;
-  }
-
-  try {
-    await build({
-      appPath: args["app-path"],
-      publicPath: args["public-path"],
-      output: args.output,
-      secret: args.secret,
-      compile: !args["no-compile"],
-    });
-  } catch {
-    Deno.exit(1);
-  }
-}
+// Shim for backwards compatibility — implementation moved to packages/core/src/build/buildCommand.ts
+import { main } from "../../packages/core/src/build/buildCommand.ts";
 
 if (import.meta.main) {
   main();

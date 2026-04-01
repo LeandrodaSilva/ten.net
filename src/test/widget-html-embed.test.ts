@@ -1,8 +1,8 @@
 import { describe, it } from "@std/testing/bdd";
 import { assert, assertEquals, assertStringIncludes } from "@std/assert";
-import { htmlWidget } from "../widgets/builtins/html.ts";
-import { embedWidget } from "../widgets/builtins/embed.ts";
-import type { WidgetInstance } from "../widgets/types.ts";
+import { htmlWidget } from "../../packages/widgets/src/builtins/html.ts";
+import { embedWidget } from "../../packages/widgets/src/builtins/embed.ts";
+import type { WidgetInstance } from "../../packages/widgets/src/types.ts";
 
 function makeInstance(
   type: string,

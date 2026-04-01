@@ -1,11 +1,11 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { renderToString } from "react-dom/server";
-import { Script } from "../admin/components/script.tsx";
-import { Plugins } from "../admin/components/plugins.tsx";
-import { Logs } from "../admin/components/logs.tsx";
-import Dashboard from "../layout/dashboard.tsx";
-import { App, appWithChildren } from "../admin/app.tsx";
+import { Script } from "../../packages/admin/src/components/script.tsx";
+import { Plugins } from "../../packages/admin/src/components/plugins.tsx";
+import { Logs } from "../../packages/admin/src/components/logs.tsx";
+import Dashboard from "../../packages/admin/src/layout/dashboard.tsx";
+import { App, appWithChildren } from "../../packages/admin/src/app.tsx";
 import type { ReactElement } from "react";
 
 describe("Script component", () => {

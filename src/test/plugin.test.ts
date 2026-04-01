@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { PagePlugin } from "../plugins/pagePlugin.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
 
 describe("AdminPlugin", () => {
   it("should accept plugins in constructor", () => {

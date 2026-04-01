@@ -1,5 +1,5 @@
 import { assertEquals } from "@deno-assert";
-import { transpileRoute } from "../utils/transpileRoute.ts";
+import { transpileRoute } from "../../packages/core/src/utils/transpileRoute.ts";
 import { assertSnapshot } from "@std/testing/snapshot";
 
 Deno.test("transpileRoute should fail with empty path", async () => {

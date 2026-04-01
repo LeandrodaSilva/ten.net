@@ -3,10 +3,10 @@
  */
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { heroWidget } from "../widgets/builtins/hero.ts";
-import { imageWidget } from "../widgets/builtins/image.ts";
-import { richTextWidget } from "../widgets/builtins/richText.ts";
-import type { WidgetInstance } from "../widgets/types.ts";
+import { heroWidget } from "../../packages/widgets/src/builtins/hero.ts";
+import { imageWidget } from "../../packages/widgets/src/builtins/image.ts";
+import { richTextWidget } from "../../packages/widgets/src/builtins/richText.ts";
+import type { WidgetInstance } from "../../packages/widgets/src/types.ts";
 
 const now = new Date().toISOString();
 

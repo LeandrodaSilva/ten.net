@@ -4,8 +4,8 @@
  */
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { PagePlugin } from "../plugins/pagePlugin.ts";
-import { RolesPlugin } from "../plugins/rolesPlugin.ts";
+import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
+import { RolesPlugin } from "../../packages/admin/src/plugins/rolesPlugin.ts";
 
 describe("Plugin.validate() — boolean field handling via PagePlugin", () => {
   it("should not require boolean fields (widgets_enabled can be empty)", () => {

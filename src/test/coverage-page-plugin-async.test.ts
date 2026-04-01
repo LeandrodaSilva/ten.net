@@ -3,8 +3,8 @@
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { PagePlugin } from "../plugins/pagePlugin.ts";
-import { DenoKvStorage } from "../storage/denoKvStorage.ts";
+import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
+import { DenoKvStorage } from "../../packages/admin/src/storage/denoKvStorage.ts";
 
 describe("PagePlugin.validateAsync — slug uniqueness", () => {
   let kv: Deno.Kv;

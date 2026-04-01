@@ -4,7 +4,7 @@ import {
   CURRENT_SCHEMA_VERSION,
   getSchemaVersion,
   runMigrations,
-} from "../storage/schema.ts";
+} from "../../packages/admin/src/storage/schema.ts";
 
 describe("Schema migrations", () => {
   let kv: Deno.Kv;

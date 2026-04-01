@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { viewEngine } from "../viewEngine.ts";
-import { Route } from "../models/Route.ts";
+import { viewEngine } from "../../packages/core/src/viewEngine.ts";
+import { Route } from "../../packages/core/src/models/Route.ts";
 
 function createRoute(
   overrides?: Partial<{

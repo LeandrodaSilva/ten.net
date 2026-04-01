@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, it } from "@std/testing/bdd";
 import { assert, assertEquals } from "@std/assert";
-import { WidgetPermissionsStore } from "../widgets/widgetPermissionsStore.ts";
-import { registerBuiltinWidgets } from "../widgets/builtins/index.ts";
+import { WidgetPermissionsStore } from "../../packages/widgets/src/widgetPermissionsStore.ts";
+import { registerBuiltinWidgets } from "../../packages/widgets/src/builtins/index.ts";
 
 // Ensure widgets are registered so fallback logic works
 registerBuiltinWidgets();

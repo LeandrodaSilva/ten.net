@@ -1,11 +1,11 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists } from "@std/assert";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
-import { AuditLogPlugin } from "../plugins/auditLogPlugin.ts";
-import { RolesPlugin } from "../plugins/rolesPlugin.ts";
-import { requestSession } from "../auth/authMiddleware.ts";
-import type { Session } from "../auth/types.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { CategoriesPlugin } from "../../packages/admin/src/plugins/categoriesPlugin.ts";
+import { AuditLogPlugin } from "../../packages/admin/src/plugins/auditLogPlugin.ts";
+import { RolesPlugin } from "../../packages/admin/src/plugins/rolesPlugin.ts";
+import { requestSession } from "../../packages/admin/src/auth/authMiddleware.ts";
+import type { Session } from "../../packages/admin/src/auth/types.ts";
 
 /** Helper: create a POST form request with session attached. */
 function makeFormRequest(

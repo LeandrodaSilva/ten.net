@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertSnapshot } from "@std/testing/snapshot";
 import { renderToString } from "react-dom/server";
-import { PermissionsMatrix } from "../admin/components/permissions-matrix.tsx";
+import { PermissionsMatrix } from "../../packages/admin/src/components/permissions-matrix.tsx";
 
 describe("PermissionsMatrix snapshot", () => {
   it("should render matrix with roles and resources", async (t) => {

@@ -1,8 +1,8 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { escapeHtml } from "../auth/htmlEscape.ts";
-import { viewEngine } from "../viewEngine.ts";
-import { Route } from "../models/Route.ts";
+import { escapeHtml } from "../../packages/core/src/utils/htmlEscape.ts";
+import { viewEngine } from "../../packages/core/src/viewEngine.ts";
+import { Route } from "../../packages/core/src/models/Route.ts";
 
 function createAdminRoute(
   page: string,

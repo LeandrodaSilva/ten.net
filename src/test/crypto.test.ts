@@ -10,7 +10,7 @@ import {
   generateSalt,
   generateSecret,
   importKeyRaw,
-} from "../build/crypto.ts";
+} from "../../packages/core/src/build/crypto.ts";
 
 describe("crypto", () => {
   describe("generateSecret", () => {

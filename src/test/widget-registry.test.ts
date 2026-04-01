@@ -1,11 +1,11 @@
 import { beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { widgetRegistry } from "../widgets/widgetRegistry.ts";
+import { widgetRegistry } from "../../packages/widgets/src/widgetRegistry.ts";
 import type {
   WidgetDefinition,
   WidgetInstance,
   WidgetType,
-} from "../widgets/types.ts";
+} from "../../packages/widgets/src/types.ts";
 
 /** Helper: create a minimal valid WidgetDefinition with overrides. */
 function makeDef(overrides?: Partial<WidgetDefinition>): WidgetDefinition {

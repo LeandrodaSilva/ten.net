@@ -40,7 +40,7 @@ jobs:
         run: deno lint --unstable-raw-imports
 
       - name: Cache dependencies
-        run: deno cache --unstable-raw-imports src/mod.ts
+        run: deno cache --unstable-raw-imports packages/core/src/mod.ts
 
       - name: Run tests
         run: deno test --allow-all --unstable-raw-imports --unstable-kv

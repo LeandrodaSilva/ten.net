@@ -1,9 +1,9 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { PostsPlugin } from "../plugins/postsPlugin.ts";
-import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
-import type { Route } from "../models/Route.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { PostsPlugin } from "../../packages/admin/src/plugins/postsPlugin.ts";
+import { CategoriesPlugin } from "../../packages/admin/src/plugins/categoriesPlugin.ts";
+import type { Route } from "../../packages/core/src/models/Route.ts";
 
 /** Helper: init AdminPlugin with Posts + Categories and return routes. */
 async function initBlogAdmin(): Promise<{

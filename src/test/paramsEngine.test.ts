@@ -1,6 +1,6 @@
 import { assertEquals } from "@deno-assert";
-import { paramsEngine } from "../paramsEngine.ts";
-import { Route } from "../models/Route.ts";
+import { paramsEngine } from "../../packages/core/src/paramsEngine.ts";
+import { Route } from "../../packages/core/src/models/Route.ts";
 
 Deno.test("paramsEngine should be defined", () => {
   assertEquals(typeof paramsEngine, "function");

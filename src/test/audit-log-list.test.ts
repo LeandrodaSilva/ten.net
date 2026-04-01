@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertSnapshot } from "@std/testing/snapshot";
 import { renderToString } from "react-dom/server";
-import { AuditLogList } from "../admin/components/audit-log-list.tsx";
+import { AuditLogList } from "../../packages/admin/src/components/audit-log-list.tsx";
 
 describe("AuditLogList snapshot", () => {
   it("should render empty state", async (t) => {

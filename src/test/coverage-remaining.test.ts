@@ -5,15 +5,15 @@
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { renderWidgetPage } from "../routing/widgetPageHandler.ts";
+import { renderWidgetPage } from "../../packages/core/src/routing/widgetPageHandler.ts";
 
-import { widgetRegistry } from "../widgets/widgetRegistry.ts";
-import { registerBuiltinWidgets } from "../widgets/builtins/index.ts";
-import { renderDynamicPage } from "../routing/dynamicPageHandler.ts";
-import type { StorageItem } from "../models/Storage.ts";
-import { transpileRoute } from "../utils/transpileRoute.ts";
-import { TerminalUi } from "../terminalUi.ts";
-import { parseCookie } from "../auth/authMiddleware.ts";
+import { widgetRegistry } from "../../packages/widgets/src/widgetRegistry.ts";
+import { registerBuiltinWidgets } from "../../packages/widgets/src/builtins/index.ts";
+import { renderDynamicPage } from "../../packages/core/src/routing/dynamicPageHandler.ts";
+import type { StorageItem } from "../../packages/core/src/models/Storage.ts";
+import { transpileRoute } from "../../packages/core/src/utils/transpileRoute.ts";
+import { TerminalUi } from "../../packages/core/src/terminalUi.ts";
+import { parseCookie } from "../../packages/admin/src/auth/authMiddleware.ts";
 
 describe("renderWidgetPage — catch/error branch", () => {
   let kv: Deno.Kv;

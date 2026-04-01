@@ -1,11 +1,11 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { PostsPlugin } from "../plugins/postsPlugin.ts";
-import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
-import { GroupsPlugin } from "../plugins/groupsPlugin.ts";
-import { UsersPlugin } from "../plugins/usersPlugin.ts";
-import { SettingsPlugin } from "../plugins/settingsPlugin.ts";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
+import { PostsPlugin } from "../../packages/admin/src/plugins/postsPlugin.ts";
+import { CategoriesPlugin } from "../../packages/admin/src/plugins/categoriesPlugin.ts";
+import { GroupsPlugin } from "../../packages/admin/src/plugins/groupsPlugin.ts";
+import { UsersPlugin } from "../../packages/admin/src/plugins/usersPlugin.ts";
+import { SettingsPlugin } from "../../packages/admin/src/plugins/settingsPlugin.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
 
 describe("PostsPlugin", () => {
   it("should have correct name", () => {

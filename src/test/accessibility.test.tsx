@@ -1,8 +1,8 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertStringIncludes } from "@std/assert";
 import { renderToString } from "react-dom/server";
-import { App } from "../admin/app.tsx";
-import Dashboard from "../layout/dashboard.tsx";
+import { App } from "../../packages/admin/src/app.tsx";
+import Dashboard from "../../packages/admin/src/layout/dashboard.tsx";
 import type { ReactElement } from "react";
 
 describe("App accessibility", () => {

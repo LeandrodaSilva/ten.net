@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists } from "@std/assert";
-import { DenoKvSessionStore } from "../storage/denoKvSessionStore.ts";
-import type { Session } from "../auth/types.ts";
+import { DenoKvSessionStore } from "../../packages/admin/src/storage/denoKvSessionStore.ts";
+import type { Session } from "../../packages/admin/src/auth/types.ts";
 
 function makeSession(overrides?: Partial<Session>): Session {
   return {

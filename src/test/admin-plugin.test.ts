@@ -1,9 +1,9 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists, assertStringIncludes } from "@std/assert";
-import { AdminPlugin } from "../plugins/adminPlugin.tsx";
-import { PagePlugin } from "../plugins/pagePlugin.ts";
-import { PostsPlugin } from "../plugins/postsPlugin.ts";
-import { CategoriesPlugin } from "../plugins/categoriesPlugin.ts";
+import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
+import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
+import { PostsPlugin } from "../../packages/admin/src/plugins/postsPlugin.ts";
+import { CategoriesPlugin } from "../../packages/admin/src/plugins/categoriesPlugin.ts";
 
 describe("AdminPlugin.init()", () => {
   it("should return routes and middlewares", async () => {

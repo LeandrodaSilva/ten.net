@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { VERSION } from "../version.ts";
+import { VERSION } from "../../packages/core/src/version.ts";
 
 describe("cli", () => {
   it("should show help when run without arguments", async () => {

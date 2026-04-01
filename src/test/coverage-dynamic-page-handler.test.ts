@@ -4,10 +4,10 @@
  */
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { renderDynamicPage } from "../routing/dynamicPageHandler.ts";
-import { WidgetStore } from "../widgets/widgetStore.ts";
-import { registerBuiltinWidgets } from "../widgets/builtins/index.ts";
-import type { StorageItem } from "../models/Storage.ts";
+import { renderDynamicPage } from "../../packages/core/src/routing/dynamicPageHandler.ts";
+import { WidgetStore } from "../../packages/widgets/src/widgetStore.ts";
+import { registerBuiltinWidgets } from "../../packages/widgets/src/builtins/index.ts";
+import type { StorageItem } from "../../packages/core/src/models/Storage.ts";
 
 // We need a real app path with document.html and layout.html for the handler
 const APP_PATH = `${Deno.cwd()}/app`;

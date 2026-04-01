@@ -4,11 +4,11 @@ import {
   authMiddleware,
   parseCookie,
   requestSession,
-} from "../auth/authMiddleware.ts";
-import { InMemorySessionStore } from "../auth/sessionStore.ts";
-import { csrfMiddleware } from "../auth/csrfMiddleware.ts";
-import { securityHeadersMiddleware } from "../auth/securityHeaders.ts";
-import type { Session } from "../auth/types.ts";
+} from "../../packages/admin/src/auth/authMiddleware.ts";
+import { InMemorySessionStore } from "../../packages/admin/src/auth/sessionStore.ts";
+import { csrfMiddleware } from "../../packages/admin/src/auth/csrfMiddleware.ts";
+import { securityHeadersMiddleware } from "../../packages/admin/src/auth/securityHeaders.ts";
+import type { Session } from "../../packages/admin/src/auth/types.ts";
 
 /** Shared session store for auth middleware tests. */
 const sessionStore = new InMemorySessionStore();

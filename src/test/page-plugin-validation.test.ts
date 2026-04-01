@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { PagePlugin } from "../plugins/pagePlugin.ts";
-import { InMemoryStorage } from "../models/Storage.ts";
+import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
+import { InMemoryStorage } from "../../packages/core/src/models/Storage.ts";
 
 /** Helper: create valid page data with overrides. */
 function pageData(
