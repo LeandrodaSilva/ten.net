@@ -92,7 +92,7 @@ function createItem(
 
 // ── Test Suite ───────────────────────────────────────────────────────────────
 
-describe("Admin E2E Integration", () => {
+describe("Admin E2E Integration", { sanitizeResources: false }, () => {
   let server: Deno.HttpServer;
   let baseUrl: string;
   let cookie: string;
