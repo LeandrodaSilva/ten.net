@@ -320,9 +320,7 @@ export function addBlogRoutes(ctx: AdminContext, routes: Route[]): void {
     }
   <div class="text-sm text-gray-500 mb-2">
     <time datetime="${escapeAttrValue(post.published_at ?? "")}">${
-      post.published_at
-        ? new Date(post.published_at).toLocaleDateString()
-        : ""
+      post.published_at ? new Date(post.published_at).toLocaleDateString() : ""
     }</time>
     ${categoryHtml}
   </div>
