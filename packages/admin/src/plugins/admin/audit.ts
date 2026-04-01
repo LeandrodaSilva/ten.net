@@ -1,5 +1,5 @@
 import { requestSession } from "../../auth/authMiddleware.ts";
-import { AUDIT_LOG_TTL, AuditLogPlugin } from "../auditLogPlugin.ts";
+import { AUDIT_LOG_TTL, type AuditLogPlugin } from "../auditLogPlugin.ts";
 import type { StorageItem } from "@leproj/tennet";
 
 export interface AuditContext {
