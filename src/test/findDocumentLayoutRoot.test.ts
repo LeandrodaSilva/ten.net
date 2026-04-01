@@ -12,7 +12,7 @@ Deno.test("findDocumentLayoutRoot - returns file content when document.html exis
 
   try {
     // Act
-    const result = findDocumentLayoutRoot(TEST_APP_PATH);
+    const result = await findDocumentLayoutRoot(TEST_APP_PATH);
 
     // Assert
     await assertSnapshot(t, result);
@@ -27,7 +27,7 @@ Deno.test("findDocumentLayoutRoot - returns default template when document.html 
   const nonExistentPath = "./non_existent_path";
 
   // Act
-  const result = findDocumentLayoutRoot(nonExistentPath);
+  const result = await findDocumentLayoutRoot(nonExistentPath);
 
   // Assert
   await assertSnapshot(t, result);
@@ -49,7 +49,7 @@ Deno.test("findDocumentLayoutRoot - returns default template when file exists bu
 
   try {
     // Act
-    const result = findDocumentLayoutRoot(TEST_APP_PATH);
+    const result = await findDocumentLayoutRoot(TEST_APP_PATH);
 
     // Assert
     await assertSnapshot(t, result);
@@ -64,14 +64,14 @@ Deno.test("findDocumentLayoutRoot - returns default template when file exists bu
   }
 });
 
-Deno.test("findDocumentLayoutRoot - handles empty file", () => {
+Deno.test("findDocumentLayoutRoot - handles empty file", async () => {
   // Setup
   Deno.mkdirSync(TEST_APP_PATH, { recursive: true });
   Deno.writeTextFileSync(DOCUMENT_HTML_PATH, "");
 
   try {
     // Act
-    const result = findDocumentLayoutRoot(TEST_APP_PATH);
+    const result = await findDocumentLayoutRoot(TEST_APP_PATH);
 
     // Assert
     assertEquals(result, "");
@@ -81,7 +81,7 @@ Deno.test("findDocumentLayoutRoot - handles empty file", () => {
   }
 });
 
-Deno.test("findDocumentLayoutRoot - handles different app paths", () => {
+Deno.test("findDocumentLayoutRoot - handles different app paths", async () => {
   // Setup
   const customAppPath = `${TEST_DIR}/custom/app/path`;
   const customDocumentPath = `${customAppPath}/document.html`;
@@ -91,7 +91,7 @@ Deno.test("findDocumentLayoutRoot - handles different app paths", () => {
 
   try {
     // Act
-    const result = findDocumentLayoutRoot(customAppPath);
+    const result = await findDocumentLayoutRoot(customAppPath);
 
     // Assert
     assertEquals(result, expectedContent);

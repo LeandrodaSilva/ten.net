@@ -29,11 +29,11 @@ export async function viewEngine(args: IViewEngine) {
       pageModule = documentLayout.replace("{{content}}", pageModule);
       layoutContents = embedded.layouts[route.path] ?? [];
     } else {
-      const layouts = findOrderedLayouts(_appPath, route.path);
-      const documentLayout = findDocumentLayoutRoot(_appPath);
+      const layouts = await findOrderedLayouts(_appPath, route.path);
+      const documentLayout = await findDocumentLayoutRoot(_appPath);
       pageModule = documentLayout.replace("{{content}}", pageModule);
       for (const layoutPath of layouts) {
-        layoutContents.push(Deno.readTextFileSync(layoutPath));
+        layoutContents.push(await Deno.readTextFile(layoutPath));
       }
     }
   }

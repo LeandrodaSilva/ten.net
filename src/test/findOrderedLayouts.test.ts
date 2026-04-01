@@ -1,8 +1,8 @@
 import { assertEquals } from "@deno-assert";
 import { findOrderedLayouts } from "../../packages/core/src/utils/findOrderedLayouts.ts";
 
-Deno.test("findOrderedLayouts - should return empty array when no layouts exist", () => {
-  const result = findOrderedLayouts("/nonexistent", "/users/profile");
+Deno.test("findOrderedLayouts - should return empty array when no layouts exist", async () => {
+  const result = await findOrderedLayouts("/nonexistent", "/users/profile");
   assertEquals(result, []);
 });
 
@@ -11,7 +11,7 @@ Deno.test("findOrderedLayouts - should find root layout only", async () => {
   await Deno.writeTextFile(`${tempDir}/layout.html`, "<html></html>");
 
   try {
-    const result = findOrderedLayouts(tempDir, "/users/profile");
+    const result = await findOrderedLayouts(tempDir, "/users/profile");
     assertEquals(result, [`${tempDir}/layout.html`]);
   } finally {
     await Deno.remove(tempDir, { recursive: true });
@@ -30,7 +30,7 @@ Deno.test("findOrderedLayouts - should find layouts in hierarchical order", asyn
   );
 
   try {
-    const result = findOrderedLayouts(tempDir, "/users/profile");
+    const result = await findOrderedLayouts(tempDir, "/users/profile");
     assertEquals(result, [
       `${tempDir}/layout.html`,
       `${tempDir}/users/layout.html`,
@@ -51,7 +51,7 @@ Deno.test("findOrderedLayouts - should skip missing intermediate layouts", async
   );
 
   try {
-    const result = findOrderedLayouts(tempDir, "/users/profile");
+    const result = await findOrderedLayouts(tempDir, "/users/profile");
     assertEquals(result, [
       `${tempDir}/layout.html`,
       `${tempDir}/users/profile/layout.html`,
@@ -66,7 +66,7 @@ Deno.test("findOrderedLayouts - should handle empty route", async () => {
   await Deno.writeTextFile(`${tempDir}/layout.html`, "<html></html>");
 
   try {
-    const result = findOrderedLayouts(tempDir, "");
+    const result = await findOrderedLayouts(tempDir, "");
     assertEquals(result, [`${tempDir}/layout.html`]);
   } finally {
     await Deno.remove(tempDir, { recursive: true });
@@ -80,7 +80,7 @@ Deno.test("findOrderedLayouts - should handle route with leading slash", async (
   await Deno.writeTextFile(`${tempDir}/api/layout.html`, "<html></html>");
 
   try {
-    const result = findOrderedLayouts(tempDir, "/api");
+    const result = await findOrderedLayouts(tempDir, "/api");
     assertEquals(result, [
       `${tempDir}/layout.html`,
       `${tempDir}/api/layout.html`,
@@ -97,7 +97,7 @@ Deno.test("findOrderedLayouts - should handle deep nested routes", async () => {
   await Deno.writeTextFile(`${tempDir}/a/b/c/d/layout.html`, "<html></html>");
 
   try {
-    const result = findOrderedLayouts(tempDir, "/a/b/c/d");
+    const result = await findOrderedLayouts(tempDir, "/a/b/c/d");
     assertEquals(result, [
       `${tempDir}/a/b/layout.html`,
       `${tempDir}/a/b/c/d/layout.html`,

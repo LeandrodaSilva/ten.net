@@ -36,14 +36,14 @@ export async function renderDynamicPage(
   let html = body;
 
   // Apply layout.html files from the root (same as file-based routing for "/")
-  const layouts = findOrderedLayouts(appPath, "/");
+  const layouts = await findOrderedLayouts(appPath, "/");
   for (let i = layouts.length - 1; i >= 0; i--) {
-    const layoutContent = Deno.readTextFileSync(layouts[i]);
+    const layoutContent = await Deno.readTextFile(layouts[i]);
     html = layoutContent.replace("{{content}}", html);
   }
 
   // Apply document.html wrapper
-  let document = findDocumentLayoutRoot(appPath);
+  let document = await findDocumentLayoutRoot(appPath);
 
   // Inject SEO tags into the document <head>
   if (seoTitle) {
