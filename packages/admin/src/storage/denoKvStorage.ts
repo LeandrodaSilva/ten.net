@@ -1,8 +1,4 @@
-import type {
-  ListOptions,
-  Storage,
-  StorageItem,
-} from "@leproj/tennet";
+import type { ListOptions, Storage, StorageItem } from "@leproj/tennet";
 import type { PluginModel } from "@leproj/tennet";
 
 /**

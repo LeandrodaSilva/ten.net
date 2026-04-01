@@ -20,7 +20,11 @@ import { csrfMiddleware } from "../auth/csrfMiddleware.ts";
 import { securityHeadersMiddleware } from "../auth/securityHeaders.ts";
 import type { Middleware, StorageItem } from "@leproj/tennet";
 import type { SidebarNavItem } from "../components/sidebar-nav.tsx";
-import { renderDynamicPage, DynamicRouteRegistry, BlogRouteRegistry } from "@leproj/tennet";
+import {
+  BlogRouteRegistry,
+  DynamicRouteRegistry,
+  renderDynamicPage,
+} from "@leproj/tennet";
 import { PagePlugin } from "./pagePlugin.ts";
 import { PostsPlugin } from "./postsPlugin.ts";
 import { CategoriesPlugin } from "./categoriesPlugin.ts";
@@ -31,13 +35,17 @@ import { ROLE_PERMISSIONS } from "../auth/types.ts";
 import type { PermissionAction } from "@leproj/tennet";
 import { UsersPlugin } from "./usersPlugin.ts";
 import {
-  WidgetStore,
-  widgetRegistry,
   registerBuiltinWidgets,
-  WidgetPermissionsStore,
   WidgetAuditLogger,
+  WidgetPermissionsStore,
+  widgetRegistry,
+  WidgetStore,
 } from "@leproj/tennet-widgets";
-import type { PlaceholderMap, WidgetInstance, WidgetType } from "@leproj/tennet-widgets";
+import type {
+  PlaceholderMap,
+  WidgetInstance,
+  WidgetType,
+} from "@leproj/tennet-widgets";
 import { PageBuilderEditor } from "../components/page-builder-editor.tsx";
 
 /** Edit form for PagePlugin — extends CrudForm with an optional Page Builder link. */

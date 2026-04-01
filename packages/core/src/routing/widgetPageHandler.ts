@@ -1,4 +1,4 @@
-import { WidgetStore, widgetRegistry } from "@leproj/tennet-widgets";
+import { widgetRegistry, WidgetStore } from "@leproj/tennet-widgets";
 import type {
   PlaceholderMap,
   WidgetInstance,

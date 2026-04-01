@@ -1,7 +1,4 @@
-import type {
-  WidgetDefinition,
-  WidgetInstance,
-} from "@leproj/tennet-widgets";
+import type { WidgetDefinition, WidgetInstance } from "@leproj/tennet-widgets";
 
 export interface BuilderWidgetCardProps {
   widget: WidgetInstance;
