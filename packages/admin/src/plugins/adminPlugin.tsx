@@ -1,9 +1,6 @@
 import type { Plugin } from "@leproj/tennet";
 import type { Middleware } from "@leproj/tennet";
-import {
-  BlogRouteRegistry,
-  DynamicRouteRegistry,
-} from "@leproj/tennet";
+import { BlogRouteRegistry, DynamicRouteRegistry } from "@leproj/tennet";
 import { createAuthRoutes } from "../auth/loginHandler.ts";
 import { authMiddleware } from "../auth/authMiddleware.ts";
 import { csrfMiddleware } from "../auth/csrfMiddleware.ts";
@@ -14,9 +11,18 @@ import { PostsPlugin } from "./postsPlugin.ts";
 import { CategoriesPlugin } from "./categoriesPlugin.ts";
 import type { AdminContext } from "./admin/context.ts";
 import { initAdmin } from "./admin/init.ts";
-import { addDashboardRoute, addFaviconRoute, addPluginCrudRoutes, addPreviewRoute } from "./admin/crud.tsx";
+import {
+  addDashboardRoute,
+  addFaviconRoute,
+  addPluginCrudRoutes,
+  addPreviewRoute,
+} from "./admin/crud.tsx";
 import { addBlogRoutes } from "./admin/blog.ts";
-import { addBuilderPreviewRoute, addBuilderUIRoutes, addPageBuilderRoutes } from "./admin/builder.ts";
+import {
+  addBuilderPreviewRoute,
+  addBuilderUIRoutes,
+  addPageBuilderRoutes,
+} from "./admin/builder.ts";
 
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {

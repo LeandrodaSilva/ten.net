@@ -32,7 +32,12 @@ export async function listItems(
   const searchFields = Object.keys(plugin.model).filter((k) =>
     plugin.model[k] === "string"
   );
-  const items = await plugin.storage.list({ page, limit: 20, search, searchFields });
+  const items = await plugin.storage.list({
+    page,
+    limit: 20,
+    search,
+    searchFields,
+  });
   const total = await plugin.storage.count({ search, searchFields });
   return { items, total, page, totalPages: Math.ceil(total / 20) };
 }
