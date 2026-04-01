@@ -245,23 +245,20 @@ export class Ten {
       return await this._handle404();
     }
 
-    const originalMethod = route.method;
-    route.method = req.method;
+    const requestMethod = req.method;
 
     try {
-      await route.import();
+      await route.import(requestMethod);
 
       const params = paramsEngine(path, route);
 
-      if (!route.isView && route.run) {
-        const response = route.run(req, {
+      if (!route.isViewForMethod(requestMethod) && route.run) {
+        return route.run(req, {
           params,
         });
-        route.method = originalMethod;
-        return response;
       }
 
-      if (route.isView) {
+      if (route.isViewForMethod(requestMethod)) {
         try {
           const page = await viewEngine({
             _appPath: this._appPath,
@@ -270,7 +267,6 @@ export class Ten {
             params,
             embedded: this._embedded,
           });
-          route.method = originalMethod;
           return new Response(page, {
             status: 200,
             headers: { "Content-Type": "text/html" },
@@ -280,10 +276,8 @@ export class Ten {
         }
       }
 
-      route.method = originalMethod;
       return this._handle404();
     } catch (e) {
-      route.method = originalMethod;
       console.error(e);
       return new Response("Internal Server Error", { status: 500 });
     }

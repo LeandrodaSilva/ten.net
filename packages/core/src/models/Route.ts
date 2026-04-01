@@ -112,6 +112,14 @@ export class Route {
   }
 
   /**
+   * Check if this route is a view for a specific HTTP method.
+   * Thread-safe alternative to mutating route.method.
+   */
+  isViewForMethod(method: string): boolean {
+    return this.hasPage && method.toUpperCase() === "GET";
+  }
+
+  /**
    * Dynamically imports and executes JavaScript code to retrieve a specific method function.
    *
    * This method creates a data URI from the provided JavaScript code, imports it as a module,
@@ -135,7 +143,9 @@ export class Route {
    * }
    * ```
    */
-  public async import(): Promise<
+  public async import(
+    requestMethod?: string,
+  ): Promise<
     | ((
       req: Request,
       ctx?: { params: Record<string, string> },
@@ -145,7 +155,10 @@ export class Route {
     if (this.run) return this.run;
     try {
       const module = await evaluateModuleCode(this.transpiledCode);
-      const fn = module[this._method] as
+      const method = requestMethod
+        ? requestMethod.toUpperCase()
+        : this._method;
+      const fn = module[method] as
         | ((
           req: Request,
           ctx?: { params: Record<string, string> },
