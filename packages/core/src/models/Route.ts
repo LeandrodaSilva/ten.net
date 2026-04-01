@@ -155,9 +155,7 @@ export class Route {
     if (this.run) return this.run;
     try {
       const module = await evaluateModuleCode(this.transpiledCode);
-      const method = requestMethod
-        ? requestMethod.toUpperCase()
-        : this._method;
+      const method = requestMethod ? requestMethod.toUpperCase() : this._method;
       const fn = module[method] as
         | ((
           req: Request,
