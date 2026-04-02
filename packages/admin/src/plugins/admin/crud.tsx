@@ -8,6 +8,7 @@ import type { SidebarNavItem } from "../../components/sidebar-nav.tsx";
 import { CrudList } from "../../components/crud-list.tsx";
 import { CrudForm } from "../../components/crud-form.tsx";
 import { requestSession } from "../../auth/authMiddleware.ts";
+import { ROLE_PERMISSIONS } from "../../auth/types.ts";
 import { renderDynamicPage } from "@leproj/tennet";
 import { PagePlugin } from "../pagePlugin.ts";
 import { PostsPlugin } from "../postsPlugin.ts";
@@ -47,6 +48,28 @@ export async function listItems(
 /** Check if a plugin is the AuditLogPlugin (readonly — block writes). */
 export function isReadonlyPlugin(plugin: Plugin): boolean {
   return plugin instanceof AuditLogPlugin;
+}
+
+/** Map plugin slug to RBAC resource name. */
+const SLUG_TO_RESOURCE: Record<string, string> = {
+  "page-plugin": "pages",
+  "post-plugin": "posts",
+  "category-plugin": "categories",
+  "group-plugin": "groups",
+  "user-plugin": "users",
+  "settings-plugin": "settings",
+  "media-plugin": "media",
+};
+
+/** Get user's permissions for a plugin based on their role. */
+function getPluginPermissions(
+  role: string | undefined,
+  pluginSlug: string,
+): string[] {
+  const rolePerms = ROLE_PERMISSIONS[role ?? ""];
+  if (!rolePerms) return [];
+  const resource = SLUG_TO_RESOURCE[pluginSlug] ?? pluginSlug;
+  return rolePerms[resource] ?? [];
 }
 
 const pluginNavIcon = (
@@ -201,6 +224,9 @@ export function addPluginCrudRoutes(
     const session = requestSession.get(req);
     const csrfToken = session?.csrfToken;
     const navItems = buildNavItems(ctx.plugins, url.pathname);
+    const perms = getPluginPermissions(session?.role, slug);
+    const canCreate = perms.includes("create") && !readonly;
+    const canDelete = perms.includes("delete") && !readonly;
 
     const html = renderAdminPage(
       CrudList,
@@ -215,6 +241,8 @@ export function addPluginCrudRoutes(
         success: url.searchParams.get("success") ?? undefined,
         error: url.searchParams.get("error") ?? undefined,
         csrfToken,
+        canCreate,
+        canDelete,
       },
       navItems,
       session?.username,

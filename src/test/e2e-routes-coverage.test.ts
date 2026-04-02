@@ -557,13 +557,13 @@ describe(
         await res.body?.cancel();
       });
 
-      it("viewer CANNOT access settings-plugin", async () => {
+      it("viewer CAN read settings-plugin", async () => {
         const res = await fetchAuth(
           baseUrl,
           "/admin/plugins/settings-plugin",
           viewerCookie,
         );
-        assertEquals(res.status, 403);
+        assertEquals(res.status, 200);
         await res.body?.cancel();
       });
 

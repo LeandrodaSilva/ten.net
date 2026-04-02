@@ -1746,7 +1746,11 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
     });
 
     it("plugin list 'Add' link should point to /admin/plugins/{slug}/new and return 200", async () => {
-      for (const slug of pluginSlugs) {
+      // settings-plugin: admin has read+update only (no create), so no "Add" link
+      const slugsWithCreate = pluginSlugs.filter((s) =>
+        s !== "settings-plugin"
+      );
+      for (const slug of slugsWithCreate) {
         const listRes = await fetchAuth(
           baseUrl,
           `/admin/plugins/${slug}`,

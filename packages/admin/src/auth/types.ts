@@ -68,6 +68,6 @@ export const ROLE_PERMISSIONS: Record<string, Record<string, Permission[]>> = {
     categories: ["read"],
     groups: ["read"],
     users: [],
-    settings: [],
+    settings: ["read"],
   },
 };

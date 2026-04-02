@@ -16,6 +16,8 @@ export interface CrudListProps {
   success?: string;
   error?: string;
   csrfToken?: string;
+  canCreate?: boolean;
+  canDelete?: boolean;
 }
 
 export function CrudList({
@@ -29,6 +31,8 @@ export function CrudList({
   success,
   error,
   csrfToken,
+  canCreate = true,
+  canDelete = true,
 }: CrudListProps) {
   const basePath = `/admin/plugins/${pluginSlug}`;
 
@@ -37,15 +41,18 @@ export function CrudList({
       label: "Edit",
       href: (row) => `${basePath}/${row.id}`,
     },
-    {
-      label: "Delete",
-      href: (row) => `${basePath}/${row.id}/delete`,
-      variant: "danger",
-      confirmMessage: (row) =>
-        `Delete "${
-          row[columns[0]?.key] ?? "this item"
-        }"? This cannot be undone.`,
-    },
+    ...(canDelete
+      ? [{
+        label: "Delete",
+        href: (row: Record<string, unknown>) =>
+          `${basePath}/${row.id}/delete`,
+        variant: "danger" as const,
+        confirmMessage: (row: Record<string, unknown>) =>
+          `Delete "${
+            row[columns[0]?.key] ?? "this item"
+          }"? This cannot be undone.`,
+      }]
+      : []),
   ];
 
   return (
@@ -61,7 +68,7 @@ export function CrudList({
         columns={columns}
         rows={rows}
         actions={actions}
-        createHref={`${basePath}/new`}
+        createHref={canCreate ? `${basePath}/new` : undefined}
         createLabel={`Add ${pluginName.toLowerCase().replace(/s$/, "")}`}
         emptyTitle={`No ${pluginName.toLowerCase()}`}
         emptyDescription={`Get started by creating your first ${
