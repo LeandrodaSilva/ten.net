@@ -130,9 +130,8 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
     const addr = server.addr as Deno.NetAddr;
     baseUrl = `http://localhost:${addr.port}`;
 
-    // Access KV handle for cleanup via internal field
-    // deno-lint-ignore no-explicit-any
-    kv = (admin as any)._kv ?? undefined;
+    // Access KV handle for cleanup
+    kv = admin.kv;
 
     // Single login, reuse cookie
     cookie = await login(baseUrl);
@@ -2002,7 +2001,10 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
     it("POST /admin/media/upload with valid image should redirect", async () => {
       // PNG magic bytes: 0x89 0x50 0x4E 0x47
       const imageData = new Uint8Array(256);
-      imageData[0] = 0x89; imageData[1] = 0x50; imageData[2] = 0x4E; imageData[3] = 0x47;
+      imageData[0] = 0x89;
+      imageData[1] = 0x50;
+      imageData[2] = 0x4E;
+      imageData[3] = 0x47;
       for (let i = 4; i < 256; i++) imageData[i] = i % 256;
       const file = new File([imageData], "test-upload.png", {
         type: "image/png",
@@ -2027,7 +2029,10 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
     it("GET /media/[filename] should serve image with Content-Type", async () => {
       // Upload via JSON API to get the filename — PNG magic bytes
       const imageData = new Uint8Array(128);
-      imageData[0] = 0x89; imageData[1] = 0x50; imageData[2] = 0x4E; imageData[3] = 0x47;
+      imageData[0] = 0x89;
+      imageData[1] = 0x50;
+      imageData[2] = 0x4E;
+      imageData[3] = 0x47;
       for (let i = 4; i < 128; i++) imageData[i] = i % 256;
       const file = new File([imageData], "serve-test.png", {
         type: "image/png",

@@ -120,8 +120,7 @@ describe(
       const addr = server.addr as Deno.NetAddr;
       baseUrl = `http://localhost:${addr.port}`;
 
-      // deno-lint-ignore no-explicit-any
-      kv = (admin as any)._kv ?? undefined;
+      kv = admin.kv;
 
       // Launch browser
       browser = await puppeteer.launch({

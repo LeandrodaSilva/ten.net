@@ -158,4 +158,9 @@ export class AdminPlugin {
   get blogRegistry(): BlogRouteRegistry | undefined {
     return this._ctx?.blogRegistry;
   }
+
+  /** Get the Deno.Kv instance (available after init). */
+  get kv(): Deno.Kv | undefined {
+    return this._ctx?.kv ?? undefined;
+  }
 }
