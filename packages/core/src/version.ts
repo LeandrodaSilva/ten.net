@@ -1,3 +1,3 @@
-import denoJson from "../deno.json" with { type: "json" };
+import denoJson from "../../../deno.json" with { type: "json" };
 
-export const VERSION = denoJson.version;
+export const VERSION = denoJson.version as string;

@@ -1,11 +1,5 @@
 {
-  "name": "@leproj/tennet-admin",
-  "version": "0.9.0",
-  "description": "Admin dashboard plugin for Ten.net — CRUD, auth, page builder, and plugin management",
-  "license": "MIT",
-  "exports": {
-    ".": "./src/mod.ts"
-  },
+  "description": "Admin dashboard plugin for Ten.net",
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react"
@@ -17,6 +11,8 @@
     "@std/testing": "jsr:@std/testing@^1.0.15",
     "deno-fs": "jsr:@std/fs@^1.0.19",
     "@std/path": "jsr:@std/path@^1.1.2",
+    "@leproj/tennet": "../core/src/mod.ts",
+    "@leproj/tennet-widgets": "../widgets/src/mod.ts",
     "@deno-assert": "https://deno.land/std@0.208.0/assert/mod.ts",
     "@std/cli": "jsr:@std/cli@^1.0.0",
     "@deno-walk": "jsr:@std/fs@1/walk",

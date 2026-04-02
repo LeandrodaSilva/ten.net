@@ -1,11 +1,5 @@
 {
-  "name": "@leproj/tennet-widgets",
-  "version": "0.9.0",
-  "description": "Widget system for Ten.net — built-in widgets and registry",
-  "license": "MIT",
-  "exports": {
-    ".": "./src/mod.ts"
-  },
+  "description": "Widget system for Ten.net",
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react"
