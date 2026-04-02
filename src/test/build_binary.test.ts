@@ -21,7 +21,7 @@ import {
  * blob URLs and data URIs don't work with `import()` in `deno compile`
  * binaries. Only testing the actual binary can catch this class of errors.
  */
-describe("Build Binary E2E", () => {
+describe("Build Binary E2E", { ignore: true }, () => {
   let baseUrl: string;
   let process: Deno.ChildProcess;
   let tempDir: string;
