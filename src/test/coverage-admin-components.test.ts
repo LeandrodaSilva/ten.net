@@ -470,6 +470,85 @@ describe("WidgetForm — all field types", () => {
     assertStringIncludes(html, "widget-rich-text");
   });
 
+  it("should render TipTap wrapper (widget-tiptap-wrap)", () => {
+    const html = renderToString(
+      WidgetForm({
+        widgetDefinition: makeDef([
+          { name: "body", label: "Body", type: "rich-text" },
+        ]),
+      }),
+    );
+    assertStringIncludes(html, "widget-tiptap-wrap");
+  });
+
+  it("should render TipTap toolbar with action buttons", () => {
+    const html = renderToString(
+      WidgetForm({
+        widgetDefinition: makeDef([
+          { name: "body", label: "Body", type: "rich-text" },
+        ]),
+      }),
+    );
+    assertStringIncludes(html, "widget-tiptap-toolbar");
+    assertStringIncludes(html, 'data-action="bold"');
+    assertStringIncludes(html, 'data-action="italic"');
+    assertStringIncludes(html, 'data-action="h2"');
+    assertStringIncludes(html, 'data-action="h3"');
+    assertStringIncludes(html, 'data-action="bulletList"');
+    assertStringIncludes(html, 'data-action="orderedList"');
+    assertStringIncludes(html, 'data-action="blockquote"');
+    assertStringIncludes(html, 'data-action="codeBlock"');
+    assertStringIncludes(html, 'data-action="link"');
+    assertStringIncludes(html, 'data-action="image"');
+  });
+
+  it("should render TipTap editor container with data-field", () => {
+    const html = renderToString(
+      WidgetForm({
+        widgetDefinition: makeDef([
+          { name: "body", label: "Body", type: "rich-text" },
+        ]),
+      }),
+    );
+    assertStringIncludes(html, "widget-tiptap-editor");
+    assertStringIncludes(html, 'data-field="data.body"');
+  });
+
+  it("should hide textarea with display:none for rich-text", () => {
+    const html = renderToString(
+      WidgetForm({
+        widgetDefinition: makeDef([
+          { name: "body", label: "Body", type: "rich-text" },
+        ]),
+      }),
+    );
+    assertStringIncludes(html, "display:none");
+  });
+
+  it("should include TipTap esm.sh imports in script", () => {
+    const html = renderToString(
+      WidgetForm({
+        widgetDefinition: makeDef([
+          { name: "body", label: "Body", type: "rich-text" },
+        ]),
+      }),
+    );
+    assertStringIncludes(html, "esm.sh/@tiptap/core");
+    assertStringIncludes(html, "esm.sh/@tiptap/starter-kit");
+    assertStringIncludes(html, "esm.sh/@tiptap/extension-image");
+  });
+
+  it("should reference widget-tiptap-editor in initialization script", () => {
+    const html = renderToString(
+      WidgetForm({
+        widgetDefinition: makeDef([
+          { name: "body", label: "Body", type: "rich-text" },
+        ]),
+      }),
+    );
+    assertStringIncludes(html, "widget-tiptap-editor");
+  });
+
   it("should render select field with options", () => {
     const html = renderToString(
       WidgetForm({
