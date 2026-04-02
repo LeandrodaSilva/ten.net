@@ -21,13 +21,21 @@ function renderMediaList(
 ): string {
   const rows = items.map((item) =>
     `<tr>
-      <td class="px-4 py-2"><img src="/media/${item.filename}" alt="${escAttr(item.alt || item.originalName)}" class="h-12 w-12 object-cover rounded" /></td>
-      <td class="px-4 py-2 text-sm text-gray-800">${escHtml(item.originalName)}</td>
+      <td class="px-4 py-2"><img src="/media/${item.filename}" alt="${
+      escAttr(item.alt || item.originalName)
+    }" class="h-12 w-12 object-cover rounded" /></td>
+      <td class="px-4 py-2 text-sm text-gray-800">${
+      escHtml(item.originalName)
+    }</td>
       <td class="px-4 py-2 text-sm text-gray-500">${escHtml(item.mimeType)}</td>
-      <td class="px-4 py-2 text-sm text-gray-500">${(item.size / 1024).toFixed(1)} KB</td>
+      <td class="px-4 py-2 text-sm text-gray-500">${
+      (item.size / 1024).toFixed(1)
+    } KB</td>
       <td class="px-4 py-2 text-sm text-gray-500">${escHtml(item.alt)}</td>
       <td class="px-4 py-2">
-        <form method="POST" action="/admin/media/${escAttr(item.id)}/delete" onsubmit="return confirm('Excluir imagem?')">
+        <form method="POST" action="/admin/media/${
+      escAttr(item.id)
+    }/delete" onsubmit="return confirm('Excluir imagem?')">
           <input type="hidden" name="_csrf" value="${escAttr(csrfToken)}" />
           <button type="submit" class="text-red-600 hover:text-red-800 text-sm">Excluir</button>
         </form>
@@ -63,7 +71,9 @@ function renderMediaList(
     <div class="bg-white rounded-lg shadow">
       <div class="p-4 border-b">
         <form method="GET" action="/admin/media" class="flex gap-2">
-          <input type="text" name="search" value="${escAttr(search)}" placeholder="Buscar por nome ou alt..." class="border border-gray-300 rounded px-3 py-2 text-sm flex-1" />
+          <input type="text" name="search" value="${
+    escAttr(search)
+  }" placeholder="Buscar por nome ou alt..." class="border border-gray-300 rounded px-3 py-2 text-sm flex-1" />
           <button type="submit" class="bg-gray-100 border border-gray-300 rounded px-4 py-2 text-sm hover:bg-gray-200">Buscar</button>
         </form>
       </div>
@@ -79,7 +89,11 @@ function renderMediaList(
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
-          ${items.length === 0 ? '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhuma imagem enviada ainda.</td></tr>' : rows}
+          ${
+    items.length === 0
+      ? '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Nenhuma imagem enviada ainda.</td></tr>'
+      : rows
+  }
         </tbody>
       </table>
     </div>
@@ -100,10 +114,16 @@ function renderMediaPicker(
   _csrfToken: string,
 ): string {
   const grid = items.map((item) =>
-    `<button type="button" onclick="selectMedia('${escAttr(item.id)}','${escAttr(`/media/${item.filename}`)}','${escAttr(item.alt || item.originalName)}')"
+    `<button type="button" onclick="selectMedia('${escAttr(item.id)}','${
+      escAttr(`/media/${item.filename}`)
+    }','${escAttr(item.alt || item.originalName)}')"
        class="border-2 border-transparent hover:border-indigo-500 rounded p-1 focus:outline-none focus:border-indigo-500 cursor-pointer bg-white">
-      <img src="/media/${item.filename}" alt="${escAttr(item.alt || item.originalName)}" class="h-24 w-24 object-cover rounded" />
-      <p class="text-xs text-gray-600 mt-1 truncate w-24">${escHtml(item.originalName)}</p>
+      <img src="/media/${item.filename}" alt="${
+      escAttr(item.alt || item.originalName)
+    }" class="h-24 w-24 object-cover rounded" />
+      <p class="text-xs text-gray-600 mt-1 truncate w-24">${
+      escHtml(item.originalName)
+    }</p>
     </button>`
   ).join("\n");
 
@@ -117,12 +137,18 @@ function renderMediaPicker(
 <body class="bg-gray-50 p-4">
   <div class="mb-4 flex gap-2">
     <form method="GET" action="/admin/media/picker" class="flex gap-2 flex-1">
-      <input type="text" name="search" value="${escAttr(search)}" placeholder="Buscar..." class="border border-gray-300 rounded px-3 py-2 text-sm flex-1" />
+      <input type="text" name="search" value="${
+    escAttr(search)
+  }" placeholder="Buscar..." class="border border-gray-300 rounded px-3 py-2 text-sm flex-1" />
       <button type="submit" class="bg-gray-100 border border-gray-300 rounded px-4 py-2 text-sm">Buscar</button>
     </form>
   </div>
   <div class="flex flex-wrap gap-3">
-    ${items.length === 0 ? '<p class="text-gray-400 text-sm">Nenhuma imagem disponível.</p>' : grid}
+    ${
+    items.length === 0
+      ? '<p class="text-gray-400 text-sm">Nenhuma imagem disponível.</p>'
+      : grid
+  }
   </div>
   <script>
     function selectMedia(id, url, alt) {
@@ -175,8 +201,15 @@ export function addMediaRoutes(ctx: AdminContext, routes: Route[]): void {
   listRoute.run = async (req: Request) => {
     const url = new URL(req.url);
     const search = url.searchParams.get("search") ?? "";
-    const page = Math.max(1, parseInt(url.searchParams.get("page") ?? "1", 10) || 1);
-    const items = await store.list({ page, limit: 30, search: search || undefined });
+    const page = Math.max(
+      1,
+      parseInt(url.searchParams.get("page") ?? "1", 10) || 1,
+    );
+    const items = await store.list({
+      page,
+      limit: 30,
+      search: search || undefined,
+    });
     const csrfToken = requestSession.get(req)?.csrfToken ?? "";
     return new Response(renderMediaList(items, search, csrfToken), {
       headers: { "Content-Type": "text/html; charset=utf-8" },
@@ -223,7 +256,9 @@ export function addMediaRoutes(ctx: AdminContext, routes: Route[]): void {
         uploadedBy,
       });
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Erro ao processar upload";
+      const msg = err instanceof Error
+        ? err.message
+        : "Erro ao processar upload";
       return new Response(`Bad Request: ${msg}`, { status: 400 });
     }
 
@@ -255,7 +290,11 @@ export function addMediaRoutes(ctx: AdminContext, routes: Route[]): void {
   pickerRoute.run = async (req: Request) => {
     const url = new URL(req.url);
     const search = url.searchParams.get("search") ?? "";
-    const items = await store.list({ page: 1, limit: 100, search: search || undefined });
+    const items = await store.list({
+      page: 1,
+      limit: 100,
+      search: search || undefined,
+    });
     const csrfToken = requestSession.get(req)?.csrfToken ?? "";
     return new Response(renderMediaPicker(items, search, csrfToken), {
       headers: { "Content-Type": "text/html; charset=utf-8" },

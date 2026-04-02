@@ -7,7 +7,9 @@ export function MediaUploadForm({ csrfToken, error }: MediaUploadFormProps) {
   return (
     <div className="mx-auto max-w-lg space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">Upload de Imagem</h1>
+        <h1 className="text-xl font-semibold text-gray-900">
+          Upload de Imagem
+        </h1>
         <p className="mt-1 text-sm text-gray-500">
           Envie uma imagem para a biblioteca de mídia.
         </p>

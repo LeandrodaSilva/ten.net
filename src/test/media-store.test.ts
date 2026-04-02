@@ -1,9 +1,5 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
-import {
-  assertEquals,
-  assertExists,
-  assertRejects,
-} from "@std/assert";
+import { assertEquals, assertExists, assertRejects } from "@std/assert";
 import { MediaStore } from "../../packages/widgets/src/mediaStore.ts";
 
 /** Magic bytes para tipos de imagem válidos. */

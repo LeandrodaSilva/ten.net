@@ -159,7 +159,11 @@ export function MediaLibrary(
               <li>
                 <a
                   href={page > 1
-                    ? `/admin/media?${search ? `search=${encodeURIComponent(search)}${separator}` : ""}page=${page - 1}`
+                    ? `/admin/media?${
+                      search
+                        ? `search=${encodeURIComponent(search)}${separator}`
+                        : ""
+                    }page=${page - 1}`
                     : undefined}
                   aria-label="Página anterior"
                   aria-disabled={page <= 1 ? "true" : undefined}
@@ -186,7 +190,11 @@ export function MediaLibrary(
               <li>
                 <a
                   href={page < totalPages
-                    ? `/admin/media?${search ? `search=${encodeURIComponent(search)}${separator}` : ""}page=${page + 1}`
+                    ? `/admin/media?${
+                      search
+                        ? `search=${encodeURIComponent(search)}${separator}`
+                        : ""
+                    }page=${page + 1}`
                     : undefined}
                   aria-label="Próxima página"
                   aria-disabled={page >= totalPages ? "true" : undefined}
@@ -216,7 +224,9 @@ export function MediaLibrary(
             {page > 1
               ? (
                 <a
-                  href={`/admin/media?${search ? `search=${encodeURIComponent(search)}&` : ""}page=${page - 1}`}
+                  href={`/admin/media?${
+                    search ? `search=${encodeURIComponent(search)}&` : ""
+                  }page=${page - 1}`}
                   className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                   Anterior
@@ -225,7 +235,9 @@ export function MediaLibrary(
               : <span />}
             {page < totalPages && (
               <a
-                href={`/admin/media?${search ? `search=${encodeURIComponent(search)}&` : ""}page=${page + 1}`}
+                href={`/admin/media?${
+                  search ? `search=${encodeURIComponent(search)}&` : ""
+                }page=${page + 1}`}
                 className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 Próxima

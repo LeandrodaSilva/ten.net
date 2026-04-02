@@ -124,7 +124,11 @@ export function MediaPicker({ items, mode, baseUrl }: MediaPickerProps) {
               (el: HTMLElement) => {
                 const fn = el.dataset.mediaItem ?? "";
                 if (selected.includes(fn)) {
-                  el.classList.add("ring-2", "ring-indigo-500", "ring-offset-2");
+                  el.classList.add(
+                    "ring-2",
+                    "ring-indigo-500",
+                    "ring-offset-2",
+                  );
                 } else {
                   el.classList.remove(
                     "ring-2",
