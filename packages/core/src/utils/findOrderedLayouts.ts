@@ -11,7 +11,33 @@
  * // Returns: ['/app/layout.html', '/app/users/layout.html', '/app/users/profile/layout.html']
  * ```
  */
-export function findOrderedLayouts(appPath: string, route: string): string[] {
+/** Async version — use in request hot path. */
+export async function findOrderedLayouts(
+  appPath: string,
+  route: string,
+): Promise<string[]> {
+  const layouts: string[] = [];
+  const segments = route.split("/").filter(Boolean);
+  let currentPath = appPath;
+
+  for (const segment of ["", ...segments]) {
+    currentPath += `/${segment}`;
+    try {
+      await Deno.lstat(`${currentPath}/layout.html`);
+      layouts.push(`${currentPath}/layout.html`);
+    } catch {
+      // No layout in this segment, continue
+    }
+  }
+
+  return layouts.map((p) => p.replaceAll("//", "/"));
+}
+
+/** Sync version — use in build/startup only. */
+export function findOrderedLayoutsSync(
+  appPath: string,
+  route: string,
+): string[] {
   const layouts: string[] = [];
   const segments = route.split("/").filter(Boolean);
   let currentPath = appPath;

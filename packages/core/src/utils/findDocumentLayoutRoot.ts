@@ -16,7 +16,24 @@ import { defaultDocumentHtml } from "../assets/documentHtml.ts";
  * // Returns content of /path/to/app/document.html or default template
  * ```
  */
-export function findDocumentLayoutRoot(appPath?: string): string {
+/** Async version — use in request hot path. */
+export async function findDocumentLayoutRoot(
+  appPath?: string,
+): Promise<string> {
+  if (appPath) {
+    const rootLayoutPath = `${appPath}/document.html`;
+    try {
+      await Deno.lstat(rootLayoutPath);
+      return await Deno.readTextFile(rootLayoutPath);
+    } catch {
+      // File does not exist or cannot be read, return default layout
+    }
+  }
+  return defaultDocumentHtml;
+}
+
+/** Sync version — use in build/startup only. */
+export function findDocumentLayoutRootSync(appPath?: string): string {
   if (appPath) {
     const rootLayoutPath = `${appPath}/document.html`;
     try {

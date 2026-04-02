@@ -2,8 +2,8 @@ import { walk } from "@deno-walk";
 import { encodeBase64 } from "@std/encoding";
 import { getRegexRoute } from "../utils/getRegexRoute.ts";
 import { transpileRoute } from "../utils/transpileRoute.ts";
-import { findOrderedLayouts } from "../utils/findOrderedLayouts.ts";
-import { findDocumentLayoutRoot } from "../utils/findDocumentLayoutRoot.ts";
+import { findOrderedLayoutsSync } from "../utils/findOrderedLayouts.ts";
+import { findDocumentLayoutRootSync } from "../utils/findDocumentLayoutRoot.ts";
 import { getMimeType } from "./mimeTypes.ts";
 import type { AppManifest, EmbeddedRoute } from "./manifest.ts";
 
@@ -14,7 +14,7 @@ export async function collectManifest(
 ): Promise<AppManifest> {
   const routes = await collectRoutes(appPath, routeFileName);
   const layouts = collectLayouts(appPath, routes);
-  const documentHtml = findDocumentLayoutRoot(appPath);
+  const documentHtml = findDocumentLayoutRootSync(appPath);
   const assets = await collectAssets(publicPath);
 
   return { routes, layouts, documentHtml, assets };
@@ -102,7 +102,7 @@ function collectLayouts(
   for (const route of routes) {
     if (!route.hasPage) continue;
 
-    const layoutPaths = findOrderedLayouts(appPath, route.path);
+    const layoutPaths = findOrderedLayoutsSync(appPath, route.path);
     const layoutContents: string[] = [];
 
     for (const layoutPath of layoutPaths) {
