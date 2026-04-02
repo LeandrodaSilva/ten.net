@@ -20,9 +20,11 @@ Published to JSR.
   files. No decorators, no configuration ceremony, no boilerplate.
 - **Plugin extensibility**: Abstract `Plugin` class with auto-registered admin
   routes. Users extend functionality without modifying the core.
-- **Admin panel for non-developers (roadmap)**: `/admin` React SSR dashboard
-  designed for marketing teams and end-users to manage the production
-  application. Currently in early development.
+- **Admin panel for non-developers**: `/admin` React SSR dashboard designed for
+  marketing teams and end-users to manage the production application. Available
+  since v0.8.0 with 10 built-in plugins (posts, pages, categories, media
+  library, users, groups, roles, settings, audit log, admin dashboard), page
+  builder, media library, and RBAC.
 
 ## Tech Stack
 
@@ -47,23 +49,52 @@ deno task bench      # Run benchmarks with history tracking
 
 ## Project Structure
 
-- `src/mod.ts` — Public entry point, exports `{ Ten }`
-- `src/ten.ts` — Core framework class (server, routing, plugin registration)
-- `src/routerEngine.ts` — File-system route scanner and transpiler
-- `src/viewEngine.ts` — HTML template renderer with nested layouts
-- `src/paramsEngine.ts` — URL parameter extraction
-- `src/models/` — Route and Plugin data models
-- `src/plugins/` — Built-in plugins (admin, page)
-- `src/utils/` — Utility functions (regex matching, transpilation, slug
-  conversion, layout discovery)
-- `src/build/` — Build system: collector, code generator, manifest types, crypto
+This is a monorepo with three packages:
+
+**`packages/core/src/`** — Core framework:
+
+- `mod.ts` — Public entry point, exports `{ Ten }`
+- `ten.ts` — Core framework class (server, routing, plugin registration)
+- `routerEngine.ts` — File-system route scanner and transpiler
+- `viewEngine.ts` — HTML template renderer with nested layouts
+- `paramsEngine.ts` — URL parameter extraction
+- `models/` — Route, Plugin, Storage data models
+- `routing/` — Dynamic route registry, blog route registry, page/widget handlers
+- `utils/` — Utility functions (regex matching, transpilation, slug conversion,
+  layout discovery)
+- `build/` — Build system: collector, code generator, manifest types, crypto
   (AES-256-GCM), CLI entry point
-- `src/embedded/` — Embedded router engine for compiled binaries
-- `src/admin/` — Admin panel React components (SSR with renderToString)
+- `embedded/` — Embedded router engine for compiled binaries
+- `middleware/` — Auth, CSRF, security headers middleware
+- `assets/` — Static assets (favicon data)
+
+**`packages/admin/src/`** — Admin panel (React SSR):
+
+- `app.tsx` — Admin app root component
+- `plugins/` — 10 built-in plugins: adminPlugin, pagePlugin, postsPlugin,
+  categoriesPlugin, mediaPlugin, usersPlugin, groupsPlugin, rolesPlugin,
+  settingsPlugin, auditLogPlugin
+- `components/` — Shared UI components (page builder, media library, CRUD, etc.)
+- `auth/` — Authentication handlers, session store, user store, password hasher
+- `storage/` — Deno KV-backed storage implementations
+- `layout/` — Admin layout components
+
+**`packages/widgets/src/`** — Built-in widgets:
+
+- `builtins/` — 10 widgets: hero, richText, image, gallery, columns, ctaButton,
+  html, spacer, embed, contactForm
+- `widgetRegistry.ts` — Widget registration and lookup
+- `widgetStore.ts`, `widgetPermissionsStore.ts`, `widgetAuditLogger.ts` — Widget
+  data and audit infrastructure
+- `mediaStore.ts` — Media storage for widgets
+- `types.ts` — Widget type definitions
+
+**Other:**
+
+- `app/demo.ts` — Dev server entry point (used by `deno task dev`)
+- `src/test/` — All tests (101 test files)
 - `src/bench/` — Benchmarks with history tracking and regression thresholds
-- `src/test/` — All tests (25 test files)
 - `app/` — Demo application using file-based routes
-- `demo.ts` — Dev server entry point (used by `deno task dev`)
 
 ## Architecture
 
@@ -87,10 +118,13 @@ using `{{content}}`.
 single binary. The collector scans `app/`, transpiles routes, and gathers assets
 into an `AppManifest`. The code generator produces a self-contained TypeScript
 file that uses `embeddedRouterEngine` instead of filesystem scanning. Optional
-AES-256-GCM encryption for code protection.
+AES-256-GCM encryption for code protection. Entry point:
+`packages/core/src/build/buildCommand.ts`.
 
 **Plugin system**: Extend abstract `Plugin` class with `name`, `description`,
 `model`. Plugins auto-register admin routes and appear in the admin dashboard.
+The `packages/admin` package ships 10 built-in plugins; the framework core
+(`packages/core`) handles registration and routing.
 
 ## Code Conventions
 
@@ -99,9 +133,16 @@ AES-256-GCM encryption for code protection.
 - Format with `deno fmt` before committing
 - React components: functional components with Tailwind CSS classes
 
+## Environment Setup
+
+- Requires Deno 2.x with `--unstable-kv` and `--unstable-raw-imports` flags
+  (already configured in `deno.json` tasks)
+- No environment variables required for development
+- `deno task dev` starts server with file watcher and inspector
+
 ## Testing
 
-Tests are in `src/test/` (25 test files). Uses `Deno.test()` and `describe/it`
+Tests are in `src/test/` (101 test files). Uses `Deno.test()` and `describe/it`
 from `@std/testing/bdd`. Assertions from `@std/assert` (preferred) and
 `@deno-assert` (legacy). Snapshot tests use `assertSnapshot` from
 `@std/testing/snapshot`, stored in `src/test/__snapshots__/`. CI enforces a
@@ -114,16 +155,21 @@ creates GitHub Release.
 
 ## JSR Entrypoints
 
-- `.` → `src/mod.ts` — Main entry, exports `{ Ten }`
-- `./cli` → `src/cli.ts` — CLI entry point
-- `./build` → `src/build/build.ts` — Build system
-- `./build/manifest` → `src/build/manifest.ts` — Build manifest types
-  (`EmbeddedRoute`, `AppManifest`)
-- `./build/crypto` → `src/build/crypto.ts` — AES-256-GCM encryption utilities
+- `.` → `packages/core/src/mod.ts` — Main entry, exports `{ Ten }`
+- `./cli` → `packages/core/src/cli.ts` — CLI entry point
+- `./build` → `packages/core/src/build/build.ts` — Build system
+- `./build/manifest` → `packages/core/src/build/manifest.ts` — Build manifest
+  types (`EmbeddedRoute`, `AppManifest`)
+- `./build/crypto` → `packages/core/src/build/crypto.ts` — AES-256-GCM
+  encryption utilities
+- `./assets/favicon` → `packages/core/src/assets/faviconData.ts` — Favicon data
+- `./admin` → `packages/admin/src/mod.ts` — Admin panel
+- `./widgets` → `packages/widgets/src/mod.ts` — Built-in widgets
 
 ## Gotchas
 
 - Most tasks require `--unstable-raw-imports` flag (already configured in
   `deno.json` tasks)
 - `deno task check` has a double-space typo in deno.json but works correctly
-- `deno task build` uses `src/build/buildCommand.ts` (not `build.ts`) as entry
+- `deno task build` uses `packages/core/src/build/buildCommand.ts` (not
+  `build.ts`) as entry
