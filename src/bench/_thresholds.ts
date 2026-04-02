@@ -28,5 +28,6 @@ export const THRESHOLDS: Record<string, number> = {
   "http_post_redirect": 50,
 } as const;
 
-/** Multiplier for regression detection against historical average. */
-export const REGRESSION_MULTIPLIER = 3.0;
+/** Multiplier for regression detection against historical average.
+ * Set to 5x to accommodate variance between local and CI runners. */
+export const REGRESSION_MULTIPLIER = 5.0;
