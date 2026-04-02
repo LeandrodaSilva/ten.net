@@ -43,6 +43,9 @@ export class InMemoryStorage implements Storage {
       );
     }
 
+    // Sort by ID for consistent ordering
+    items.sort((a, b) => a.id.localeCompare(b.id));
+
     const page = options?.page ?? 1;
     const limit = options?.limit ?? 20;
     const start = (page - 1) * limit;
