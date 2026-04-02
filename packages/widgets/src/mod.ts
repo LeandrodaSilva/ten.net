@@ -11,6 +11,8 @@ export { WidgetStore } from "./widgetStore.ts";
 export { registerBuiltinWidgets } from "./builtins/index.ts";
 export { WidgetPermissionsStore } from "./widgetPermissionsStore.ts";
 export { WidgetAuditLogger } from "./widgetAuditLogger.ts";
+export { MediaStore } from "./mediaStore.ts";
+export type { MediaItem } from "./mediaStore.ts";
 
 export type {
   BuiltinWidgetType,

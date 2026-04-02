@@ -66,6 +66,7 @@ function extractResource(path: string): string {
       groups: "groups",
       users: "users",
       settings: "settings",
+      media: "media",
     };
     return SEGMENT_TO_RESOURCE[segment] ?? "dashboard";
   }

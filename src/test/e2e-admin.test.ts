@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, it } from "@std/testing/bdd";
 import {
   assert,
   assertEquals,
+  assertExists,
   assertMatch,
   assertStringIncludes,
 } from "@std/assert";
@@ -129,9 +130,8 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
     const addr = server.addr as Deno.NetAddr;
     baseUrl = `http://localhost:${addr.port}`;
 
-    // Access KV handle for cleanup via internal field
-    // deno-lint-ignore no-explicit-any
-    kv = (admin as any)._kv ?? undefined;
+    // Access KV handle for cleanup
+    kv = admin.kv;
 
     // Single login, reuse cookie
     cookie = await login(baseUrl);
@@ -1980,6 +1980,88 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
         `Configurações link /admin/plugins/page-plugin/${pageId} should return 200`,
       );
       await configRes.text();
+    });
+  });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // Media Library E2E
+  // ──────────────────────────────────────────────────────────────────────────
+  describe("Media Library", () => {
+    let mediaCsrf: string;
+
+    it("GET /admin/media should return 200 with media list page", async () => {
+      const res = await fetchAuth(baseUrl, "/admin/media", cookie);
+      assertEquals(res.status, 200);
+      const body = await res.text();
+      assertStringIncludes(body, "Media Library");
+      // Grab CSRF token from any admin form for subsequent POST tests
+      mediaCsrf = await getCsrf(baseUrl, cookie, "page-plugin");
+    });
+
+    it("POST /admin/media/upload with valid image should redirect", async () => {
+      // PNG magic bytes: 0x89 0x50 0x4E 0x47
+      const imageData = new Uint8Array(256);
+      imageData[0] = 0x89;
+      imageData[1] = 0x50;
+      imageData[2] = 0x4E;
+      imageData[3] = 0x47;
+      for (let i = 4; i < 256; i++) imageData[i] = i % 256;
+      const file = new File([imageData], "test-upload.png", {
+        type: "image/png",
+      });
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("alt", "E2E test image");
+      formData.append("_csrf", mediaCsrf);
+
+      const res = await fetch(`${baseUrl}/admin/media/upload`, {
+        method: "POST",
+        body: formData,
+        headers: { cookie },
+        redirect: "manual",
+      });
+      assertEquals(res.status, 302);
+      assertEquals(res.headers.get("Location"), "/admin/media");
+      await res.body?.cancel();
+    });
+
+    it("GET /media/[filename] should serve image with Content-Type", async () => {
+      // Upload via JSON API to get the filename — PNG magic bytes
+      const imageData = new Uint8Array(128);
+      imageData[0] = 0x89;
+      imageData[1] = 0x50;
+      imageData[2] = 0x4E;
+      imageData[3] = 0x47;
+      for (let i = 4; i < 128; i++) imageData[i] = i % 256;
+      const file = new File([imageData], "serve-test.png", {
+        type: "image/png",
+      });
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("alt", "serve test");
+      formData.append("_csrf", mediaCsrf);
+
+      const uploadRes = await fetch(`${baseUrl}/admin/media/upload`, {
+        method: "POST",
+        body: formData,
+        headers: { cookie, Accept: "application/json" },
+      });
+      assertEquals(uploadRes.status, 201);
+      const mediaItem = await uploadRes.json();
+      assertExists(mediaItem.filename);
+
+      // Now fetch publicly (no auth needed)
+      const serveRes = await fetch(`${baseUrl}/media/${mediaItem.filename}`);
+      assertEquals(serveRes.status, 200);
+      assertEquals(serveRes.headers.get("Content-Type"), "image/png");
+      assertStringIncludes(
+        serveRes.headers.get("Cache-Control") ?? "",
+        "public",
+      );
+      const body = new Uint8Array(await serveRes.arrayBuffer());
+      assertEquals(body.byteLength, 128);
     });
   });
 });

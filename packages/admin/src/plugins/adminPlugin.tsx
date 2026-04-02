@@ -23,6 +23,7 @@ import {
   addBuilderUIRoutes,
   addPageBuilderRoutes,
 } from "./admin/builder.ts";
+import { addMediaRoutes } from "./admin/media.ts";
 
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {
@@ -92,6 +93,9 @@ export class AdminPlugin {
       addPageBuilderRoutes(ctx, routes);
     }
 
+    // Media Library routes (admin + rota pública /media/:filename)
+    addMediaRoutes(ctx, routes);
+
     // Auth routes (login/logout)
     routes.push(...createAuthRoutes(ctx.userStore, ctx.sessionStore));
 
@@ -153,5 +157,10 @@ export class AdminPlugin {
   /** Get the BlogRouteRegistry instance (available after init). */
   get blogRegistry(): BlogRouteRegistry | undefined {
     return this._ctx?.blogRegistry;
+  }
+
+  /** Get the Deno.Kv instance (available after init). */
+  get kv(): Deno.Kv | undefined {
+    return this._ctx?.kv ?? undefined;
   }
 }
