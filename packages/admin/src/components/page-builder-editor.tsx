@@ -7,6 +7,8 @@ import { Script } from "./script.tsx";
 import { WidgetPalette } from "./widget-palette.tsx";
 import { BuilderWidgetCard } from "./builder-widget-card.tsx";
 import { WidgetForm } from "./widget-form.tsx";
+import type { MediaItem } from "./media-library.tsx";
+import { MediaPickerModal } from "./media-picker.tsx";
 
 export interface PageBuilderEditorProps {
   pageId: string;
@@ -18,6 +20,10 @@ export interface PageBuilderEditorProps {
   /** Definition for the widget being edited */
   editingDefinition?: WidgetDefinition;
   csrfToken?: string;
+  /** Media items for the inline picker modal */
+  mediaItems?: MediaItem[];
+  /** Base URL for media assets */
+  mediaBaseUrl?: string;
 }
 
 function PlaceholderSection(
@@ -63,6 +69,8 @@ export function PageBuilderEditor(
     editingWidget,
     editingDefinition,
     csrfToken,
+    mediaItems,
+    mediaBaseUrl,
   }: PageBuilderEditorProps,
 ) {
   const definitionMap = new Map(availableWidgets.map((d) => [d.type, d]));
@@ -459,6 +467,12 @@ export function PageBuilderEditor(
           })();
         }}
       </Script>
+
+      {/* Media Picker Modal (inline, no new tab) */}
+      <MediaPickerModal
+        items={mediaItems ?? []}
+        baseUrl={mediaBaseUrl ?? "/admin/media/files"}
+      />
 
       {/* Modal Preview */}
       <div

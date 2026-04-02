@@ -87,15 +87,14 @@ function WidgetField(
               placeholder="Image URL"
               className={`${baseInputClass} flex-1`}
             />
-            <a
-              href="/admin/media/picker?mode=single"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-image-field={inputName}
+            <button
+              type="button"
+              data-media-picker="true"
+              data-target-field={inputName}
               className="shrink-0 inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Escolher da biblioteca
-            </a>
+            </button>
           </div>
         )}
         {field.type === "gallery" && (
@@ -160,41 +159,27 @@ export function WidgetForm({ widgetDefinition, values }: WidgetFormProps) {
       <Script>
         {() => {
           // @ts-ignore: DOM APIs available at runtime
-          const win = globalThis.window;
-          // @ts-ignore: DOM APIs
           const doc = globalThis.document;
-          if (!win || !doc) return;
+          if (!doc) return;
 
-          // Track which image field triggered the picker
-          let lastPickerField = "";
-
+          // Open media picker modal when clicking "Escolher da biblioteca"
           // @ts-ignore: DOM APIs
           doc.addEventListener("click", (e: MouseEvent) => {
             // @ts-ignore: DOM APIs
-            const link = (e.target as HTMLElement)?.closest?.(
-              "a[data-image-field]",
-            ) as HTMLAnchorElement | null;
-            if (!link) return;
+            const btn = (e.target as HTMLElement)?.closest?.(
+              "[data-media-picker]",
+            ) as HTMLElement | null;
+            if (!btn) return;
             // @ts-ignore: DOM APIs
-            lastPickerField = link.dataset.imageField ?? "";
-          });
-
-          // Listen for media picker results and fill the target image field
-          // @ts-ignore: DOM APIs
-          win.addEventListener("message", (e: MessageEvent) => {
-            if (e.origin !== win.location.origin) return;
-            if (e.data?.type !== "media-picker-result") return;
-            if (!lastPickerField) return;
+            const targetField = btn.dataset.targetField ?? "";
             // @ts-ignore: DOM APIs
-            const input = doc.getElementById(
-              lastPickerField,
-            ) as HTMLInputElement | null;
-            if (!input) return;
-            const value = Array.isArray(e.data.value)
-              ? e.data.value[0]
-              : e.data.value;
-            // @ts-ignore: DOM APIs
-            input.value = String(value ?? "");
+            const modal = doc.getElementById("media-picker-modal") as any;
+            if (modal) {
+              // @ts-ignore: DOM APIs
+              modal.classList.remove("hidden");
+              // @ts-ignore: DOM APIs
+              modal.dataset.targetField = targetField;
+            }
           });
         }}
       </Script>
