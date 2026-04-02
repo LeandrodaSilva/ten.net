@@ -4,6 +4,7 @@ import {
   AuditLogPlugin,
   CategoriesPlugin,
   GroupsPlugin,
+  MediaPlugin,
   PagePlugin,
   PostsPlugin,
   RolesPlugin,
@@ -24,6 +25,7 @@ if (import.meta.main) {
         SettingsPlugin,
         RolesPlugin,
         AuditLogPlugin,
+        MediaPlugin,
       ],
     }),
   );

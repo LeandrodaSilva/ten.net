@@ -1,3 +1,6 @@
+// deno-lint-ignore-file no-explicit-any
+import { Script } from "./script.tsx";
+
 export interface MediaItem {
   filename: string;
   originalName: string;
@@ -23,7 +26,7 @@ function formatSize(bytes: number): string {
 }
 
 export function MediaLibrary(
-  { items, page, totalPages, search, csrfToken: _csrfToken }: MediaLibraryProps,
+  { items, page, totalPages, search, csrfToken }: MediaLibraryProps,
 ) {
   const separator = search ? `&` : `?`;
 
@@ -32,20 +35,70 @@ export function MediaLibrary(
       {/* Header */}
       <div className="flex items-center justify-between gap-x-4">
         <h1 className="text-xl font-semibold text-gray-900">Media Library</h1>
-        <a
-          href="/admin/media/upload"
-          className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      </div>
+
+      {/* Inline upload form */}
+      <div className="rounded-lg border border-gray-200 bg-white p-4">
+        <form
+          id="media-library-upload-form"
+          method="POST"
+          action="/admin/media/upload"
+          encType="multipart/form-data"
+          className="space-y-3"
         >
-          <svg
-            aria-hidden="true"
-            className="-ml-0.5 mr-1.5 size-4"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+          {csrfToken && <input type="hidden" name="_csrf" value={csrfToken} />}
+          <div
+            id="media-library-dropzone"
+            className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-indigo-400 transition-colors"
           >
-            <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-          </svg>
-          Upload
-        </a>
+            <svg
+              aria-hidden="true"
+              className="mx-auto size-7 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+              />
+            </svg>
+            <p className="mt-1 text-sm text-gray-600">
+              Arraste imagens aqui ou{" "}
+              <span className="text-indigo-600 font-medium">
+                clique para selecionar
+              </span>
+            </p>
+            <p className="text-xs text-gray-400">Até 5 MB · PNG, JPG, WEBP</p>
+            <input
+              id="media-library-file-input"
+              type="file"
+              name="file"
+              accept="image/*"
+              required
+              className="hidden"
+            />
+          </div>
+          <p
+            id="media-library-upload-error"
+            className="hidden text-sm text-red-600"
+          />
+          <p
+            id="media-library-upload-filename"
+            className="hidden text-sm text-gray-700"
+          />
+          <div className="flex justify-end">
+            <button
+              id="media-library-upload-submit"
+              type="submit"
+              className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Enviar
+            </button>
+          </div>
+        </form>
       </div>
 
       {/* Search */}
@@ -125,21 +178,168 @@ export function MediaLibrary(
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <div className="p-3">
-                  <p
-                    className="truncate text-sm font-medium text-gray-900"
-                    title={item.originalName}
+                <div className="flex items-start justify-between p-3">
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className="truncate text-sm font-medium text-gray-900"
+                      title={item.originalName}
+                    >
+                      {item.originalName}
+                    </p>
+                    <p className="mt-0.5 text-xs text-gray-500">
+                      {formatSize(item.size)}
+                    </p>
+                  </div>
+                  <form
+                    method="POST"
+                    action={`/admin/media/${item.filename}/delete`}
+                    className="ml-2 shrink-0"
                   >
-                    {item.originalName}
-                  </p>
-                  <p className="mt-0.5 text-xs text-gray-500">
-                    {formatSize(item.size)}
-                  </p>
+                    {csrfToken && (
+                      <input type="hidden" name="_csrf" value={csrfToken} />
+                    )}
+                    <button
+                      type="submit"
+                      data-confirm={`Excluir "${item.originalName}"?`}
+                      className="text-xs text-red-500 hover:text-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                    >
+                      Excluir
+                    </button>
+                  </form>
                 </div>
               </li>
             ))}
           </ul>
         )}
+
+      <Script>
+        {() => {
+          // @ts-ignore: DOM APIs available at runtime
+          const doc = globalThis.document;
+          if (!doc) return;
+
+          // --- Inline upload dropzone ---
+          // @ts-ignore: DOM APIs
+          const dropzone = doc.getElementById("media-library-dropzone") as any;
+          // @ts-ignore: DOM APIs
+          const fileInput = doc.getElementById(
+            "media-library-file-input",
+          ) as any;
+          // @ts-ignore: DOM APIs
+          const errorEl = doc.getElementById(
+            "media-library-upload-error",
+          ) as any;
+          // @ts-ignore: DOM APIs
+          const filenameEl = doc.getElementById(
+            "media-library-upload-filename",
+          ) as any;
+          // @ts-ignore: DOM APIs
+          const submitBtn = doc.getElementById(
+            "media-library-upload-submit",
+          ) as any;
+          // @ts-ignore: DOM APIs
+          const uploadForm = doc.getElementById(
+            "media-library-upload-form",
+          ) as any;
+
+          function showError(msg: string) {
+            if (errorEl) {
+              errorEl.textContent = msg;
+              errorEl.classList.remove("hidden");
+            }
+            if (filenameEl) filenameEl.classList.add("hidden");
+            if (submitBtn) submitBtn.disabled = true;
+          }
+
+          function clearError() {
+            if (errorEl) {
+              errorEl.textContent = "";
+              errorEl.classList.add("hidden");
+            }
+            if (submitBtn) submitBtn.disabled = false;
+          }
+
+          function validateFile(file: File): boolean {
+            clearError();
+            if (!file.type.startsWith("image/")) {
+              showError("Apenas imagens são permitidas.");
+              return false;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+              showError("O arquivo excede o limite de 5 MB.");
+              return false;
+            }
+            if (filenameEl) {
+              filenameEl.textContent = `Selecionado: ${file.name}`;
+              filenameEl.classList.remove("hidden");
+            }
+            return true;
+          }
+
+          if (dropzone && fileInput) {
+            dropzone.addEventListener("click", () => fileInput.click());
+
+            // @ts-ignore: DOM APIs
+            dropzone.addEventListener("dragover", (e: DragEvent) => {
+              e.preventDefault();
+              dropzone.classList.add("border-indigo-500", "bg-indigo-50");
+            });
+
+            dropzone.addEventListener("dragleave", () => {
+              dropzone.classList.remove("border-indigo-500", "bg-indigo-50");
+            });
+
+            // @ts-ignore: DOM APIs
+            dropzone.addEventListener("drop", (e: DragEvent) => {
+              e.preventDefault();
+              dropzone.classList.remove("border-indigo-500", "bg-indigo-50");
+              // @ts-ignore: DOM APIs
+              const files = e.dataTransfer?.files;
+              if (!files?.length) return;
+              // @ts-ignore: DOM APIs
+              const dt = new DataTransfer();
+              dt.items.add(files[0]);
+              fileInput.files = dt.files;
+              validateFile(files[0]);
+            });
+
+            fileInput.addEventListener("change", () => {
+              const files = fileInput.files;
+              if (files?.length) validateFile(files[0]);
+            });
+          }
+
+          if (uploadForm) {
+            // @ts-ignore: DOM APIs
+            uploadForm.addEventListener("submit", (e: Event) => {
+              const files = fileInput?.files;
+              if (!files?.length) {
+                e.preventDefault();
+                showError("Selecione um arquivo de imagem.");
+                return;
+              }
+              if (!validateFile(files[0])) {
+                e.preventDefault();
+              }
+            });
+          }
+
+          // --- Delete confirm ---
+          // @ts-ignore: DOM APIs
+          doc.addEventListener("click", (e: MouseEvent) => {
+            // @ts-ignore: DOM APIs
+            const btn = (e.target as HTMLElement)?.closest?.(
+              "[data-confirm]",
+            ) as any;
+            if (!btn) return;
+            const message = btn.dataset.confirm ?? "Confirmar?";
+            // @ts-ignore: DOM APIs
+            if (!globalThis.confirm(message)) {
+              e.preventDefault();
+            }
+          });
+        }}
+      </Script>
 
       {/* Pagination */}
       {totalPages > 1 && (

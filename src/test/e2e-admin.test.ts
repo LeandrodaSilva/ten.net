@@ -2,7 +2,6 @@ import { afterAll, beforeAll, describe, it } from "@std/testing/bdd";
 import {
   assert,
   assertEquals,
-  assertExists,
   assertMatch,
   assertStringIncludes,
 } from "@std/assert";
@@ -16,6 +15,7 @@ import { UsersPlugin } from "../../packages/admin/src/plugins/usersPlugin.ts";
 import { SettingsPlugin } from "../../packages/admin/src/plugins/settingsPlugin.ts";
 import { RolesPlugin } from "../../packages/admin/src/plugins/rolesPlugin.ts";
 import { AuditLogPlugin } from "../../packages/admin/src/plugins/auditLogPlugin.ts";
+import { MediaPlugin } from "../../packages/admin/src/plugins/mediaPlugin.ts";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -123,6 +123,7 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
         SettingsPlugin,
         RolesPlugin,
         AuditLogPlugin,
+        MediaPlugin,
       ],
     });
     await app.useAdmin(admin);
@@ -2109,26 +2110,112 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
   // Media Library E2E
   // ──────────────────────────────────────────────────────────────────────────
   describe("Media Library", () => {
-    let mediaCsrf: string;
+    // Minimal valid 1×1 PNG (signature + IHDR + IDAT + IEND)
+    const PNG_HEADER = new Uint8Array([
+      0x89,
+      0x50,
+      0x4E,
+      0x47,
+      0x0D,
+      0x0A,
+      0x1A,
+      0x0A, // PNG signature
+      0x00,
+      0x00,
+      0x00,
+      0x0D,
+      0x49,
+      0x48,
+      0x44,
+      0x52, // IHDR chunk
+      0x00,
+      0x00,
+      0x00,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      0x01, // 1x1 pixel
+      0x08,
+      0x02,
+      0x00,
+      0x00,
+      0x00,
+      0x90,
+      0x77,
+      0x53, // RGB, etc
+      0xDE,
+      0x00,
+      0x00,
+      0x00,
+      0x0C,
+      0x49,
+      0x44,
+      0x41, // IDAT chunk
+      0x54,
+      0x08,
+      0xD7,
+      0x63,
+      0xF8,
+      0xCF,
+      0xC0,
+      0x00, // compressed data
+      0x00,
+      0x00,
+      0x02,
+      0x00,
+      0x01,
+      0xE2,
+      0x21,
+      0xBC, // checksum
+      0x33,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x49,
+      0x45,
+      0x4E, // IEND
+      0x44,
+      0xAE,
+      0x42,
+      0x60,
+      0x82,
+    ]);
 
-    it("GET /admin/media should return 200 with media list page", async () => {
-      const res = await fetchAuth(baseUrl, "/admin/media", cookie);
+    let mediaCsrf: string;
+    let uploadedFilename: string;
+    let uploadedId: string;
+
+    // 1. GET /admin/plugins/media-plugin → 200 (plugin registrado)
+    it("GET /admin/plugins/media-plugin should return 200", async () => {
+      const res = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/media-plugin",
+        cookie,
+      );
       assertEquals(res.status, 200);
       const body = await res.text();
-      assertStringIncludes(body, "Media Library");
-      // Grab CSRF token from any admin form for subsequent POST tests
-      mediaCsrf = await getCsrf(baseUrl, cookie, "page-plugin");
+      assertStringIncludes(body, "MediaPlugin");
+      // Grab CSRF token for subsequent tests
+      mediaCsrf = await getCsrf(baseUrl, cookie, "media-plugin");
     });
 
-    it("POST /admin/media/upload with valid image should redirect", async () => {
-      // PNG magic bytes: 0x89 0x50 0x4E 0x47
-      const imageData = new Uint8Array(256);
-      imageData[0] = 0x89;
-      imageData[1] = 0x50;
-      imageData[2] = 0x4E;
-      imageData[3] = 0x47;
-      for (let i = 4; i < 256; i++) imageData[i] = i % 256;
-      const file = new File([imageData], "test-upload.png", {
+    // 2. GET /admin/plugins/media-plugin/new → form com upload
+    it("GET /admin/plugins/media-plugin/new should render upload form", async () => {
+      const res = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/media-plugin/new",
+        cookie,
+      );
+      assertEquals(res.status, 200);
+      const body = await res.text();
+      assertStringIncludes(body, "_csrf");
+    });
+
+    // 3. POST /admin/media/upload com PNG válido → redirect sucesso
+    it("POST /admin/media/upload with valid PNG should redirect", async () => {
+      const file = new File([PNG_HEADER], "e2e-test.png", {
         type: "image/png",
       });
 
@@ -2148,21 +2235,36 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
       await res.body?.cancel();
     });
 
-    it("GET /media/[filename] should serve image with Content-Type", async () => {
-      // Upload via JSON API to get the filename — PNG magic bytes
-      const imageData = new Uint8Array(128);
-      imageData[0] = 0x89;
-      imageData[1] = 0x50;
-      imageData[2] = 0x4E;
-      imageData[3] = 0x47;
-      for (let i = 4; i < 128; i++) imageData[i] = i % 256;
-      const file = new File([imageData], "serve-test.png", {
-        type: "image/png",
+    // 4. POST /admin/media/upload com MIME inválido → erro 400
+    it("POST /admin/media/upload with invalid MIME should return 400", async () => {
+      const file = new File([new Uint8Array([0x00, 0x01])], "bad.exe", {
+        type: "application/octet-stream",
       });
 
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("alt", "serve test");
+      formData.append("alt", "bad file");
+      formData.append("_csrf", mediaCsrf);
+
+      const res = await fetch(`${baseUrl}/admin/media/upload`, {
+        method: "POST",
+        body: formData,
+        headers: { cookie },
+      });
+      assertEquals(res.status, 400);
+      const body = await res.text();
+      assertStringIncludes(body, "MIME");
+    });
+
+    // 5. GET /admin/plugins/media-plugin → imagem na listagem após upload
+    it("GET /admin/plugins/media-plugin should list uploaded image", async () => {
+      // Upload via JSON API to get metadata
+      const file = new File([PNG_HEADER], "listed-image.png", {
+        type: "image/png",
+      });
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("alt", "listed image");
       formData.append("_csrf", mediaCsrf);
 
       const uploadRes = await fetch(`${baseUrl}/admin/media/upload`, {
@@ -2172,18 +2274,197 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
       });
       assertEquals(uploadRes.status, 201);
       const mediaItem = await uploadRes.json();
-      assertExists(mediaItem.filename);
+      uploadedFilename = mediaItem.filename;
+      uploadedId = mediaItem.id;
 
-      // Now fetch publicly (no auth needed)
-      const serveRes = await fetch(`${baseUrl}/media/${mediaItem.filename}`);
-      assertEquals(serveRes.status, 200);
-      assertEquals(serveRes.headers.get("Content-Type"), "image/png");
+      // Check the media list page shows the image
+      const listRes = await fetchAuth(baseUrl, "/admin/media", cookie);
+      assertEquals(listRes.status, 200);
+      const body = await listRes.text();
+      assertStringIncludes(body, uploadedFilename);
+    });
+
+    // 6. GET /media/[filename] → Content-Type image/png
+    it("GET /media/[filename] should serve with Content-Type image/png", async () => {
+      const res = await fetch(`${baseUrl}/media/${uploadedFilename}`);
+      assertEquals(res.status, 200);
+      assertEquals(res.headers.get("Content-Type"), "image/png");
+      await res.body?.cancel();
+    });
+
+    // 7. GET /media/[filename] → headers Cache-Control + X-Content-Type-Options
+    it("GET /media/[filename] should have Cache-Control and nosniff headers", async () => {
+      const res = await fetch(`${baseUrl}/media/${uploadedFilename}`);
+      assertEquals(res.status, 200);
       assertStringIncludes(
-        serveRes.headers.get("Cache-Control") ?? "",
+        res.headers.get("Cache-Control") ?? "",
         "public",
       );
-      const body = new Uint8Array(await serveRes.arrayBuffer());
-      assertEquals(body.byteLength, 128);
+      assertEquals(
+        res.headers.get("X-Content-Type-Options"),
+        "nosniff",
+      );
+      await res.body?.cancel();
+    });
+
+    // 8. GET /media/nonexistent.jpg → 404
+    it("GET /media/nonexistent.jpg should return 404", async () => {
+      const res = await fetch(`${baseUrl}/media/nonexistent.jpg`);
+      assertEquals(res.status, 404);
+      await res.body?.cancel();
+    });
+
+    // 9. POST /admin/media/[id]/delete → remove
+    it("POST /admin/media/[id]/delete should remove the image", async () => {
+      const form = new URLSearchParams({ _csrf: mediaCsrf });
+      const res = await fetch(
+        `${baseUrl}/admin/media/${uploadedId}/delete`,
+        {
+          method: "POST",
+          body: form,
+          headers: { cookie },
+          redirect: "manual",
+        },
+      );
+      assertEquals(res.status, 302);
+      assertEquals(res.headers.get("Location"), "/admin/media");
+      await res.body?.cancel();
+    });
+
+    // 10. GET /admin/media/picker → 200
+    it("GET /admin/media/picker should return 200", async () => {
+      const res = await fetchAuth(baseUrl, "/admin/media/picker", cookie);
+      assertEquals(res.status, 200);
+      const body = await res.text();
+      assertStringIncludes(body, "Selecionar");
+    });
+
+    // 11. Builder HTML has data-media-picker (botão escolher)
+    it("builder HTML should have data-media-picker attribute", async () => {
+      // Create a page with widgets_enabled to get a builder page
+      const csrf = await getCsrf(baseUrl, cookie, "page-plugin");
+      const createRes = await createItem(baseUrl, cookie, "page-plugin", {
+        slug: "media-builder-test",
+        title: "Media Builder Test",
+        body: "",
+        status: "draft",
+        seo_title: "",
+        seo_description: "",
+        template: "",
+        author_id: "",
+        widgets_enabled: "true",
+      }, csrf);
+      await createRes.body?.cancel();
+
+      // Find the page ID
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const matches = [
+        ...listBody.matchAll(
+          /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/g,
+        ),
+      ];
+      let mediaPageId = "";
+      for (const m of matches) {
+        const editRes = await fetchAuth(
+          baseUrl,
+          `/admin/plugins/page-plugin/${m[1]}`,
+          cookie,
+        );
+        const editBody = await editRes.text();
+        if (editBody.includes('value="media-builder-test"')) {
+          mediaPageId = m[1];
+          break;
+        }
+      }
+      assert(mediaPageId, "should find media-builder-test page ID");
+
+      // Add an image widget so the builder renders a WidgetForm with data-media-picker
+      const addRes = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${mediaPageId}/widgets`,
+        cookie,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrf,
+          },
+          body: JSON.stringify({ type: "image" }),
+        },
+      );
+      assert(
+        addRes.status === 200 || addRes.status === 201,
+        `expected 200 or 201, got ${addRes.status}`,
+      );
+      const addedWidget = await addRes.json();
+      const widgetId = addedWidget.id;
+      assert(widgetId, "should get widget ID");
+
+      // Visit builder with ?edit=widgetId to render the WidgetForm
+      const builderRes = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${mediaPageId}/builder?edit=${widgetId}`,
+        cookie,
+      );
+      assertEquals(builderRes.status, 200);
+      const builderBody = await builderRes.text();
+      assertStringIncludes(builderBody, "data-media-picker");
+    });
+
+    // 12. Builder HTML has media-picker-modal (hidden)
+    it("builder HTML should have media-picker-modal element", async () => {
+      // Find the page we just created
+      const listRes = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const listBody = await listRes.text();
+      const matches = [
+        ...listBody.matchAll(
+          /\/admin\/plugins\/page-plugin\/([a-f0-9-]{36})/g,
+        ),
+      ];
+      let mediaPageId = "";
+      for (const m of matches) {
+        const editRes = await fetchAuth(
+          baseUrl,
+          `/admin/plugins/page-plugin/${m[1]}`,
+          cookie,
+        );
+        const editBody = await editRes.text();
+        if (editBody.includes('value="media-builder-test"')) {
+          mediaPageId = m[1];
+          break;
+        }
+      }
+      assert(mediaPageId, "should find media-builder-test page ID");
+
+      // media-picker-modal is always rendered on the builder page (no edit needed)
+      const builderRes = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${mediaPageId}/builder`,
+        cookie,
+      );
+      const builderBody = await builderRes.text();
+      assertStringIncludes(builderBody, "media-picker-modal");
+    });
+
+    // 13. GET /admin/plugins/media-plugin após delete → imagem removida
+    it("GET /admin/media after delete should not list removed image", async () => {
+      const res = await fetchAuth(baseUrl, "/admin/media", cookie);
+      assertEquals(res.status, 200);
+      const body = await res.text();
+      // The uploaded image from test 5 was deleted in test 9
+      assert(
+        !body.includes(uploadedFilename),
+        "deleted image should not appear in media list",
+      );
     });
   });
 });

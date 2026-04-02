@@ -29,6 +29,7 @@ export { UsersPlugin } from "./plugins/usersPlugin.ts";
 export { SettingsPlugin } from "./plugins/settingsPlugin.ts";
 export { RolesPlugin } from "./plugins/rolesPlugin.ts";
 export { AuditLogPlugin } from "./plugins/auditLogPlugin.ts";
+export { MediaPlugin } from "./plugins/mediaPlugin.ts";
 
 // Base for custom plugins
 export { Plugin } from "@leproj/tennet";
