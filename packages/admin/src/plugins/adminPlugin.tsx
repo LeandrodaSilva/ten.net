@@ -18,6 +18,7 @@ import {
   addPreviewRoute,
 } from "./admin/crud.tsx";
 import { addBlogRoutes } from "./admin/blog.ts";
+import { addSeoRoutes } from "./admin/seo.ts";
 import {
   addBuilderPreviewRoute,
   addBuilderUIRoutes,
@@ -134,6 +135,9 @@ export class AdminPlugin {
       // Add public blog routes (no auth required — /blog does not start with /admin)
       addBlogRoutes(ctx, routes);
     }
+
+    // SEO routes — public, no auth required
+    addSeoRoutes(ctx, routes);
 
     return {
       routes,

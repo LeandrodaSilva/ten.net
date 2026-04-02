@@ -129,6 +129,8 @@ export function addBlogRoutes(ctx: AdminContext, routes: Route[]): void {
         template: "blog-list",
       },
       appPath,
+      undefined,
+      { url: url.href, type: "website" },
     );
     html = injectHeadTags(html, RSS_DISCOVERY_TAG);
 
@@ -264,6 +266,8 @@ export function addBlogRoutes(ctx: AdminContext, routes: Route[]): void {
         template: "blog-list",
       },
       appPath,
+      undefined,
+      { url: url.href, type: "website" },
     );
     html = injectHeadTags(html, RSS_DISCOVERY_TAG);
 
@@ -284,7 +288,7 @@ export function addBlogRoutes(ctx: AdminContext, routes: Route[]): void {
   });
   blogPostRoute.method = "GET";
   blogPostRoute.run = async (
-    _req: Request,
+    req: Request,
     routeCtx?: { params: Record<string, string> },
   ) => {
     const slug = routeCtx?.params?.slug;
@@ -331,6 +335,7 @@ export function addBlogRoutes(ctx: AdminContext, routes: Route[]): void {
 
     const seoDescription = post.excerpt || post.title;
 
+    const url = new URL(req.url);
     let html = await renderDynamicPage(
       {
         id: post.id,
@@ -341,14 +346,14 @@ export function addBlogRoutes(ctx: AdminContext, routes: Route[]): void {
         template: "blog-post",
       },
       appPath,
+      undefined,
+      {
+        url: url.href,
+        type: "article",
+        ogImage: post.cover_image || undefined,
+      },
     );
-    let headTags = RSS_DISCOVERY_TAG;
-    if (post.cover_image) {
-      headTags += `\n<meta property="og:image" content="${
-        escapeAttrValue(post.cover_image)
-      }">`;
-    }
-    html = injectHeadTags(html, headTags);
+    html = injectHeadTags(html, RSS_DISCOVERY_TAG);
 
     return new Response(html, {
       status: 200,

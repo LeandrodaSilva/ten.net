@@ -89,8 +89,8 @@ describe("AdminPlugin.init()", () => {
   it("should work with no plugins", async () => {
     const admin = new AdminPlugin({ storage: "memory" });
     const { routes, middlewares } = await admin.init();
-    // Dashboard + favicon + 3 auth routes = 5
-    assertEquals(routes.length, 5);
+    // Dashboard + favicon + 3 auth routes + 2 SEO routes = 7
+    assertEquals(routes.length, 7);
     assertEquals(middlewares.length, 3);
   });
 });

@@ -28,6 +28,9 @@ export type { Middleware } from "./middleware/middleware.ts";
 export { buildPermissionKey } from "./models/Permission.ts";
 export type { PermissionAction } from "./models/Permission.ts";
 export type { ListOptions, Storage, StorageItem } from "./models/Storage.ts";
-export { renderDynamicPage } from "./routing/dynamicPageHandler.ts";
+export {
+  renderDynamicPage,
+  type SeoOptions,
+} from "./routing/dynamicPageHandler.ts";
 export { DynamicRouteRegistry } from "./routing/dynamicRouteRegistry.ts";
 export { BlogRouteRegistry } from "./routing/blogRouteRegistry.ts";

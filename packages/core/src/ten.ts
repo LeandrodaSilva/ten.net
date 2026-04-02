@@ -143,6 +143,7 @@ export class Ten {
       template: string;
       widgets_enabled?: boolean;
     },
+    req?: Request,
   ): Promise<Response> {
     const html = await renderDynamicPage(
       {
@@ -156,6 +157,7 @@ export class Ten {
       },
       this._appPath,
       this._kv,
+      req ? { url: new URL(req.url).href, type: "website" } : undefined,
     );
     return new Response(html, {
       status: 200,
@@ -239,7 +241,7 @@ export class Ten {
       if (req.method === "GET" && this._dynamicRegistry) {
         const dynamicRoute = this._dynamicRegistry.match(path);
         if (dynamicRoute) {
-          return await this._handleDynamicPage(dynamicRoute);
+          return await this._handleDynamicPage(dynamicRoute, req);
         }
       }
       return await this._handle404();
