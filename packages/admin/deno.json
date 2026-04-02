@@ -1,6 +1,6 @@
 {
   "name": "@leproj/tennet-admin",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Admin dashboard plugin for Ten.net — CRUD, auth, page builder, and plugin management",
   "license": "MIT",
   "exports": {
