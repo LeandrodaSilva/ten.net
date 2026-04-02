@@ -22,8 +22,10 @@ describe("AdminPlugin.init()", () => {
       (r) => r.path === "/admin" && r.method === "GET",
     );
     assertExists(dash);
-    assertEquals(dash!.hasPage, true);
-    assertStringIncludes(dash!.page, "<!DOCTYPE html>");
+    assertEquals(dash!.hasPage, false);
+    assertExists(dash!.run);
+    const res = await dash!.run!(new Request("http://localhost/admin"));
+    assertStringIncludes(await res.text(), "<!DOCTYPE html>");
   });
 
   it("should generate favicon route", async () => {

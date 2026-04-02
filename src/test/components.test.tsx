@@ -104,22 +104,13 @@ describe("Dashboard layout", () => {
     assertStringIncludes(html, "My custom content");
   });
 
-  it("should render aside with Logs", () => {
-    const html = renderToString(
-      <Dashboard>
-        <div>Content</div>
-      </Dashboard>,
-    );
-    assertStringIncludes(html, "No recent activity");
-  });
-
   it("should render notification button", () => {
     const html = renderToString(
       <Dashboard>
         <div>Content</div>
       </Dashboard>,
     );
-    assertStringIncludes(html, "View notifications");
+    assertStringIncludes(html, "Ver notificações");
   });
 });
 

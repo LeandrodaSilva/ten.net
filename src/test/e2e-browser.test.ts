@@ -236,11 +236,13 @@ describe(
           await bodyField.type("Test content from browser");
         }
 
-        // Click submit and wait for response (form POST → 302 → list page)
+        // Click submit and wait for response (form POST → 302 → list page).
+        // Use 'main button[type="submit"]' to avoid matching logout buttons
+        // inside the hidden mobile sidebar dialog.
         const [_response] = await Promise.all([
           page.waitForNavigation({ waitUntil: "networkidle2", timeout: 15000 })
             .catch(() => null),
-          page.click('button[type="submit"]'),
+          page.click('main button[type="submit"]'),
         ]);
 
         // If navigation happened, verify we're on the plugin page
@@ -438,7 +440,12 @@ describe(
     describe("Navegação", () => {
       it("should navigate to plugin pages from sidebar links", async () => {
         await page.goto(`${baseUrl}/admin`, { waitUntil: "networkidle2" });
-        const links = await page.$$('nav[aria-label="Admin navigation"] a');
+        // Use XPath to select links only from navs NOT inside a hidden dialog.
+        // The new layout renders two navs (mobile dialog + desktop sidebar);
+        // links inside the closed <dialog> are not clickable.
+        const links = await page.$x(
+          '//nav[@aria-label="Admin navigation"][not(ancestor::dialog)]//a',
+        );
         assert(links.length > 0, "sidebar should have links");
 
         await Promise.all([

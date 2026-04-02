@@ -7,13 +7,14 @@ import type { SidebarNavItem } from "./components/sidebar-nav.tsx";
 import type { ReactElement } from "react";
 
 export const App = (
-  { children, navItems }: {
+  { children, navItems, userName }: {
     children: ReactElement;
     navItems?: SidebarNavItem[];
+    userName?: string;
   },
 ) => {
   return (
-    <html lang="en" className="h-full bg-gray-100">
+    <html lang="en" className="h-full bg-white">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,7 +34,7 @@ export const App = (
         >
           Skip to content
         </a>
-        <Dashboard navItems={navItems}>
+        <Dashboard navItems={navItems} userName={userName}>
           {children || <Plugins />}
         </Dashboard>
         <Script>
@@ -88,10 +89,11 @@ export function renderAdminPage<P extends Record<string, unknown>>(
   Component: (props: P) => React.ReactElement,
   props: P,
   navItems?: SidebarNavItem[],
+  userName?: string,
 ): string {
   return `<!DOCTYPE html>${
     renderToString(
-      <App navItems={navItems}>
+      <App navItems={navItems} userName={userName}>
         <Component {...props} />
       </App>,
     )

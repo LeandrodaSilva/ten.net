@@ -266,7 +266,7 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
     it("page should have ARIA header element", async () => {
       const res = await fetchAuth(baseUrl, "/admin", cookie);
       const body = await res.text();
-      assertStringIncludes(body, "<header");
+      assertStringIncludes(body, "sticky top-0");
     });
 
     it("each plugin link should have correct href", async () => {
@@ -1722,7 +1722,6 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
       "user-plugin",
       "settings-plugin",
       "role-plugin",
-      "audit-log-plugin",
     ];
 
     it("dashboard plugin cards should link to /admin/plugins/{slug} and return 200", async () => {

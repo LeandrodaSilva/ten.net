@@ -1,8 +1,10 @@
 import { Route } from "@leproj/tennet";
 import type { Plugin, StorageItem } from "@leproj/tennet";
-import type { ReactElement } from "react";
-import { appWithChildren, renderAdminPage } from "../../app.tsx";
-import { Plugins } from "../../components/plugins.tsx";
+import { renderAdminPage } from "../../app.tsx";
+import { HomeDashboard } from "../../components/home-dashboard.tsx";
+import type { HomeDashboardStats } from "../../components/home-dashboard.tsx";
+import type { AuditLogEntry } from "../../components/logs.tsx";
+import type { SidebarNavItem } from "../../components/sidebar-nav.tsx";
 import { CrudList } from "../../components/crud-list.tsx";
 import { CrudForm } from "../../components/crud-form.tsx";
 import { requestSession } from "../../auth/authMiddleware.ts";
@@ -47,40 +49,103 @@ export function isReadonlyPlugin(plugin: Plugin): boolean {
   return plugin instanceof AuditLogPlugin;
 }
 
+const pluginNavIcon = (
+  <svg
+    aria-hidden="true"
+    className="size-6 shrink-0"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 0 1-.657.643 48.39 48.39 0 0 1-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 0 1-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 0 0-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 0 1-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 0 0 .657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 0 1-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 0 0 5.427-.63 48.05 48.05 0 0 0 .582-4.717.532.532 0 0 0-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 0 0 .657-.663 48.422 48.422 0 0 0-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 0 1-.61-.58v0Z"
+    />
+  </svg>
+);
+
+/** Build sidebar nav items from registered plugins, marking active by current URL. */
+function buildNavItems(
+  plugins: Plugin[],
+  currentUrl?: string,
+): SidebarNavItem[] {
+  return plugins
+    .filter((p) => !(p instanceof AuditLogPlugin))
+    .map((p) => ({
+      label: p.name.replace(/Plugin$/, ""),
+      href: `/admin/plugins/${p.slug}`,
+      icon: pluginNavIcon,
+      active: currentUrl?.startsWith(`/admin/plugins/${p.slug}`) ?? false,
+    }));
+}
+
 /** Generate the dashboard route (GET /admin). */
 export function addDashboardRoute(ctx: AdminContext, routes: Route[]): void {
   const route = new Route({
     path: "/admin",
     regex: /^\/admin$/,
-    hasPage: true,
+    hasPage: false,
     transpiledCode: "",
     sourcePath: "",
   });
   route.method = "GET";
-  route.run = (_req: Request) => {
-    return new Response(
-      JSON.stringify({
-        plugin: "AdminPlugin",
-        description: "Admin Dashboard",
-        plugins: ctx.plugins.map((p) => ({
-          name: p.name,
-          slug: p.slug,
-          description: p.description,
-        })),
-      }),
-      { status: 200, headers: { "Content-Type": "application/json" } },
+  route.run = async (req: Request) => {
+    const session = requestSession.get(req);
+    const userName = session?.username;
+    const navItems = buildNavItems(ctx.plugins, "/admin");
+
+    // Fetch stats via parallel count queries
+    const statSlugs: Record<keyof HomeDashboardStats, string> = {
+      pages: "page-plugin",
+      posts: "post-plugin",
+      media: "media-plugin",
+      users: "user-plugin",
+    };
+    const stats: HomeDashboardStats = {
+      pages: 0,
+      posts: 0,
+      media: 0,
+      users: 0,
+    };
+    await Promise.all(
+      (Object.entries(statSlugs) as [keyof HomeDashboardStats, string][]).map(
+        async ([key, slug]) => {
+          const plugin = ctx.plugins.find((p) => p.slug === slug);
+          if (plugin) stats[key] = await plugin.storage.count();
+        },
+      ),
     );
+
+    // Fetch last 5 audit log entries
+    const auditPlugin = ctx.plugins.find((p) => p instanceof AuditLogPlugin);
+    const recentActivity = auditPlugin
+      ? (await auditPlugin.storage.list({
+        page: 1,
+        limit: 5,
+      })) as unknown as AuditLogEntry[]
+      : [];
+
+    const pluginCards = ctx.plugins
+      .filter((p) => !(p instanceof AuditLogPlugin))
+      .map((p) => ({
+        name: p.name,
+        slug: p.slug,
+        description: p.description,
+      }));
+
+    const html = renderAdminPage(
+      HomeDashboard,
+      { stats, plugins: pluginCards, recentActivity },
+      navItems,
+      userName,
+    );
+    return new Response(html, {
+      status: 200,
+      headers: { "Content-Type": "text/html" },
+    });
   };
-
-  const pluginCards = ctx.plugins.map((p) => ({
-    name: p.name,
-    slug: p.slug,
-    description: p.description,
-  }));
-
-  route.page = appWithChildren(
-    (() => <Plugins plugins={pluginCards} />) as () => ReactElement,
-  );
 
   routes.push(route);
 }
@@ -135,19 +200,25 @@ export function addPluginCrudRoutes(
 
     const session = requestSession.get(req);
     const csrfToken = session?.csrfToken;
+    const navItems = buildNavItems(ctx.plugins, url.pathname);
 
-    const html = renderAdminPage(CrudList, {
-      pluginName: plugin.name,
-      pluginSlug: slug,
-      columns,
-      rows: data.items as Record<string, unknown>[],
-      total: data.total,
-      page: data.page,
-      totalPages: data.totalPages,
-      success: url.searchParams.get("success") ?? undefined,
-      error: url.searchParams.get("error") ?? undefined,
-      csrfToken,
-    });
+    const html = renderAdminPage(
+      CrudList,
+      {
+        pluginName: plugin.name,
+        pluginSlug: slug,
+        columns,
+        rows: data.items as Record<string, unknown>[],
+        total: data.total,
+        page: data.page,
+        totalPages: data.totalPages,
+        success: url.searchParams.get("success") ?? undefined,
+        error: url.searchParams.get("error") ?? undefined,
+        csrfToken,
+      },
+      navItems,
+      session?.username,
+    );
 
     return new Response(html, {
       status: 200,
@@ -253,14 +324,20 @@ export function addPluginCrudRoutes(
     const session = requestSession.get(req);
     const csrfToken = session?.csrfToken;
     const fields = await buildFormFields(plugin, ctx.plugins);
-    const html = renderAdminPage(CrudForm, {
-      pluginName: plugin.name,
-      pluginSlug: slug,
-      fields,
-      action: basePath,
-      isEdit: false,
-      csrfToken,
-    });
+    const navItems = buildNavItems(ctx.plugins, basePath);
+    const html = renderAdminPage(
+      CrudForm,
+      {
+        pluginName: plugin.name,
+        pluginSlug: slug,
+        fields,
+        action: basePath,
+        isEdit: false,
+        csrfToken,
+      },
+      navItems,
+      session?.username,
+    );
     return new Response(html, {
       status: 200,
       headers: { "Content-Type": "text/html" },
@@ -299,33 +376,44 @@ export function addPluginCrudRoutes(
       }
     }
 
+    const navItems = buildNavItems(ctx.plugins, basePath);
     let html: string;
     if (plugin instanceof PagePlugin) {
       const builderHref = values.widgets_enabled === "true"
         ? `/admin/pages/${id}/builder`
         : undefined;
-      html = renderAdminPage(PagePluginEditPage, {
-        pluginName: plugin.name,
-        pluginSlug: slug,
-        fields,
-        values,
-        action: `${basePath}/${id}`,
-        isEdit: true,
-        itemId: id,
-        csrfToken,
-        builderHref,
-      });
+      html = renderAdminPage(
+        PagePluginEditPage,
+        {
+          pluginName: plugin.name,
+          pluginSlug: slug,
+          fields,
+          values,
+          action: `${basePath}/${id}`,
+          isEdit: true,
+          itemId: id,
+          csrfToken,
+          builderHref,
+        },
+        navItems,
+        session?.username,
+      );
     } else {
-      html = renderAdminPage(CrudForm, {
-        pluginName: plugin.name,
-        pluginSlug: slug,
-        fields,
-        values,
-        action: `${basePath}/${id}`,
-        isEdit: true,
-        itemId: id,
-        csrfToken,
-      });
+      html = renderAdminPage(
+        CrudForm,
+        {
+          pluginName: plugin.name,
+          pluginSlug: slug,
+          fields,
+          values,
+          action: `${basePath}/${id}`,
+          isEdit: true,
+          itemId: id,
+          csrfToken,
+        },
+        navItems,
+        session?.username,
+      );
     }
     return new Response(html, {
       status: 200,

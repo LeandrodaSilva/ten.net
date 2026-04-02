@@ -28,29 +28,33 @@ describe("AdminPlugin", () => {
     );
     assertEquals(dashRoute?.path, "/admin");
     assertEquals(dashRoute?.method, "GET");
-    assertEquals(dashRoute?.hasPage, true);
+    assertEquals(dashRoute?.hasPage, false);
   });
 
-  it("should have page content in dashboard route", async () => {
-    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
-    const { routes } = await admin.init();
-    const dashRoute = routes.find(
-      (r) => r.path === "/admin" && r.method === "GET",
-    );
-    assertStringIncludes(dashRoute!.page, "<!DOCTYPE html>");
-  });
-
-  it("should have a run handler on dashboard that returns JSON", async () => {
+  it("should have page content in dashboard route via run handler", async () => {
     const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
     const { routes } = await admin.init();
     const dashRoute = routes.find(
       (r) => r.path === "/admin" && r.method === "GET",
     );
     const req = new Request("http://localhost/admin");
-    const response = dashRoute!.run!(req);
-    const body = await (response as Response).json();
-    assertEquals(body.plugin, "AdminPlugin");
-    assertEquals(Array.isArray(body.plugins), true);
+    const response = await dashRoute!.run!(req);
+    assertStringIncludes(await response.text(), "<!DOCTYPE html>");
+  });
+
+  it("should have a run handler on dashboard that returns HTML", async () => {
+    const admin = new AdminPlugin({ storage: "memory", plugins: [PagePlugin] });
+    const { routes } = await admin.init();
+    const dashRoute = routes.find(
+      (r) => r.path === "/admin" && r.method === "GET",
+    );
+    const req = new Request("http://localhost/admin");
+    const response = await dashRoute!.run!(req);
+    assertEquals(response.status, 200);
+    assertStringIncludes(
+      response.headers.get("Content-Type") ?? "",
+      "text/html",
+    );
   });
 
   it("should generate favicon route", async () => {

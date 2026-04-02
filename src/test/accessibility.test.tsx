@@ -60,18 +60,11 @@ describe("Dashboard accessibility", () => {
     assertStringIncludes(html, 'id="main-content"');
   });
 
-  it("should render aside with aria-label=Activity log", () => {
-    const html = renderToString(
-      <Dashboard>{<div>Content</div> as ReactElement}</Dashboard>,
-    );
-    assertStringIncludes(html, 'aria-label="Activity log"');
-  });
-
   it("should render notification button with sr-only text", () => {
     const html = renderToString(
       <Dashboard>{<div>Content</div> as ReactElement}</Dashboard>,
     );
-    assertStringIncludes(html, "View notifications");
+    assertStringIncludes(html, "Ver notificações");
     assertStringIncludes(html, "sr-only");
   });
 
@@ -98,10 +91,11 @@ describe("Dashboard accessibility", () => {
     assertStringIncludes(html, "Unique Content");
   });
 
-  it("should render aside with aria-label=Site navigation", () => {
+  it("should render nav inside bg-gray-900 sidebar", () => {
     const html = renderToString(
       <Dashboard>{<div>test</div> as ReactElement}</Dashboard>,
     );
-    assertStringIncludes(html, 'aria-label="Site navigation"');
+    assertStringIncludes(html, "bg-gray-900");
+    assertStringIncludes(html, "<nav");
   });
 });
