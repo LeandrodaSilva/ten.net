@@ -1,4 +1,4 @@
-import { assertEquals } from "@deno-assert";
+import { assertEquals } from "@std/assert";
 import { paramsEngine } from "../../packages/core/src/paramsEngine.ts";
 import { Route } from "../../packages/core/src/models/Route.ts";
 

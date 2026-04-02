@@ -12,7 +12,7 @@ export interface DynamicRoute {
   seo_title: string;
   seo_description: string;
   template: string;
-  widgets_enabled?: string;
+  widgets_enabled?: boolean;
   route: Route;
 }
 
@@ -69,7 +69,7 @@ export class DynamicRouteRegistry {
       seo_description: String(page.seo_description ?? ""),
       template: String(page.template ?? ""),
       widgets_enabled: page.widgets_enabled !== undefined
-        ? String(page.widgets_enabled)
+        ? Boolean(page.widgets_enabled)
         : undefined,
       route,
     };

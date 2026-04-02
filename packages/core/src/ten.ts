@@ -141,7 +141,7 @@ export class Ten {
       seo_title: string;
       seo_description: string;
       template: string;
-      widgets_enabled?: string;
+      widgets_enabled?: boolean;
     },
   ): Promise<Response> {
     const html = await renderDynamicPage(
@@ -278,7 +278,7 @@ export class Ten {
 
       return this._handle404();
     } catch (e) {
-      console.error(e);
+      console.error(`Error handling route: ${route?.path}`, e);
       return new Response("Internal Server Error", { status: 500 });
     }
   }

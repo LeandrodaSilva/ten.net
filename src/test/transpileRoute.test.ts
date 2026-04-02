@@ -1,4 +1,4 @@
-import { assertEquals } from "@deno-assert";
+import { assertEquals } from "@std/assert";
 import { transpileRoute } from "../../packages/core/src/utils/transpileRoute.ts";
 import { assertSnapshot } from "@std/testing/snapshot";
 
