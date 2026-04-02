@@ -95,7 +95,7 @@ criativos e surpreendentes. Siga estas diretrizes:
 Antes de criar ou modificar QUALQUER componente de UI do admin, voce DEVE:
 
 1. **Buscar** templates relevantes via `Glob` em
-   `.claude/docs/tailwindcss-plus/`
+   `.claude/agents/frontend-dev-agent-templates/`
 2. **Ler** o template HTML mais proximo do que precisa
 3. **Adaptar** para React TSX seguindo as regras de conversao abaixo
 4. **Personalizar** com escolhas esteticas distintas (fontes, cores de accent,
@@ -104,7 +104,7 @@ Antes de criar ou modificar QUALQUER componente de UI do admin, voce DEVE:
 
 ### Localizacao dos Templates
 
-Root: `.claude/docs/tailwindcss-plus/`
+Root: `.claude/agents/frontend-dev-agent-templates/`
 
 - `application-ui-v4/html/` — Componentes de aplicacao (PRINCIPAL para admin)
 - `ecommerce-v4/html/` — Componentes de e-commerce
