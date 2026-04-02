@@ -374,11 +374,29 @@ export function addPageBuilderRoutes(
     }
 
     let body: Record<string, unknown>;
+    const contentType = req.headers.get("content-type") ?? "";
     try {
-      body = await req.json() as Record<string, unknown>;
+      if (contentType.includes("application/json")) {
+        body = await req.json() as Record<string, unknown>;
+      } else {
+        // Parse form-encoded data (from HTML form submit)
+        const formData = await req.formData();
+        const widgetData: Record<string, unknown> = {};
+        body = {};
+        for (const [key, value] of formData.entries()) {
+          if (key.startsWith("data.")) {
+            widgetData[key.slice(5)] = value;
+          } else if (key !== "_csrf" && key !== "_method") {
+            body[key] = value;
+          }
+        }
+        if (Object.keys(widgetData).length > 0) {
+          body.data = widgetData;
+        }
+      }
     } catch {
       return new Response(
-        JSON.stringify({ error: "Invalid JSON body" }),
+        JSON.stringify({ error: "Invalid request body" }),
         { status: 400, headers: { "Content-Type": "application/json" } },
       );
     }
@@ -394,7 +412,10 @@ export function addPageBuilderRoutes(
       patch.placeholder = body.placeholder;
     }
     if (typeof body.order === "number") patch.order = body.order;
-    if (typeof body.data === "object" && body.data !== null) {
+    if (
+      body.data !== undefined && typeof body.data === "object" &&
+      body.data !== null
+    ) {
       patch.data = body.data as Record<string, unknown>;
     }
 
@@ -452,9 +473,16 @@ export function addPageBuilderRoutes(
         );
       }
 
-      return new Response(JSON.stringify(updated), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
+      if (contentType.includes("application/json")) {
+        return new Response(JSON.stringify(updated), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      // Form submit: redirect back to builder
+      return new Response(null, {
+        status: 302,
+        headers: { Location: `${basePath}/${pageId}/builder` },
       });
     } catch {
       return new Response("Not found", { status: 404 });

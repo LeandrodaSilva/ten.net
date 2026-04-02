@@ -1136,6 +1136,128 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
       assertEquals(json.data.heading, "Updated Welcome");
     });
 
+    it("POST update widget with form-encoded body should succeed (regression: was 400 Invalid JSON body)", async () => {
+      // Create a widget specifically for this form-encoded test
+      const createRes = await fetch(
+        `${baseUrl}/admin/pages/${pageId}/widgets`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            type: "hero",
+            placeholder: "main",
+            order: 10,
+            data: { text: "original", url: "" },
+          }),
+          headers: {
+            cookie,
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
+          },
+        },
+      );
+      assertEquals(createRes.status, 201);
+      const created = await createRes.json();
+      const formWidgetId = created.id;
+
+      // Update via form-encoded body (as the browser sends from Page Builder form)
+      const formBody =
+        `_csrf=${csrfToken}&_method=PATCH&data.text=updated+text&data.url=https%3A%2F%2Fexample.com`;
+      const res = await fetch(
+        `${baseUrl}/admin/pages/${pageId}/widgets/${formWidgetId}`,
+        {
+          method: "POST",
+          body: formBody,
+          headers: {
+            cookie,
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRF-Token": csrfToken,
+          },
+          redirect: "manual",
+        },
+      );
+      // Should redirect (302) back to the builder, NOT return 400
+      assertEquals(res.status, 302);
+      await res.body?.cancel();
+
+      // Verify the widget was actually updated
+      const listRes = await fetchAuth(
+        baseUrl,
+        `/admin/pages/${pageId}/widgets`,
+        cookie,
+      );
+      const widgets = await listRes.json();
+      const updated = widgets.find((w: { id: string }) =>
+        w.id === formWidgetId
+      );
+      assert(updated, "form-encoded updated widget should exist");
+      assertEquals(updated.data.text, "updated text");
+      assertEquals(updated.data.url, "https://example.com");
+
+      // Cleanup: delete the widget
+      const delRes = await fetch(
+        `${baseUrl}/admin/pages/${pageId}/widgets/${formWidgetId}/delete`,
+        {
+          method: "POST",
+          headers: { cookie, "X-CSRF-Token": csrfToken },
+        },
+      );
+      await delRes.body?.cancel();
+    });
+
+    it("POST update widget with JSON body should still work (inverse regression)", async () => {
+      // Ensure the JSON path was not broken by the form-encoded fix
+      const createRes = await fetch(
+        `${baseUrl}/admin/pages/${pageId}/widgets`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            type: "rich-text",
+            placeholder: "main",
+            order: 11,
+            data: { content: "before" },
+          }),
+          headers: {
+            cookie,
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
+          },
+        },
+      );
+      assertEquals(createRes.status, 201);
+      const created = await createRes.json();
+      const jsonWidgetId = created.id;
+
+      // Update via JSON body (the original path)
+      const res = await fetch(
+        `${baseUrl}/admin/pages/${pageId}/widgets/${jsonWidgetId}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            data: { content: "after update" },
+            order: 11,
+          }),
+          headers: {
+            cookie,
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
+          },
+        },
+      );
+      assertEquals(res.status, 200);
+      const json = await res.json();
+      assertEquals(json.data.content, "after update");
+
+      // Cleanup: delete the widget
+      const delRes = await fetch(
+        `${baseUrl}/admin/pages/${pageId}/widgets/${jsonWidgetId}/delete`,
+        {
+          method: "POST",
+          headers: { cookie, "X-CSRF-Token": csrfToken },
+        },
+      );
+      await delRes.body?.cancel();
+    });
+
     it("POST reorder widgets should return 204", async () => {
       // Create a second widget
       const createRes = await fetch(
