@@ -3,6 +3,7 @@ import type {
   WidgetFieldSchema,
   WidgetInstance,
 } from "@leproj/tennet-widgets";
+import { Script } from "./script.tsx";
 
 const baseInputClass =
   "block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm";
@@ -76,13 +77,35 @@ function WidgetField(
           </select>
         )}
         {field.type === "image" && (
-          <input
-            type="url"
+          <div className="flex gap-x-2">
+            <input
+              type="url"
+              id={inputName}
+              name={inputName}
+              defaultValue={value}
+              required={field.required}
+              placeholder="Image URL"
+              className={`${baseInputClass} flex-1`}
+            />
+            <a
+              href="/admin/media/picker?mode=single"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-image-field={inputName}
+              className="shrink-0 inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Escolher da biblioteca
+            </a>
+          </div>
+        )}
+        {field.type === "gallery" && (
+          <textarea
             id={inputName}
             name={inputName}
+            rows={4}
             defaultValue={value}
             required={field.required}
-            placeholder="Image URL"
+            placeholder='["https://example.com/img1.jpg", "https://example.com/img2.jpg"]'
             className={baseInputClass}
           />
         )}
@@ -128,11 +151,54 @@ export interface WidgetFormProps {
 
 export function WidgetForm({ widgetDefinition, values }: WidgetFormProps) {
   return (
-    <div className="space-y-6">
-      {widgetDefinition.fields.map((field) => (
-        <WidgetField key={field.name} field={field} values={values} />
-      ))}
-    </div>
+    <>
+      <div className="space-y-6">
+        {widgetDefinition.fields.map((field) => (
+          <WidgetField key={field.name} field={field} values={values} />
+        ))}
+      </div>
+      <Script>
+        {() => {
+          // @ts-ignore: DOM APIs available at runtime
+          const win = globalThis.window;
+          // @ts-ignore: DOM APIs
+          const doc = globalThis.document;
+          if (!win || !doc) return;
+
+          // Track which image field triggered the picker
+          let lastPickerField = "";
+
+          // @ts-ignore: DOM APIs
+          doc.addEventListener("click", (e: MouseEvent) => {
+            // @ts-ignore: DOM APIs
+            const link = (e.target as HTMLElement)?.closest?.(
+              "a[data-image-field]",
+            ) as HTMLAnchorElement | null;
+            if (!link) return;
+            // @ts-ignore: DOM APIs
+            lastPickerField = link.dataset.imageField ?? "";
+          });
+
+          // Listen for media picker results and fill the target image field
+          // @ts-ignore: DOM APIs
+          win.addEventListener("message", (e: MessageEvent) => {
+            if (e.origin !== win.location.origin) return;
+            if (e.data?.type !== "media-picker-result") return;
+            if (!lastPickerField) return;
+            // @ts-ignore: DOM APIs
+            const input = doc.getElementById(
+              lastPickerField,
+            ) as HTMLInputElement | null;
+            if (!input) return;
+            const value = Array.isArray(e.data.value)
+              ? e.data.value[0]
+              : e.data.value;
+            // @ts-ignore: DOM APIs
+            input.value = String(value ?? "");
+          });
+        }}
+      </Script>
+    </>
   );
 }
 

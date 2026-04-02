@@ -23,6 +23,7 @@ import {
   addBuilderUIRoutes,
   addPageBuilderRoutes,
 } from "./admin/builder.ts";
+import { addMediaRoutes } from "./admin/media.ts";
 
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {
@@ -91,6 +92,9 @@ export class AdminPlugin {
       addBuilderUIRoutes(ctx, routes);
       addPageBuilderRoutes(ctx, routes);
     }
+
+    // Media Library routes (admin + rota pública /media/:filename)
+    addMediaRoutes(ctx, routes);
 
     // Auth routes (login/logout)
     routes.push(...createAuthRoutes(ctx.userStore, ctx.sessionStore));

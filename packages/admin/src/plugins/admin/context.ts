@@ -3,6 +3,7 @@ import type { BlogRouteRegistry, DynamicRouteRegistry } from "@leproj/tennet";
 import type { SessionStore } from "../../auth/sessionStore.ts";
 import type { UserStore } from "../../auth/userStore.ts";
 import type { AuditLogPlugin } from "../auditLogPlugin.ts";
+import type { MediaStore } from "@leproj/tennet-widgets";
 
 /** Shared context passed to every admin sub-module. */
 export interface AdminContext {
@@ -14,4 +15,5 @@ export interface AdminContext {
   dynamicRegistry?: DynamicRouteRegistry;
   blogRegistry?: BlogRouteRegistry;
   auditLogPlugin?: AuditLogPlugin;
+  mediaStore?: MediaStore;
 }
