@@ -2,7 +2,6 @@ import { afterAll, beforeAll, describe, it } from "@std/testing/bdd";
 import {
   assert,
   assertEquals,
-  assertExists,
   assertMatch,
   assertStringIncludes,
 } from "@std/assert";

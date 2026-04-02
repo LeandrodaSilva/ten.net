@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import type { MediaItem } from "./media-library.tsx";
 import { Script } from "./script.tsx";
 

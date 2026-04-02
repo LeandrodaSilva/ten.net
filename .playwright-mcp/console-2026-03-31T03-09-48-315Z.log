@@ -78,6 +78,7 @@
 [34046174ms] [WARNING] Limpando dados do usuário... @ http://localhost:3000/static/js/bundle.js:419200
 [34046175ms] [WARNING] Dados do usuário limpos com sucesso! @ http://localhost:3000/static/js/bundle.js:419226
 [34056126ms] [LOG] Download the Apollo DevTools for a better development experience: %s https://chrome.google.com/webstore/detail/apollo-client-developer-t/jdkknkkbebbapilgoeccciglkfbmbnfm @ http://localhost:3000/static/js/bundle.js:383293
+<<<<<<< Updated upstream
 [38974768ms] [ERROR] Failed to load resource: net::ERR_QUIC_PROTOCOL_ERROR.QUIC_PACKET_WRITE_ERROR @ https://www.googletagmanager.com/gtag/js?id=G-66D9CB2YXQ:0
 [38976045ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:3000/static/js/bundle.js:328480
 [38976327ms] [WARNING] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information. @ http://localhost:3000/static/js/bundle.js:43142
@@ -117,3 +118,9 @@
 [48779191ms] [WARNING] Limpando dados do usuário... @ http://localhost:3000/static/js/bundle.js:419202
 [48779193ms] [WARNING] Dados do usuário limpos com sucesso! @ http://localhost:3000/static/js/bundle.js:419228
 [48789153ms] [LOG] Download the Apollo DevTools for a better development experience: %s https://chrome.google.com/webstore/detail/apollo-client-developer-t/jdkknkkbebbapilgoeccciglkfbmbnfm @ http://localhost:3000/static/js/bundle.js:383293
+=======
+[34750761ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://session-replay.browser-intake-us3-datadoghq.com/api/v2/replay?ddsource=browser&ddtags=sdk_version%3A4.50.1%2Capi%3Afetch%2Cenv%3Aprod%2Cservice%3Astatic-familyportal-front-prd%2Cversion%3A2.0.0&dd-api-key=pub81fd57a3b7de12ef650569bccc29b04f&dd-evp-origin-version=4.50.1&dd-evp-origin=browser&dd-request-id=0c2dd42e-0c3e-4792-906d-28ba143689ef:0
+[34751014ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://session-replay.browser-intake-us3-datadoghq.com/api/v2/replay?ddsource=browser&ddtags=sdk_version%3A4.50.1%2Capi%3Afetch%2Cenv%3Aprod%2Cservice%3Astatic-familyportal-front-prd%2Cversion%3A2.0.0&dd-api-key=pub81fd57a3b7de12ef650569bccc29b04f&dd-evp-origin-version=4.50.1&dd-evp-origin=browser&dd-request-id=1bf6d2df-ce35-48fa-b241-e438f54ed3bd:0
+[34751126ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://rum.browser-intake-us3-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A4.50.1%2Capi%3Afetch%2Cenv%3Aprod%2Cservice%3Astatic-familyportal-front-prd%2Cversion%3A2.0.0&dd-api-key=pub81fd57a3b7de12ef650569bccc29b04f&dd-evp-origin-version=4.50.1&dd-evp-origin=browser&dd-request-id=fe9ce5a5-9edb-4575-ace8-fe642c03ad81&batch_time=1774961264419:0
+[34751383ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://rum.browser-intake-us3-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A4.50.1%2Capi%3Axhr%2Cenv%3Aprod%2Cservice%3Astatic-familyportal-front-prd%2Cversion%3A2.0.0&dd-api-key=pub81fd57a3b7de12ef650569bccc29b04f&dd-evp-origin-version=4.50.1&dd-evp-origin=browser&dd-request-id=6d06aa69-45f4-4523-958a-5ea78742ad91&batch_time=1774961339441:0
+>>>>>>> Stashed changes
