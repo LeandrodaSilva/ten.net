@@ -189,14 +189,14 @@ describe("Dashboard layout", () => {
     assertStringIncludes(html, "Sair");
   });
 
-  it("should render profile link to /admin/profile", () => {
+  it("should render logout form in dropdown", () => {
     const html = renderToString(
       <Dashboard>
         <div>content</div>
       </Dashboard>,
     );
-    assertStringIncludes(html, 'href="/admin/profile"');
-    assertStringIncludes(html, "Seu perfil");
+    assertStringIncludes(html, 'action="/admin/logout"');
+    assertStringIncludes(html, "Sair");
   });
 
   it("should render SidebarNav with dark variant in sidebar", () => {
@@ -244,10 +244,10 @@ describe("HomeDashboard — stats row", () => {
 
   it("should render stat links to plugin pages", () => {
     const html = renderToString(<HomeDashboard />);
-    assertStringIncludes(html, 'href="/admin/plugins/pages"');
-    assertStringIncludes(html, 'href="/admin/plugins/posts"');
-    assertStringIncludes(html, 'href="/admin/plugins/media"');
-    assertStringIncludes(html, 'href="/admin/plugins/users"');
+    assertStringIncludes(html, 'href="/admin/plugins/page-plugin"');
+    assertStringIncludes(html, 'href="/admin/plugins/post-plugin"');
+    assertStringIncludes(html, 'href="/admin/plugins/media-plugin"');
+    assertStringIncludes(html, 'href="/admin/plugins/user-plugin"');
   });
 
   it("should default stats to 0 when not provided", () => {
@@ -285,7 +285,7 @@ describe("HomeDashboard — recent activity", () => {
 
   it("should render 'Ver tudo' link to audit log", () => {
     const html = renderToString(<HomeDashboard />);
-    assertStringIncludes(html, 'href="/admin/plugins/audit-log"');
+    assertStringIncludes(html, 'href="/admin/plugins/audit-log-plugin"');
     assertStringIncludes(html, "Ver tudo");
   });
 

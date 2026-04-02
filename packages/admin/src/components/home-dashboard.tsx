@@ -15,10 +15,10 @@ export interface HomeDashboardProps {
 }
 
 const statItems = [
-  { label: "Páginas", key: "pages" as const, href: "/admin/plugins/pages" },
-  { label: "Posts", key: "posts" as const, href: "/admin/plugins/posts" },
-  { label: "Mídias", key: "media" as const, href: "/admin/plugins/media" },
-  { label: "Usuários", key: "users" as const, href: "/admin/plugins/users" },
+  { label: "Páginas", key: "pages" as const, href: "/admin/plugins/page-plugin" },
+  { label: "Posts", key: "posts" as const, href: "/admin/plugins/post-plugin" },
+  { label: "Mídias", key: "media" as const, href: "/admin/plugins/media-plugin" },
+  { label: "Usuários", key: "users" as const, href: "/admin/plugins/user-plugin" },
 ];
 
 const actionIcons: Record<string, { path: string; color: string }> = {
@@ -98,7 +98,7 @@ export function HomeDashboard(
             Atividade recente
           </h2>
           <a
-            href="/admin/plugins/audit-log"
+            href="/admin/plugins/audit-log-plugin"
             className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
           >
             Ver tudo

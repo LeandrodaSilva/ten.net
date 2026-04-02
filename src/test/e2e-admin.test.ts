@@ -2466,4 +2466,143 @@ describe("Admin E2E Integration", { sanitizeResources: false }, () => {
       );
     });
   });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 15. SettingsPlugin Extended
+  // ──────────────────────────────────────────────────────────────────────────
+  describe("SettingsPlugin Extended", () => {
+    it("POST delete setting should return 403 (admin has read+update only)", async () => {
+      // Since we can't create settings via CRUD (create is blocked),
+      // try to delete a nonexistent one — RBAC should block before reaching handler
+      const res = await fetch(
+        `${baseUrl}/admin/plugins/settings-plugin/nonexistent/delete`,
+        {
+          method: "POST",
+          body: new URLSearchParams({ _csrf: "dummy" }),
+          headers: { cookie },
+          redirect: "manual",
+        },
+      );
+      assertEquals(res.status, 403);
+      await res.body?.cancel();
+    });
+  });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 16. Media Search & Pagination
+  // ──────────────────────────────────────────────────────────────────────────
+  describe("Media Search & Pagination", () => {
+    it("GET /admin/media?search=nonexistent should return 200", async () => {
+      const res = await fetchAuth(
+        baseUrl,
+        "/admin/media?search=nonexistent",
+        cookie,
+      );
+      assertEquals(res.status, 200);
+      await res.body?.cancel();
+    });
+
+    it("GET /admin/media?page=1 should return 200", async () => {
+      const res = await fetchAuth(
+        baseUrl,
+        "/admin/media?page=1",
+        cookie,
+      );
+      assertEquals(res.status, 200);
+      await res.body?.cancel();
+    });
+
+    it("GET /admin/media?page=999 should return 200 (empty page)", async () => {
+      const res = await fetchAuth(
+        baseUrl,
+        "/admin/media?page=999",
+        cookie,
+      );
+      assertEquals(res.status, 200);
+      await res.body?.cancel();
+    });
+
+    it("GET /admin/plugins/media-plugin?page=1 should return 200", async () => {
+      const res = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/media-plugin?page=1",
+        cookie,
+      );
+      assertEquals(res.status, 200);
+      await res.body?.cancel();
+    });
+  });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 17. Dashboard Link Checker
+  // ──────────────────────────────────────────────────────────────────────────
+  describe("Dashboard Link Checker", () => {
+    const KNOWN_BROKEN = new Set<string>([]);
+
+    it("all internal links on dashboard should not return 404 or 500", async () => {
+      const res = await fetchAuth(baseUrl, "/admin", cookie);
+      const body = await res.text();
+
+      const hrefMatches = body.match(/href="([^"]+)"/g) ?? [];
+      const hrefs = hrefMatches
+        .map((m) => m.match(/href="([^"]+)"/)?.[1] ?? "")
+        .filter((href) =>
+          href.startsWith("/") && !href.startsWith("//") &&
+          !href.startsWith("#")
+        )
+        .filter((href) => !href.includes("cdn"));
+
+      assert(hrefs.length > 0, "dashboard should have internal links");
+
+      const uniqueHrefs = [...new Set(hrefs)];
+      const brokenLinks: string[] = [];
+      for (const href of uniqueHrefs) {
+        const linkRes = await fetchAuth(baseUrl, href, cookie);
+        await linkRes.body?.cancel();
+        if (linkRes.status === 404 || linkRes.status >= 500) {
+          if (!KNOWN_BROKEN.has(href)) {
+            brokenLinks.push(`${href} → ${linkRes.status}`);
+          }
+        }
+      }
+
+      assertEquals(
+        brokenLinks.length,
+        0,
+        `Unexpected broken links found: ${brokenLinks.join(", ")}`,
+      );
+    });
+
+    it("all internal links on page-plugin list should not return 404 or 500", async () => {
+      const res = await fetchAuth(
+        baseUrl,
+        "/admin/plugins/page-plugin",
+        cookie,
+      );
+      const body = await res.text();
+
+      const hrefMatches = body.match(/href="([^"]+)"/g) ?? [];
+      const hrefs = hrefMatches
+        .map((m) => m.match(/href="([^"]+)"/)?.[1] ?? "")
+        .filter((href) => href.startsWith("/admin") && !href.startsWith("#"));
+
+      const uniqueHrefs = [...new Set(hrefs)];
+      const brokenLinks: string[] = [];
+      for (const href of uniqueHrefs) {
+        const linkRes = await fetchAuth(baseUrl, href, cookie);
+        await linkRes.body?.cancel();
+        if (linkRes.status === 404 || linkRes.status >= 500) {
+          if (!KNOWN_BROKEN.has(href)) {
+            brokenLinks.push(`${href} → ${linkRes.status}`);
+          }
+        }
+      }
+
+      assertEquals(
+        brokenLinks.length,
+        0,
+        `Broken links found on page-plugin list: ${brokenLinks.join(", ")}`,
+      );
+    });
+  });
 });

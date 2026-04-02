@@ -139,6 +139,109 @@ describe("Route.isAdmin", () => {
 - Para E2E: usar `port: 0` e `AbortController` ou `server.shutdown()` para
   cleanup
 
+## Cobertura E2E de Elementos Interativos — Workflow Obrigatorio
+
+Ao criar testes E2E para qualquer tela do admin, voce DEVE seguir este workflow:
+
+### 1. Inventariar Elementos Interativos
+
+ANTES de escrever testes para uma tela, leia o componente que a renderiza e
+catalogue TODOS os elementos interativos:
+
+- **Links** (`<a href>`) — verificar que TODOS retornam status 200 (link checker)
+- **Botoes** (`<button>`) — verificar presenca no HTML, tipo (submit/button),
+  e que acoes funcionam (submit forms, triggers de dialog)
+- **Forms** (`<form>`) — testar submit com dados VALIDOS e INVALIDOS, verificar
+  CSRF token presente em todos os forms
+- **Dropdowns** (`el-dropdown` / `el-menu`) — verificar presenca no HTML,
+  itens de menu com links/acoes corretas
+- **Dialogs** (`el-dialog` / `<dialog>`) — verificar presenca no HTML,
+  trigger buttons com `command`/`commandfor`
+- **Data attributes** — verificar presenca de TODOS:
+  - `data-confirm` — confirmacao de delete
+  - `data-dismiss-alert` — fechar alertas
+  - `data-add-widget` — adicionar widget
+  - `data-edit-widget` — editar widget
+  - `data-duplicate-widget` — duplicar widget
+  - `data-delete-widget` — deletar widget
+  - `data-drag-handle` — handle de drag-and-drop
+  - `data-media-picker` — abrir media picker
+  - `data-widget-type`, `data-widget-id`, `data-page-id` etc.
+- **Script components** — verificar que `<script type="module">` esta presente
+  quando o componente injeta JS inline
+
+### 2. Para Cada Rota Testada, Verificar
+
+- Status code correto (200, 302, 400, 403, 404)
+- Content-Type correto (text/html, application/json, text/xml, etc.)
+- Todos os links internos na pagina retornam status valido (nao 404/500)
+- Todos os `<form>` tem campo `<input type="hidden" name="_csrf">`
+- Elementos de navegacao presentes (sidebar nav, breadcrumbs)
+- NavItems do sidebar correspondem aos plugins registrados
+
+### 3. Testes de Interacao Browser (Puppeteer)
+
+Para testes Puppeteer, considerar TODOS os elementos clicaveis:
+
+- **Cliques em links** — navegar e verificar destino
+- **Submit de forms** — preencher e submeter, verificar redirect/resposta
+- **Dialogs** — abrir (hamburger, preview), fechar (close button, backdrop)
+- **Dropdowns** — abrir (click trigger), verificar menu items, clicar item
+- **Confirmacao** — data-confirm intercepta submit, testar cancel E confirm
+- **Dismiss** — data-dismiss-alert remove elemento do DOM
+- **Drag and drop** — verificar que Sortable.js inicializa e handles existem
+- **Media picker** — abrir modal, selecionar imagem, confirmar selecao
+- **Responsive** — testar em 375px (mobile), 768px (tablet), 1280px (desktop)
+
+### 4. Relatorio de Problemas
+
+Ao executar testes E2E, compilar um relatorio markdown documentando:
+
+```markdown
+# Relatorio E2E — Admin Ten.net
+
+## Links Quebrados
+- [rota] → [status recebido] (esperado: [status])
+
+## Forms sem CSRF
+- [rota] → [form action] sem campo _csrf
+
+## Elementos Interativos com Problema
+- [componente] → [descricao do problema]
+
+## Comportamento Inesperado
+- [rota] → [descricao]
+
+## Recomendacoes de Correcao
+- [prioridade] [item] → [sugestao de fix]
+```
+
+Salve o relatorio como `src/test/E2E_REPORT.md` ao concluir todos os testes.
+
+---
+
+## Inventario de Rotas do Admin (70 rotas)
+
+Use esta referencia para garantir cobertura 100%:
+
+- **Auth**: GET /admin/login, POST /admin/login, POST /admin/logout (3)
+- **Dashboard**: GET /admin, GET /admin/favicon.ico (2)
+- **CRUD por plugin** (9 plugins x 5 rotas = 45):
+  GET /admin/plugins/{slug} (list), POST /admin/plugins/{slug} (create),
+  GET /admin/plugins/{slug}/new (form), GET /admin/plugins/{slug}/{id} (edit),
+  POST /admin/plugins/{slug}/{id} (update),
+  POST /admin/plugins/{slug}/{id}/delete (delete)
+- **Preview**: GET /admin/preview/{id} (1)
+- **Builder**: GET /admin/pages/{id}/builder, GET /admin/pages/{id}/builder/preview,
+  GET /admin/pages/{id}/widgets, POST create/reorder/update/delete/duplicate (8)
+- **Media**: GET /admin/media, POST /admin/media/upload,
+  GET /admin/media/picker, POST /admin/media/{id}/delete, GET /media/{filename} (5)
+- **Blog**: GET /blog, GET /blog/rss.xml, GET /blog/category/{slug},
+  GET /blog/{slug} (4)
+- **SEO**: GET /sitemap.xml, GET /robots.txt (2)
+
+---
+
 ## Categorias de Testes a Escrever
 
 ### 1. Testes de Componentes (`.test.tsx`)

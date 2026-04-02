@@ -69,12 +69,6 @@ function SidebarContent(
                 popover
                 class="w-48 origin-bottom-left rounded-md bg-gray-800 py-2 shadow-lg outline outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
-                <a
-                  href="/admin/profile"
-                  className="block px-3 py-1 text-sm text-gray-300 hover:bg-white/5 hover:text-white focus:bg-white/5 focus:outline-hidden"
-                >
-                  Seu perfil
-                </a>
                 <form method="POST" action="/admin/logout">
                   <button
                     type="submit"
@@ -242,12 +236,6 @@ export default function Dashboard(
                   popover
                   class="w-40 origin-top-right rounded-md bg-white py-2 shadow-lg outline outline-gray-900/5 transition transition-discrete [--anchor-gap:--spacing(2.5)] data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                 >
-                  <a
-                    href="/admin/profile"
-                    className="block px-3 py-1 text-sm text-gray-900 hover:bg-gray-50 focus:bg-gray-50 focus:outline-hidden"
-                  >
-                    Seu perfil
-                  </a>
                   <form method="POST" action="/admin/logout">
                     <button
                       type="submit"
