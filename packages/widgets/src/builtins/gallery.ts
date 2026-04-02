@@ -12,7 +12,7 @@ export const galleryWidget: WidgetDefinition = {
     {
       name: "images",
       label: "Images (JSON array of URLs)",
-      type: "textarea",
+      type: "gallery",
       required: true,
       default: "",
     },

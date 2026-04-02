@@ -57,6 +57,7 @@ export interface WidgetFieldSchema {
     | "textarea"
     | "rich-text"
     | "image"
+    | "gallery"
     | "url"
     | "select"
     | "number";

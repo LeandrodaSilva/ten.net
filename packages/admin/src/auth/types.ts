@@ -47,6 +47,7 @@ export const ROLE_PERMISSIONS: Record<string, Record<string, Permission[]>> = {
     "role-plugin": ["read", "create", "update", "delete"],
     "audit-log-plugin": ["read"],
     widgets: ["read", "create", "update", "delete"],
+    media: ["read", "create", "delete"],
   },
   editor: {
     dashboard: ["read"],
@@ -56,6 +57,7 @@ export const ROLE_PERMISSIONS: Record<string, Record<string, Permission[]>> = {
     groups: ["read", "create", "update", "delete"],
     users: [],
     settings: [],
+    media: ["read", "create", "delete"],
   },
   viewer: {
     dashboard: ["read"],
