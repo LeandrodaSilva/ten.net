@@ -1,33 +1,49 @@
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon, RectangleGroupIcon } from '@heroicons/react/20/solid'
-import { ChartPieIcon, CursorArrowRaysIcon, FingerPrintIcon, SquaresPlusIcon } from '@heroicons/react/24/outline'
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import {
+  ChevronDownIcon,
+  PhoneIcon,
+  PlayCircleIcon,
+  RectangleGroupIcon,
+} from "@heroicons/react/20/solid";
+import {
+  ChartPieIcon,
+  CursorArrowRaysIcon,
+  FingerPrintIcon,
+  SquaresPlusIcon,
+} from "@heroicons/react/24/outline";
 
 const solutions = [
   {
-    name: 'Analytics',
-    description: 'Get a better understanding of where your traffic is coming from',
-    href: '#',
+    name: "Analytics",
+    description:
+      "Get a better understanding of where your traffic is coming from",
+    href: "#",
     icon: ChartPieIcon,
   },
   {
-    name: 'Engagement',
-    description: 'Speak directly to your customers with our engagement tool',
-    href: '#',
+    name: "Engagement",
+    description: "Speak directly to your customers with our engagement tool",
+    href: "#",
     icon: CursorArrowRaysIcon,
   },
-  { name: 'Security', description: "Your customers' data will be safe and secure", href: '#', icon: FingerPrintIcon },
   {
-    name: 'Integrations',
+    name: "Security",
+    description: "Your customers' data will be safe and secure",
+    href: "#",
+    icon: FingerPrintIcon,
+  },
+  {
+    name: "Integrations",
     description: "Connect with third-party tools that you're already using",
-    href: '#',
+    href: "#",
     icon: SquaresPlusIcon,
   },
-]
+];
 const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
-  { name: 'View all products', href: '#', icon: RectangleGroupIcon },
-]
+  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
+  { name: "Contact sales", href: "#", icon: PhoneIcon },
+  { name: "View all products", href: "#", icon: RectangleGroupIcon },
+];
 
 export default function Example() {
   return (
@@ -63,11 +79,16 @@ export default function Example() {
                     className="size-6 text-gray-600 group-hover:text-indigo-600 dark:text-gray-400 dark:group-hover:text-white"
                   />
                 </div>
-                <a href={item.href} className="mt-6 block font-semibold text-gray-900 dark:text-white">
+                <a
+                  href={item.href}
+                  className="mt-6 block font-semibold text-gray-900 dark:text-white"
+                >
                   {item.name}
                   <span className="absolute inset-0" />
                 </a>
-                <p className="mt-1 text-gray-600 dark:text-gray-400">{item.description}</p>
+                <p className="mt-1 text-gray-600 dark:text-gray-400">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
@@ -80,7 +101,10 @@ export default function Example() {
                     href={item.href}
                     className="flex items-center justify-center gap-x-2.5 p-3 text-sm/6 font-semibold text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800"
                   >
-                    <item.icon aria-hidden="true" className="size-5 flex-none text-gray-400 dark:text-gray-500" />
+                    <item.icon
+                      aria-hidden="true"
+                      className="size-5 flex-none text-gray-400 dark:text-gray-500"
+                    />
                     {item.name}
                   </a>
                 ))}
@@ -90,5 +114,5 @@ export default function Example() {
         </div>
       </PopoverPanel>
     </Popover>
-  )
+  );
 }

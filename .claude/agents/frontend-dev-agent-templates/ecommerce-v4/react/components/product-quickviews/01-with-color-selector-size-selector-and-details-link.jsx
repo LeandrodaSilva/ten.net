@@ -1,38 +1,47 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { StarIcon } from '@heroicons/react/20/solid'
+import { useState } from "react";
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { StarIcon } from "@heroicons/react/20/solid";
 
 const product = {
   name: "Women's Basic Tee",
-  price: '$32',
+  price: "$32",
   rating: 3.9,
   reviewCount: 512,
-  href: '#',
-  imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-featured-product-shot.jpg',
+  href: "#",
+  imageSrc:
+    "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-featured-product-shot.jpg",
   imageAlt: "Back of women's Basic Tee in black.",
   colors: [
-    { id: 'black', name: 'Black', classes: 'bg-gray-900 checked:outline-gray-900' },
-    { id: 'heather-grey', name: 'Heather Grey', classes: 'bg-gray-400 checked:outline-gray-400' },
+    {
+      id: "black",
+      name: "Black",
+      classes: "bg-gray-900 checked:outline-gray-900",
+    },
+    {
+      id: "heather-grey",
+      name: "Heather Grey",
+      classes: "bg-gray-400 checked:outline-gray-400",
+    },
   ],
   sizes: [
-    { id: 'xxs', name: 'XXS', inStock: true },
-    { id: 'xs', name: 'XS', inStock: true },
-    { id: 's', name: 'S', inStock: true },
-    { id: 'm', name: 'M', inStock: true },
-    { id: 'l', name: 'L', inStock: true },
-    { id: 'xl', name: 'XL', inStock: false },
+    { id: "xxs", name: "XXS", inStock: true },
+    { id: "xs", name: "XS", inStock: true },
+    { id: "s", name: "S", inStock: true },
+    { id: "m", name: "M", inStock: true },
+    { id: "l", name: "L", inStock: true },
+    { id: "xl", name: "XL", inStock: false },
   ],
-}
+};
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -44,7 +53,10 @@ export default function Example() {
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
           {/* This element is to trick the browser into centering the modal contents. */}
-          <span aria-hidden="true" className="hidden md:inline-block md:h-screen md:align-middle">
+          <span
+            aria-hidden="true"
+            className="hidden md:inline-block md:h-screen md:align-middle"
+          >
             &#8203;
           </span>
           <DialogPanel
@@ -68,9 +80,14 @@ export default function Example() {
                   className="aspect-2/3 w-full rounded-lg bg-gray-100 object-cover sm:col-span-4 lg:col-span-5"
                 />
                 <div className="sm:col-span-8 lg:col-span-7">
-                  <h2 className="text-xl font-medium text-gray-900 sm:pr-12">{product.name}</h2>
+                  <h2 className="text-xl font-medium text-gray-900 sm:pr-12">
+                    {product.name}
+                  </h2>
 
-                  <section aria-labelledby="information-heading" className="mt-1">
+                  <section
+                    aria-labelledby="information-heading"
+                    className="mt-1"
+                  >
                     <h3 id="information-heading" className="sr-only">
                       Product information
                     </h3>
@@ -83,7 +100,7 @@ export default function Example() {
                       <div className="flex items-center">
                         <p className="text-sm text-gray-700">
                           {product.rating}
-                          <span className="sr-only"> out of 5 stars</span>
+                          <span className="sr-only">out of 5 stars</span>
                         </p>
                         <div className="ml-1 flex items-center">
                           {[0, 1, 2, 3, 4].map((rating) => (
@@ -91,8 +108,10 @@ export default function Example() {
                               key={rating}
                               aria-hidden="true"
                               className={classNames(
-                                product.rating > rating ? 'text-yellow-400' : 'text-gray-200',
-                                'size-5 shrink-0',
+                                product.rating > rating
+                                  ? "text-yellow-400"
+                                  : "text-gray-200",
+                                "size-5 shrink-0",
                               )}
                             />
                           ))}
@@ -101,7 +120,10 @@ export default function Example() {
                           <span aria-hidden="true" className="text-gray-300">
                             &middot;
                           </span>
-                          <a href="#" className="ml-4 text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                          <a
+                            href="#"
+                            className="ml-4 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                          >
                             See all {product.reviewCount} reviews
                           </a>
                         </div>
@@ -117,7 +139,9 @@ export default function Example() {
                     <form>
                       {/* Color picker */}
                       <fieldset aria-label="Choose a color">
-                        <legend className="text-sm font-medium text-gray-900">Color</legend>
+                        <legend className="text-sm font-medium text-gray-900">
+                          Color
+                        </legend>
 
                         <div className="mt-2 flex items-center gap-x-3">
                           {product.colors.map((color) => (
@@ -133,7 +157,7 @@ export default function Example() {
                                 aria-label={color.name}
                                 className={classNames(
                                   color.classes,
-                                  'size-8 appearance-none rounded-full forced-color-adjust-none checked:outline-2 checked:outline-offset-2 focus-visible:outline-3 focus-visible:outline-offset-3',
+                                  "size-8 appearance-none rounded-full forced-color-adjust-none checked:outline-2 checked:outline-offset-2 focus-visible:outline-3 focus-visible:outline-offset-3",
                                 )}
                               />
                             </div>
@@ -144,8 +168,13 @@ export default function Example() {
                       {/* Size picker */}
                       <fieldset aria-label="Choose a size" className="mt-8">
                         <div className="flex items-center justify-between">
-                          <div className="text-sm font-medium text-gray-900">Size</div>
-                          <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                          <div className="text-sm font-medium text-gray-900">
+                            Size
+                          </div>
+                          <a
+                            href="#"
+                            className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                          >
                             Size guide
                           </a>
                         </div>
@@ -180,7 +209,10 @@ export default function Example() {
                       </button>
 
                       <p className="absolute top-4 left-4 text-center sm:static sm:mt-8">
-                        <a href={product.href} className="font-medium text-indigo-600 hover:text-indigo-500">
+                        <a
+                          href={product.href}
+                          className="font-medium text-indigo-600 hover:text-indigo-500"
+                        >
                           View full details
                         </a>
                       </p>
@@ -193,5 +225,5 @@ export default function Example() {
         </div>
       </div>
     </Dialog>
-  )
+  );
 }

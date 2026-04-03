@@ -1,9 +1,14 @@
-import { BarsArrowUpIcon, MagnifyingGlassIcon } from '@heroicons/react/16/solid'
+import {
+  BarsArrowUpIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/16/solid";
 
 export default function Example() {
   return (
     <div className="border-b border-gray-200 pb-5 sm:flex sm:items-center sm:justify-between dark:border-white/10">
-      <h3 className="text-base font-semibold text-gray-900 dark:text-white">Job Postings</h3>
+      <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+        Job Postings
+      </h3>
       <div className="mt-3 flex sm:mt-0 sm:ml-4">
         <div className="-mr-px grid grow grid-cols-1 focus-within:relative">
           <input
@@ -23,10 +28,13 @@ export default function Example() {
           type="button"
           className="flex shrink-0 items-center gap-x-1.5 rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 outline-1 -outline-offset-1 outline-gray-300 hover:bg-gray-50 focus:relative focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/10 dark:text-white dark:outline-gray-700 dark:hover:bg-white/20 dark:focus:outline-indigo-500"
         >
-          <BarsArrowUpIcon aria-hidden="true" className="-ml-0.5 size-4 text-gray-400" />
+          <BarsArrowUpIcon
+            aria-hidden="true"
+            className="-ml-0.5 size-4 text-gray-400"
+          />
           Sort
         </button>
       </div>
     </div>
-  )
+  );
 }

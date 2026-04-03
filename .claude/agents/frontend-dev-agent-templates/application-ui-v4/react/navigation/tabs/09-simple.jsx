@@ -1,11 +1,11 @@
-import { ChevronDownIcon } from '@heroicons/react/16/solid'
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
 const tabs = [
-  { name: 'My Account', href: '#', current: false },
-  { name: 'Company', href: '#', current: false },
-  { name: 'Team Members', href: '#', current: true },
-  { name: 'Billing', href: '#', current: false },
-]
+  { name: "My Account", href: "#", current: false },
+  { name: "Company", href: "#", current: false },
+  { name: "Team Members", href: "#", current: true },
+  { name: "Billing", href: "#", current: false },
+];
 
 export default function Example() {
   return (
@@ -18,9 +18,7 @@ export default function Example() {
             aria-label="Select a tab"
             className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/5 dark:text-gray-100 dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500"
           >
-            {tabs.map((tab) => (
-              <option key={tab.name}>{tab.name}</option>
-            ))}
+            {tabs.map((tab) => <option key={tab.name}>{tab.name}</option>)}
           </select>
           <ChevronDownIcon
             aria-hidden="true"
@@ -37,9 +35,9 @@ export default function Example() {
                 <li key={tab.name}>
                   <a
                     href={tab.href}
-                    className={
-                      tab.current ? 'text-indigo-600 dark:text-indigo-400' : 'hover:text-gray-700 dark:hover:text-white'
-                    }
+                    className={tab.current
+                      ? "text-indigo-600 dark:text-indigo-400"
+                      : "hover:text-gray-700 dark:hover:text-white"}
                   >
                     {tab.name}
                   </a>
@@ -50,5 +48,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

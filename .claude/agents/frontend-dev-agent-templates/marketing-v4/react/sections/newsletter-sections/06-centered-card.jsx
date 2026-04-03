@@ -7,7 +7,8 @@ export default function Example() {
             Get notified when we’re launching
           </h2>
           <p className="mx-auto mt-6 max-w-lg text-center text-lg text-gray-300">
-            Reprehenderit ad esse et non officia in nulla. Id proident tempor incididunt nostrud nulla et culpa.
+            Reprehenderit ad esse et non officia in nulla. Id proident tempor
+            incididunt nostrud nulla et culpa.
           </p>
           <form className="mx-auto mt-10 flex max-w-md gap-x-4">
             <label htmlFor="email-address" className="sr-only">
@@ -34,7 +35,13 @@ export default function Example() {
             aria-hidden="true"
             className="absolute top-1/2 left-1/2 -z-10 size-256 -translate-x-1/2"
           >
-            <circle r={512} cx={512} cy={512} fill="url(#759c1415-0410-454c-8f7c-9a820de03641)" fillOpacity="0.7" />
+            <circle
+              r={512}
+              cx={512}
+              cy={512}
+              fill="url(#759c1415-0410-454c-8f7c-9a820de03641)"
+              fillOpacity="0.7"
+            />
             <defs>
               <radialGradient
                 r={1}
@@ -52,5 +59,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

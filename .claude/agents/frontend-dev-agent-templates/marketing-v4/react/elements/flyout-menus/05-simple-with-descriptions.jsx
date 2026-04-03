@@ -1,17 +1,35 @@
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 const solutions = [
-  { name: 'Blog', description: 'Learn about tips, product updates and company culture', href: '#' },
   {
-    name: 'Help center',
-    description: 'Get all of your questions answered in our forums of contact support',
-    href: '#',
+    name: "Blog",
+    description: "Learn about tips, product updates and company culture",
+    href: "#",
   },
-  { name: 'Guides', description: 'Learn how to maximize our platform to get the most out of it', href: '#' },
-  { name: 'Events', description: 'Check out webinars with experts and learn about our annual conference', href: '#' },
-  { name: 'Security', description: 'Understand how we take your privacy seriously', href: '#' },
-]
+  {
+    name: "Help center",
+    description:
+      "Get all of your questions answered in our forums of contact support",
+    href: "#",
+  },
+  {
+    name: "Guides",
+    description: "Learn how to maximize our platform to get the most out of it",
+    href: "#",
+  },
+  {
+    name: "Events",
+    description:
+      "Check out webinars with experts and learn about our annual conference",
+    href: "#",
+  },
+  {
+    name: "Security",
+    description: "Understand how we take your privacy seriously",
+    href: "#",
+  },
+];
 
 export default function Example() {
   return (
@@ -27,16 +45,24 @@ export default function Example() {
       >
         <div className="w-screen max-w-sm flex-auto rounded-3xl bg-white p-4 text-sm/6 shadow-lg outline-1 outline-gray-900/5 dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
           {solutions.map((item) => (
-            <div key={item.name} className="relative rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-white/5">
-              <a href={item.href} className="font-semibold text-gray-900 dark:text-white">
+            <div
+              key={item.name}
+              className="relative rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-white/5"
+            >
+              <a
+                href={item.href}
+                className="font-semibold text-gray-900 dark:text-white"
+              >
                 {item.name}
                 <span className="absolute inset-0" />
               </a>
-              <p className="mt-1 text-gray-600 dark:text-gray-400">{item.description}</p>
+              <p className="mt-1 text-gray-600 dark:text-gray-400">
+                {item.description}
+              </p>
             </div>
           ))}
         </div>
       </PopoverPanel>
     </Popover>
-  )
+  );
 }

@@ -1,5 +1,10 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { CodeBracketIcon, EllipsisVerticalIcon, FlagIcon, StarIcon } from '@heroicons/react/20/solid'
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import {
+  CodeBracketIcon,
+  EllipsisVerticalIcon,
+  FlagIcon,
+  StarIcon,
+} from "@heroicons/react/20/solid";
 
 export default function Example() {
   return (
@@ -42,7 +47,10 @@ export default function Example() {
                     href="#"
                     className="flex px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5 dark:data-focus:text-white"
                   >
-                    <StarIcon aria-hidden="true" className="mr-3 size-5 text-gray-400" />
+                    <StarIcon
+                      aria-hidden="true"
+                      className="mr-3 size-5 text-gray-400"
+                    />
                     <span>Add to favorites</span>
                   </a>
                 </MenuItem>
@@ -51,7 +59,10 @@ export default function Example() {
                     href="#"
                     className="flex px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5 dark:data-focus:text-white"
                   >
-                    <CodeBracketIcon aria-hidden="true" className="mr-3 size-5 text-gray-400" />
+                    <CodeBracketIcon
+                      aria-hidden="true"
+                      className="mr-3 size-5 text-gray-400"
+                    />
                     <span>Embed</span>
                   </a>
                 </MenuItem>
@@ -60,7 +71,10 @@ export default function Example() {
                     href="#"
                     className="flex px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden dark:text-gray-200 dark:data-focus:bg-white/5 dark:data-focus:text-white"
                   >
-                    <FlagIcon aria-hidden="true" className="mr-3 size-5 text-gray-400" />
+                    <FlagIcon
+                      aria-hidden="true"
+                      className="mr-3 size-5 text-gray-400"
+                    />
                     <span>Report content</span>
                   </a>
                 </MenuItem>
@@ -70,5 +84,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

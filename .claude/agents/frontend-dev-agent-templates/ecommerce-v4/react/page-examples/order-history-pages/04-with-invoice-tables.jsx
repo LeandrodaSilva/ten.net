@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -14,170 +14,184 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingCartIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+} from "@headlessui/react";
+import {
+  Bars3Icon,
+  MagnifyingGlassIcon,
+  ShoppingCartIcon,
+  UserIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
-const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
+const currencies = ["CAD", "USD", "AUD", "EUR", "GBP"];
 const navigation = {
   categories: [
     {
-      name: 'Women',
+      name: "Women",
       featured: [
-        { name: 'Sleep', href: '#' },
-        { name: 'Swimwear', href: '#' },
-        { name: 'Underwear', href: '#' },
+        { name: "Sleep", href: "#" },
+        { name: "Swimwear", href: "#" },
+        { name: "Underwear", href: "#" },
       ],
       collection: [
-        { name: 'Everything', href: '#' },
-        { name: 'Core', href: '#' },
-        { name: 'New Arrivals', href: '#' },
-        { name: 'Sale', href: '#' },
+        { name: "Everything", href: "#" },
+        { name: "Core", href: "#" },
+        { name: "New Arrivals", href: "#" },
+        { name: "Sale", href: "#" },
       ],
       categories: [
-        { name: 'Basic Tees', href: '#' },
-        { name: 'Artwork Tees', href: '#' },
-        { name: 'Bottoms', href: '#' },
-        { name: 'Underwear', href: '#' },
-        { name: 'Accessories', href: '#' },
+        { name: "Basic Tees", href: "#" },
+        { name: "Artwork Tees", href: "#" },
+        { name: "Bottoms", href: "#" },
+        { name: "Underwear", href: "#" },
+        { name: "Accessories", href: "#" },
       ],
       brands: [
-        { name: 'Full Nelson', href: '#' },
-        { name: 'My Way', href: '#' },
-        { name: 'Re-Arranged', href: '#' },
-        { name: 'Counterfeit', href: '#' },
-        { name: 'Significant Other', href: '#' },
+        { name: "Full Nelson", href: "#" },
+        { name: "My Way", href: "#" },
+        { name: "Re-Arranged", href: "#" },
+        { name: "Counterfeit", href: "#" },
+        { name: "Significant Other", href: "#" },
       ],
     },
     {
-      name: 'Men',
+      name: "Men",
       featured: [
-        { name: 'Casual', href: '#' },
-        { name: 'Boxers', href: '#' },
-        { name: 'Outdoor', href: '#' },
+        { name: "Casual", href: "#" },
+        { name: "Boxers", href: "#" },
+        { name: "Outdoor", href: "#" },
       ],
       collection: [
-        { name: 'Everything', href: '#' },
-        { name: 'Core', href: '#' },
-        { name: 'New Arrivals', href: '#' },
-        { name: 'Sale', href: '#' },
+        { name: "Everything", href: "#" },
+        { name: "Core", href: "#" },
+        { name: "New Arrivals", href: "#" },
+        { name: "Sale", href: "#" },
       ],
       categories: [
-        { name: 'Artwork Tees', href: '#' },
-        { name: 'Pants', href: '#' },
-        { name: 'Accessories', href: '#' },
-        { name: 'Boxers', href: '#' },
-        { name: 'Basic Tees', href: '#' },
+        { name: "Artwork Tees", href: "#" },
+        { name: "Pants", href: "#" },
+        { name: "Accessories", href: "#" },
+        { name: "Boxers", href: "#" },
+        { name: "Basic Tees", href: "#" },
       ],
       brands: [
-        { name: 'Significant Other', href: '#' },
-        { name: 'My Way', href: '#' },
-        { name: 'Counterfeit', href: '#' },
-        { name: 'Re-Arranged', href: '#' },
-        { name: 'Full Nelson', href: '#' },
+        { name: "Significant Other", href: "#" },
+        { name: "My Way", href: "#" },
+        { name: "Counterfeit", href: "#" },
+        { name: "Re-Arranged", href: "#" },
+        { name: "Full Nelson", href: "#" },
       ],
     },
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: "Company", href: "#" },
+    { name: "Stores", href: "#" },
   ],
-}
+};
 const orders = [
   {
-    number: 'WU88191111',
-    date: 'January 22, 2021',
-    datetime: '2021-01-22',
-    invoiceHref: '#',
-    total: '$104.00',
+    number: "WU88191111",
+    date: "January 22, 2021",
+    datetime: "2021-01-22",
+    invoiceHref: "#",
+    total: "$104.00",
     products: [
       {
         id: 1,
         name: "Men's 3D Glasses Artwork Tee",
-        href: '#',
-        price: '$36.00',
-        status: 'Delivered Jan 25, 2021',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-01.jpg',
-        imageAlt: 'Black tee with intersecting red, white, and green curved lines on front.',
+        href: "#",
+        price: "$36.00",
+        status: "Delivered Jan 25, 2021",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-01.jpg",
+        imageAlt:
+          "Black tee with intersecting red, white, and green curved lines on front.",
       },
       {
         id: 2,
         name: "Women's Moss Basic Tee",
-        href: '#',
-        price: '$32.00',
-        status: 'Delivered Jan 25, 2021',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-02.jpg',
+        href: "#",
+        price: "$32.00",
+        status: "Delivered Jan 25, 2021",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-02.jpg",
         imageAlt: "Moss green basic tee with fitted women's cut.",
       },
       {
         id: 3,
         name: "Women's Waves Artwork Tee",
-        href: '#',
-        price: '$36.00',
-        status: 'Delivered Jan 25, 2021',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-03.jpg',
-        imageAlt: 'Bright mint green tee with darker green wave line pattern on front.',
+        href: "#",
+        price: "$36.00",
+        status: "Delivered Jan 25, 2021",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-03.jpg",
+        imageAlt:
+          "Bright mint green tee with darker green wave line pattern on front.",
       },
     ],
   },
   {
-    number: 'WU88191009',
-    date: 'January 5, 2021',
-    datetime: '2021-01-05',
-    invoiceHref: '#',
-    total: '$68.00',
+    number: "WU88191009",
+    date: "January 5, 2021",
+    datetime: "2021-01-05",
+    invoiceHref: "#",
+    total: "$68.00",
     products: [
       {
         id: 1,
         name: "Women's Gray Basic Tee",
-        href: '#',
-        price: '$32.00',
-        status: 'Delivered Jan 7, 2021',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-04.jpg',
+        href: "#",
+        price: "$32.00",
+        status: "Delivered Jan 7, 2021",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-04.jpg",
         imageAlt: "Heather gray basic tee with fitted women's cut.",
       },
       {
         id: 2,
         name: "Women's Iso Dots Artwork Tee",
-        href: '#',
-        price: '$36.00',
-        status: 'Delivered Jan 7, 2021',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-05.jpg',
-        imageAlt: 'Peach tee with white and dark pink dots forming an isometric cube pattern on front.',
+        href: "#",
+        price: "$36.00",
+        status: "Delivered Jan 7, 2021",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-04-product-05.jpg",
+        imageAlt:
+          "Peach tee with white and dark pink dots forming an isometric cube pattern on front.",
       },
     ],
   },
-]
+];
 const footerNavigation = {
   account: [
-    { name: 'Manage Account', href: '#' },
-    { name: 'Saved Items', href: '#' },
-    { name: 'Orders', href: '#' },
-    { name: 'Redeem Gift card', href: '#' },
+    { name: "Manage Account", href: "#" },
+    { name: "Saved Items", href: "#" },
+    { name: "Orders", href: "#" },
+    { name: "Redeem Gift card", href: "#" },
   ],
   service: [
-    { name: 'Shipping & Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
-    { name: 'Get in touch', href: '#' },
+    { name: "Shipping & Returns", href: "#" },
+    { name: "Warranty", href: "#" },
+    { name: "FAQ", href: "#" },
+    { name: "Find a store", href: "#" },
+    { name: "Get in touch", href: "#" },
   ],
   company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
+    { name: "Who we are", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Careers", href: "#" },
+    { name: "Terms & Conditions", href: "#" },
+    { name: "Privacy", href: "#" },
   ],
   connect: [
-    { name: 'Facebook', href: '#' },
-    { name: 'Instagram', href: '#' },
-    { name: 'Pinterest', href: '#' },
+    { name: "Facebook", href: "#" },
+    { name: "Instagram", href: "#" },
+    { name: "Pinterest", href: "#" },
   ],
-}
+};
 
 export default function Example() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="bg-white">
@@ -220,11 +234,17 @@ export default function Example() {
               </div>
               <TabPanels as={Fragment}>
                 {navigation.categories.map((category, categoryIdx) => (
-                  <TabPanel key={category.name} className="space-y-12 px-4 pt-10 pb-6">
+                  <TabPanel
+                    key={category.name}
+                    className="space-y-12 px-4 pt-10 pb-6"
+                  >
                     <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10">
                       <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                         <div>
-                          <p id={`mobile-featured-heading-${categoryIdx}`} className="font-medium text-gray-900">
+                          <p
+                            id={`mobile-featured-heading-${categoryIdx}`}
+                            className="font-medium text-gray-900"
+                          >
                             Featured
                           </p>
                           <ul
@@ -242,10 +262,17 @@ export default function Example() {
                           </ul>
                         </div>
                         <div>
-                          <p id="mobile-categories-heading" className="font-medium text-gray-900">
+                          <p
+                            id="mobile-categories-heading"
+                            className="font-medium text-gray-900"
+                          >
                             Categories
                           </p>
-                          <ul role="list" aria-labelledby="mobile-categories-heading" className="mt-6 space-y-6">
+                          <ul
+                            role="list"
+                            aria-labelledby="mobile-categories-heading"
+                            className="mt-6 space-y-6"
+                          >
                             {category.categories.map((item) => (
                               <li key={item.name} className="flex">
                                 <a href={item.href} className="text-gray-500">
@@ -258,10 +285,17 @@ export default function Example() {
                       </div>
                       <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                         <div>
-                          <p id="mobile-collection-heading" className="font-medium text-gray-900">
+                          <p
+                            id="mobile-collection-heading"
+                            className="font-medium text-gray-900"
+                          >
                             Collection
                           </p>
-                          <ul role="list" aria-labelledby="mobile-collection-heading" className="mt-6 space-y-6">
+                          <ul
+                            role="list"
+                            aria-labelledby="mobile-collection-heading"
+                            className="mt-6 space-y-6"
+                          >
                             {category.collection.map((item) => (
                               <li key={item.name} className="flex">
                                 <a href={item.href} className="text-gray-500">
@@ -273,10 +307,17 @@ export default function Example() {
                         </div>
 
                         <div>
-                          <p id="mobile-brand-heading" className="font-medium text-gray-900">
+                          <p
+                            id="mobile-brand-heading"
+                            className="font-medium text-gray-900"
+                          >
                             Brands
                           </p>
-                          <ul role="list" aria-labelledby="mobile-brand-heading" className="mt-6 space-y-6">
+                          <ul
+                            role="list"
+                            aria-labelledby="mobile-brand-heading"
+                            className="mt-6 space-y-6"
+                          >
                             {category.brands.map((item) => (
                               <li key={item.name} className="flex">
                                 <a href={item.href} className="text-gray-500">
@@ -296,7 +337,10 @@ export default function Example() {
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               {navigation.pages.map((page) => (
                 <div key={page.name} className="flow-root">
-                  <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                  <a
+                    href={page.href}
+                    className="-m-2 block p-2 font-medium text-gray-900"
+                  >
                     {page.name}
                   </a>
                 </div>
@@ -305,12 +349,18 @@ export default function Example() {
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Create an account
                 </a>
               </div>
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Sign in
                 </a>
               </div>
@@ -371,11 +421,17 @@ export default function Example() {
               </p>
 
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
+                <a
+                  href="#"
+                  className="text-sm font-medium text-white hover:text-gray-100"
+                >
                   Create an account
                 </a>
                 <span aria-hidden="true" className="h-6 w-px bg-gray-600" />
-                <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
+                <a
+                  href="#"
+                  className="text-sm font-medium text-white hover:text-gray-100"
+                >
                   Sign in
                 </a>
               </div>
@@ -419,7 +475,10 @@ export default function Example() {
                               className="absolute inset-x-0 top-full z-20 w-full bg-white text-sm text-gray-500 transition data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
                             >
                               {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                              <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow-sm" />
+                              <div
+                                aria-hidden="true"
+                                className="absolute inset-0 top-1/2 bg-white shadow-sm"
+                              />
                               <div className="relative bg-white">
                                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                                   <div className="grid grid-cols-2 items-start gap-x-8 gap-y-10 pt-10 pb-12">
@@ -437,8 +496,14 @@ export default function Example() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.featured.map((item) => (
-                                            <li key={item.name} className="flex">
-                                              <a href={item.href} className="hover:text-gray-800">
+                                            <li
+                                              key={item.name}
+                                              className="flex"
+                                            >
+                                              <a
+                                                href={item.href}
+                                                className="hover:text-gray-800"
+                                              >
                                                 {item.name}
                                               </a>
                                             </li>
@@ -446,7 +511,10 @@ export default function Example() {
                                         </ul>
                                       </div>
                                       <div>
-                                        <p id="desktop-categories-heading" className="font-medium text-gray-900">
+                                        <p
+                                          id="desktop-categories-heading"
+                                          className="font-medium text-gray-900"
+                                        >
                                           Categories
                                         </p>
                                         <ul
@@ -455,8 +523,14 @@ export default function Example() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.categories.map((item) => (
-                                            <li key={item.name} className="flex">
-                                              <a href={item.href} className="hover:text-gray-800">
+                                            <li
+                                              key={item.name}
+                                              className="flex"
+                                            >
+                                              <a
+                                                href={item.href}
+                                                className="hover:text-gray-800"
+                                              >
                                                 {item.name}
                                               </a>
                                             </li>
@@ -466,7 +540,10 @@ export default function Example() {
                                     </div>
                                     <div className="grid grid-cols-2 gap-x-8 gap-y-10">
                                       <div>
-                                        <p id="desktop-collection-heading" className="font-medium text-gray-900">
+                                        <p
+                                          id="desktop-collection-heading"
+                                          className="font-medium text-gray-900"
+                                        >
                                           Collection
                                         </p>
                                         <ul
@@ -475,8 +552,14 @@ export default function Example() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.collection.map((item) => (
-                                            <li key={item.name} className="flex">
-                                              <a href={item.href} className="hover:text-gray-800">
+                                            <li
+                                              key={item.name}
+                                              className="flex"
+                                            >
+                                              <a
+                                                href={item.href}
+                                                className="hover:text-gray-800"
+                                              >
                                                 {item.name}
                                               </a>
                                             </li>
@@ -485,7 +568,10 @@ export default function Example() {
                                       </div>
 
                                       <div>
-                                        <p id="desktop-brand-heading" className="font-medium text-gray-900">
+                                        <p
+                                          id="desktop-brand-heading"
+                                          className="font-medium text-gray-900"
+                                        >
                                           Brands
                                         </p>
                                         <ul
@@ -494,8 +580,14 @@ export default function Example() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.brands.map((item) => (
-                                            <li key={item.name} className="flex">
-                                              <a href={item.href} className="hover:text-gray-800">
+                                            <li
+                                              key={item.name}
+                                              className="flex"
+                                            >
+                                              <a
+                                                href={item.href}
+                                                className="hover:text-gray-800"
+                                              >
                                                 {item.name}
                                               </a>
                                             </li>
@@ -534,9 +626,15 @@ export default function Example() {
                     </button>
 
                     {/* Search */}
-                    <a href="#" className="ml-2 p-2 text-gray-400 hover:text-gray-500">
+                    <a
+                      href="#"
+                      className="ml-2 p-2 text-gray-400 hover:text-gray-500"
+                    >
                       <span className="sr-only">Search</span>
-                      <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                      <MagnifyingGlassIcon
+                        aria-hidden="true"
+                        className="size-6"
+                      />
                     </a>
                   </div>
 
@@ -554,30 +652,49 @@ export default function Example() {
                     <div className="flex items-center lg:ml-8">
                       <div className="flex space-x-8">
                         <div className="hidden lg:flex">
-                          <a href="#" className="-m-2 p-2 text-gray-400 hover:text-gray-500">
+                          <a
+                            href="#"
+                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
+                          >
                             <span className="sr-only">Search</span>
-                            <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                            <MagnifyingGlassIcon
+                              aria-hidden="true"
+                              className="size-6"
+                            />
                           </a>
                         </div>
 
                         <div className="flex">
-                          <a href="#" className="-m-2 p-2 text-gray-400 hover:text-gray-500">
+                          <a
+                            href="#"
+                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
+                          >
                             <span className="sr-only">Account</span>
                             <UserIcon aria-hidden="true" className="size-6" />
                           </a>
                         </div>
                       </div>
 
-                      <span aria-hidden="true" className="mx-4 h-6 w-px bg-gray-200 lg:mx-6" />
+                      <span
+                        aria-hidden="true"
+                        className="mx-4 h-6 w-px bg-gray-200 lg:mx-6"
+                      />
 
                       <div className="flow-root">
-                        <a href="#" className="group -m-2 flex items-center p-2">
+                        <a
+                          href="#"
+                          className="group -m-2 flex items-center p-2"
+                        >
                           <ShoppingCartIcon
                             aria-hidden="true"
                             className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                           />
-                          <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                          <span className="sr-only">items in cart, view bag</span>
+                          <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                            0
+                          </span>
+                          <span className="sr-only">
+                            items in cart, view bag
+                          </span>
                         </a>
                       </div>
                     </div>
@@ -591,9 +708,12 @@ export default function Example() {
 
       <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:pb-24">
         <div className="max-w-xl">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Order history</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+            Order history
+          </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Check the status of recent orders, manage returns, and download invoices.
+            Check the status of recent orders, manage returns, and download
+            invoices.
           </p>
         </div>
 
@@ -606,7 +726,8 @@ export default function Example() {
             {orders.map((order) => (
               <div key={order.number}>
                 <h3 className="sr-only">
-                  Order placed on <time dateTime={order.datetime}>{order.date}</time>
+                  Order placed on{" "}
+                  <time dateTime={order.datetime}>{order.date}</time>
                 </h3>
 
                 <div className="rounded-lg bg-gray-50 px-4 py-6 sm:flex sm:items-center sm:justify-between sm:space-x-6 sm:px-6 lg:space-x-8">
@@ -618,12 +739,18 @@ export default function Example() {
                       </dd>
                     </div>
                     <div className="max-sm:flex max-sm:justify-between max-sm:py-6 max-sm:first:pt-0 max-sm:last:pb-0">
-                      <dt className="font-medium text-gray-900">Order number</dt>
+                      <dt className="font-medium text-gray-900">
+                        Order number
+                      </dt>
                       <dd className="sm:mt-1">{order.number}</dd>
                     </div>
                     <div className="max-sm:flex max-sm:justify-between max-sm:py-6 max-sm:first:pt-0 max-sm:last:pb-0">
-                      <dt className="font-medium text-gray-900">Total amount</dt>
-                      <dd className="font-medium text-gray-900 sm:mt-1">{order.total}</dd>
+                      <dt className="font-medium text-gray-900">
+                        Total amount
+                      </dt>
+                      <dd className="font-medium text-gray-900 sm:mt-1">
+                        {order.total}
+                      </dd>
                     </div>
                   </dl>
                   <a
@@ -639,16 +766,28 @@ export default function Example() {
                   <caption className="sr-only">Products</caption>
                   <thead className="sr-only text-left text-sm text-gray-500 sm:not-sr-only">
                     <tr>
-                      <th scope="col" className="py-3 pr-8 font-normal sm:w-2/5 lg:w-1/3">
+                      <th
+                        scope="col"
+                        className="py-3 pr-8 font-normal sm:w-2/5 lg:w-1/3"
+                      >
                         Product
                       </th>
-                      <th scope="col" className="hidden w-1/5 py-3 pr-8 font-normal sm:table-cell">
+                      <th
+                        scope="col"
+                        className="hidden w-1/5 py-3 pr-8 font-normal sm:table-cell"
+                      >
                         Price
                       </th>
-                      <th scope="col" className="hidden py-3 pr-8 font-normal sm:table-cell">
+                      <th
+                        scope="col"
+                        className="hidden py-3 pr-8 font-normal sm:table-cell"
+                      >
                         Status
                       </th>
-                      <th scope="col" className="w-0 py-3 text-right font-normal">
+                      <th
+                        scope="col"
+                        className="w-0 py-3 text-right font-normal"
+                      >
                         Info
                       </th>
                     </tr>
@@ -664,16 +803,26 @@ export default function Example() {
                               className="mr-6 size-16 rounded-sm object-cover"
                             />
                             <div>
-                              <div className="font-medium text-gray-900">{product.name}</div>
-                              <div className="mt-1 sm:hidden">{product.price}</div>
+                              <div className="font-medium text-gray-900">
+                                {product.name}
+                              </div>
+                              <div className="mt-1 sm:hidden">
+                                {product.price}
+                              </div>
                             </div>
                           </div>
                         </td>
-                        <td className="hidden py-6 pr-8 sm:table-cell">{product.price}</td>
-                        <td className="hidden py-6 pr-8 sm:table-cell">{product.status}</td>
+                        <td className="hidden py-6 pr-8 sm:table-cell">
+                          {product.price}
+                        </td>
+                        <td className="hidden py-6 pr-8 sm:table-cell">
+                          {product.status}
+                        </td>
                         <td className="py-6 text-right font-medium whitespace-nowrap">
                           <a href={product.href} className="text-indigo-600">
-                            View<span className="hidden lg:inline"> Product</span>
+                            View<span className="hidden lg:inline">
+                              Product
+                            </span>
                             <span className="sr-only">, {product.name}</span>
                           </a>
                         </td>
@@ -699,7 +848,10 @@ export default function Example() {
                 <ul role="list" className="mt-6 space-y-6">
                   {footerNavigation.account.map((item) => (
                     <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
                         {item.name}
                       </a>
                     </li>
@@ -711,7 +863,10 @@ export default function Example() {
                 <ul role="list" className="mt-6 space-y-6">
                   {footerNavigation.service.map((item) => (
                     <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
                         {item.name}
                       </a>
                     </li>
@@ -725,7 +880,10 @@ export default function Example() {
                 <ul role="list" className="mt-6 space-y-6">
                   {footerNavigation.company.map((item) => (
                     <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
                         {item.name}
                       </a>
                     </li>
@@ -737,7 +895,10 @@ export default function Example() {
                 <ul role="list" className="mt-6 space-y-6">
                   {footerNavigation.connect.map((item) => (
                     <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
                         {item.name}
                       </a>
                     </li>
@@ -752,10 +913,12 @@ export default function Example() {
               <p>Shipping to Canada ($CAD)</p>
               <p className="ml-3 border-l border-gray-200 pl-3">English</p>
             </div>
-            <p className="mt-6 text-center text-sm text-gray-500 sm:mt-0">&copy; 2021 Your Company, Inc.</p>
+            <p className="mt-6 text-center text-sm text-gray-500 sm:mt-0">
+              &copy; 2021 Your Company, Inc.
+            </p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

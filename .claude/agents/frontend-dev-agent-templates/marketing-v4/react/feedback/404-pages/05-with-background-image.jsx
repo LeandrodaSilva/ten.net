@@ -1,14 +1,16 @@
 export default function Example() {
   return (
     <>
-      {/*
+      {
+        /*
         This example requires updating your template:
 
         ```
         <html class="h-full">
         <body class="h-full">
         ```
-      */}
+      */
+      }
       <main className="relative isolate min-h-full">
         <img
           alt=""
@@ -29,12 +31,15 @@ export default function Example() {
             Sorry, we couldn’t find the page you’re looking for.
           </p>
           <div className="mt-10 flex justify-center">
-            <a href="#" className="text-sm/7 font-semibold text-white hover:text-white/90">
+            <a
+              href="#"
+              className="text-sm/7 font-semibold text-white hover:text-white/90"
+            >
               <span aria-hidden="true">&larr;</span> Back to home
             </a>
           </div>
         </div>
       </main>
     </>
-  )
+  );
 }

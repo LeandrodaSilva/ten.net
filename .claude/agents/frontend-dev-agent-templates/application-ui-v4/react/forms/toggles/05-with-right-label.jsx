@@ -14,13 +14,19 @@ export default function Example() {
       </div>
 
       <div className="text-sm">
-        <label id="annual-billing-label" className="font-medium text-gray-900 dark:text-white">
+        <label
+          id="annual-billing-label"
+          className="font-medium text-gray-900 dark:text-white"
+        >
           Annual billing
-        </label>{' '}
-        <span id="annual-billing-description" className="text-gray-500 dark:text-gray-400">
+        </label>{" "}
+        <span
+          id="annual-billing-description"
+          className="text-gray-500 dark:text-gray-400"
+        >
           (Save 10%)
         </span>
       </div>
     </div>
-  )
+  );
 }

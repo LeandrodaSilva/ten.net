@@ -1,9 +1,12 @@
-import { BarsArrowUpIcon, UsersIcon } from '@heroicons/react/16/solid'
+import { BarsArrowUpIcon, UsersIcon } from "@heroicons/react/16/solid";
 
 export default function Example() {
   return (
     <div>
-      <label htmlFor="query" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
+      <label
+        htmlFor="query"
+        className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+      >
         Search candidates
       </label>
       <div className="mt-2 flex">
@@ -24,10 +27,13 @@ export default function Example() {
           type="button"
           className="flex shrink-0 items-center gap-x-1.5 rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 outline-1 -outline-offset-1 outline-gray-300 hover:bg-gray-50 focus:relative focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/10 dark:text-white dark:outline-gray-700 dark:hover:bg-white/20 dark:focus:outline-indigo-500"
         >
-          <BarsArrowUpIcon aria-hidden="true" className="-ml-0.5 size-4 text-gray-400" />
+          <BarsArrowUpIcon
+            aria-hidden="true"
+            className="-ml-0.5 size-4 text-gray-400"
+          />
           Sort
         </button>
       </div>
     </div>
-  )
+  );
 }

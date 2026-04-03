@@ -1,8 +1,20 @@
 const offers = [
-  { name: 'Download the app', description: 'Get an exclusive $5 off code', href: '#' },
-  { name: "Return when you're ready", description: '60 days of free returns', href: '#' },
-  { name: 'Sign up for our newsletter', description: '15% off your first order', href: '#' },
-]
+  {
+    name: "Download the app",
+    description: "Get an exclusive $5 off code",
+    href: "#",
+  },
+  {
+    name: "Return when you're ready",
+    description: "60 days of free returns",
+    href: "#",
+  },
+  {
+    name: "Sign up for our newsletter",
+    description: "15% off your first order",
+    href: "#",
+  },
+];
 
 export default function Example() {
   return (
@@ -21,7 +33,9 @@ export default function Example() {
                     className="relative flex flex-1 flex-col justify-center bg-white px-4 py-6 text-center focus:z-10"
                   >
                     <p className="text-sm text-gray-500">{offer.name}</p>
-                    <p className="font-semibold text-gray-900">{offer.description}</p>
+                    <p className="font-semibold text-gray-900">
+                      {offer.description}
+                    </p>
                   </a>
                 </li>
               ))}
@@ -30,7 +44,10 @@ export default function Example() {
         </nav>
 
         <div className="relative">
-          <div aria-hidden="true" className="absolute hidden h-full w-1/2 bg-gray-100 lg:block" />
+          <div
+            aria-hidden="true"
+            className="absolute hidden h-full w-1/2 bg-gray-100 lg:block"
+          />
           <div className="relative bg-gray-100 lg:bg-transparent">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:grid lg:grid-cols-2 lg:px-8">
               <div className="mx-auto max-w-2xl py-24 lg:max-w-none lg:py-64">
@@ -39,8 +56,8 @@ export default function Example() {
                     Focus on what matters
                   </h1>
                   <p className="mt-4 text-xl text-gray-600">
-                    All the charts, datepickers, and notifications in the world can't beat checking off some items on a
-                    paper card.
+                    All the charts, datepickers, and notifications in the world
+                    can't beat checking off some items on a paper card.
                   </p>
                   <div className="mt-6">
                     <a
@@ -64,5 +81,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -27,8 +27,11 @@ export default function Example() {
             </button>
           </div>
           <p className="mt-4 text-sm/6 text-gray-300">
-            We care about your data. Read our{' '}
-            <a href="#" className="font-semibold whitespace-nowrap text-white hover:text-indigo-50">
+            We care about your data. Read our{" "}
+            <a
+              href="#"
+              className="font-semibold whitespace-nowrap text-white hover:text-indigo-50"
+            >
               privacy policy
             </a>
             .
@@ -36,5 +39,5 @@ export default function Example() {
         </form>
       </div>
     </div>
-  )
+  );
 }

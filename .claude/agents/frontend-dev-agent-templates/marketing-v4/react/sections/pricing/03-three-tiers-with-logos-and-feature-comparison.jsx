@@ -1,80 +1,116 @@
-import { Fragment } from 'react'
-import { CheckIcon, MinusIcon, PlusIcon } from '@heroicons/react/16/solid'
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
+import { Fragment } from "react";
+import { CheckIcon, MinusIcon, PlusIcon } from "@heroicons/react/16/solid";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 
 const tiers = [
   {
-    name: 'Starter',
-    description: 'Everything you need to get started.',
-    priceMonthly: '$19',
-    href: '#',
+    name: "Starter",
+    description: "Everything you need to get started.",
+    priceMonthly: "$19",
+    href: "#",
     highlights: [
-      { description: 'Custom domains' },
-      { description: 'Edge content delivery' },
-      { description: 'Advanced analytics' },
-      { description: 'Quarterly workshops', disabled: true },
-      { description: 'Single sign-on (SSO)', disabled: true },
-      { description: 'Priority phone support', disabled: true },
+      { description: "Custom domains" },
+      { description: "Edge content delivery" },
+      { description: "Advanced analytics" },
+      { description: "Quarterly workshops", disabled: true },
+      { description: "Single sign-on (SSO)", disabled: true },
+      { description: "Priority phone support", disabled: true },
     ],
   },
   {
-    name: 'Growth',
-    description: 'All the extras for your growing team.',
-    priceMonthly: '$49',
-    href: '#',
+    name: "Growth",
+    description: "All the extras for your growing team.",
+    priceMonthly: "$49",
+    href: "#",
     highlights: [
-      { description: 'Custom domains' },
-      { description: 'Edge content delivery' },
-      { description: 'Advanced analytics' },
-      { description: 'Quarterly workshops' },
-      { description: 'Single sign-on (SSO)', disabled: true },
-      { description: 'Priority phone support', disabled: true },
+      { description: "Custom domains" },
+      { description: "Edge content delivery" },
+      { description: "Advanced analytics" },
+      { description: "Quarterly workshops" },
+      { description: "Single sign-on (SSO)", disabled: true },
+      { description: "Priority phone support", disabled: true },
     ],
   },
   {
-    name: 'Scale',
-    description: 'Added flexibility at scale.',
-    priceMonthly: '$99',
-    href: '#',
+    name: "Scale",
+    description: "Added flexibility at scale.",
+    priceMonthly: "$99",
+    href: "#",
     highlights: [
-      { description: 'Custom domains' },
-      { description: 'Edge content delivery' },
-      { description: 'Advanced analytics' },
-      { description: 'Quarterly workshops' },
-      { description: 'Single sign-on (SSO)' },
-      { description: 'Priority phone support' },
+      { description: "Custom domains" },
+      { description: "Edge content delivery" },
+      { description: "Advanced analytics" },
+      { description: "Quarterly workshops" },
+      { description: "Single sign-on (SSO)" },
+      { description: "Priority phone support" },
     ],
   },
-]
+];
 const sections = [
   {
-    name: 'Features',
+    name: "Features",
     features: [
-      { name: 'Edge content delivery', tiers: { Starter: true, Growth: true, Scale: true } },
-      { name: 'Custom domains', tiers: { Starter: '1', Growth: '3', Scale: 'Unlimited' } },
-      { name: 'Team members', tiers: { Starter: '3', Growth: '20', Scale: 'Unlimited' } },
-      { name: 'Single sign-on (SSO)', tiers: { Starter: false, Growth: false, Scale: true } },
+      {
+        name: "Edge content delivery",
+        tiers: { Starter: true, Growth: true, Scale: true },
+      },
+      {
+        name: "Custom domains",
+        tiers: { Starter: "1", Growth: "3", Scale: "Unlimited" },
+      },
+      {
+        name: "Team members",
+        tiers: { Starter: "3", Growth: "20", Scale: "Unlimited" },
+      },
+      {
+        name: "Single sign-on (SSO)",
+        tiers: { Starter: false, Growth: false, Scale: true },
+      },
     ],
   },
   {
-    name: 'Reporting',
+    name: "Reporting",
     features: [
-      { name: 'Advanced analytics', tiers: { Starter: true, Growth: true, Scale: true } },
-      { name: 'Basic reports', tiers: { Starter: false, Growth: true, Scale: true } },
-      { name: 'Professional reports', tiers: { Starter: false, Growth: false, Scale: true } },
-      { name: 'Custom report builder', tiers: { Starter: false, Growth: false, Scale: true } },
+      {
+        name: "Advanced analytics",
+        tiers: { Starter: true, Growth: true, Scale: true },
+      },
+      {
+        name: "Basic reports",
+        tiers: { Starter: false, Growth: true, Scale: true },
+      },
+      {
+        name: "Professional reports",
+        tiers: { Starter: false, Growth: false, Scale: true },
+      },
+      {
+        name: "Custom report builder",
+        tiers: { Starter: false, Growth: false, Scale: true },
+      },
     ],
   },
   {
-    name: 'Support',
+    name: "Support",
     features: [
-      { name: '24/7 online support', tiers: { Starter: true, Growth: true, Scale: true } },
-      { name: 'Quarterly workshops', tiers: { Starter: false, Growth: true, Scale: true } },
-      { name: 'Priority phone support', tiers: { Starter: false, Growth: false, Scale: true } },
-      { name: '1:1 onboarding tour', tiers: { Starter: false, Growth: false, Scale: true } },
+      {
+        name: "24/7 online support",
+        tiers: { Starter: true, Growth: true, Scale: true },
+      },
+      {
+        name: "Quarterly workshops",
+        tiers: { Starter: false, Growth: true, Scale: true },
+      },
+      {
+        name: "Priority phone support",
+        tiers: { Starter: false, Growth: false, Scale: true },
+      },
+      {
+        name: "1:1 onboarding tour",
+        tiers: { Starter: false, Growth: false, Scale: true },
+      },
     ],
   },
-]
+];
 
 export default function Example() {
   return (
@@ -84,8 +120,8 @@ export default function Example() {
           Pricing that grows with your team size
         </h1>
         <p className="mt-6 max-w-2xl text-lg font-medium text-pretty text-gray-600 max-lg:mx-auto sm:text-xl/8 dark:text-gray-400">
-          Choose an affordable plan that’s packed with the best features for engaging your audience, creating customer
-          loyalty, and driving sales.
+          Choose an affordable plan that’s packed with the best features for
+          engaging your audience, creating customer loyalty, and driving sales.
         </p>
       </div>
       <div className="relative pt-16 sm:pt-24">
@@ -102,9 +138,13 @@ export default function Example() {
                     <h2 className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
                       {tier.name} <span className="sr-only">plan</span>
                     </h2>
-                    <p className="mt-2 text-sm/6 text-pretty text-gray-600 dark:text-gray-300">{tier.description}</p>
+                    <p className="mt-2 text-sm/6 text-pretty text-gray-600 dark:text-gray-300">
+                      {tier.description}
+                    </p>
                     <div className="mt-8 flex items-center gap-4">
-                      <div className="text-5xl font-semibold text-gray-950 dark:text-white">{tier.priceMonthly}</div>
+                      <div className="text-5xl font-semibold text-gray-950 dark:text-white">
+                        {tier.priceMonthly}
+                      </div>
                       <div className="text-sm text-gray-600 dark:text-gray-400">
                         <p>USD</p>
                         <p>per month</p>
@@ -120,7 +160,9 @@ export default function Example() {
                       </a>
                     </div>
                     <div className="mt-8">
-                      <h3 className="text-sm/6 font-medium text-gray-950 dark:text-white">Start selling with:</h3>
+                      <h3 className="text-sm/6 font-medium text-gray-950 dark:text-white">
+                        Start selling with:
+                      </h3>
                       <ul className="mt-3 space-y-3">
                         {tier.highlights.map((highlight) => (
                           <li
@@ -134,7 +176,9 @@ export default function Example() {
                                 className="size-4 fill-gray-400 group-data-disabled:fill-gray-300 dark:fill-gray-500 dark:group-data-disabled:fill-gray-600"
                               />
                             </span>
-                            {highlight.disabled ? <span className="sr-only">Not included:</span> : null}
+                            {highlight.disabled
+                              ? <span className="sr-only">Not included:</span>
+                              : null}
                             {highlight.description}
                           </li>
                         ))}
@@ -212,45 +256,63 @@ export default function Example() {
           {sections.map((section) => (
             <tbody key={section.name} className="group">
               <tr>
-                <th scope="colgroup" colSpan={4} className="px-0 pt-10 pb-0 group-first-of-type:pt-5">
+                <th
+                  scope="colgroup"
+                  colSpan={4}
+                  className="px-0 pt-10 pb-0 group-first-of-type:pt-5"
+                >
                   <div className="-mx-4 rounded-lg bg-gray-50 px-4 py-3 text-sm/6 font-semibold text-gray-950 dark:bg-gray-800/50 dark:text-white">
                     {section.name}
                   </div>
                 </th>
               </tr>
               {section.features.map((feature) => (
-                <tr key={feature.name} className="border-b border-gray-100 last:border-none dark:border-white/10">
-                  <th scope="row" className="px-0 py-4 text-sm/6 font-normal text-gray-600 dark:text-gray-300">
+                <tr
+                  key={feature.name}
+                  className="border-b border-gray-100 last:border-none dark:border-white/10"
+                >
+                  <th
+                    scope="row"
+                    className="px-0 py-4 text-sm/6 font-normal text-gray-600 dark:text-gray-300"
+                  >
                     {feature.name}
                   </th>
                   {tiers.map((tier) => (
                     <td key={tier.name} className="p-4 max-sm:text-center">
-                      {typeof feature.tiers[tier.name] === 'string' ? (
-                        <>
-                          <span className="sr-only">{tier.name} includes:</span>
-                          <span className="text-sm/6 text-gray-950 dark:text-white">{feature.tiers[tier.name]}</span>
-                        </>
-                      ) : (
-                        <>
-                          {feature.tiers[tier.name] === true ? (
-                            <CheckIcon
-                              aria-hidden="true"
-                              className="inline-block size-4 fill-green-600 dark:fill-green-500"
-                            />
-                          ) : (
-                            <MinusIcon
-                              aria-hidden="true"
-                              className="inline-block size-4 fill-gray-400 dark:fill-gray-500"
-                            />
-                          )}
-
-                          <span className="sr-only">
+                      {typeof feature.tiers[tier.name] === "string"
+                        ? (
+                          <>
+                            <span className="sr-only">
+                              {tier.name} includes:
+                            </span>
+                            <span className="text-sm/6 text-gray-950 dark:text-white">
+                              {feature.tiers[tier.name]}
+                            </span>
+                          </>
+                        )
+                        : (
+                          <>
                             {feature.tiers[tier.name] === true
-                              ? `Included in ${tier.name}`
-                              : `Not included in ${tier.name}`}
-                          </span>
-                        </>
-                      )}
+                              ? (
+                                <CheckIcon
+                                  aria-hidden="true"
+                                  className="inline-block size-4 fill-green-600 dark:fill-green-500"
+                                />
+                              )
+                              : (
+                                <MinusIcon
+                                  aria-hidden="true"
+                                  className="inline-block size-4 fill-gray-400 dark:fill-gray-500"
+                                />
+                              )}
+
+                            <span className="sr-only">
+                              {feature.tiers[tier.name] === true
+                                ? `Included in ${tier.name}`
+                                : `Not included in ${tier.name}`}
+                            </span>
+                          </>
+                        )}
                     </td>
                   ))}
                 </tr>
@@ -289,29 +351,39 @@ export default function Example() {
                           key={feature.name}
                           className="grid grid-cols-2 border-b border-gray-100 py-4 last:border-none dark:border-white/10"
                         >
-                          <dt className="text-sm/6 font-normal text-gray-600 dark:text-gray-300">{feature.name}</dt>
+                          <dt className="text-sm/6 font-normal text-gray-600 dark:text-gray-300">
+                            {feature.name}
+                          </dt>
                           <dd className="text-center">
-                            {typeof feature.tiers[tier.name] === 'string' ? (
-                              <span className="text-sm/6 text-gray-950 dark:text-white">
-                                {feature.tiers[tier.name]}
-                              </span>
-                            ) : (
-                              <>
-                                {feature.tiers[tier.name] === true ? (
-                                  <CheckIcon
-                                    aria-hidden="true"
-                                    className="inline-block size-4 fill-green-600 dark:fill-green-500"
-                                  />
-                                ) : (
-                                  <MinusIcon
-                                    aria-hidden="true"
-                                    className="inline-block size-4 fill-gray-400 dark:fill-gray-500"
-                                  />
-                                )}
+                            {typeof feature.tiers[tier.name] === "string"
+                              ? (
+                                <span className="text-sm/6 text-gray-950 dark:text-white">
+                                  {feature.tiers[tier.name]}
+                                </span>
+                              )
+                              : (
+                                <>
+                                  {feature.tiers[tier.name] === true
+                                    ? (
+                                      <CheckIcon
+                                        aria-hidden="true"
+                                        className="inline-block size-4 fill-green-600 dark:fill-green-500"
+                                      />
+                                    )
+                                    : (
+                                      <MinusIcon
+                                        aria-hidden="true"
+                                        className="inline-block size-4 fill-gray-400 dark:fill-gray-500"
+                                      />
+                                    )}
 
-                                <span className="sr-only">{feature.tiers[tier.name] === true ? 'Yes' : 'No'}</span>
-                              </>
-                            )}
+                                  <span className="sr-only">
+                                    {feature.tiers[tier.name] === true
+                                      ? "Yes"
+                                      : "No"}
+                                  </span>
+                                </>
+                              )}
                           </dd>
                         </div>
                       ))}
@@ -324,5 +396,5 @@ export default function Example() {
         </TabGroup>
       </div>
     </div>
-  )
+  );
 }

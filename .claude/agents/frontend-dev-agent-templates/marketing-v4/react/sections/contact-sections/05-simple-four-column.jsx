@@ -7,8 +7,9 @@ export default function Example() {
             Our offices
           </h2>
           <p className="mt-6 text-lg/8 text-gray-600 dark:text-gray-400">
-            Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui
-            laoreet diam sed lacus, fames.
+            Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate
+            id malesuada non. Cras aliquet purus dui laoreet diam sed lacus,
+            fames.
           </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 text-base/7 sm:grid-cols-2 sm:gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-4">
@@ -51,5 +52,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

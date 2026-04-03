@@ -1,7 +1,10 @@
 export default function Example() {
   return (
     <div>
-      <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
+      <label
+        htmlFor="email"
+        className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+      >
         Email
       </label>
       <div className="mt-2">
@@ -14,5 +17,5 @@ export default function Example() {
         />
       </div>
     </div>
-  )
+  );
 }

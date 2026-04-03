@@ -5,24 +5,36 @@ import {
   FolderIcon,
   HomeIcon,
   UsersIcon,
-} from '@heroicons/react/24/outline'
+} from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, count: '5', current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, count: '12', current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, count: '20+', current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
-]
+  { name: "Dashboard", href: "#", icon: HomeIcon, count: "5", current: true },
+  { name: "Team", href: "#", icon: UsersIcon, current: false },
+  {
+    name: "Projects",
+    href: "#",
+    icon: FolderIcon,
+    count: "12",
+    current: false,
+  },
+  {
+    name: "Calendar",
+    href: "#",
+    icon: CalendarIcon,
+    count: "20+",
+    current: false,
+  },
+  { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
+  { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
+];
 const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
+  { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
+  { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
+  { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
@@ -50,34 +62,40 @@ export default function Example() {
                     href={item.href}
                     className={classNames(
                       item.current
-                        ? 'bg-indigo-700 text-white dark:bg-black/10'
-                        : 'text-indigo-200 hover:bg-indigo-700 hover:text-white dark:text-indigo-100 dark:hover:bg-black/10',
-                      'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                        ? "bg-indigo-700 text-white dark:bg-black/10"
+                        : "text-indigo-200 hover:bg-indigo-700 hover:text-white dark:text-indigo-100 dark:hover:bg-black/10",
+                      "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
                     )}
                   >
                     <item.icon
                       aria-hidden="true"
                       className={classNames(
-                        item.current ? 'text-white' : 'text-indigo-200 group-hover:text-white dark:text-indigo-100',
-                        'size-6 shrink-0',
+                        item.current
+                          ? "text-white"
+                          : "text-indigo-200 group-hover:text-white dark:text-indigo-100",
+                        "size-6 shrink-0",
                       )}
                     />
                     {item.name}
-                    {item.count ? (
-                      <span
-                        aria-hidden="true"
-                        className="ml-auto w-9 min-w-max rounded-full bg-indigo-600 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white outline-1 -outline-offset-1 outline-indigo-500 dark:bg-indigo-800 dark:outline-indigo-600/75"
-                      >
-                        {item.count}
-                      </span>
-                    ) : null}
+                    {item.count
+                      ? (
+                        <span
+                          aria-hidden="true"
+                          className="ml-auto w-9 min-w-max rounded-full bg-indigo-600 px-2.5 py-0.5 text-center text-xs/5 font-medium whitespace-nowrap text-white outline-1 -outline-offset-1 outline-indigo-500 dark:bg-indigo-800 dark:outline-indigo-600/75"
+                        >
+                          {item.count}
+                        </span>
+                      )
+                      : null}
                   </a>
                 </li>
               ))}
             </ul>
           </li>
           <li>
-            <div className="text-xs/6 font-semibold text-indigo-200">Your teams</div>
+            <div className="text-xs/6 font-semibold text-indigo-200">
+              Your teams
+            </div>
             <ul role="list" className="-mx-2 mt-2 space-y-1">
               {teams.map((team) => (
                 <li key={team.name}>
@@ -85,9 +103,9 @@ export default function Example() {
                     href={team.href}
                     className={classNames(
                       team.current
-                        ? 'bg-indigo-700 text-white dark:bg-black/10'
-                        : 'text-indigo-200 hover:bg-indigo-700 hover:text-white dark:text-indigo-100 dark:hover:bg-black/10',
-                      'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
+                        ? "bg-indigo-700 text-white dark:bg-black/10"
+                        : "text-indigo-200 hover:bg-indigo-700 hover:text-white dark:text-indigo-100 dark:hover:bg-black/10",
+                      "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
                     )}
                   >
                     <span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white dark:border-indigo-500 dark:bg-indigo-700">
@@ -116,5 +134,5 @@ export default function Example() {
         </ul>
       </nav>
     </div>
-  )
+  );
 }

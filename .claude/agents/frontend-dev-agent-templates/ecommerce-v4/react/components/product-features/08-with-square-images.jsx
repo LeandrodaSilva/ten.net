@@ -1,29 +1,39 @@
 const features = [
   {
-    name: 'Three card types',
-    description: 'Today, Next, and Someday cards allow you to defer your dreams into the future.',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-feature-08-detail-01.jpg',
-    imageAlt: 'Green cardstock box containing white, beige, and brown cards.',
+    name: "Three card types",
+    description:
+      "Today, Next, and Someday cards allow you to defer your dreams into the future.",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-feature-08-detail-01.jpg",
+    imageAlt: "Green cardstock box containing white, beige, and brown cards.",
   },
   {
-    name: 'The perfect mix',
-    description: 'Each refill pack contains plenty of cards to last you a month of procrastination.',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-feature-08-detail-02.jpg',
-    imageAlt: 'Green cardstock box open with 50 cards inside.',
+    name: "The perfect mix",
+    description:
+      "Each refill pack contains plenty of cards to last you a month of procrastination.",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-feature-08-detail-02.jpg",
+    imageAlt: "Green cardstock box open with 50 cards inside.",
   },
   {
-    name: 'Dot grid backs',
-    description: 'Flip a card over to doodle during meetings when you should be listening.',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-feature-08-detail-03.jpg',
-    imageAlt: 'Detail of white today card, beige next card, and brown someday card with dot grid.',
+    name: "Dot grid backs",
+    description:
+      "Flip a card over to doodle during meetings when you should be listening.",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-feature-08-detail-03.jpg",
+    imageAlt:
+      "Detail of white today card, beige next card, and brown someday card with dot grid.",
   },
   {
-    name: 'Refill packs',
-    description: 'Subscribe and save on routine refill packs to keep you productive all year long.',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-feature-08-detail-04.jpg',
-    imageAlt: 'Stack of three green cardstock boxes with 3 hole cutouts showing cards inside.',
+    name: "Refill packs",
+    description:
+      "Subscribe and save on routine refill packs to keep you productive all year long.",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-feature-08-detail-04.jpg",
+    imageAlt:
+      "Stack of three green cardstock boxes with 3 hole cutouts showing cards inside.",
   },
-]
+];
 
 export default function Example() {
   return (
@@ -33,10 +43,13 @@ export default function Example() {
           <h2 id="features-heading" className="font-medium text-gray-500">
             Focus
           </h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Simple productivity</p>
+          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Simple productivity
+          </p>
           <p className="mt-4 text-gray-500">
-            Focus allows you to plan 10 daily tasks, while also thinking ahead about what's next. Forget distracting
-            digital apps and embrace these small, sturdy pieces of paper.
+            Focus allows you to plan 10 daily tasks, while also thinking ahead
+            about what's next. Forget distracting digital apps and embrace these
+            small, sturdy pieces of paper.
           </p>
         </div>
 
@@ -44,8 +57,12 @@ export default function Example() {
           {features.map((feature) => (
             <div key={feature.name} className="flex flex-col-reverse">
               <div className="mt-6">
-                <h3 className="text-sm font-medium text-gray-900">{feature.name}</h3>
-                <p className="mt-2 text-sm text-gray-500">{feature.description}</p>
+                <h3 className="text-sm font-medium text-gray-900">
+                  {feature.name}
+                </h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  {feature.description}
+                </p>
               </div>
               <img
                 alt={feature.imageAlt}
@@ -57,5 +74,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

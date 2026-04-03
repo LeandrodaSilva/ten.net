@@ -1,15 +1,16 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function Example() {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
 
   return (
     <div>
       <button
+        type="button"
         onClick={() => setOpen(true)}
         className="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
       >
@@ -28,7 +29,9 @@ export default function Example() {
                 <div className="relative flex h-full flex-col overflow-y-auto bg-white shadow-xl dark:bg-gray-800 dark:after:absolute dark:after:inset-y-0 dark:after:left-0 dark:after:w-px dark:after:bg-white/10">
                   <div className="bg-indigo-700 px-4 py-6 sm:px-6 dark:bg-indigo-800">
                     <div className="flex items-center justify-between">
-                      <DialogTitle className="text-base font-semibold text-white">Panel title</DialogTitle>
+                      <DialogTitle className="text-base font-semibold text-white">
+                        Panel title
+                      </DialogTitle>
                       <div className="ml-3 flex h-7 items-center">
                         <button
                           type="button"
@@ -43,11 +46,14 @@ export default function Example() {
                     </div>
                     <div className="mt-1">
                       <p className="text-sm text-indigo-300 dark:text-indigo-200">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit aliquam ad hic recusandae soluta.
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit
+                        aliquam ad hic recusandae soluta.
                       </p>
                     </div>
                   </div>
-                  <div className="relative flex-1 px-4 py-6 sm:px-6">{/* Your content */}</div>
+                  <div className="relative flex-1 px-4 py-6 sm:px-6">
+                    {/* Your content */}
+                  </div>
                 </div>
               </DialogPanel>
             </div>
@@ -55,5 +61,5 @@ export default function Example() {
         </div>
       </Dialog>
     </div>
-  )
+  );
 }

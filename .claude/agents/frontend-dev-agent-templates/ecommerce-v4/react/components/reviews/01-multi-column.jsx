@@ -1,4 +1,4 @@
-import { StarIcon } from '@heroicons/react/20/solid'
+import { StarIcon } from "@heroicons/react/20/solid";
 
 const reviews = [
   {
@@ -9,37 +9,37 @@ const reviews = [
       <p>I was really pleased with the overall shopping experience. My order even included a little personal, handwritten note, which delighted me!</p>
       <p>The product quality is amazing, it looks and feel even better than I had anticipated. Brilliant stuff! I would gladly recommend this store to my friends. And, now that I think of it... I actually have, many times!</p>
     `,
-    author: 'Risako M',
-    date: 'May 16, 2021',
-    datetime: '2021-01-06',
+    author: "Risako M",
+    date: "May 16, 2021",
+    datetime: "2021-01-06",
   },
   {
     id: 2,
-    title: 'Very comfy and looks the part',
+    title: "Very comfy and looks the part",
     rating: 5,
     content: `
       <p>After a quick chat with customer support, I had a good feeling about this shirt and ordered three of them.</p>
       <p>Less than 48 hours later, my delivery arrived. I haven't worn anything else since that day! These shirts are so comfortable, yet look classy enough that I can wear them at work or even some formal events. Winning!</p>
     `,
-    author: 'Jackie H',
-    date: 'April 6, 2021',
-    datetime: '2021-01-06',
+    author: "Jackie H",
+    date: "April 6, 2021",
+    datetime: "2021-01-06",
   },
   {
     id: 3,
-    title: 'The last shirts I may ever need',
+    title: "The last shirts I may ever need",
     rating: 4,
     content: `
       <p>I bought two of those comfy cotton shirts, and let me tell you: they're amazing! I have been wearing them almost every day. Even after a dozen of washes, that still looks and feel good as new. Will definitely order a few more... If I ever need to!</p>
     `,
-    author: 'Laura G',
-    date: 'February 24, 2021',
-    datetime: '2021-01-06',
+    author: "Laura G",
+    date: "February 24, 2021",
+    datetime: "2021-01-06",
   },
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
@@ -49,7 +49,10 @@ export default function Example() {
         <h2 className="text-lg font-medium text-gray-900">Recent reviews</h2>
         <div className="mt-6 divide-y divide-gray-200 border-t border-b border-gray-200">
           {reviews.map((review) => (
-            <div key={review.id} className="py-10 lg:grid lg:grid-cols-12 lg:gap-x-8">
+            <div
+              key={review.id}
+              className="py-10 lg:grid lg:grid-cols-12 lg:gap-x-8"
+            >
               <div className="lg:col-span-8 lg:col-start-5 xl:col-span-9 xl:col-start-4 xl:grid xl:grid-cols-3 xl:items-start xl:gap-x-8">
                 <div className="flex items-center xl:col-span-1">
                   <div className="flex items-center">
@@ -58,20 +61,24 @@ export default function Example() {
                         key={rating}
                         aria-hidden="true"
                         className={classNames(
-                          review.rating > rating ? 'text-yellow-400' : 'text-gray-200',
-                          'size-5 shrink-0',
+                          review.rating > rating
+                            ? "text-yellow-400"
+                            : "text-gray-200",
+                          "size-5 shrink-0",
                         )}
                       />
                     ))}
                   </div>
                   <p className="ml-3 text-sm text-gray-700">
                     {review.rating}
-                    <span className="sr-only"> out of 5 stars</span>
+                    <span className="sr-only">out of 5 stars</span>
                   </p>
                 </div>
 
                 <div className="mt-4 lg:mt-6 xl:col-span-2 xl:mt-0">
-                  <h3 className="text-sm font-medium text-gray-900">{review.title}</h3>
+                  <h3 className="text-sm font-medium text-gray-900">
+                    {review.title}
+                  </h3>
 
                   <div
                     dangerouslySetInnerHTML={{ __html: review.content }}
@@ -94,5 +101,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

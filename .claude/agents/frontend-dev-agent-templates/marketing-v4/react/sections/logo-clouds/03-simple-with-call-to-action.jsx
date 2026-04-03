@@ -80,17 +80,19 @@ export default function Example() {
         </div>
         <div className="mt-16 flex justify-center">
           <p className="relative rounded-full bg-gray-50 px-4 py-1.5 text-sm/6 text-gray-600 inset-ring inset-ring-gray-900/5 dark:bg-gray-800/75 dark:text-gray-400 dark:inset-ring-white/10">
-            <span className="hidden md:inline">Over 2500 companies use our tools to better their business.</span>
+            <span className="hidden md:inline">
+              Over 2500 companies use our tools to better their business.
+            </span>
             <a
               href="#"
               className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
             >
-              <span aria-hidden="true" className="absolute inset-0" /> Read our customer stories{' '}
-              <span aria-hidden="true">&rarr;</span>
+              <span aria-hidden="true" className="absolute inset-0" />{" "}
+              Read our customer stories <span aria-hidden="true">&rarr;</span>
             </a>
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

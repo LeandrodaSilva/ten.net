@@ -17,13 +17,22 @@ export default function Example() {
             <path d="M100 200V.5M.5 .5H200" fill="none" />
           </pattern>
         </defs>
-        <svg x="50%" y={-64} className="overflow-visible fill-gray-50 dark:fill-gray-800/40">
+        <svg
+          x="50%"
+          y={-64}
+          className="overflow-visible fill-gray-50 dark:fill-gray-800/40"
+        >
           <path
             d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M299.5 800h201v201h-201Z"
             strokeWidth={0}
           />
         </svg>
-        <rect fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)" width="100%" height="100%" strokeWidth={0} />
+        <rect
+          fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)"
+          width="100%"
+          height="100%"
+          strokeWidth={0}
+        />
       </svg>
       <div className="mx-auto max-w-xl lg:max-w-4xl">
         <h2 className="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl dark:text-white">
@@ -36,7 +45,10 @@ export default function Example() {
           <form action="#" method="POST" className="lg:flex-auto">
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
               <div>
-                <label htmlFor="first-name" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                <label
+                  htmlFor="first-name"
+                  className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                >
                   First name
                 </label>
                 <div className="mt-2.5">
@@ -50,7 +62,10 @@ export default function Example() {
                 </div>
               </div>
               <div>
-                <label htmlFor="last-name" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                <label
+                  htmlFor="last-name"
+                  className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                >
                   Last name
                 </label>
                 <div className="mt-2.5">
@@ -64,7 +79,10 @@ export default function Example() {
                 </div>
               </div>
               <div>
-                <label htmlFor="budget" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                <label
+                  htmlFor="budget"
+                  className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                >
                   Budget
                 </label>
                 <div className="mt-2.5">
@@ -77,7 +95,10 @@ export default function Example() {
                 </div>
               </div>
               <div>
-                <label htmlFor="website" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                <label
+                  htmlFor="website"
+                  className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                >
                   Website
                 </label>
                 <div className="mt-2.5">
@@ -90,7 +111,10 @@ export default function Example() {
                 </div>
               </div>
               <div className="sm:col-span-2">
-                <label htmlFor="message" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                <label
+                  htmlFor="message"
+                  className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                >
                   Message
                 </label>
                 <div className="mt-2.5">
@@ -99,7 +123,7 @@ export default function Example() {
                     name="message"
                     rows={4}
                     className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 backdrop-blur-sm placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
-                    defaultValue={''}
+                    defaultValue=""
                   />
                 </div>
               </div>
@@ -113,8 +137,11 @@ export default function Example() {
               </button>
             </div>
             <p className="mt-4 text-sm/6 text-gray-500 dark:text-gray-400">
-              By submitting this form, I agree to the{' '}
-              <a href="#" className="font-semibold whitespace-nowrap text-indigo-600 dark:text-indigo-400">
+              By submitting this form, I agree to the{" "}
+              <a
+                href="#"
+                className="font-semibold whitespace-nowrap text-indigo-600 dark:text-indigo-400"
+              >
                 privacy policy
               </a>
               .
@@ -134,8 +161,9 @@ export default function Example() {
             <figure className="mt-10">
               <blockquote className="text-lg/8 font-semibold text-gray-900 dark:text-white">
                 <p>
-                  “Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo expedita voluptas culpa sapiente alias
-                  molestiae. Numquam corrupti in laborum sed rerum et corporis.”
+                  “Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
+                  expedita voluptas culpa sapiente alias molestiae. Numquam
+                  corrupti in laborum sed rerum et corporis.”
                 </p>
               </blockquote>
               <figcaption className="mt-10 flex gap-x-6">
@@ -145,8 +173,12 @@ export default function Example() {
                   className="size-12 flex-none rounded-full bg-gray-50 dark:bg-gray-800"
                 />
                 <div>
-                  <div className="text-base font-semibold text-gray-900 dark:text-white">Brenna Goyette</div>
-                  <div className="text-sm/6 text-gray-600 dark:text-gray-400">CEO of Workcation</div>
+                  <div className="text-base font-semibold text-gray-900 dark:text-white">
+                    Brenna Goyette
+                  </div>
+                  <div className="text-sm/6 text-gray-600 dark:text-gray-400">
+                    CEO of Workcation
+                  </div>
                 </div>
               </figcaption>
             </figure>
@@ -154,5 +186,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

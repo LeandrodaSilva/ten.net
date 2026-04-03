@@ -1,52 +1,63 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
-import { CalendarIcon, PaperClipIcon, TagIcon, UserCircleIcon } from '@heroicons/react/20/solid'
+import { useState } from "react";
+import {
+  Label,
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from "@headlessui/react";
+import {
+  CalendarIcon,
+  PaperClipIcon,
+  TagIcon,
+  UserCircleIcon,
+} from "@heroicons/react/20/solid";
 
 const assignees = [
-  { name: 'Unassigned', value: null },
+  { name: "Unassigned", value: null },
   {
-    name: 'Wade Cooper',
-    value: 'wade-cooper',
+    name: "Wade Cooper",
+    value: "wade-cooper",
     avatar:
-      'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
-    name: 'Arlene Mccoy',
-    value: 'arlene-mccoy',
+    name: "Arlene Mccoy",
+    value: "arlene-mccoy",
     avatar:
-      'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   {
-    name: 'Devon Webb',
-    value: 'devon-webb',
+    name: "Devon Webb",
+    value: "devon-webb",
     avatar:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80',
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
   },
-]
+];
 const labels = [
-  { name: 'Unlabelled', value: null },
-  { name: 'Engineering', value: 'engineering' },
-  { name: 'Marketing', value: 'marketing' },
-  { name: 'Design', value: 'design' },
-  { name: 'Human Resources', value: 'human-resources' },
-]
+  { name: "Unlabelled", value: null },
+  { name: "Engineering", value: "engineering" },
+  { name: "Marketing", value: "marketing" },
+  { name: "Design", value: "design" },
+  { name: "Human Resources", value: "human-resources" },
+];
 const dueDates = [
-  { name: 'No due date', value: null },
-  { name: 'Today', value: 'today' },
-  { name: 'Tomorrow', value: 'tomorrow' },
-  { name: 'This week', value: 'this-week' },
-]
+  { name: "No due date", value: null },
+  { name: "Today", value: "today" },
+  { name: "Tomorrow", value: "tomorrow" },
+  { name: "This week", value: "this-week" },
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
-  const [assigned, setAssigned] = useState(assignees[0])
-  const [labelled, setLabelled] = useState(labels[0])
-  const [dated, setDated] = useState(dueDates[0])
+  const [assigned, setAssigned] = useState(assignees[0]);
+  const [labelled, setLabelled] = useState(labels[0]);
+  const [dated, setDated] = useState(dueDates[0]);
 
   return (
     <form action="#" className="relative">
@@ -70,7 +81,7 @@ export default function Example() {
           rows={2}
           placeholder="Write a description..."
           className="block w-full resize-none px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6 dark:text-white dark:placeholder:text-gray-500"
-          defaultValue={''}
+          defaultValue=""
         />
 
         {/* Spacer element to match the height of the toolbar */}
@@ -90,26 +101,39 @@ export default function Example() {
       <div className="absolute inset-x-px bottom-0">
         {/* Actions: These are just examples to demonstrate the concept, replace/wire these up however makes sense for your project. */}
         <div className="flex flex-nowrap justify-end space-x-2 px-2 py-2 sm:px-3">
-          <Listbox as="div" value={assigned} onChange={setAssigned} className="shrink-0">
+          <Listbox
+            as="div"
+            value={assigned}
+            onChange={setAssigned}
+            className="shrink-0"
+          >
             <Label className="sr-only">Assign</Label>
             <div className="relative">
               <ListboxButton className="relative inline-flex items-center rounded-full bg-gray-50 px-2 py-2 text-sm font-medium whitespace-nowrap text-gray-500 hover:bg-gray-100 sm:px-3 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10">
-                {assigned.value === null ? (
-                  <UserCircleIcon
-                    aria-hidden="true"
-                    className="size-5 shrink-0 text-gray-300 sm:-ml-1 dark:text-gray-500"
-                  />
-                ) : (
-                  <img alt="" src={assigned.avatar} className="size-5 shrink-0 rounded-full" />
-                )}
+                {assigned.value === null
+                  ? (
+                    <UserCircleIcon
+                      aria-hidden="true"
+                      className="size-5 shrink-0 text-gray-300 sm:-ml-1 dark:text-gray-500"
+                    />
+                  )
+                  : (
+                    <img
+                      alt=""
+                      src={assigned.avatar}
+                      className="size-5 shrink-0 rounded-full"
+                    />
+                  )}
 
                 <span
                   className={classNames(
-                    assigned.value === null ? '' : 'text-gray-900 dark:text-white',
-                    'hidden truncate sm:ml-2 sm:block',
+                    assigned.value === null
+                      ? ""
+                      : "text-gray-900 dark:text-white",
+                    "hidden truncate sm:ml-2 sm:block",
                   )}
                 >
-                  {assigned.value === null ? 'Assign' : assigned.name}
+                  {assigned.value === null ? "Assign" : assigned.name}
                 </span>
               </ListboxButton>
 
@@ -124,20 +148,24 @@ export default function Example() {
                     className="cursor-default bg-white px-3 py-2 select-none data-focus:relative data-focus:bg-gray-100 data-focus:hover:outline-hidden dark:bg-gray-800 dark:data-focus:bg-white/5"
                   >
                     <div className="flex items-center">
-                      {assignee.avatar ? (
-                        <img
-                          alt=""
-                          src={assignee.avatar}
-                          className="size-5 shrink-0 rounded-full bg-gray-100 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10"
-                        />
-                      ) : (
-                        <UserCircleIcon
-                          aria-hidden="true"
-                          className="size-5 shrink-0 text-gray-400 dark:text-gray-500"
-                        />
-                      )}
+                      {assignee.avatar
+                        ? (
+                          <img
+                            alt=""
+                            src={assignee.avatar}
+                            className="size-5 shrink-0 rounded-full bg-gray-100 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10"
+                          />
+                        )
+                        : (
+                          <UserCircleIcon
+                            aria-hidden="true"
+                            className="size-5 shrink-0 text-gray-400 dark:text-gray-500"
+                          />
+                        )}
 
-                      <span className="ml-3 block truncate font-medium dark:text-white">{assignee.name}</span>
+                      <span className="ml-3 block truncate font-medium dark:text-white">
+                        {assignee.name}
+                      </span>
                     </div>
                   </ListboxOption>
                 ))}
@@ -145,24 +173,33 @@ export default function Example() {
             </div>
           </Listbox>
 
-          <Listbox as="div" value={labelled} onChange={setLabelled} className="shrink-0">
+          <Listbox
+            as="div"
+            value={labelled}
+            onChange={setLabelled}
+            className="shrink-0"
+          >
             <Label className="sr-only">Add a label</Label>
             <div className="relative">
               <ListboxButton className="relative inline-flex items-center rounded-full bg-gray-50 px-2 py-2 text-sm font-medium whitespace-nowrap text-gray-500 hover:bg-gray-100 sm:px-3 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10">
                 <TagIcon
                   aria-hidden="true"
                   className={classNames(
-                    labelled.value === null ? 'text-gray-300 dark:text-gray-500' : 'text-gray-500 dark:text-gray-400',
-                    'size-5 shrink-0 sm:-ml-1',
+                    labelled.value === null
+                      ? "text-gray-300 dark:text-gray-500"
+                      : "text-gray-500 dark:text-gray-400",
+                    "size-5 shrink-0 sm:-ml-1",
                   )}
                 />
                 <span
                   className={classNames(
-                    labelled.value === null ? '' : 'text-gray-900 dark:text-white',
-                    'hidden truncate sm:ml-2 sm:block',
+                    labelled.value === null
+                      ? ""
+                      : "text-gray-900 dark:text-white",
+                    "hidden truncate sm:ml-2 sm:block",
                   )}
                 >
-                  {labelled.value === null ? 'Label' : labelled.name}
+                  {labelled.value === null ? "Label" : labelled.name}
                 </span>
               </ListboxButton>
 
@@ -177,7 +214,9 @@ export default function Example() {
                     className="cursor-default bg-white px-3 py-2 select-none data-focus:relative data-focus:bg-gray-100 data-focus:hover:outline-hidden dark:bg-gray-800 dark:data-focus:bg-white/5"
                   >
                     <div className="flex items-center">
-                      <span className="block truncate font-medium dark:text-white">{label.name}</span>
+                      <span className="block truncate font-medium dark:text-white">
+                        {label.name}
+                      </span>
                     </div>
                   </ListboxOption>
                 ))}
@@ -185,24 +224,31 @@ export default function Example() {
             </div>
           </Listbox>
 
-          <Listbox as="div" value={dated} onChange={setDated} className="shrink-0">
+          <Listbox
+            as="div"
+            value={dated}
+            onChange={setDated}
+            className="shrink-0"
+          >
             <Label className="sr-only">Add a due date</Label>
             <div className="relative">
               <ListboxButton className="relative inline-flex items-center rounded-full bg-gray-50 px-2 py-2 text-sm font-medium whitespace-nowrap text-gray-500 hover:bg-gray-100 sm:px-3 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10">
                 <CalendarIcon
                   aria-hidden="true"
                   className={classNames(
-                    dated.value === null ? 'text-gray-300 dark:text-gray-500' : 'text-gray-500 dark:text-gray-400',
-                    'size-5 shrink-0 sm:-ml-1',
+                    dated.value === null
+                      ? "text-gray-300 dark:text-gray-500"
+                      : "text-gray-500 dark:text-gray-400",
+                    "size-5 shrink-0 sm:-ml-1",
                   )}
                 />
                 <span
                   className={classNames(
-                    dated.value === null ? '' : 'text-gray-900 dark:text-white',
-                    'hidden truncate sm:ml-2 sm:block',
+                    dated.value === null ? "" : "text-gray-900 dark:text-white",
+                    "hidden truncate sm:ml-2 sm:block",
                   )}
                 >
-                  {dated.value === null ? 'Due date' : dated.name}
+                  {dated.value === null ? "Due date" : dated.name}
                 </span>
               </ListboxButton>
 
@@ -217,7 +263,9 @@ export default function Example() {
                     className="cursor-default bg-white px-3 py-2 select-none data-focus:relative data-focus:bg-gray-100 data-focus:hover:outline-hidden dark:bg-gray-800 dark:data-focus:bg-white/5"
                   >
                     <div className="flex items-center">
-                      <span className="block truncate font-medium dark:text-white">{dueDate.name}</span>
+                      <span className="block truncate font-medium dark:text-white">
+                        {dueDate.name}
+                      </span>
                     </div>
                   </ListboxOption>
                 ))}
@@ -251,5 +299,5 @@ export default function Example() {
         </div>
       </div>
     </form>
-  )
+  );
 }

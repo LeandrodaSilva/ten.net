@@ -1,15 +1,16 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function Example() {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
 
   return (
     <div>
       <button
+        type="button"
         onClick={() => setOpen(true)}
         className="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
       >
@@ -45,7 +46,9 @@ export default function Example() {
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">{/* Your content */}</div>
+                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                      {/* Your content */}
+                    </div>
                   </div>
                   <div className="flex shrink-0 justify-end px-4 py-4">
                     <button
@@ -69,5 +72,5 @@ export default function Example() {
         </div>
       </Dialog>
     </div>
-  )
+  );
 }

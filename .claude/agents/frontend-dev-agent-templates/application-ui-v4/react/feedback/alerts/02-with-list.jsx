@@ -1,4 +1,4 @@
-import { XCircleIcon } from '@heroicons/react/20/solid'
+import { XCircleIcon } from "@heroicons/react/20/solid";
 
 export default function Example() {
   return (
@@ -14,11 +14,14 @@ export default function Example() {
           <div className="mt-2 text-sm text-red-700 dark:text-red-200/80">
             <ul role="list" className="list-disc space-y-1 pl-5">
               <li>Your password must be at least 8 characters</li>
-              <li>Your password must include at least one pro wrestling finishing move</li>
+              <li>
+                Your password must include at least one pro wrestling finishing
+                move
+              </li>
             </ul>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,80 +1,131 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon as XMarkIconOutline } from '@heroicons/react/24/outline'
-import { CheckIcon, XMarkIcon as XMarkIconMini } from '@heroicons/react/20/solid'
+import { useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import {
+  Bars3Icon,
+  XMarkIcon as XMarkIconOutline,
+} from "@heroicons/react/24/outline";
+import {
+  CheckIcon,
+  XMarkIcon as XMarkIconMini,
+} from "@heroicons/react/20/solid";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-]
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Marketplace", href: "#" },
+  { name: "Company", href: "#" },
+];
 const pricing = {
   tiers: [
     {
-      id: 'starter',
-      name: 'Starter',
-      description: 'Everything you need to get started.',
-      price: { monthly: '$19', annually: '$199' },
-      highlights: ['Custom domains', 'Edge content delivery', 'Advanced analytics'],
+      id: "starter",
+      name: "Starter",
+      description: "Everything you need to get started.",
+      price: { monthly: "$19", annually: "$199" },
+      highlights: [
+        "Custom domains",
+        "Edge content delivery",
+        "Advanced analytics",
+      ],
       featured: false,
     },
     {
-      id: 'scale',
-      name: 'Scale',
-      description: 'Added flexibility at scale.',
-      price: { monthly: '$99', annually: '$999' },
+      id: "scale",
+      name: "Scale",
+      description: "Added flexibility at scale.",
+      price: { monthly: "$99", annually: "$999" },
       highlights: [
-        'Custom domains',
-        'Edge content delivery',
-        'Advanced analytics',
-        'Quarterly workshops',
-        'Single sign-on (SSO)',
-        'Priority phone support',
+        "Custom domains",
+        "Edge content delivery",
+        "Advanced analytics",
+        "Quarterly workshops",
+        "Single sign-on (SSO)",
+        "Priority phone support",
       ],
       featured: true,
     },
     {
-      id: 'growth',
-      name: 'Growth',
-      description: 'All the extras for your growing team.',
-      price: { monthly: '$49', annually: '$499' },
-      highlights: ['Custom domains', 'Edge content delivery', 'Advanced analytics', 'Quarterly workshops'],
+      id: "growth",
+      name: "Growth",
+      description: "All the extras for your growing team.",
+      price: { monthly: "$49", annually: "$499" },
+      highlights: [
+        "Custom domains",
+        "Edge content delivery",
+        "Advanced analytics",
+        "Quarterly workshops",
+      ],
       featured: false,
     },
   ],
   sections: [
     {
-      name: 'Features',
+      name: "Features",
       features: [
-        { name: 'Edge content delivery', tiers: { Starter: true, Growth: true, Scale: true } },
-        { name: 'Custom domains', tiers: { Starter: '1', Growth: '3', Scale: 'Unlimited' } },
-        { name: 'Team members', tiers: { Starter: '3', Growth: '20', Scale: 'Unlimited' } },
-        { name: 'Single sign-on (SSO)', tiers: { Starter: false, Growth: false, Scale: true } },
+        {
+          name: "Edge content delivery",
+          tiers: { Starter: true, Growth: true, Scale: true },
+        },
+        {
+          name: "Custom domains",
+          tiers: { Starter: "1", Growth: "3", Scale: "Unlimited" },
+        },
+        {
+          name: "Team members",
+          tiers: { Starter: "3", Growth: "20", Scale: "Unlimited" },
+        },
+        {
+          name: "Single sign-on (SSO)",
+          tiers: { Starter: false, Growth: false, Scale: true },
+        },
       ],
     },
     {
-      name: 'Reporting',
+      name: "Reporting",
       features: [
-        { name: 'Advanced analytics', tiers: { Starter: true, Growth: true, Scale: true } },
-        { name: 'Basic reports', tiers: { Starter: false, Growth: true, Scale: true } },
-        { name: 'Professional reports', tiers: { Starter: false, Growth: false, Scale: true } },
-        { name: 'Custom report builder', tiers: { Starter: false, Growth: false, Scale: true } },
+        {
+          name: "Advanced analytics",
+          tiers: { Starter: true, Growth: true, Scale: true },
+        },
+        {
+          name: "Basic reports",
+          tiers: { Starter: false, Growth: true, Scale: true },
+        },
+        {
+          name: "Professional reports",
+          tiers: { Starter: false, Growth: false, Scale: true },
+        },
+        {
+          name: "Custom report builder",
+          tiers: { Starter: false, Growth: false, Scale: true },
+        },
       ],
     },
     {
-      name: 'Support',
+      name: "Support",
       features: [
-        { name: '24/7 online support', tiers: { Starter: true, Growth: true, Scale: true } },
-        { name: 'Quarterly workshops', tiers: { Starter: false, Growth: true, Scale: true } },
-        { name: 'Priority phone support', tiers: { Starter: false, Growth: false, Scale: true } },
-        { name: '1:1 onboarding tour', tiers: { Starter: false, Growth: false, Scale: true } },
+        {
+          name: "24/7 online support",
+          tiers: { Starter: true, Growth: true, Scale: true },
+        },
+        {
+          name: "Quarterly workshops",
+          tiers: { Starter: false, Growth: true, Scale: true },
+        },
+        {
+          name: "Priority phone support",
+          tiers: { Starter: false, Growth: false, Scale: true },
+        },
+        {
+          name: "1:1 onboarding tour",
+          tiers: { Starter: false, Growth: false, Scale: true },
+        },
       ],
     },
   ],
-}
+};
 const faqs = [
   {
     id: 1,
@@ -84,19 +135,19 @@ const faqs = [
   },
   {
     id: 2,
-    question: 'How do you make holy water?',
+    question: "How do you make holy water?",
     answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam aut tempora vitae odio inventore fuga aliquam nostrum quod porro. Delectus quia facere id sequi expedita natus.',
+      "You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam aut tempora vitae odio inventore fuga aliquam nostrum quod porro. Delectus quia facere id sequi expedita natus.",
   },
   {
     id: 3,
-    question: 'What do you call someone with no body and no nose?',
+    question: "What do you call someone with no body and no nose?",
     answer:
-      'Nobody knows. Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, voluptas ipsa quia excepturi, quibusdam natus exercitationem sapiente tempore labore voluptatem.',
+      "Nobody knows. Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, voluptas ipsa quia excepturi, quibusdam natus exercitationem sapiente tempore labore voluptatem.",
   },
   {
     id: 4,
-    question: 'Why do you never see elephants hiding in trees?',
+    question: "Why do you never see elephants hiding in trees?",
     answer:
       "Because they're so good at it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
   },
@@ -104,43 +155,43 @@ const faqs = [
     id: 5,
     question: "Why can't you hear a pterodactyl go to the bathroom?",
     answer:
-      'Because the pee is silent. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam, quas voluptatibus ex culpa ipsum, aspernatur blanditiis fugiat ullam magnam suscipit deserunt illum natus facilis atque vero consequatur! Quisquam, debitis error.',
+      "Because the pee is silent. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam, quas voluptatibus ex culpa ipsum, aspernatur blanditiis fugiat ullam magnam suscipit deserunt illum natus facilis atque vero consequatur! Quisquam, debitis error.",
   },
   {
     id: 6,
-    question: 'Why did the invisible man turn down the job offer?',
+    question: "Why did the invisible man turn down the job offer?",
     answer:
       "He couldn't see himself doing it. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eveniet perspiciatis officiis corrupti tenetur. Temporibus ut voluptatibus, perferendis sed unde rerum deserunt eius.",
   },
-]
+];
 const footerNavigation = {
   solutions: [
-    { name: 'Marketing', href: '#' },
-    { name: 'Analytics', href: '#' },
-    { name: 'Automation', href: '#' },
-    { name: 'Commerce', href: '#' },
-    { name: 'Insights', href: '#' },
+    { name: "Marketing", href: "#" },
+    { name: "Analytics", href: "#" },
+    { name: "Automation", href: "#" },
+    { name: "Commerce", href: "#" },
+    { name: "Insights", href: "#" },
   ],
   support: [
-    { name: 'Submit ticket', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
+    { name: "Submit ticket", href: "#" },
+    { name: "Documentation", href: "#" },
+    { name: "Guides", href: "#" },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
+    { name: "About", href: "#" },
+    { name: "Blog", href: "#" },
+    { name: "Jobs", href: "#" },
+    { name: "Press", href: "#" },
   ],
   legal: [
-    { name: 'Terms of service', href: '#' },
-    { name: 'Privacy policy', href: '#' },
-    { name: 'License', href: '#' },
+    { name: "Terms of service", href: "#" },
+    { name: "Privacy policy", href: "#" },
+    { name: "License", href: "#" },
   ],
   social: [
     {
-      name: 'Facebook',
-      href: '#',
+      name: "Facebook",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -152,8 +203,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'Instagram',
-      href: '#',
+      name: "Instagram",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -165,8 +216,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'X',
-      href: '#',
+      name: "X",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" />
@@ -174,8 +225,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'GitHub',
-      href: '#',
+      name: "GitHub",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -187,8 +238,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'YouTube',
-      href: '#',
+      name: "YouTube",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -200,20 +251,23 @@ const footerNavigation = {
       ),
     },
   ],
-}
+};
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white dark:bg-gray-900">
       {/* Header */}
       <header className="bg-gray-900 dark:bg-gray-800/25">
-        <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+        <nav
+          aria-label="Global"
+          className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        >
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
@@ -236,7 +290,11 @@ export default function Example() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-white">
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-sm/6 font-semibold text-white"
+              >
                 {item.name}
               </a>
             ))}
@@ -247,7 +305,11 @@ export default function Example() {
             </a>
           </div>
         </nav>
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="lg:hidden"
+        >
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
             <div className="flex items-center justify-between">
@@ -305,8 +367,9 @@ export default function Example() {
                   Pricing that grows with you
                 </h2>
                 <p className="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
-                  Choose an affordable plan that’s packed with the best features for engaging your audience, creating
-                  customer loyalty, and driving sales.
+                  Choose an affordable plan that’s packed with the best features
+                  for engaging your audience, creating customer loyalty, and
+                  driving sales.
                 </p>
                 <div className="mt-16 flex justify-center">
                   <fieldset aria-label="Payment frequency">
@@ -340,7 +403,13 @@ export default function Example() {
                   aria-hidden="true"
                   className="absolute -bottom-48 left-1/2 h-256 -translate-x-1/2 translate-y-1/2 mask-[radial-gradient(closest-side,white,transparent)] lg:-top-48 lg:bottom-auto lg:translate-y-0"
                 >
-                  <ellipse cx={604} cy={512} rx={604} ry={512} fill="url(#d25c25d4-6d43-4bf9-b9ac-1842a30a4867)" />
+                  <ellipse
+                    cx={604}
+                    cy={512}
+                    rx={604}
+                    ry={512}
+                    fill="url(#d25c25d4-6d43-4bf9-b9ac-1842a30a4867)"
+                  />
                   <defs>
                     <radialGradient id="d25c25d4-6d43-4bf9-b9ac-1842a30a4867">
                       <stop stopColor="#7775D6" />
@@ -355,12 +424,12 @@ export default function Example() {
                 {pricing.tiers.map((tier) => (
                   <div
                     key={tier.id}
-                    data-featured={tier.featured ? 'true' : undefined}
+                    data-featured={tier.featured ? "true" : undefined}
                     className={classNames(
                       tier.featured
-                        ? 'z-10 bg-white shadow-xl outline-1 outline-gray-900/10 dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10'
-                        : 'bg-gray-800/80 outline-1 -outline-offset-1 outline-white/10 lg:bg-transparent lg:pb-14 lg:outline-0',
-                      'group/tier relative rounded-2xl',
+                        ? "z-10 bg-white shadow-xl outline-1 outline-gray-900/10 dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
+                        : "bg-gray-800/80 outline-1 -outline-offset-1 outline-white/10 lg:bg-transparent lg:pb-14 lg:outline-0",
+                      "group/tier relative rounded-2xl",
                     )}
                   >
                     <div className="p-8 lg:pt-12 xl:p-10 xl:pt-14">
@@ -425,35 +494,49 @@ export default function Example() {
           <div className="relative bg-gray-50 lg:pt-14 dark:bg-gray-900">
             <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
               {/* Feature comparison (up to lg) */}
-              <section aria-labelledby="mobile-comparison-heading" className="lg:hidden">
+              <section
+                aria-labelledby="mobile-comparison-heading"
+                className="lg:hidden"
+              >
                 <h2 id="mobile-comparison-heading" className="sr-only">
                   Feature comparison
                 </h2>
 
                 <div className="mx-auto max-w-2xl space-y-16">
                   {pricing.tiers.map((tier) => (
-                    <div key={tier.id} className="border-t border-gray-900/10 dark:border-white/10">
+                    <div
+                      key={tier.id}
+                      className="border-t border-gray-900/10 dark:border-white/10"
+                    >
                       <div
                         className={classNames(
-                          tier.featured ? 'border-indigo-600 dark:border-indigo-500' : 'border-transparent',
-                          '-mt-px w-72 border-t-2 pt-10 md:w-80',
+                          tier.featured
+                            ? "border-indigo-600 dark:border-indigo-500"
+                            : "border-transparent",
+                          "-mt-px w-72 border-t-2 pt-10 md:w-80",
                         )}
                       >
                         <h3
                           className={classNames(
-                            tier.featured ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-900 dark:text-white',
-                            'text-sm/6 font-semibold',
+                            tier.featured
+                              ? "text-indigo-600 dark:text-indigo-400"
+                              : "text-gray-900 dark:text-white",
+                            "text-sm/6 font-semibold",
                           )}
                         >
                           {tier.name}
                         </h3>
-                        <p className="mt-1 text-sm/6 text-gray-600 dark:text-gray-400">{tier.description}</p>
+                        <p className="mt-1 text-sm/6 text-gray-600 dark:text-gray-400">
+                          {tier.description}
+                        </p>
                       </div>
 
                       <div className="mt-10 space-y-10">
                         {pricing.sections.map((section) => (
                           <div key={section.name}>
-                            <h4 className="text-sm/6 font-semibold text-gray-900 dark:text-white">{section.name}</h4>
+                            <h4 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                              {section.name}
+                            </h4>
                             <div className="relative mt-6">
                               {/* Fake card background */}
                               <div
@@ -464,9 +547,9 @@ export default function Example() {
                               <div
                                 className={classNames(
                                   tier.featured
-                                    ? 'ring-2 ring-indigo-600 dark:ring-indigo-500'
-                                    : 'ring-1 ring-gray-900/10 dark:ring-white/10',
-                                  'relative rounded-lg bg-white shadow-xs sm:rounded-none sm:bg-transparent sm:shadow-none sm:ring-0 dark:bg-gray-800/50 dark:shadow-none dark:sm:bg-transparent',
+                                    ? "ring-2 ring-indigo-600 dark:ring-indigo-500"
+                                    : "ring-1 ring-gray-900/10 dark:ring-white/10",
+                                  "relative rounded-lg bg-white shadow-xs sm:rounded-none sm:bg-transparent sm:shadow-none sm:ring-0 dark:bg-gray-800/50 dark:shadow-none dark:sm:bg-transparent",
                                 )}
                               >
                                 <dl className="divide-y divide-gray-200 text-sm/6 dark:divide-white/10">
@@ -475,37 +558,45 @@ export default function Example() {
                                       key={feature.name}
                                       className="flex items-center justify-between px-4 py-3 sm:grid sm:grid-cols-2 sm:px-0"
                                     >
-                                      <dt className="pr-4 text-gray-600 dark:text-gray-400">{feature.name}</dt>
+                                      <dt className="pr-4 text-gray-600 dark:text-gray-400">
+                                        {feature.name}
+                                      </dt>
                                       <dd className="flex items-center justify-end sm:justify-center sm:px-4">
-                                        {typeof feature.tiers[tier.name] === 'string' ? (
-                                          <span
-                                            className={
-                                              tier.featured
-                                                ? 'font-semibold text-indigo-600 dark:text-indigo-400'
-                                                : 'text-gray-900 dark:text-white'
-                                            }
-                                          >
-                                            {feature.tiers[tier.name]}
-                                          </span>
-                                        ) : (
-                                          <>
-                                            {feature.tiers[tier.name] === true ? (
-                                              <CheckIcon
-                                                aria-hidden="true"
-                                                className="mx-auto size-5 text-indigo-600 dark:text-indigo-400"
-                                              />
-                                            ) : (
-                                              <XMarkIconMini
-                                                aria-hidden="true"
-                                                className="mx-auto size-5 text-gray-400 dark:text-gray-600"
-                                              />
-                                            )}
-
-                                            <span className="sr-only">
-                                              {feature.tiers[tier.name] === true ? 'Yes' : 'No'}
+                                        {typeof feature.tiers[tier.name] ===
+                                            "string"
+                                          ? (
+                                            <span
+                                              className={tier.featured
+                                                ? "font-semibold text-indigo-600 dark:text-indigo-400"
+                                                : "text-gray-900 dark:text-white"}
+                                            >
+                                              {feature.tiers[tier.name]}
                                             </span>
-                                          </>
-                                        )}
+                                          )
+                                          : (
+                                            <>
+                                              {feature.tiers[tier.name] === true
+                                                ? (
+                                                  <CheckIcon
+                                                    aria-hidden="true"
+                                                    className="mx-auto size-5 text-indigo-600 dark:text-indigo-400"
+                                                  />
+                                                )
+                                                : (
+                                                  <XMarkIconMini
+                                                    aria-hidden="true"
+                                                    className="mx-auto size-5 text-gray-400 dark:text-gray-600"
+                                                  />
+                                                )}
+
+                                              <span className="sr-only">
+                                                {feature.tiers[tier.name] ===
+                                                    true
+                                                  ? "Yes"
+                                                  : "No"}
+                                              </span>
+                                            </>
+                                          )}
                                       </dd>
                                     </div>
                                   ))}
@@ -517,9 +608,9 @@ export default function Example() {
                                 aria-hidden="true"
                                 className={classNames(
                                   tier.featured
-                                    ? 'ring-2 ring-indigo-600 dark:ring-indigo-500'
-                                    : 'ring-1 ring-gray-900/10 dark:ring-white/10',
-                                  'pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 rounded-lg sm:block',
+                                    ? "ring-2 ring-indigo-600 dark:ring-indigo-500"
+                                    : "ring-1 ring-gray-900/10 dark:ring-white/10",
+                                  "pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 rounded-lg sm:block",
                                 )}
                               />
                             </div>
@@ -532,7 +623,10 @@ export default function Example() {
               </section>
 
               {/* Feature comparison (lg+) */}
-              <section aria-labelledby="comparison-heading" className="hidden lg:block">
+              <section
+                aria-labelledby="comparison-heading"
+                className="hidden lg:block"
+              >
                 <h2 id="comparison-heading" className="sr-only">
                   Feature comparison
                 </h2>
@@ -542,19 +636,25 @@ export default function Example() {
                     <div key={tier.id} aria-hidden="true" className="-mt-px">
                       <div
                         className={classNames(
-                          tier.featured ? 'border-indigo-600 dark:border-indigo-500' : 'border-transparent',
-                          'border-t-2 pt-10',
+                          tier.featured
+                            ? "border-indigo-600 dark:border-indigo-500"
+                            : "border-transparent",
+                          "border-t-2 pt-10",
                         )}
                       >
                         <p
                           className={classNames(
-                            tier.featured ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-900 dark:text-white',
-                            'text-sm/6 font-semibold',
+                            tier.featured
+                              ? "text-indigo-600 dark:text-indigo-400"
+                              : "text-gray-900 dark:text-white",
+                            "text-sm/6 font-semibold",
                           )}
                         >
                           {tier.name}
                         </p>
-                        <p className="mt-1 text-sm/6 text-gray-600 dark:text-gray-400">{tier.description}</p>
+                        <p className="mt-1 text-sm/6 text-gray-600 dark:text-gray-400">
+                          {tier.description}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -563,7 +663,9 @@ export default function Example() {
                 <div className="-mt-6 space-y-16">
                   {pricing.sections.map((section) => (
                     <div key={section.name}>
-                      <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">{section.name}</h3>
+                      <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                        {section.name}
+                      </h3>
                       <div className="relative -mx-8 mt-10">
                         {/* Fake card backgrounds */}
                         <div
@@ -583,7 +685,9 @@ export default function Example() {
                               </th>
                               {tiers.map((tier) => (
                                 <th key={tier.id} scope="col">
-                                  <span className="sr-only">{tier.name} tier</span>
+                                  <span className="sr-only">
+                                    {tier.name} tier
+                                  </span>
                                 </th>
                               ))}
                             </tr>
@@ -596,43 +700,55 @@ export default function Example() {
                                   className="w-1/4 py-3 pr-4 text-left text-sm/6 font-normal text-gray-900 dark:text-white"
                                 >
                                   {feature.name}
-                                  {featureIdx !== section.features.length - 1 ? (
-                                    <div className="absolute inset-x-8 mt-3 h-px bg-gray-200 dark:bg-white/10" />
-                                  ) : null}
+                                  {featureIdx !== section.features.length - 1
+                                    ? (
+                                      <div className="absolute inset-x-8 mt-3 h-px bg-gray-200 dark:bg-white/10" />
+                                    )
+                                    : null}
                                 </th>
                                 {pricing.tiers.map((tier) => (
-                                  <td key={tier.id} className="relative w-1/4 px-4 py-0 text-center">
+                                  <td
+                                    key={tier.id}
+                                    className="relative w-1/4 px-4 py-0 text-center"
+                                  >
                                     <span className="relative size-full py-3">
-                                      {typeof feature.tiers[tier.name] === 'string' ? (
-                                        <span
-                                          className={classNames(
-                                            tier.featured
-                                              ? 'font-semibold text-indigo-600 dark:text-indigo-400'
-                                              : 'text-gray-900 dark:text-white',
-                                            'text-sm/6',
-                                          )}
-                                        >
-                                          {feature.tiers[tier.name]}
-                                        </span>
-                                      ) : (
-                                        <>
-                                          {feature.tiers[tier.name] === true ? (
-                                            <CheckIcon
-                                              aria-hidden="true"
-                                              className="mx-auto size-5 text-indigo-600 dark:text-indigo-400"
-                                            />
-                                          ) : (
-                                            <XMarkIconMini
-                                              aria-hidden="true"
-                                              className="mx-auto size-5 text-gray-400 dark:text-gray-600"
-                                            />
-                                          )}
-
-                                          <span className="sr-only">
-                                            {feature.tiers[tier.name] === true ? 'Yes' : 'No'}
+                                      {typeof feature.tiers[tier.name] ===
+                                          "string"
+                                        ? (
+                                          <span
+                                            className={classNames(
+                                              tier.featured
+                                                ? "font-semibold text-indigo-600 dark:text-indigo-400"
+                                                : "text-gray-900 dark:text-white",
+                                              "text-sm/6",
+                                            )}
+                                          >
+                                            {feature.tiers[tier.name]}
                                           </span>
-                                        </>
-                                      )}
+                                        )
+                                        : (
+                                          <>
+                                            {feature.tiers[tier.name] === true
+                                              ? (
+                                                <CheckIcon
+                                                  aria-hidden="true"
+                                                  className="mx-auto size-5 text-indigo-600 dark:text-indigo-400"
+                                                />
+                                              )
+                                              : (
+                                                <XMarkIconMini
+                                                  aria-hidden="true"
+                                                  className="mx-auto size-5 text-gray-400 dark:text-gray-600"
+                                                />
+                                              )}
+
+                                            <span className="sr-only">
+                                              {feature.tiers[tier.name] === true
+                                                ? "Yes"
+                                                : "No"}
+                                            </span>
+                                          </>
+                                        )}
                                     </span>
                                   </td>
                                 ))}
@@ -651,9 +767,9 @@ export default function Example() {
                               key={tier.id}
                               className={classNames(
                                 tier.featured
-                                  ? 'ring-2 ring-indigo-600 dark:ring-indigo-500'
-                                  : 'ring-1 ring-gray-900/10 dark:ring-white/10',
-                                'rounded-lg',
+                                  ? "ring-2 ring-indigo-600 dark:ring-indigo-500"
+                                  : "ring-1 ring-gray-900/10 dark:ring-white/10",
+                                "rounded-lg",
                               )}
                             />
                           ))}
@@ -674,12 +790,17 @@ export default function Example() {
           </h2>
           <dl className="mt-20 divide-y divide-gray-900/10 dark:divide-white/10">
             {faqs.map((faq) => (
-              <div key={faq.id} className="py-8 first:pt-0 last:pb-0 lg:grid lg:grid-cols-12 lg:gap-8">
+              <div
+                key={faq.id}
+                className="py-8 first:pt-0 last:pb-0 lg:grid lg:grid-cols-12 lg:gap-8"
+              >
                 <dt className="text-base/7 font-semibold text-gray-900 lg:col-span-5 dark:text-white">
                   {faq.question}
                 </dt>
                 <dd className="mt-4 lg:col-span-7 lg:mt-0">
-                  <p className="text-base/7 text-gray-600 dark:text-gray-400">{faq.answer}</p>
+                  <p className="text-base/7 text-gray-600 dark:text-gray-400">
+                    {faq.answer}
+                  </p>
                 </dd>
               </div>
             ))}
@@ -703,7 +824,8 @@ export default function Example() {
                 className="h-9 not-dark:hidden"
               />
               <p className="text-sm/6 text-balance text-gray-600 dark:text-gray-400">
-                Making the world a better place through constructing elegant hierarchies.
+                Making the world a better place through constructing elegant
+                hierarchies.
               </p>
               <div className="flex gap-x-6">
                 {footerNavigation.social.map((item) => (
@@ -721,7 +843,9 @@ export default function Example() {
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Solutions</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Solutions
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.solutions.map((item) => (
                       <li key={item.name}>
@@ -736,7 +860,9 @@ export default function Example() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Support</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Support
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.support.map((item) => (
                       <li key={item.name}>
@@ -753,7 +879,9 @@ export default function Example() {
               </div>
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Company</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Company
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.company.map((item) => (
                       <li key={item.name}>
@@ -768,7 +896,9 @@ export default function Example() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Legal</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Legal
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.legal.map((item) => (
                       <li key={item.name}>
@@ -793,5 +923,5 @@ export default function Example() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

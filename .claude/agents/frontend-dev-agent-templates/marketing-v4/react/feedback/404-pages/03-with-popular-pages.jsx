@@ -1,26 +1,41 @@
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import { BookmarkSquareIcon, BookOpenIcon, QueueListIcon, RssIcon } from '@heroicons/react/24/solid'
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import {
+  BookmarkSquareIcon,
+  BookOpenIcon,
+  QueueListIcon,
+  RssIcon,
+} from "@heroicons/react/24/solid";
 
 const links = [
   {
-    name: 'Documentation',
-    href: '#',
-    description: 'Learn how to integrate our tools with your app.',
+    name: "Documentation",
+    href: "#",
+    description: "Learn how to integrate our tools with your app.",
     icon: BookOpenIcon,
   },
-  { name: 'API Reference', href: '#', description: 'A complete API reference for our libraries.', icon: QueueListIcon },
   {
-    name: 'Guides',
-    href: '#',
-    description: 'Installation guides that cover popular setups.',
+    name: "API Reference",
+    href: "#",
+    description: "A complete API reference for our libraries.",
+    icon: QueueListIcon,
+  },
+  {
+    name: "Guides",
+    href: "#",
+    description: "Installation guides that cover popular setups.",
     icon: BookmarkSquareIcon,
   },
-  { name: 'Blog', href: '#', description: 'Read our latest news and articles.', icon: RssIcon },
-]
+  {
+    name: "Blog",
+    href: "#",
+    description: "Read our latest news and articles.",
+    icon: RssIcon,
+  },
+];
 const social = [
   {
-    name: 'X',
-    href: '#',
+    name: "X",
+    href: "#",
     icon: (props) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" />
@@ -28,8 +43,8 @@ const social = [
     ),
   },
   {
-    name: 'GitHub',
-    href: '#',
+    name: "GitHub",
+    href: "#",
     icon: (props) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path
@@ -41,8 +56,8 @@ const social = [
     ),
   },
   {
-    name: 'Instagram',
-    href: '#',
+    name: "Instagram",
+    href: "#",
     icon: (props) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path
@@ -53,7 +68,7 @@ const social = [
       </svg>
     ),
   },
-]
+];
 
 export default function Example() {
   return (
@@ -70,7 +85,9 @@ export default function Example() {
           className="mx-auto h-10 w-auto not-dark:hidden sm:h-12"
         />
         <div className="mx-auto mt-20 max-w-2xl text-center sm:mt-24">
-          <p className="text-base/8 font-semibold text-indigo-600 dark:text-indigo-400">404</p>
+          <p className="text-base/8 font-semibold text-indigo-600 dark:text-indigo-400">
+            404
+          </p>
           <h1 className="mt-4 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-6xl dark:text-white">
             This page does not exist
           </h1>
@@ -87,7 +104,10 @@ export default function Example() {
             {links.map((link, linkIdx) => (
               <li key={linkIdx} className="relative flex gap-x-6 py-6">
                 <div className="flex size-10 flex-none items-center justify-center rounded-lg shadow-xs outline-1 outline-gray-900/10 dark:bg-gray-800/50 dark:-outline-offset-1 dark:outline-white/10">
-                  <link.icon aria-hidden="true" className="size-6 text-indigo-600 dark:text-indigo-400" />
+                  <link.icon
+                    aria-hidden="true"
+                    className="size-6 text-indigo-600 dark:text-indigo-400"
+                  />
                 </div>
                 <div className="flex-auto">
                   <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
@@ -96,16 +116,24 @@ export default function Example() {
                       {link.name}
                     </a>
                   </h3>
-                  <p className="mt-2 text-sm/6 text-gray-600 dark:text-gray-400">{link.description}</p>
+                  <p className="mt-2 text-sm/6 text-gray-600 dark:text-gray-400">
+                    {link.description}
+                  </p>
                 </div>
                 <div className="flex-none self-center">
-                  <ChevronRightIcon aria-hidden="true" className="size-5 text-gray-400 dark:text-gray-500" />
+                  <ChevronRightIcon
+                    aria-hidden="true"
+                    className="size-5 text-gray-400 dark:text-gray-500"
+                  />
                 </div>
               </li>
             ))}
           </ul>
           <div className="mt-10 flex justify-center">
-            <a href="#" className="text-sm/6 font-semibold text-indigo-600 dark:text-indigo-400">
+            <a
+              href="#"
+              className="text-sm/6 font-semibold text-indigo-600 dark:text-indigo-400"
+            >
               <span aria-hidden="true">&larr;</span> Back to home
             </a>
           </div>
@@ -113,7 +141,9 @@ export default function Example() {
       </main>
       <footer className="border-t border-gray-100 py-6 sm:py-10 dark:border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-8 px-6 sm:flex-row lg:px-8">
-          <p className="text-sm/7 text-gray-400 dark:text-gray-500">&copy; Your Company, Inc. All rights reserved.</p>
+          <p className="text-sm/7 text-gray-400 dark:text-gray-500">
+            &copy; Your Company, Inc. All rights reserved.
+          </p>
           <div className="hidden sm:block sm:h-7 sm:w-px sm:flex-none sm:bg-gray-200 dark:sm:bg-gray-700" />
           <div className="flex gap-x-4">
             {social.map((item, itemIdx) => (
@@ -130,5 +160,5 @@ export default function Example() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

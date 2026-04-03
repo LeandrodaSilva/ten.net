@@ -1,31 +1,36 @@
-import { ChatBubbleOvalLeftEllipsisIcon, HeartIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+  ChatBubbleOvalLeftEllipsisIcon,
+  HeartIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 
 const features = [
   {
-    name: 'Spam report',
+    name: "Spam report",
     description:
-      'Autem reprehenderit aut debitis ut. Officiis harum omnis placeat blanditiis delectus sint vel et voluptatum.',
+      "Autem reprehenderit aut debitis ut. Officiis harum omnis placeat blanditiis delectus sint vel et voluptatum.",
     icon: TrashIcon,
   },
   {
-    name: 'Compose in markdown',
+    name: "Compose in markdown",
     description:
-      'Illum et aut inventore. Ut et dignissimos quasi. Omnis saepe dolorum. Hic autem fugiat. Voluptatem officiis necessitatibus.',
+      "Illum et aut inventore. Ut et dignissimos quasi. Omnis saepe dolorum. Hic autem fugiat. Voluptatem officiis necessitatibus.",
     icon: PencilSquareIcon,
   },
   {
-    name: 'Email commenting',
+    name: "Email commenting",
     description:
-      'Commodi quam quo. In quasi mollitia optio voluptate et est reiciendis. Ut et sunt id officiis vitae perspiciatis.',
+      "Commodi quam quo. In quasi mollitia optio voluptate et est reiciendis. Ut et sunt id officiis vitae perspiciatis.",
     icon: ChatBubbleOvalLeftEllipsisIcon,
   },
   {
-    name: 'Customer connections',
+    name: "Customer connections",
     description:
-      'Deserunt corrupti praesentium quo vel cupiditate est occaecati ad. Aperiam libero modi similique iure praesentium facilis.',
+      "Deserunt corrupti praesentium quo vel cupiditate est occaecati ad. Aperiam libero modi similique iure praesentium facilis.",
     icon: HeartIcon,
   },
-]
+];
 
 export default function Example() {
   return (
@@ -40,16 +45,21 @@ export default function Example() {
               <div key={feature.name}>
                 <dt className="text-base/7 font-semibold text-gray-900 dark:text-white">
                   <div className="mb-6 flex size-10 items-center justify-center rounded-lg bg-indigo-600 dark:bg-indigo-500">
-                    <feature.icon aria-hidden="true" className="size-6 text-white" />
+                    <feature.icon
+                      aria-hidden="true"
+                      className="size-6 text-white"
+                    />
                   </div>
                   {feature.name}
                 </dt>
-                <dd className="mt-1 text-base/7 text-gray-600 dark:text-gray-400">{feature.description}</dd>
+                <dd className="mt-1 text-base/7 text-gray-600 dark:text-gray-400">
+                  {feature.description}
+                </dd>
               </div>
             ))}
           </dl>
         </div>
       </div>
     </div>
-  )
+  );
 }

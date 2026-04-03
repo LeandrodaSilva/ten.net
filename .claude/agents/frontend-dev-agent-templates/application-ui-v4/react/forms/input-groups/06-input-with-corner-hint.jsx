@@ -2,10 +2,16 @@ export default function Example() {
   return (
     <div>
       <div className="flex justify-between">
-        <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
+        <label
+          htmlFor="email"
+          className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+        >
           Email
         </label>
-        <span id="email-optional" className="text-sm/6 text-gray-500 dark:text-gray-400">
+        <span
+          id="email-optional"
+          className="text-sm/6 text-gray-500 dark:text-gray-400"
+        >
           Optional
         </span>
       </div>
@@ -20,5 +26,5 @@ export default function Example() {
         />
       </div>
     </div>
-  )
+  );
 }

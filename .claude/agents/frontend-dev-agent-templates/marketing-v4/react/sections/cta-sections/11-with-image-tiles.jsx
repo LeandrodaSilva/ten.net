@@ -8,12 +8,14 @@ export default function Example() {
               Our people
             </h2>
             <p className="mt-6 text-xl/8 text-gray-700 dark:text-gray-300">
-              Quasi est quaerat. Sit molestiae et. Provident ad dolorem occaecati eos iste. Soluta rerum quidem minus ut
-              molestiae velit error quod. Excepturi quidem expedita molestias quas.
+              Quasi est quaerat. Sit molestiae et. Provident ad dolorem
+              occaecati eos iste. Soluta rerum quidem minus ut molestiae velit
+              error quod. Excepturi quidem expedita molestias quas.
             </p>
             <p className="mt-6 text-base/7 text-gray-600 dark:text-gray-400">
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-              fugiat veniam occaecat fugiat. Quasi aperiam sit non sit neque reprehenderit.
+              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
+              lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
+              fugiat. Quasi aperiam sit non sit neque reprehenderit.
             </p>
             <div className="mt-10 flex">
               <a
@@ -60,5 +62,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

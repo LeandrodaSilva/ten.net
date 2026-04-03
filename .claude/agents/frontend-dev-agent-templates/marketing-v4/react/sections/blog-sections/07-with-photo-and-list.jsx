@@ -1,32 +1,32 @@
 const jobOpenings = [
   {
     id: 1,
-    role: 'Full-time designer',
-    href: '#',
+    role: "Full-time designer",
+    href: "#",
     description:
-      'Quos sunt ad dolore ullam qui. Enim et quisquam dicta molestias. Corrupti quo voluptatum eligendi autem labore.',
-    salary: '$75,000 USD',
-    location: 'San Francisco, CA',
+      "Quos sunt ad dolore ullam qui. Enim et quisquam dicta molestias. Corrupti quo voluptatum eligendi autem labore.",
+    salary: "$75,000 USD",
+    location: "San Francisco, CA",
   },
   {
     id: 2,
-    role: 'Laravel developer',
-    href: '#',
+    role: "Laravel developer",
+    href: "#",
     description:
-      'Et veniam et officia dolorum rerum. Et voluptas consequatur magni sapiente amet voluptates dolorum. Ut porro aut eveniet.',
-    salary: '$125,000 USD',
-    location: 'San Francisco, CA',
+      "Et veniam et officia dolorum rerum. Et voluptas consequatur magni sapiente amet voluptates dolorum. Ut porro aut eveniet.",
+    salary: "$125,000 USD",
+    location: "San Francisco, CA",
   },
   {
     id: 3,
-    role: 'React Native developer',
-    href: '#',
+    role: "React Native developer",
+    href: "#",
     description:
-      'Veniam ipsam nisi quas architecto eos non voluptatem in nemo. Est occaecati nihil omnis delectus illum est.',
-    salary: '$105,000 USD',
-    location: 'San Francisco, CA',
+      "Veniam ipsam nisi quas architecto eos non voluptatem in nemo. Est occaecati nihil omnis delectus illum est.",
+    salary: "$105,000 USD",
+    location: "San Francisco, CA",
   },
-]
+];
 
 export default function Example() {
   return (
@@ -38,8 +38,9 @@ export default function Example() {
               We’re always looking for awesome people to join us
             </h2>
             <p className="mt-6 text-xl/8 text-gray-600 dark:text-gray-400">
-              Diam nunc lacus lacus aliquam turpis enim. Eget hac velit est euismod lacus. Est non placerat nam arcu.
-              Cras purus nibh cursus sit eu in id.
+              Diam nunc lacus lacus aliquam turpis enim. Eget hac velit est
+              euismod lacus. Est non placerat nam arcu. Cras purus nibh cursus
+              sit eu in id.
             </p>
             <img
               alt=""
@@ -65,7 +66,9 @@ export default function Example() {
                       {opening.description}
                     </dd>
                     <dt className="sr-only">Salary</dt>
-                    <dd className="mt-4 text-base/7 font-semibold text-gray-900 dark:text-white">{opening.salary}</dd>
+                    <dd className="mt-4 text-base/7 font-semibold text-gray-900 dark:text-white">
+                      {opening.salary}
+                    </dd>
                     <dt className="sr-only">Location</dt>
                     <dd className="mt-4 flex items-center gap-x-3 text-base/7 text-gray-500 dark:text-gray-400">
                       <svg
@@ -93,5 +96,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

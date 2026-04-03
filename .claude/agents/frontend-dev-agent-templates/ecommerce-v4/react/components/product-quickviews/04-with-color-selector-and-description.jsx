@@ -1,32 +1,45 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { StarIcon } from '@heroicons/react/20/solid'
+import { useState } from "react";
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { StarIcon } from "@heroicons/react/20/solid";
 
 const product = {
-  name: 'Zip Tote Basket',
-  price: '$220',
+  name: "Zip Tote Basket",
+  price: "$220",
   rating: 3.9,
-  href: '#',
+  href: "#",
   description:
-    'The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.',
-  imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-04.jpg',
-  imageAlt: 'Back angled view with bag open and handles to the side.',
+    "The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.",
+  imageSrc:
+    "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-04.jpg",
+  imageAlt: "Back angled view with bag open and handles to the side.",
   colors: [
-    { id: 'washed-black', name: 'Washed Black', classes: 'bg-gray-700 checked:outline-gray-700' },
-    { id: 'white', name: 'White', classes: 'bg-white checked:outline-gray-400' },
-    { id: 'washed-gray', name: 'Washed Gray', classes: 'bg-gray-500 checked:outline-gray-500' },
+    {
+      id: "washed-black",
+      name: "Washed Black",
+      classes: "bg-gray-700 checked:outline-gray-700",
+    },
+    {
+      id: "white",
+      name: "White",
+      classes: "bg-white checked:outline-gray-400",
+    },
+    {
+      id: "washed-gray",
+      name: "Washed Gray",
+      classes: "bg-gray-500 checked:outline-gray-500",
+    },
   ],
-}
+};
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -60,9 +73,14 @@ export default function Example() {
                   />
                 </div>
                 <div className="sm:col-span-8 lg:col-span-7">
-                  <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{product.name}</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">
+                    {product.name}
+                  </h2>
 
-                  <section aria-labelledby="information-heading" className="mt-3">
+                  <section
+                    aria-labelledby="information-heading"
+                    className="mt-3"
+                  >
                     <h3 id="information-heading" className="sr-only">
                       Product information
                     </h3>
@@ -79,20 +97,26 @@ export default function Example() {
                               key={rating}
                               aria-hidden="true"
                               className={classNames(
-                                product.rating > rating ? 'text-gray-400' : 'text-gray-200',
-                                'size-5 shrink-0',
+                                product.rating > rating
+                                  ? "text-gray-400"
+                                  : "text-gray-200",
+                                "size-5 shrink-0",
                               )}
                             />
                           ))}
                         </div>
-                        <p className="sr-only">{product.rating} out of 5 stars</p>
+                        <p className="sr-only">
+                          {product.rating} out of 5 stars
+                        </p>
                       </div>
                     </div>
 
                     <div className="mt-6">
                       <h4 className="sr-only">Description</h4>
 
-                      <p className="text-sm text-gray-700">{product.description}</p>
+                      <p className="text-sm text-gray-700">
+                        {product.description}
+                      </p>
                     </div>
                   </section>
 
@@ -104,7 +128,9 @@ export default function Example() {
                     <form>
                       {/* Colors */}
                       <div>
-                        <h4 className="text-sm font-medium text-gray-600">Color</h4>
+                        <h4 className="text-sm font-medium text-gray-600">
+                          Color
+                        </h4>
 
                         <fieldset aria-label="Choose a color" className="mt-2">
                           <div className="flex items-center gap-x-3">
@@ -121,7 +147,7 @@ export default function Example() {
                                   aria-label={color.name}
                                   className={classNames(
                                     color.classes,
-                                    'size-8 appearance-none rounded-full forced-color-adjust-none checked:outline-2 checked:outline-offset-2 focus-visible:outline-3 focus-visible:outline-offset-3',
+                                    "size-8 appearance-none rounded-full forced-color-adjust-none checked:outline-2 checked:outline-offset-2 focus-visible:outline-3 focus-visible:outline-offset-3",
                                   )}
                                 />
                               </div>
@@ -140,7 +166,10 @@ export default function Example() {
                       </div>
 
                       <p className="absolute top-4 left-4 text-center sm:static sm:mt-6">
-                        <a href={product.href} className="font-medium text-indigo-600 hover:text-indigo-500">
+                        <a
+                          href={product.href}
+                          className="font-medium text-indigo-600 hover:text-indigo-500"
+                        >
                           View full details
                         </a>
                       </p>
@@ -153,5 +182,5 @@ export default function Example() {
         </div>
       </div>
     </Dialog>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -14,144 +14,169 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
+} from "@headlessui/react";
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
   QuestionMarkCircleIcon,
   ShoppingBagIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { CheckCircleIcon, ChevronDownIcon, TrashIcon } from '@heroicons/react/20/solid'
+} from "@heroicons/react/24/outline";
+import {
+  CheckCircleIcon,
+  ChevronDownIcon,
+  TrashIcon,
+} from "@heroicons/react/20/solid";
 
-const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
+const currencies = ["CAD", "USD", "AUD", "EUR", "GBP"];
 const navigation = {
   categories: [
     {
-      name: 'Women',
+      name: "Women",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg",
+          imageAlt:
+            "Models sitting back to back, wearing Basic Tee in black and bone.",
         },
         {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+          name: "Basic Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg",
+          imageAlt:
+            "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
         },
         {
-          name: 'Accessories',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-03.jpg',
-          imageAlt: 'Model wearing minimalist watch with black wristband and white watch face.',
+          name: "Accessories",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-03.jpg",
+          imageAlt:
+            "Model wearing minimalist watch with black wristband and white watch face.",
         },
         {
-          name: 'Carry',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-04.jpg',
-          imageAlt: 'Model opening tan leather long wallet with credit card pockets and cash pouch.',
+          name: "Carry",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-04.jpg",
+          imageAlt:
+            "Model opening tan leather long wallet with credit card pockets and cash pouch.",
         },
       ],
     },
     {
-      name: 'Men',
+      name: "Men",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-01.jpg',
-          imageAlt: 'Hats and sweaters on wood shelves next to various colors of t-shirts on hangers.',
-        },
-        {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-02.jpg',
-          imageAlt: 'Model wearing light heather gray t-shirt.',
-        },
-        {
-          name: 'Accessories',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-03.jpg',
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-01.jpg",
           imageAlt:
-            'Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.',
+            "Hats and sweaters on wood shelves next to various colors of t-shirts on hangers.",
         },
         {
-          name: 'Carry',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-04.jpg',
-          imageAlt: 'Model putting folded cash into slim card holder olive leather wallet with hand stitching.',
+          name: "Basic Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-02.jpg",
+          imageAlt: "Model wearing light heather gray t-shirt.",
+        },
+        {
+          name: "Accessories",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-03.jpg",
+          imageAlt:
+            "Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.",
+        },
+        {
+          name: "Carry",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-04.jpg",
+          imageAlt:
+            "Model putting folded cash into slim card holder olive leather wallet with hand stitching.",
         },
       ],
     },
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: "Company", href: "#" },
+    { name: "Stores", href: "#" },
   ],
-}
+};
 const products = [
   {
     id: 1,
-    title: 'Basic Tee',
-    href: '#',
-    price: '$32.00',
-    color: 'Black',
-    size: 'Large',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/checkout-page-02-product-01.jpg',
+    title: "Basic Tee",
+    href: "#",
+    price: "$32.00",
+    color: "Black",
+    size: "Large",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/checkout-page-02-product-01.jpg",
     imageAlt: "Front of men's Basic Tee in black.",
   },
   {
     id: 2,
-    title: 'Basic Tee',
-    href: '#',
-    price: '$32.00',
-    color: 'Sienna',
-    size: 'Large',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/checkout-page-02-product-02.jpg',
+    title: "Basic Tee",
+    href: "#",
+    price: "$32.00",
+    color: "Sienna",
+    size: "Large",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/checkout-page-02-product-02.jpg",
     imageAlt: "Front of men's Basic Tee in sienna.",
   },
-]
+];
 const deliveryMethods = [
-  { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-]
+  {
+    id: 1,
+    title: "Standard",
+    turnaround: "4–10 business days",
+    price: "$5.00",
+  },
+  { id: 2, title: "Express", turnaround: "2–5 business days", price: "$16.00" },
+];
 const paymentMethods = [
-  { id: 'credit-card', title: 'Credit card' },
-  { id: 'paypal', title: 'PayPal' },
-  { id: 'etransfer', title: 'eTransfer' },
-]
+  { id: "credit-card", title: "Credit card" },
+  { id: "paypal", title: "PayPal" },
+  { id: "etransfer", title: "eTransfer" },
+];
 const footerNavigation = {
   products: [
-    { name: 'Bags', href: '#' },
-    { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' },
+    { name: "Bags", href: "#" },
+    { name: "Tees", href: "#" },
+    { name: "Objects", href: "#" },
+    { name: "Home Goods", href: "#" },
+    { name: "Accessories", href: "#" },
   ],
   company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
+    { name: "Who we are", href: "#" },
+    { name: "Sustainability", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Careers", href: "#" },
+    { name: "Terms & Conditions", href: "#" },
+    { name: "Privacy", href: "#" },
   ],
   customerService: [
-    { name: 'Contact', href: '#' },
-    { name: 'Shipping', href: '#' },
-    { name: 'Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'Secure Payments', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
+    { name: "Contact", href: "#" },
+    { name: "Shipping", href: "#" },
+    { name: "Returns", href: "#" },
+    { name: "Warranty", href: "#" },
+    { name: "Secure Payments", href: "#" },
+    { name: "FAQ", href: "#" },
+    { name: "Find a store", href: "#" },
   ],
-}
+};
 
 export default function Example() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="bg-gray-50">
@@ -194,7 +219,10 @@ export default function Example() {
               </div>
               <TabPanels as={Fragment}>
                 {navigation.categories.map((category) => (
-                  <TabPanel key={category.name} className="space-y-12 px-4 py-6">
+                  <TabPanel
+                    key={category.name}
+                    className="space-y-12 px-4 py-6"
+                  >
                     <div className="grid grid-cols-2 gap-x-4 gap-y-10">
                       {category.featured.map((item) => (
                         <div key={item.name} className="group relative">
@@ -203,11 +231,20 @@ export default function Example() {
                             src={item.imageSrc}
                             className="aspect-square w-full rounded-md bg-gray-100 object-cover group-hover:opacity-75"
                           />
-                          <a href={item.href} className="mt-6 block text-sm font-medium text-gray-900">
-                            <span aria-hidden="true" className="absolute inset-0 z-10" />
+                          <a
+                            href={item.href}
+                            className="mt-6 block text-sm font-medium text-gray-900"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="absolute inset-0 z-10"
+                            />
                             {item.name}
                           </a>
-                          <p aria-hidden="true" className="mt-1 text-sm text-gray-500">
+                          <p
+                            aria-hidden="true"
+                            className="mt-1 text-sm text-gray-500"
+                          >
                             Shop now
                           </p>
                         </div>
@@ -221,7 +258,10 @@ export default function Example() {
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               {navigation.pages.map((page) => (
                 <div key={page.name} className="flow-root">
-                  <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                  <a
+                    href={page.href}
+                    className="-m-2 block p-2 font-medium text-gray-900"
+                  >
                     {page.name}
                   </a>
                 </div>
@@ -230,12 +270,18 @@ export default function Example() {
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Create an account
                 </a>
               </div>
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Sign in
                 </a>
               </div>
@@ -292,10 +338,16 @@ export default function Example() {
               </form>
 
               <div className="flex items-center space-x-6">
-                <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
+                <a
+                  href="#"
+                  className="text-sm font-medium text-white hover:text-gray-100"
+                >
                   Sign in
                 </a>
-                <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
+                <a
+                  href="#"
+                  className="text-sm font-medium text-white hover:text-gray-100"
+                >
                   Create an account
                 </a>
               </div>
@@ -338,19 +390,31 @@ export default function Example() {
                             className="group/popover-panel absolute inset-x-0 top-full z-20 w-full bg-white text-sm text-gray-500 transition data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
                           >
                             {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                            <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow-sm" />
+                            <div
+                              aria-hidden="true"
+                              className="absolute inset-0 top-1/2 bg-white shadow-sm"
+                            />
                             <div className="relative bg-white">
                               <div className="mx-auto max-w-7xl px-8">
                                 <div className="grid grid-cols-4 gap-x-8 gap-y-10 py-16">
                                   {category.featured.map((item) => (
-                                    <div key={item.name} className="group relative">
+                                    <div
+                                      key={item.name}
+                                      className="group relative"
+                                    >
                                       <img
                                         alt={item.imageAlt}
                                         src={item.imageSrc}
                                         className="aspect-square w-full rounded-md bg-gray-100 object-cover group-hover:opacity-75"
                                       />
-                                      <a href={item.href} className="mt-4 block font-medium text-gray-900">
-                                        <span aria-hidden="true" className="absolute inset-0 z-10" />
+                                      <a
+                                        href={item.href}
+                                        className="mt-4 block font-medium text-gray-900"
+                                      >
+                                        <span
+                                          aria-hidden="true"
+                                          className="absolute inset-0 z-10"
+                                        />
                                         {item.name}
                                       </a>
                                       <p aria-hidden="true" className="mt-1">
@@ -362,7 +426,10 @@ export default function Example() {
                               </div>
                             </div>
                             {/* Presentational element to emulate a border that sits on top of the popover */}
-                            <div aria-hidden="true" className="absolute inset-0 top-0 z-10 mx-auto h-px max-w-7xl px-8">
+                            <div
+                              aria-hidden="true"
+                              className="absolute inset-0 top-0 z-10 mx-auto h-px max-w-7xl px-8"
+                            >
                               <div className="h-px w-full bg-transparent transition-colors duration-200 ease-out group-data-open/popover-panel:bg-gray-200" />
                             </div>
                           </PopoverPanel>
@@ -393,9 +460,15 @@ export default function Example() {
                   </button>
 
                   {/* Search */}
-                  <a href="#" className="ml-2 p-2 text-gray-400 hover:text-gray-500">
+                  <a
+                    href="#"
+                    className="ml-2 p-2 text-gray-400 hover:text-gray-500"
+                  >
                     <span className="sr-only">Search</span>
-                    <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                    <MagnifyingGlassIcon
+                      aria-hidden="true"
+                      className="size-6"
+                    />
                   </a>
                 </div>
 
@@ -410,17 +483,29 @@ export default function Example() {
                 </a>
 
                 <div className="flex flex-1 items-center justify-end">
-                  <a href="#" className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block">
+                  <a
+                    href="#"
+                    className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
+                  >
                     Search
                   </a>
 
                   <div className="flex items-center lg:ml-8">
                     {/* Help */}
-                    <a href="#" className="p-2 text-gray-400 hover:text-gray-500 lg:hidden">
+                    <a
+                      href="#"
+                      className="p-2 text-gray-400 hover:text-gray-500 lg:hidden"
+                    >
                       <span className="sr-only">Help</span>
-                      <QuestionMarkCircleIcon aria-hidden="true" className="size-6" />
+                      <QuestionMarkCircleIcon
+                        aria-hidden="true"
+                        className="size-6"
+                      />
                     </a>
-                    <a href="#" className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block">
+                    <a
+                      href="#"
+                      className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
+                    >
                       Help
                     </a>
 
@@ -431,7 +516,9 @@ export default function Example() {
                           aria-hidden="true"
                           className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                         />
-                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                          0
+                        </span>
                         <span className="sr-only">items in cart, view bag</span>
                       </a>
                     </div>
@@ -450,10 +537,15 @@ export default function Example() {
           <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
             <div>
               <div>
-                <h2 className="text-lg font-medium text-gray-900">Contact information</h2>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Contact information
+                </h2>
 
                 <div className="mt-4">
-                  <label htmlFor="email-address" className="block text-sm/6 font-medium text-gray-700">
+                  <label
+                    htmlFor="email-address"
+                    className="block text-sm/6 font-medium text-gray-700"
+                  >
                     Email address
                   </label>
                   <div className="mt-2">
@@ -469,11 +561,16 @@ export default function Example() {
               </div>
 
               <div className="mt-10 border-t border-gray-200 pt-10">
-                <h2 className="text-lg font-medium text-gray-900">Shipping information</h2>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Shipping information
+                </h2>
 
                 <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                   <div>
-                    <label htmlFor="first-name" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="first-name"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       First name
                     </label>
                     <div className="mt-2">
@@ -488,7 +585,10 @@ export default function Example() {
                   </div>
 
                   <div>
-                    <label htmlFor="last-name" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="last-name"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Last name
                     </label>
                     <div className="mt-2">
@@ -503,7 +603,10 @@ export default function Example() {
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label htmlFor="company" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="company"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Company
                     </label>
                     <div className="mt-2">
@@ -517,7 +620,10 @@ export default function Example() {
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label htmlFor="address" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="address"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Address
                     </label>
                     <div className="mt-2">
@@ -532,7 +638,10 @@ export default function Example() {
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label htmlFor="apartment" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="apartment"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Apartment, suite, etc.
                     </label>
                     <div className="mt-2">
@@ -546,7 +655,10 @@ export default function Example() {
                   </div>
 
                   <div>
-                    <label htmlFor="city" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="city"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       City
                     </label>
                     <div className="mt-2">
@@ -561,7 +673,10 @@ export default function Example() {
                   </div>
 
                   <div>
-                    <label htmlFor="country" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="country"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Country
                     </label>
                     <div className="mt-2 grid grid-cols-1">
@@ -583,7 +698,10 @@ export default function Example() {
                   </div>
 
                   <div>
-                    <label htmlFor="region" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="region"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       State / Province
                     </label>
                     <div className="mt-2">
@@ -598,7 +716,10 @@ export default function Example() {
                   </div>
 
                   <div>
-                    <label htmlFor="postal-code" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="postal-code"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Postal code
                     </label>
                     <div className="mt-2">
@@ -613,7 +734,10 @@ export default function Example() {
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label htmlFor="phone" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Phone
                     </label>
                     <div className="mt-2">
@@ -630,7 +754,9 @@ export default function Example() {
               </div>
 
               <div className="mt-10 border-t border-gray-200 pt-10">
-                <h2 className="text-lg font-medium text-gray-900">Delivery method</h2>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Delivery method
+                </h2>
 
                 <fieldset aria-label="Delivery method" className="mt-4">
                   <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
@@ -649,9 +775,15 @@ export default function Example() {
                           className="absolute inset-0 appearance-none focus:outline-none"
                         />
                         <div className="flex-1">
-                          <span className="block text-sm font-medium text-gray-900">{deliveryMethod.title}</span>
-                          <span className="mt-1 block text-sm text-gray-500">{deliveryMethod.turnaround}</span>
-                          <span className="mt-6 block text-sm font-medium text-gray-900">{deliveryMethod.price}</span>
+                          <span className="block text-sm font-medium text-gray-900">
+                            {deliveryMethod.title}
+                          </span>
+                          <span className="mt-1 block text-sm text-gray-500">
+                            {deliveryMethod.turnaround}
+                          </span>
+                          <span className="mt-6 block text-sm font-medium text-gray-900">
+                            {deliveryMethod.price}
+                          </span>
                         </div>
                         <CheckCircleIcon
                           aria-hidden="true"
@@ -679,7 +811,10 @@ export default function Example() {
                           type="radio"
                           className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"
                         />
-                        <label htmlFor={paymentMethod.id} className="ml-3 block text-sm/6 font-medium text-gray-700">
+                        <label
+                          htmlFor={paymentMethod.id}
+                          className="ml-3 block text-sm/6 font-medium text-gray-700"
+                        >
                           {paymentMethod.title}
                         </label>
                       </div>
@@ -689,7 +824,10 @@ export default function Example() {
 
                 <div className="mt-6 grid grid-cols-4 gap-x-4 gap-y-6">
                   <div className="col-span-4">
-                    <label htmlFor="card-number" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="card-number"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Card number
                     </label>
                     <div className="mt-2">
@@ -704,7 +842,10 @@ export default function Example() {
                   </div>
 
                   <div className="col-span-4">
-                    <label htmlFor="name-on-card" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="name-on-card"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Name on card
                     </label>
                     <div className="mt-2">
@@ -719,7 +860,10 @@ export default function Example() {
                   </div>
 
                   <div className="col-span-3">
-                    <label htmlFor="expiration-date" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="expiration-date"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       Expiration date (MM/YY)
                     </label>
                     <div className="mt-2">
@@ -734,7 +878,10 @@ export default function Example() {
                   </div>
 
                   <div>
-                    <label htmlFor="cvc" className="block text-sm/6 font-medium text-gray-700">
+                    <label
+                      htmlFor="cvc"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
                       CVC
                     </label>
                     <div className="mt-2">
@@ -753,7 +900,9 @@ export default function Example() {
 
             {/* Order summary */}
             <div className="mt-10 lg:mt-0">
-              <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
+              <h2 className="text-lg font-medium text-gray-900">
+                Order summary
+              </h2>
 
               <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-xs">
                 <h3 className="sr-only">Items in your cart</h3>
@@ -761,19 +910,30 @@ export default function Example() {
                   {products.map((product) => (
                     <li key={product.id} className="flex px-4 py-6 sm:px-6">
                       <div className="shrink-0">
-                        <img alt={product.imageAlt} src={product.imageSrc} className="w-20 rounded-md" />
+                        <img
+                          alt={product.imageAlt}
+                          src={product.imageSrc}
+                          className="w-20 rounded-md"
+                        />
                       </div>
 
                       <div className="ml-6 flex flex-1 flex-col">
                         <div className="flex">
                           <div className="min-w-0 flex-1">
                             <h4 className="text-sm">
-                              <a href={product.href} className="font-medium text-gray-700 hover:text-gray-800">
+                              <a
+                                href={product.href}
+                                className="font-medium text-gray-700 hover:text-gray-800"
+                              >
                                 {product.title}
                               </a>
                             </h4>
-                            <p className="mt-1 text-sm text-gray-500">{product.color}</p>
-                            <p className="mt-1 text-sm text-gray-500">{product.size}</p>
+                            <p className="mt-1 text-sm text-gray-500">
+                              {product.color}
+                            </p>
+                            <p className="mt-1 text-sm text-gray-500">
+                              {product.size}
+                            </p>
                           </div>
 
                           <div className="ml-4 flow-root shrink-0">
@@ -782,13 +942,18 @@ export default function Example() {
                               className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
                             >
                               <span className="sr-only">Remove</span>
-                              <TrashIcon aria-hidden="true" className="size-5" />
+                              <TrashIcon
+                                aria-hidden="true"
+                                className="size-5"
+                              />
                             </button>
                           </div>
                         </div>
 
                         <div className="flex flex-1 items-end justify-between pt-2">
-                          <p className="mt-1 text-sm font-medium text-gray-900">{product.price}</p>
+                          <p className="mt-1 text-sm font-medium text-gray-900">
+                            {product.price}
+                          </p>
 
                           <div className="ml-4 grid grid-cols-1">
                             <select
@@ -819,7 +984,9 @@ export default function Example() {
                 <dl className="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
                   <div className="flex items-center justify-between">
                     <dt className="text-sm">Subtotal</dt>
-                    <dd className="text-sm font-medium text-gray-900">$64.00</dd>
+                    <dd className="text-sm font-medium text-gray-900">
+                      $64.00
+                    </dd>
                   </div>
                   <div className="flex items-center justify-between">
                     <dt className="text-sm">Shipping</dt>
@@ -831,7 +998,9 @@ export default function Example() {
                   </div>
                   <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                     <dt className="text-base font-medium">Total</dt>
-                    <dd className="text-base font-medium text-gray-900">$75.52</dd>
+                    <dd className="text-base font-medium text-gray-900">
+                      $75.52
+                    </dd>
                   </div>
                 </dl>
 
@@ -849,7 +1018,10 @@ export default function Example() {
         </div>
       </main>
 
-      <footer aria-labelledby="footer-heading" className="border-t border-gray-200 bg-white">
+      <footer
+        aria-labelledby="footer-heading"
+        className="border-t border-gray-200 bg-white"
+      >
         <h2 id="footer-heading" className="sr-only">
           Footer
         </h2>
@@ -869,11 +1041,16 @@ export default function Example() {
               <div className="col-span-6 mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-8 md:col-start-3 md:row-start-1 md:mt-0 lg:col-span-6 lg:col-start-2">
                 <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">Products</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Products
+                    </h3>
                     <ul role="list" className="mt-6 space-y-6">
                       {footerNavigation.products.map((item) => (
                         <li key={item.name} className="text-sm">
-                          <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                          <a
+                            href={item.href}
+                            className="text-gray-500 hover:text-gray-600"
+                          >
                             {item.name}
                           </a>
                         </li>
@@ -881,11 +1058,16 @@ export default function Example() {
                     </ul>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">Company</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Company
+                    </h3>
                     <ul role="list" className="mt-6 space-y-6">
                       {footerNavigation.company.map((item) => (
                         <li key={item.name} className="text-sm">
-                          <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                          <a
+                            href={item.href}
+                            className="text-gray-500 hover:text-gray-600"
+                          >
                             {item.name}
                           </a>
                         </li>
@@ -894,11 +1076,16 @@ export default function Example() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900">Customer Service</h3>
+                  <h3 className="text-sm font-medium text-gray-900">
+                    Customer Service
+                  </h3>
                   <ul role="list" className="mt-6 space-y-6">
                     {footerNavigation.customerService.map((item) => (
                       <li key={item.name} className="text-sm">
-                        <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -909,8 +1096,12 @@ export default function Example() {
 
               {/* Newsletter section */}
               <div className="mt-12 md:col-span-8 md:col-start-3 md:row-start-2 md:mt-0 lg:col-span-4 lg:col-start-9 lg:row-start-1">
-                <h3 className="text-sm font-medium text-gray-900">Sign up for our newsletter</h3>
-                <p className="mt-6 text-sm text-gray-500">The latest deals and savings, sent to your inbox weekly.</p>
+                <h3 className="text-sm font-medium text-gray-900">
+                  Sign up for our newsletter
+                </h3>
+                <p className="mt-6 text-sm text-gray-500">
+                  The latest deals and savings, sent to your inbox weekly.
+                </p>
                 <form className="mt-2 flex sm:max-w-md">
                   <input
                     id="email-address"
@@ -934,10 +1125,12 @@ export default function Example() {
           </div>
 
           <div className="border-t border-gray-100 py-10 text-center">
-            <p className="text-sm text-gray-500">&copy; 2021 Your Company, Inc. All rights reserved.</p>
+            <p className="text-sm text-gray-500">
+              &copy; 2021 Your Company, Inc. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

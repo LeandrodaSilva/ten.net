@@ -6,99 +6,109 @@ import {
   FingerPrintIcon,
   LockClosedIcon,
   ServerIcon,
-} from '@heroicons/react/20/solid'
-import { BoltIcon, CalendarDaysIcon, UsersIcon } from '@heroicons/react/24/outline'
+} from "@heroicons/react/20/solid";
+import {
+  BoltIcon,
+  CalendarDaysIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
 
 const primaryFeatures = [
   {
-    name: 'Server monitoring',
+    name: "Server monitoring",
     description:
-      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
-    href: '#',
+      "Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.",
+    href: "#",
     icon: BoltIcon,
   },
   {
-    name: 'Collaborate',
+    name: "Collaborate",
     description:
-      'Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.',
-    href: '#',
+      "Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.",
+    href: "#",
     icon: UsersIcon,
   },
   {
-    name: 'Task scheduling',
+    name: "Task scheduling",
     description:
-      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
-    href: '#',
+      "Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.",
+    href: "#",
     icon: CalendarDaysIcon,
   },
-]
+];
 const secondaryFeatures = [
   {
-    name: 'Push to deploy.',
-    description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.',
+    name: "Push to deploy.",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
     icon: CloudArrowUpIcon,
   },
   {
-    name: 'SSL certificates.',
-    description: 'Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.',
+    name: "SSL certificates.",
+    description:
+      "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
     icon: LockClosedIcon,
   },
   {
-    name: 'Simple queues.',
-    description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.',
+    name: "Simple queues.",
+    description:
+      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.",
     icon: ArrowPathIcon,
   },
   {
-    name: 'Advanced security.',
-    description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.',
+    name: "Advanced security.",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
     icon: FingerPrintIcon,
   },
   {
-    name: 'Powerful API.',
-    description: 'Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.',
+    name: "Powerful API.",
+    description:
+      "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
     icon: Cog6ToothIcon,
   },
   {
-    name: 'Database backups.',
-    description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.',
+    name: "Database backups.",
+    description:
+      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.",
     icon: ServerIcon,
   },
-]
+];
 const stats = [
-  { id: 1, name: 'Developers on the platform', value: '8,000+' },
-  { id: 2, name: 'Daily requests', value: '900m+' },
-  { id: 3, name: 'Uptime guarantee', value: '99.9%' },
-  { id: 4, name: 'Projects deployed', value: '12m' },
-]
+  { id: 1, name: "Developers on the platform", value: "8,000+" },
+  { id: 2, name: "Daily requests", value: "900m+" },
+  { id: 3, name: "Uptime guarantee", value: "99.9%" },
+  { id: 4, name: "Projects deployed", value: "12m" },
+];
 const footerNavigation = {
   solutions: [
-    { name: 'Hosting', href: '#' },
-    { name: 'Data Services', href: '#' },
-    { name: 'Uptime Monitoring', href: '#' },
-    { name: 'Enterprise Services', href: '#' },
+    { name: "Hosting", href: "#" },
+    { name: "Data Services", href: "#" },
+    { name: "Uptime Monitoring", href: "#" },
+    { name: "Enterprise Services", href: "#" },
   ],
   support: [
-    { name: 'Pricing', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
-    { name: 'API Reference', href: '#' },
+    { name: "Pricing", href: "#" },
+    { name: "Documentation", href: "#" },
+    { name: "Guides", href: "#" },
+    { name: "API Reference", href: "#" },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Partners', href: '#' },
+    { name: "About", href: "#" },
+    { name: "Blog", href: "#" },
+    { name: "Jobs", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Partners", href: "#" },
   ],
   legal: [
-    { name: 'Claim', href: '#' },
-    { name: 'Privacy', href: '#' },
-    { name: 'Terms', href: '#' },
+    { name: "Claim", href: "#" },
+    { name: "Privacy", href: "#" },
+    { name: "Terms", href: "#" },
   ],
   social: [
     {
-      name: 'Facebook',
-      href: '#',
+      name: "Facebook",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -110,8 +120,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'Instagram',
-      href: '#',
+      name: "Instagram",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -123,8 +133,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'X',
-      href: '#',
+      name: "X",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" />
@@ -132,8 +142,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'GitHub',
-      href: '#',
+      name: "GitHub",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -145,8 +155,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'YouTube',
-      href: '#',
+      name: "YouTube",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -158,7 +168,7 @@ const footerNavigation = {
       ),
     },
   ],
-}
+};
 
 export default function Example() {
   return (
@@ -182,13 +192,22 @@ export default function Example() {
                 <path d="M.5 200V.5H200" fill="none" />
               </pattern>
             </defs>
-            <svg x="50%" y={-1} className="overflow-visible fill-gray-50 dark:fill-gray-800/20">
+            <svg
+              x="50%"
+              y={-1}
+              className="overflow-visible fill-gray-50 dark:fill-gray-800/20"
+            >
               <path
                 d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
                 strokeWidth={0}
               />
             </svg>
-            <rect fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)" width="100%" height="100%" strokeWidth={0} />
+            <rect
+              fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)"
+              width="100%"
+              height="100%"
+              strokeWidth={0}
+            />
           </svg>
           <div
             aria-hidden="true"
@@ -197,7 +216,7 @@ export default function Example() {
             <div
               style={{
                 clipPath:
-                  'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
+                  "polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)",
               }}
               className="aspect-1108/632 w-277 bg-linear-to-r from-[#80caff] to-[#4f46e5] opacity-20"
             />
@@ -221,7 +240,10 @@ export default function Example() {
                   </span>
                   <span className="inline-flex items-center space-x-2 text-sm/6 font-medium text-gray-600 dark:text-gray-300">
                     <span>Just shipped v1.0</span>
-                    <ChevronRightIcon aria-hidden="true" className="size-5 text-gray-400 dark:text-gray-500" />
+                    <ChevronRightIcon
+                      aria-hidden="true"
+                      className="size-5 text-gray-400 dark:text-gray-500"
+                    />
                   </span>
                 </a>
               </div>
@@ -229,8 +251,8 @@ export default function Example() {
                 Deploy to the cloud with confidence
               </h1>
               <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8 dark:text-gray-400">
-                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-                fugiat veniam occaecat.
+                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
+                lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
                 <a
@@ -239,7 +261,10 @@ export default function Example() {
                 >
                   Get started
                 </a>
-                <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                <a
+                  href="#"
+                  className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+                >
                   Learn more <span aria-hidden="true">→</span>
                 </a>
               </div>
@@ -351,13 +376,16 @@ export default function Example() {
         {/* Feature section */}
         <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Deploy faster</h2>
+            <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+              Deploy faster
+            </h2>
             <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance dark:text-white">
               Everything you need to deploy your app
             </p>
             <p className="mt-6 text-lg/8 text-gray-600 dark:text-gray-300">
-              Quis tellus eget adipiscing convallis sit sit eget aliquet quis. Suspendisse eget egestas a elementum
-              pulvinar et feugiat blandit at. In mi viverra elit nunc.
+              Quis tellus eget adipiscing convallis sit sit eget aliquet quis.
+              Suspendisse eget egestas a elementum pulvinar et feugiat blandit
+              at. In mi viverra elit nunc.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -366,7 +394,10 @@ export default function Example() {
                 <div key={feature.name} className="flex flex-col">
                   <dt className="text-base/7 font-semibold text-gray-900 dark:text-white">
                     <div className="mb-6 flex size-10 items-center justify-center rounded-lg bg-indigo-600 dark:bg-indigo-500">
-                      <feature.icon aria-hidden="true" className="size-6 text-white" />
+                      <feature.icon
+                        aria-hidden="true"
+                        className="size-6 text-white"
+                      />
                     </div>
                     {feature.name}
                   </dt>
@@ -391,13 +422,16 @@ export default function Example() {
         <div className="mt-32 sm:mt-56">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl sm:text-center">
-              <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Everything you need</h2>
+              <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+                Everything you need
+              </h2>
               <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl sm:text-balance dark:text-white">
                 No server? No problem.
               </p>
               <p className="mt-6 text-lg/8 text-gray-600 dark:text-gray-300">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque,
-                iste dolor cupiditate blanditiis.
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Maiores impedit perferendis suscipit eaque, iste dolor
+                cupiditate blanditiis.
               </p>
             </div>
           </div>
@@ -432,7 +466,7 @@ export default function Example() {
                       className="absolute top-1 left-1 size-5 text-indigo-600 dark:text-indigo-400"
                     />
                     {feature.name}
-                  </dt>{' '}
+                  </dt>{" "}
                   <dd className="inline">{feature.description}</dd>
                 </div>
               ))}
@@ -443,13 +477,16 @@ export default function Example() {
         {/* Stats */}
         <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
           <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
-            <h2 className="text-base/8 font-semibold text-indigo-600 dark:text-indigo-400">Our track record</h2>
+            <h2 className="text-base/8 font-semibold text-indigo-600 dark:text-indigo-400">
+              Our track record
+            </h2>
             <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl dark:text-white">
               Trusted by thousands of creators&nbsp;worldwide
             </p>
             <p className="mt-6 text-lg/8 text-gray-700 dark:text-gray-300">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste
-              dolor cupiditate blanditiis.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores
+              impedit perferendis suscipit eaque, iste dolor cupiditate
+              blanditiis.
             </p>
           </div>
           <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-10 text-gray-900 sm:mt-20 sm:grid-cols-2 sm:gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-4 dark:text-white">
@@ -459,7 +496,9 @@ export default function Example() {
                 className="flex flex-col gap-y-3 border-l border-gray-900/15 pl-6 dark:border-white/10"
               >
                 <dt className="text-sm/6">{stat.name}</dt>
-                <dd className="order-first text-3xl font-semibold tracking-tight">{stat.value}</dd>
+                <dd className="order-first text-3xl font-semibold tracking-tight">
+                  {stat.value}
+                </dd>
               </div>
             ))}
           </dl>
@@ -483,13 +522,22 @@ export default function Example() {
                 <path d="M.5 200V.5H200" fill="none" />
               </pattern>
             </defs>
-            <svg x="50%" y={0} className="overflow-visible fill-gray-50 dark:fill-gray-800/20">
+            <svg
+              x="50%"
+              y={0}
+              className="overflow-visible fill-gray-50 dark:fill-gray-800/20"
+            >
               <path
                 d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
                 strokeWidth={0}
               />
             </svg>
-            <rect fill="url(#1d4240dd-898f-445f-932d-e2872fd12de3)" width="100%" height="100%" strokeWidth={0} />
+            <rect
+              fill="url(#1d4240dd-898f-445f-932d-e2872fd12de3)"
+              width="100%"
+              height="100%"
+              strokeWidth={0}
+            />
           </svg>
           <div
             aria-hidden="true"
@@ -498,7 +546,7 @@ export default function Example() {
             <div
               style={{
                 clipPath:
-                  'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
+                  "polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)",
               }}
               className="aspect-1108/632 w-277 flex-none bg-linear-to-r from-[#80caff] to-[#4f46e5] opacity-20"
             />
@@ -508,8 +556,8 @@ export default function Example() {
               Boost your productivity. Start using our app today.
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg/8 text-pretty text-gray-600 dark:text-gray-300">
-              Incididunt sint fugiat pariatur cupidatat consectetur sit cillum anim id veniam aliqua proident excepteur
-              commodo do ea.
+              Incididunt sint fugiat pariatur cupidatat consectetur sit cillum
+              anim id veniam aliqua proident excepteur commodo do ea.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a
@@ -518,7 +566,10 @@ export default function Example() {
               >
                 Get started
               </a>
-              <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+              <a
+                href="#"
+                className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+              >
                 Learn more <span aria-hidden="true">→</span>
               </a>
             </div>
@@ -547,5 +598,5 @@ export default function Example() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

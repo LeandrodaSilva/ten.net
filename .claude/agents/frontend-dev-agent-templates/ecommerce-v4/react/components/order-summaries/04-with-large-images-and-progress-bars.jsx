@@ -1,48 +1,55 @@
 const products = [
   {
     id: 1,
-    name: 'Distant Mountains Artwork Tee',
-    price: '$36.00',
-    description: 'You awake in a new, mysterious land. Mist hangs low along the distant mountains. What does it mean?',
-    address: ['Floyd Miles', '7363 Cynthia Pass', 'Toronto, ON N3Y 4H8'],
-    email: 'f•••@example.com',
-    phone: '1•••••••••40',
-    href: '#',
-    status: 'Processing',
+    name: "Distant Mountains Artwork Tee",
+    price: "$36.00",
+    description:
+      "You awake in a new, mysterious land. Mist hangs low along the distant mountains. What does it mean?",
+    address: ["Floyd Miles", "7363 Cynthia Pass", "Toronto, ON N3Y 4H8"],
+    email: "f•••@example.com",
+    phone: "1•••••••••40",
+    href: "#",
+    status: "Processing",
     step: 1,
-    date: 'March 24, 2021',
-    datetime: '2021-03-24',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/confirmation-page-04-product-01.jpg',
-    imageAlt: 'Off-white t-shirt with circular dot illustration on the front of mountain ridges that fade.',
+    date: "March 24, 2021",
+    datetime: "2021-03-24",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/confirmation-page-04-product-01.jpg",
+    imageAlt:
+      "Off-white t-shirt with circular dot illustration on the front of mountain ridges that fade.",
   },
   {
     id: 2,
-    name: 'Rainfall Artwork Tee',
-    price: '$36.00',
+    name: "Rainfall Artwork Tee",
+    price: "$36.00",
     description:
-      'A foreboding archway leads outside. Heavy rains descend upon the earth. Your destiny awaits. Hold up, are we still talking about t-shirts?',
-    address: ['Floyd Miles', '7363 Cynthia Pass', 'Toronto, ON N3Y 4H8'],
-    email: 'f•••@example.com',
-    phone: '1•••••••••40',
-    href: '#',
-    status: 'Shipped',
+      "A foreboding archway leads outside. Heavy rains descend upon the earth. Your destiny awaits. Hold up, are we still talking about t-shirts?",
+    address: ["Floyd Miles", "7363 Cynthia Pass", "Toronto, ON N3Y 4H8"],
+    email: "f•••@example.com",
+    phone: "1•••••••••40",
+    href: "#",
+    status: "Shipped",
     step: 2,
-    date: 'March 23, 2021',
-    datetime: '2021-03-23',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/confirmation-page-04-product-02.jpg',
-    imageAlt: 'Dark green t-shirt with arched gradient on the front that fades away.',
+    date: "March 23, 2021",
+    datetime: "2021-03-23",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/confirmation-page-04-product-02.jpg",
+    imageAlt:
+      "Dark green t-shirt with arched gradient on the front that fades away.",
   },
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Order Details</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          Order Details
+        </h1>
 
         <div className="mt-2 border-b border-gray-200 pb-5 text-sm sm:flex sm:justify-between">
           <dl className="flex">
@@ -59,9 +66,12 @@ export default function Example() {
             </dd>
           </dl>
           <div className="mt-4 sm:mt-0">
-            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <a
+              href="#"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
               View invoice
-              <span aria-hidden="true"> &rarr;</span>
+              <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </div>
@@ -86,13 +96,17 @@ export default function Example() {
                   <h3 className="text-lg font-medium text-gray-900">
                     <a href={product.href}>{product.name}</a>
                   </h3>
-                  <p className="mt-1 font-medium text-gray-900">{product.price}</p>
+                  <p className="mt-1 font-medium text-gray-900">
+                    {product.price}
+                  </p>
                   <p className="mt-3 text-gray-500">{product.description}</p>
                 </div>
                 <div className="sm:col-span-12 md:col-span-7">
                   <dl className="grid grid-cols-1 gap-y-8 border-b border-gray-200 py-8 sm:grid-cols-2 sm:gap-x-6 sm:py-6 md:py-10">
                     <div>
-                      <dt className="font-medium text-gray-900">Delivery address</dt>
+                      <dt className="font-medium text-gray-900">
+                        Delivery address
+                      </dt>
                       <dd className="mt-3 text-gray-500">
                         <span className="block">{product.address[0]}</span>
                         <span className="block">{product.address[1]}</span>
@@ -100,35 +114,58 @@ export default function Example() {
                       </dd>
                     </div>
                     <div>
-                      <dt className="font-medium text-gray-900">Shipping updates</dt>
+                      <dt className="font-medium text-gray-900">
+                        Shipping updates
+                      </dt>
                       <dd className="mt-3 space-y-3 text-gray-500">
                         <p>{product.email}</p>
                         <p>{product.phone}</p>
-                        <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
+                        <button
+                          type="button"
+                          className="font-medium text-indigo-600 hover:text-indigo-500"
+                        >
                           Edit
                         </button>
                       </dd>
                     </div>
                   </dl>
                   <p className="mt-6 font-medium text-gray-900 md:mt-10">
-                    {product.status} on <time dateTime={product.datetime}>{product.date}</time>
+                    {product.status} on{" "}
+                    <time dateTime={product.datetime}>{product.date}</time>
                   </p>
                   <div className="mt-6">
                     <div className="overflow-hidden rounded-full bg-gray-200">
                       <div
-                        style={{ width: `calc((${product.step} * 2 + 1) / 8 * 100%)` }}
+                        style={{
+                          width: `calc((${product.step} * 2 + 1) / 8 * 100%)`,
+                        }}
                         className="h-2 rounded-full bg-indigo-600"
                       />
                     </div>
                     <div className="mt-6 hidden grid-cols-4 font-medium text-gray-600 sm:grid">
                       <div className="text-indigo-600">Order placed</div>
-                      <div className={classNames(product.step > 0 ? 'text-indigo-600' : '', 'text-center')}>
+                      <div
+                        className={classNames(
+                          product.step > 0 ? "text-indigo-600" : "",
+                          "text-center",
+                        )}
+                      >
                         Processing
                       </div>
-                      <div className={classNames(product.step > 1 ? 'text-indigo-600' : '', 'text-center')}>
+                      <div
+                        className={classNames(
+                          product.step > 1 ? "text-indigo-600" : "",
+                          "text-center",
+                        )}
+                      >
                         Shipped
                       </div>
-                      <div className={classNames(product.step > 2 ? 'text-indigo-600' : '', 'text-right')}>
+                      <div
+                        className={classNames(
+                          product.step > 2 ? "text-indigo-600" : "",
+                          "text-right",
+                        )}
+                      >
                         Delivered
                       </div>
                     </div>
@@ -154,10 +191,18 @@ export default function Example() {
                 </dd>
               </div>
               <div>
-                <dt className="font-medium text-gray-900">Payment information</dt>
+                <dt className="font-medium text-gray-900">
+                  Payment information
+                </dt>
                 <dd className="mt-3 flex">
                   <div>
-                    <svg width={36} height={24} viewBox="0 0 36 24" aria-hidden="true" className="h-6 w-auto">
+                    <svg
+                      width={36}
+                      height={24}
+                      viewBox="0 0 36 24"
+                      aria-hidden="true"
+                      className="h-6 w-auto"
+                    >
                       <rect rx={4} fill="#224DBA" width={36} height={24} />
                       <path
                         d="M10.925 15.673H8.874l-1.538-6c-.073-.276-.228-.52-.456-.635A6.575 6.575 0 005 8.403v-.231h3.304c.456 0 .798.347.855.75l.798 4.328 2.05-5.078h1.994l-3.076 7.5zm4.216 0h-1.937L14.8 8.172h1.937l-1.595 7.5zm4.101-5.422c.057-.404.399-.635.798-.635a3.54 3.54 0 011.88.346l.342-1.615A4.808 4.808 0 0020.496 8c-1.88 0-3.248 1.039-3.248 2.481 0 1.097.969 1.673 1.653 2.02.74.346 1.025.577.968.923 0 .519-.57.75-1.139.75a4.795 4.795 0 01-1.994-.462l-.342 1.616a5.48 5.48 0 002.108.404c2.108.057 3.418-.981 3.418-2.539 0-1.962-2.678-2.077-2.678-2.942zm9.457 5.422L27.16 8.172h-1.652a.858.858 0 00-.798.577l-2.848 6.924h1.994l.398-1.096h2.45l.228 1.096h1.766zm-2.905-5.482l.57 2.827h-1.596l1.026-2.827z"
@@ -196,5 +241,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

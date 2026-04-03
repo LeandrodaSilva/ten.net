@@ -1,60 +1,71 @@
 const products = [
   {
     id: 1,
-    name: 'Nomad Pouch',
-    href: '#',
-    price: '$50',
-    availability: 'White and Black',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-01.jpg',
-    imageAlt: 'White fabric pouch with white zipper, black zipper pull, and black elastic loop.',
+    name: "Nomad Pouch",
+    href: "#",
+    price: "$50",
+    availability: "White and Black",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-01.jpg",
+    imageAlt:
+      "White fabric pouch with white zipper, black zipper pull, and black elastic loop.",
   },
   {
     id: 2,
-    name: 'Zip Tote Basket',
-    href: '#',
-    price: '$140',
-    availability: 'Washed Black',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-02.jpg',
-    imageAlt: 'Front of tote bag with washed black canvas body, black straps, and tan leather handles and accents.',
+    name: "Zip Tote Basket",
+    href: "#",
+    price: "$140",
+    availability: "Washed Black",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-02.jpg",
+    imageAlt:
+      "Front of tote bag with washed black canvas body, black straps, and tan leather handles and accents.",
   },
   {
     id: 3,
-    name: 'Medium Stuff Satchel',
-    href: '#',
-    price: '$220',
-    availability: 'Blue',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-03.jpg',
+    name: "Medium Stuff Satchel",
+    href: "#",
+    price: "$220",
+    availability: "Blue",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-03.jpg",
     imageAlt:
-      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
+      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
   },
   {
     id: 4,
-    name: 'High Wall Tote',
-    href: '#',
-    price: '$210',
-    availability: 'Black and Orange',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-04.jpg',
-    imageAlt: 'Front of zip tote bag with black canvas, black handles, and orange drawstring top.',
+    name: "High Wall Tote",
+    href: "#",
+    price: "$210",
+    availability: "Black and Orange",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-04.jpg",
+    imageAlt:
+      "Front of zip tote bag with black canvas, black handles, and orange drawstring top.",
   },
   {
     id: 5,
-    name: 'Zip Tote Basket',
-    href: '#',
-    price: '$140',
-    availability: 'White and black',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-05.jpg',
-    imageAlt: 'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
+    name: "Zip Tote Basket",
+    href: "#",
+    price: "$140",
+    availability: "White and black",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-05.jpg",
+    imageAlt:
+      "Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.",
   },
   {
     id: 6,
-    name: 'Zip High Wall Tote',
-    href: '#',
-    price: '$150',
-    availability: 'White and blue',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-06.jpg',
-    imageAlt: 'Front of zip tote bag with white canvas, blue canvas straps and handle, and front zipper pocket.',
+    name: "Zip High Wall Tote",
+    href: "#",
+    price: "$150",
+    availability: "White and blue",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-06.jpg",
+    imageAlt:
+      "Front of zip tote bag with white canvas, blue canvas straps and handle, and front zipper pocket.",
   },
-]
+];
 
 export default function Example() {
   return (
@@ -76,5 +87,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

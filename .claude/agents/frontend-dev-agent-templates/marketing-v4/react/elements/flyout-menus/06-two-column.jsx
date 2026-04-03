@@ -1,5 +1,5 @@
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import {
   ArrowPathIcon,
   ChartPieIcon,
@@ -7,31 +7,46 @@ import {
   DocumentChartBarIcon,
   FingerPrintIcon,
   SquaresPlusIcon,
-} from '@heroicons/react/24/outline'
+} from "@heroicons/react/24/outline";
 
 const solutions = [
-  { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
   {
-    name: 'Integrations',
-    description: 'Connect with third-party tools and find out expectations',
-    href: '#',
+    name: "Analytics",
+    description: "Get a better understanding of your traffic",
+    href: "#",
+    icon: ChartPieIcon,
+  },
+  {
+    name: "Integrations",
+    description: "Connect with third-party tools and find out expectations",
+    href: "#",
     icon: SquaresPlusIcon,
   },
   {
-    name: 'Engagement',
-    description: 'Speak directly to your customers with our engagement tool',
-    href: '#',
+    name: "Engagement",
+    description: "Speak directly to your customers with our engagement tool",
+    href: "#",
     icon: CursorArrowRaysIcon,
   },
-  { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
-  { name: 'Security', description: "Your customers' data will be safe and secure", href: '#', icon: FingerPrintIcon },
   {
-    name: 'Reports',
-    description: 'Edit, manage and create newly informed decisions',
-    href: '#',
+    name: "Automations",
+    description: "Build strategic funnels that will convert",
+    href: "#",
+    icon: ArrowPathIcon,
+  },
+  {
+    name: "Security",
+    description: "Your customers' data will be safe and secure",
+    href: "#",
+    icon: FingerPrintIcon,
+  },
+  {
+    name: "Reports",
+    description: "Edit, manage and create newly informed decisions",
+    href: "#",
     icon: DocumentChartBarIcon,
   },
-]
+];
 
 export default function Example() {
   return (
@@ -59,18 +74,25 @@ export default function Example() {
                   />
                 </div>
                 <div>
-                  <a href={item.href} className="font-semibold text-gray-900 dark:text-white">
+                  <a
+                    href={item.href}
+                    className="font-semibold text-gray-900 dark:text-white"
+                  >
                     {item.name}
                     <span className="absolute inset-0" />
                   </a>
-                  <p className="mt-1 text-gray-600 dark:text-gray-400">{item.description}</p>
+                  <p className="mt-1 text-gray-600 dark:text-gray-400">
+                    {item.description}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
           <div className="bg-gray-50 px-8 py-6 dark:bg-gray-700/50">
             <div className="flex items-center gap-x-3">
-              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Enterprise</h3>
+              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                Enterprise
+              </h3>
               <p className="rounded-full bg-indigo-600/10 px-2.5 py-1.5 text-xs font-semibold text-indigo-600 dark:bg-indigo-400/10 dark:text-indigo-400">
                 New
               </p>
@@ -82,5 +104,5 @@ export default function Example() {
         </div>
       </PopoverPanel>
     </Popover>
-  )
+  );
 }

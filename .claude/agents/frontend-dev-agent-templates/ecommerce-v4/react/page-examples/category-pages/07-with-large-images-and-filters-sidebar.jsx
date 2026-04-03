@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -21,300 +21,336 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
+} from "@headlessui/react";
+import {
+  Bars3Icon,
+  MagnifyingGlassIcon,
+  ShoppingBagIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  FunnelIcon,
+  MinusIcon,
+  PlusIcon,
+  Squares2X2Icon,
+} from "@heroicons/react/20/solid";
 
 const navigation = {
   categories: [
     {
-      id: 'women',
-      name: 'Women',
+      id: "women",
+      name: "Women",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg",
+          imageAlt:
+            "Models sitting back to back, wearing Basic Tee in black and bone.",
         },
         {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+          name: "Basic Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg",
+          imageAlt:
+            "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
         },
       ],
       sections: [
         {
-          id: 'clothing',
-          name: 'Clothing',
+          id: "clothing",
+          name: "Clothing",
           items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Dresses', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Denim', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: "Tops", href: "#" },
+            { name: "Dresses", href: "#" },
+            { name: "Pants", href: "#" },
+            { name: "Denim", href: "#" },
+            { name: "Sweaters", href: "#" },
+            { name: "T-Shirts", href: "#" },
+            { name: "Jackets", href: "#" },
+            { name: "Activewear", href: "#" },
+            { name: "Browse All", href: "#" },
           ],
         },
         {
-          id: 'accessories',
-          name: 'Accessories',
+          id: "accessories",
+          name: "Accessories",
           items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
+            { name: "Watches", href: "#" },
+            { name: "Wallets", href: "#" },
+            { name: "Bags", href: "#" },
+            { name: "Sunglasses", href: "#" },
+            { name: "Hats", href: "#" },
+            { name: "Belts", href: "#" },
           ],
         },
         {
-          id: 'brands',
-          name: 'Brands',
+          id: "brands",
+          name: "Brands",
           items: [
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Significant Other', href: '#' },
+            { name: "Full Nelson", href: "#" },
+            { name: "My Way", href: "#" },
+            { name: "Re-Arranged", href: "#" },
+            { name: "Counterfeit", href: "#" },
+            { name: "Significant Other", href: "#" },
           ],
         },
       ],
     },
     {
-      id: 'men',
-      name: 'Men',
+      id: "men",
+      name: "Men",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
+          name: "New Arrivals",
+          href: "#",
           imageSrc:
-            'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
+          imageAlt:
+            "Drawstring top with elastic loop closure and textured interior padding.",
         },
         {
-          name: 'Artwork Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-06.jpg',
+          name: "Artwork Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-06.jpg",
           imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
+            "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
         },
       ],
       sections: [
         {
-          id: 'clothing',
-          name: 'Clothing',
+          id: "clothing",
+          name: "Clothing",
           items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: "Tops", href: "#" },
+            { name: "Pants", href: "#" },
+            { name: "Sweaters", href: "#" },
+            { name: "T-Shirts", href: "#" },
+            { name: "Jackets", href: "#" },
+            { name: "Activewear", href: "#" },
+            { name: "Browse All", href: "#" },
           ],
         },
         {
-          id: 'accessories',
-          name: 'Accessories',
+          id: "accessories",
+          name: "Accessories",
           items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
+            { name: "Watches", href: "#" },
+            { name: "Wallets", href: "#" },
+            { name: "Bags", href: "#" },
+            { name: "Sunglasses", href: "#" },
+            { name: "Hats", href: "#" },
+            { name: "Belts", href: "#" },
           ],
         },
         {
-          id: 'brands',
-          name: 'Brands',
+          id: "brands",
+          name: "Brands",
           items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
+            { name: "Re-Arranged", href: "#" },
+            { name: "Counterfeit", href: "#" },
+            { name: "Full Nelson", href: "#" },
+            { name: "My Way", href: "#" },
           ],
         },
       ],
     },
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: "Company", href: "#" },
+    { name: "Stores", href: "#" },
   ],
-}
+};
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-]
+  { name: "Most Popular", href: "#", current: true },
+  { name: "Best Rating", href: "#", current: false },
+  { name: "Newest", href: "#", current: false },
+  { name: "Price: Low to High", href: "#", current: false },
+  { name: "Price: High to Low", href: "#", current: false },
+];
 const subCategories = [
-  { name: 'Totes', href: '#' },
-  { name: 'Backpacks', href: '#' },
-  { name: 'Travel Bags', href: '#' },
-  { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' },
-]
+  { name: "Totes", href: "#" },
+  { name: "Backpacks", href: "#" },
+  { name: "Travel Bags", href: "#" },
+  { name: "Hip Bags", href: "#" },
+  { name: "Laptop Sleeves", href: "#" },
+];
 const filters = [
   {
-    id: 'color',
-    name: 'Color',
+    id: "color",
+    name: "Color",
     options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
-      { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
+      { value: "white", label: "White", checked: false },
+      { value: "beige", label: "Beige", checked: false },
+      { value: "blue", label: "Blue", checked: true },
+      { value: "brown", label: "Brown", checked: false },
+      { value: "green", label: "Green", checked: false },
+      { value: "purple", label: "Purple", checked: false },
     ],
   },
   {
-    id: 'category',
-    name: 'Category',
+    id: "category",
+    name: "Category",
     options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
+      { value: "new-arrivals", label: "New Arrivals", checked: false },
+      { value: "sale", label: "Sale", checked: false },
+      { value: "travel", label: "Travel", checked: true },
+      { value: "organization", label: "Organization", checked: false },
+      { value: "accessories", label: "Accessories", checked: false },
     ],
   },
   {
-    id: 'size',
-    name: 'Size',
+    id: "size",
+    name: "Size",
     options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
+      { value: "2l", label: "2L", checked: false },
+      { value: "6l", label: "6L", checked: false },
+      { value: "12l", label: "12L", checked: false },
+      { value: "18l", label: "18L", checked: false },
+      { value: "20l", label: "20L", checked: false },
+      { value: "40l", label: "40L", checked: true },
     ],
   },
-]
+];
 const products = [
   {
     id: 1,
-    name: 'Nomad Pouch',
-    href: '#',
-    price: '$50',
-    availability: 'White and Black',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-01.jpg',
-    imageAlt: 'White fabric pouch with white zipper, black zipper pull, and black elastic loop.',
+    name: "Nomad Pouch",
+    href: "#",
+    price: "$50",
+    availability: "White and Black",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-01.jpg",
+    imageAlt:
+      "White fabric pouch with white zipper, black zipper pull, and black elastic loop.",
   },
   {
     id: 2,
-    name: 'Zip Tote Basket',
-    href: '#',
-    price: '$140',
-    availability: 'Washed Black',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-02.jpg',
-    imageAlt: 'Front of tote bag with washed black canvas body, black straps, and tan leather handles and accents.',
+    name: "Zip Tote Basket",
+    href: "#",
+    price: "$140",
+    availability: "Washed Black",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-02.jpg",
+    imageAlt:
+      "Front of tote bag with washed black canvas body, black straps, and tan leather handles and accents.",
   },
   {
     id: 3,
-    name: 'Medium Stuff Satchel',
-    href: '#',
-    price: '$220',
-    availability: 'Blue',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-03.jpg',
+    name: "Medium Stuff Satchel",
+    href: "#",
+    price: "$220",
+    availability: "Blue",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-03.jpg",
     imageAlt:
-      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
+      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
   },
   {
     id: 4,
-    name: 'High Wall Tote',
-    href: '#',
-    price: '$210',
-    availability: 'Black and Orange',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-04.jpg',
-    imageAlt: 'Front of zip tote bag with black canvas, black handles, and orange drawstring top.',
+    name: "High Wall Tote",
+    href: "#",
+    price: "$210",
+    availability: "Black and Orange",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-04.jpg",
+    imageAlt:
+      "Front of zip tote bag with black canvas, black handles, and orange drawstring top.",
   },
   {
     id: 5,
-    name: 'Zip Tote Basket',
-    href: '#',
-    price: '$140',
-    availability: 'White and black',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-05.jpg',
-    imageAlt: 'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
+    name: "Zip Tote Basket",
+    href: "#",
+    price: "$140",
+    availability: "White and black",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-05.jpg",
+    imageAlt:
+      "Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.",
   },
   {
     id: 6,
-    name: 'Zip High Wall Tote',
-    href: '#',
-    price: '$150',
-    availability: 'White and blue',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-06.jpg',
-    imageAlt: 'Front of zip tote bag with white canvas, blue canvas straps and handle, and front zipper pocket.',
+    name: "Zip High Wall Tote",
+    href: "#",
+    price: "$150",
+    availability: "White and blue",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-06.jpg",
+    imageAlt:
+      "Front of zip tote bag with white canvas, blue canvas straps and handle, and front zipper pocket.",
   },
   {
     id: 7,
-    name: 'Throwback Hip Bag',
-    href: '#',
-    price: '$90',
-    availability: 'Salmon',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-07.jpg',
-    imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
+    name: "Throwback Hip Bag",
+    href: "#",
+    price: "$90",
+    availability: "Salmon",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-07.jpg",
+    imageAlt:
+      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
   },
   {
     id: 8,
-    name: 'Halfsize Tote',
-    href: '#',
-    price: '$210',
-    availability: 'Clay',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-08.jpg',
-    imageAlt: 'Front of tote with monochrome natural canvas body, straps, roll top, and handles.',
+    name: "Halfsize Tote",
+    href: "#",
+    price: "$210",
+    availability: "Clay",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-07-product-08.jpg",
+    imageAlt:
+      "Front of tote with monochrome natural canvas body, straps, roll top, and handles.",
   },
-]
+];
 const footerNavigation = {
   account: [
-    { name: 'Manage Account', href: '#' },
-    { name: 'Saved Items', href: '#' },
-    { name: 'Orders', href: '#' },
-    { name: 'Redeem Gift card', href: '#' },
+    { name: "Manage Account", href: "#" },
+    { name: "Saved Items", href: "#" },
+    { name: "Orders", href: "#" },
+    { name: "Redeem Gift card", href: "#" },
   ],
   service: [
-    { name: 'Shipping & Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
-    { name: 'Get in touch', href: '#' },
+    { name: "Shipping & Returns", href: "#" },
+    { name: "Warranty", href: "#" },
+    { name: "FAQ", href: "#" },
+    { name: "Find a store", href: "#" },
+    { name: "Get in touch", href: "#" },
   ],
   company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
+    { name: "Who we are", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Careers", href: "#" },
+    { name: "Terms & Conditions", href: "#" },
+    { name: "Privacy", href: "#" },
   ],
   connect: [
-    { name: 'Facebook', href: '#' },
-    { name: 'Instagram', href: '#' },
-    { name: 'Pinterest', href: '#' },
+    { name: "Facebook", href: "#" },
+    { name: "Instagram", href: "#" },
+    { name: "Pinterest", href: "#" },
   ],
-}
+};
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return (
     <div className="bg-white">
       <div>
         {/* Mobile menu */}
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="relative z-40 lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="relative z-40 lg:hidden"
+        >
           <DialogBackdrop
             transition
             className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
@@ -352,17 +388,29 @@ export default function Example() {
                 </div>
                 <TabPanels as={Fragment}>
                   {navigation.categories.map((category) => (
-                    <TabPanel key={category.name} className="space-y-10 px-4 pt-10 pb-8">
+                    <TabPanel
+                      key={category.name}
+                      className="space-y-10 px-4 pt-10 pb-8"
+                    >
                       <div className="grid grid-cols-2 gap-x-4">
                         {category.featured.map((item) => (
-                          <div key={item.name} className="group relative text-sm">
+                          <div
+                            key={item.name}
+                            className="group relative text-sm"
+                          >
                             <img
                               alt={item.imageAlt}
                               src={item.imageSrc}
                               className="aspect-square w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75"
                             />
-                            <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                              <span aria-hidden="true" className="absolute inset-0 z-10" />
+                            <a
+                              href={item.href}
+                              className="mt-6 block font-medium text-gray-900"
+                            >
+                              <span
+                                aria-hidden="true"
+                                className="absolute inset-0 z-10"
+                              />
                               {item.name}
                             </a>
                             <p aria-hidden="true" className="mt-1">
@@ -373,7 +421,10 @@ export default function Example() {
                       </div>
                       {category.sections.map((section) => (
                         <div key={section.name}>
-                          <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-gray-900">
+                          <p
+                            id={`${category.id}-${section.id}-heading-mobile`}
+                            className="font-medium text-gray-900"
+                          >
                             {section.name}
                           </p>
                           <ul
@@ -383,7 +434,10 @@ export default function Example() {
                           >
                             {section.items.map((item) => (
                               <li key={item.name} className="flow-root">
-                                <a href={item.href} className="-m-2 block p-2 text-gray-500">
+                                <a
+                                  href={item.href}
+                                  className="-m-2 block p-2 text-gray-500"
+                                >
                                   {item.name}
                                 </a>
                               </li>
@@ -399,7 +453,10 @@ export default function Example() {
               <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                 {navigation.pages.map((page) => (
                   <div key={page.name} className="flow-root">
-                    <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                    <a
+                      href={page.href}
+                      className="-m-2 block p-2 font-medium text-gray-900"
+                    >
                       {page.name}
                     </a>
                   </div>
@@ -408,12 +465,18 @@ export default function Example() {
 
               <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                 <div className="flow-root">
-                  <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                  <a
+                    href="#"
+                    className="-m-2 block p-2 font-medium text-gray-900"
+                  >
                     Sign in
                   </a>
                 </div>
                 <div className="flow-root">
-                  <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                  <a
+                    href="#"
+                    className="-m-2 block p-2 font-medium text-gray-900"
+                  >
                     Create account
                   </a>
                 </div>
@@ -426,7 +489,9 @@ export default function Example() {
                     src="https://tailwindcss.com/plus-assets/img/flags/flag-canada.svg"
                     className="block h-auto w-5 shrink-0"
                   />
-                  <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
+                  <span className="ml-3 block text-base font-medium text-gray-900">
+                    CAD
+                  </span>
                   <span className="sr-only">, change currency</span>
                 </a>
               </div>
@@ -439,7 +504,10 @@ export default function Example() {
             Get free delivery on orders over $100
           </p>
 
-          <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <nav
+            aria-label="Top"
+            className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+          >
             <div className="border-b border-gray-200">
               <div className="flex h-16 items-center">
                 <button
@@ -483,20 +551,32 @@ export default function Example() {
                           className="absolute inset-x-0 top-full z-20 w-full bg-white text-sm text-gray-500 transition data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
                         >
                           {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                          <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow-sm" />
+                          <div
+                            aria-hidden="true"
+                            className="absolute inset-0 top-1/2 bg-white shadow-sm"
+                          />
                           <div className="relative bg-white">
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                               <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
                                 <div className="col-start-2 grid grid-cols-2 gap-x-8">
                                   {category.featured.map((item) => (
-                                    <div key={item.name} className="group relative text-base sm:text-sm">
+                                    <div
+                                      key={item.name}
+                                      className="group relative text-base sm:text-sm"
+                                    >
                                       <img
                                         alt={item.imageAlt}
                                         src={item.imageSrc}
                                         className="aspect-square w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75"
                                       />
-                                      <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                                        <span aria-hidden="true" className="absolute inset-0 z-10" />
+                                      <a
+                                        href={item.href}
+                                        className="mt-6 block font-medium text-gray-900"
+                                      >
+                                        <span
+                                          aria-hidden="true"
+                                          className="absolute inset-0 z-10"
+                                        />
                                         {item.name}
                                       </a>
                                       <p aria-hidden="true" className="mt-1">
@@ -508,7 +588,10 @@ export default function Example() {
                                 <div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
                                   {category.sections.map((section) => (
                                     <div key={section.name}>
-                                      <p id={`${section.name}-heading`} className="font-medium text-gray-900">
+                                      <p
+                                        id={`${section.name}-heading`}
+                                        className="font-medium text-gray-900"
+                                      >
                                         {section.name}
                                       </p>
                                       <ul
@@ -518,7 +601,10 @@ export default function Example() {
                                       >
                                         {section.items.map((item) => (
                                           <li key={item.name} className="flex">
-                                            <a href={item.href} className="hover:text-gray-800">
+                                            <a
+                                              href={item.href}
+                                              className="hover:text-gray-800"
+                                            >
                                               {item.name}
                                             </a>
                                           </li>
@@ -547,32 +633,49 @@ export default function Example() {
 
                 <div className="ml-auto flex items-center">
                   <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                    <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                    <a
+                      href="#"
+                      className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                    >
                       Sign in
                     </a>
                     <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
-                    <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                    <a
+                      href="#"
+                      className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                    >
                       Create account
                     </a>
                   </div>
 
                   <div className="hidden lg:ml-8 lg:flex">
-                    <a href="#" className="flex items-center text-gray-700 hover:text-gray-800">
+                    <a
+                      href="#"
+                      className="flex items-center text-gray-700 hover:text-gray-800"
+                    >
                       <img
                         alt=""
                         src="https://tailwindcss.com/plus-assets/img/flags/flag-canada.svg"
                         className="block h-auto w-5 shrink-0"
                       />
-                      <span className="ml-3 block text-sm font-medium">CAD</span>
+                      <span className="ml-3 block text-sm font-medium">
+                        CAD
+                      </span>
                       <span className="sr-only">, change currency</span>
                     </a>
                   </div>
 
                   {/* Search */}
                   <div className="flex lg:ml-6">
-                    <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+                    <a
+                      href="#"
+                      className="p-2 text-gray-400 hover:text-gray-500"
+                    >
                       <span className="sr-only">Search</span>
-                      <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                      <MagnifyingGlassIcon
+                        aria-hidden="true"
+                        className="size-6"
+                      />
                     </a>
                   </div>
 
@@ -583,7 +686,9 @@ export default function Example() {
                         aria-hidden="true"
                         className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                       />
-                      <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                      <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                        0
+                      </span>
                       <span className="sr-only">items in cart, view bag</span>
                     </a>
                   </div>
@@ -596,7 +701,11 @@ export default function Example() {
 
       <div>
         {/* Mobile filter dialog */}
-        <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative z-40 lg:hidden">
+        <Dialog
+          open={mobileFiltersOpen}
+          onClose={setMobileFiltersOpen}
+          className="relative z-40 lg:hidden"
+        >
           <DialogBackdrop
             transition
             className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
@@ -634,13 +743,25 @@ export default function Example() {
                 </ul>
 
                 {filters.map((section) => (
-                  <Disclosure key={section.id} as="div" className="border-t border-gray-200 px-4 py-6">
+                  <Disclosure
+                    key={section.id}
+                    as="div"
+                    className="border-t border-gray-200 px-4 py-6"
+                  >
                     <h3 className="-mx-2 -my-3 flow-root">
                       <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-                        <span className="font-medium text-gray-900">{section.name}</span>
+                        <span className="font-medium text-gray-900">
+                          {section.name}
+                        </span>
                         <span className="ml-6 flex items-center">
-                          <PlusIcon aria-hidden="true" className="size-5 group-data-open:hidden" />
-                          <MinusIcon aria-hidden="true" className="size-5 group-not-data-open:hidden" />
+                          <PlusIcon
+                            aria-hidden="true"
+                            className="size-5 group-data-open:hidden"
+                          />
+                          <MinusIcon
+                            aria-hidden="true"
+                            className="size-5 group-not-data-open:hidden"
+                          />
                         </span>
                       </DisclosureButton>
                     </h3>
@@ -699,7 +820,9 @@ export default function Example() {
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pt-24 pb-6">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+              New Arrivals
+            </h1>
 
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
@@ -721,8 +844,10 @@ export default function Example() {
                         <a
                           href={option.href}
                           className={classNames(
-                            option.current ? 'font-medium text-gray-900' : 'text-gray-500',
-                            'block px-4 py-2 text-sm data-focus:bg-gray-100 data-focus:outline-hidden',
+                            option.current
+                              ? "font-medium text-gray-900"
+                              : "text-gray-500",
+                            "block px-4 py-2 text-sm data-focus:bg-gray-100 data-focus:outline-hidden",
                           )}
                         >
                           {option.name}
@@ -733,7 +858,10 @@ export default function Example() {
                 </MenuItems>
               </Menu>
 
-              <button type="button" className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
+              <button
+                type="button"
+                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
+              >
                 <span className="sr-only">View grid</span>
                 <Squares2X2Icon aria-hidden="true" className="size-5" />
               </button>
@@ -757,7 +885,10 @@ export default function Example() {
               {/* Filters */}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
-                <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                <ul
+                  role="list"
+                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
+                >
                   {subCategories.map((category) => (
                     <li key={category.name}>
                       <a href={category.href}>{category.name}</a>
@@ -766,13 +897,25 @@ export default function Example() {
                 </ul>
 
                 {filters.map((section) => (
-                  <Disclosure key={section.id} as="div" className="border-b border-gray-200 py-6">
+                  <Disclosure
+                    key={section.id}
+                    as="div"
+                    className="border-b border-gray-200 py-6"
+                  >
                     <h3 className="-my-3 flow-root">
                       <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                        <span className="font-medium text-gray-900">{section.name}</span>
+                        <span className="font-medium text-gray-900">
+                          {section.name}
+                        </span>
                         <span className="ml-6 flex items-center">
-                          <PlusIcon aria-hidden="true" className="size-5 group-data-open:hidden" />
-                          <MinusIcon aria-hidden="true" className="size-5 group-not-data-open:hidden" />
+                          <PlusIcon
+                            aria-hidden="true"
+                            className="size-5 group-data-open:hidden"
+                          />
+                          <MinusIcon
+                            aria-hidden="true"
+                            className="size-5 group-not-data-open:hidden"
+                          />
                         </span>
                       </DisclosureButton>
                     </h3>
@@ -812,7 +955,10 @@ export default function Example() {
                                 </svg>
                               </div>
                             </div>
-                            <label htmlFor={`filter-${section.id}-${optionIdx}`} className="text-sm text-gray-600">
+                            <label
+                              htmlFor={`filter-${section.id}-${optionIdx}`}
+                              className="text-sm text-gray-600"
+                            >
                               {option.label}
                             </label>
                           </div>
@@ -826,15 +972,25 @@ export default function Example() {
               {/* Product grid */}
               <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:col-span-3 lg:gap-x-8">
                 {products.map((product) => (
-                  <a key={product.id} href={product.href} className="group text-sm">
+                  <a
+                    key={product.id}
+                    href={product.href}
+                    className="group text-sm"
+                  >
                     <img
                       alt={product.imageAlt}
                       src={product.imageSrc}
                       className="aspect-square w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75"
                     />
-                    <h3 className="mt-4 font-medium text-gray-900">{product.name}</h3>
-                    <p className="text-gray-500 italic">{product.availability}</p>
-                    <p className="mt-2 font-medium text-gray-900">{product.price}</p>
+                    <h3 className="mt-4 font-medium text-gray-900">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-500 italic">
+                      {product.availability}
+                    </p>
+                    <p className="mt-2 font-medium text-gray-900">
+                      {product.price}
+                    </p>
                   </a>
                 ))}
               </div>
@@ -854,7 +1010,10 @@ export default function Example() {
                   <ul role="list" className="mt-6 space-y-6">
                     {footerNavigation.account.map((item) => (
                       <li key={item.name} className="text-sm">
-                        <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -866,7 +1025,10 @@ export default function Example() {
                   <ul role="list" className="mt-6 space-y-6">
                     {footerNavigation.service.map((item) => (
                       <li key={item.name} className="text-sm">
-                        <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -880,7 +1042,10 @@ export default function Example() {
                   <ul role="list" className="mt-6 space-y-6">
                     {footerNavigation.company.map((item) => (
                       <li key={item.name} className="text-sm">
-                        <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -892,7 +1057,10 @@ export default function Example() {
                   <ul role="list" className="mt-6 space-y-6">
                     {footerNavigation.connect.map((item) => (
                       <li key={item.name} className="text-sm">
-                        <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -907,11 +1075,13 @@ export default function Example() {
                 <p>Shipping to Canada ($CAD)</p>
                 <p className="ml-3 border-l border-gray-200 pl-3">English</p>
               </div>
-              <p className="mt-6 text-center text-sm text-gray-500 sm:mt-0">&copy; 2021 Your Company, Inc.</p>
+              <p className="mt-6 text-center text-sm text-gray-500 sm:mt-0">
+                &copy; 2021 Your Company, Inc.
+              </p>
             </div>
           </div>
         </footer>
       </div>
     </div>
-  )
+  );
 }

@@ -1,23 +1,29 @@
-import { CloudArrowUpIcon, LockClosedIcon, ServerIcon } from '@heroicons/react/20/solid'
+import {
+  CloudArrowUpIcon,
+  LockClosedIcon,
+  ServerIcon,
+} from "@heroicons/react/20/solid";
 
 const features = [
   {
-    name: 'Push to deploy.',
+    name: "Push to deploy.",
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
     icon: CloudArrowUpIcon,
   },
   {
-    name: 'SSL certificates.',
-    description: 'Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.',
+    name: "SSL certificates.",
+    description:
+      "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
     icon: LockClosedIcon,
   },
   {
-    name: 'Database backups.',
-    description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
+    name: "Database backups.",
+    description:
+      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
     icon: ServerIcon,
   },
-]
+];
 
 export default function Example() {
   return (
@@ -26,13 +32,16 @@ export default function Example() {
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
           <div className="px-6 md:px-0 lg:pt-4 lg:pr-4">
             <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
-              <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Deploy faster</h2>
+              <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+                Deploy faster
+              </h2>
               <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl dark:text-white">
                 A better workflow
               </p>
               <p className="mt-6 text-lg/8 text-gray-700 dark:text-gray-300">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque,
-                iste dolor cupiditate blanditiis ratione.
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Maiores impedit perferendis suscipit eaque, iste dolor
+                cupiditate blanditiis ratione.
               </p>
               <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none dark:text-gray-400">
                 {features.map((feature) => (
@@ -43,7 +52,7 @@ export default function Example() {
                         className="absolute top-1 left-1 size-5 text-indigo-600 dark:text-indigo-400"
                       />
                       {feature.name}
-                    </dt>{' '}
+                    </dt>{" "}
                     <dd className="inline">{feature.description}</dd>
                   </div>
                 ))}
@@ -63,10 +72,14 @@ export default function Example() {
                       <div className="border-r border-b border-r-white/10 border-b-white/20 bg-white/5 px-4 py-2 text-white">
                         NotificationSetting.jsx
                       </div>
-                      <div className="border-r border-gray-600/10 px-4 py-2">App.jsx</div>
+                      <div className="border-r border-gray-600/10 px-4 py-2">
+                        App.jsx
+                      </div>
                     </div>
                   </div>
-                  <div className="px-6 pt-6 pb-14">{/* Your code example */}</div>
+                  <div className="px-6 pt-6 pb-14">
+                    {/* Your code example */}
+                  </div>
                 </div>
               </div>
               <div
@@ -78,5 +91,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

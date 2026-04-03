@@ -1,11 +1,23 @@
 const features = [
-  { name: 'Origin', description: 'Designed by Good Goods, Inc.' },
-  { name: 'Material', description: 'Solid walnut base with rare earth magnets and polycarbonate add-ons.' },
-  { name: 'Dimensions', description: '15" x 3.75" x .75"' },
-  { name: 'Finish', description: 'Hand sanded and finished with natural oil' },
-  { name: 'Includes', description: 'Pen Tray, Phone Tray, Small Tray, Large Tray, Sticky Note Holder' },
-  { name: 'Considerations', description: 'Made from natural materials. Grain and color vary with each item.' },
-]
+  { name: "Origin", description: "Designed by Good Goods, Inc." },
+  {
+    name: "Material",
+    description:
+      "Solid walnut base with rare earth magnets and polycarbonate add-ons.",
+  },
+  { name: "Dimensions", description: '15" x 3.75" x .75"' },
+  { name: "Finish", description: "Hand sanded and finished with natural oil" },
+  {
+    name: "Includes",
+    description:
+      "Pen Tray, Phone Tray, Small Tray, Large Tray, Sticky Note Holder",
+  },
+  {
+    name: "Considerations",
+    description:
+      "Made from natural materials. Grain and color vary with each item.",
+  },
+];
 
 export default function Example() {
   return (
@@ -21,10 +33,13 @@ export default function Example() {
 
       <div className="relative mx-auto -mt-12 max-w-7xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
         <div className="mx-auto max-w-2xl text-center lg:max-w-4xl">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Technical Specifications</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Technical Specifications
+          </h2>
           <p className="mt-4 text-gray-500">
-            Organize is a system to keep your desk tidy and photo-worthy all day long. Procrastinate your work while you
-            meticulously arrange items into dedicated trays.
+            Organize is a system to keep your desk tidy and photo-worthy all day
+            long. Procrastinate your work while you meticulously arrange items
+            into dedicated trays.
           </p>
         </div>
 
@@ -32,11 +47,13 @@ export default function Example() {
           {features.map((feature) => (
             <div key={feature.name} className="border-t border-gray-200 pt-4">
               <dt className="font-medium text-gray-900">{feature.name}</dt>
-              <dd className="mt-2 text-sm text-gray-500">{feature.description}</dd>
+              <dd className="mt-2 text-sm text-gray-500">
+                {feature.description}
+              </dd>
             </div>
           ))}
         </dl>
       </div>
     </div>
-  )
+  );
 }

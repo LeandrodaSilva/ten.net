@@ -12,11 +12,14 @@ export default function Example() {
           >
             Get started
           </a>
-          <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-gray-300 dark:hover:text-white">
+          <a
+            href="#"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-gray-300 dark:hover:text-white"
+          >
             Learn more <span aria-hidden="true">→</span>
           </a>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,26 +1,29 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-  { name: 'Log in', href: '#' },
-]
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Marketplace", href: "#" },
+  { name: "Company", href: "#" },
+  { name: "Log in", href: "#" },
+];
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white dark:bg-gray-900">
       <header className="absolute inset-x-0 top-0 z-50">
         <div className="mx-auto max-w-7xl">
           <div className="px-6 pt-6 lg:max-w-2xl lg:pr-0 lg:pl-8">
-            <nav aria-label="Global" className="flex items-center justify-between lg:justify-start">
+            <nav
+              aria-label="Global"
+              className="flex items-center justify-between lg:justify-start"
+            >
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
                 <img
@@ -44,7 +47,11 @@ export default function Example() {
               </button>
               <div className="hidden lg:ml-12 lg:flex lg:gap-x-14">
                 {navigation.map((item) => (
-                  <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+                  >
                     {item.name}
                   </a>
                 ))}
@@ -52,7 +59,11 @@ export default function Example() {
             </nav>
           </div>
         </div>
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="lg:hidden"
+        >
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-gray-100/10">
             <div className="flex items-center justify-between">
@@ -121,8 +132,11 @@ export default function Example() {
               <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
                 <div className="hidden sm:mb-10 sm:flex">
                   <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-500 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-400 dark:ring-white/10 dark:hover:ring-white/20">
-                    Anim aute id magna aliqua ad ad non deserunt sunt.{' '}
-                    <a href="#" className="font-semibold whitespace-nowrap text-indigo-600 dark:text-indigo-400">
+                    Anim aute id magna aliqua ad ad non deserunt sunt.{" "}
+                    <a
+                      href="#"
+                      className="font-semibold whitespace-nowrap text-indigo-600 dark:text-indigo-400"
+                    >
                       <span aria-hidden="true" className="absolute inset-0" />
                       Read more <span aria-hidden="true">&rarr;</span>
                     </a>
@@ -132,8 +146,9 @@ export default function Example() {
                   Data to enrich your business
                 </h1>
                 <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8 dark:text-gray-400">
-                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt
-                  amet fugiat veniam occaecat fugiat aliqua.
+                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure
+                  qui lorem cupidatat commodo. Elit sunt amet fugiat veniam
+                  occaecat fugiat aliqua.
                 </p>
                 <div className="mt-10 flex items-center gap-x-6">
                   <a
@@ -142,7 +157,10 @@ export default function Example() {
                   >
                     Get started
                   </a>
-                  <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  <a
+                    href="#"
+                    className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+                  >
                     Learn more <span aria-hidden="true">→</span>
                   </a>
                 </div>
@@ -159,5 +177,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

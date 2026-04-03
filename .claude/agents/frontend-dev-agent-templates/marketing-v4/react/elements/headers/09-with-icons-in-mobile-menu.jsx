@@ -1,7 +1,14 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel, Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/react'
+import { useState } from "react";
+import {
+  Dialog,
+  DialogPanel,
+  Popover,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+} from "@headlessui/react";
 import {
   ArrowPathIcon,
   Bars3Icon,
@@ -10,37 +17,85 @@ import {
   FingerPrintIcon,
   SquaresPlusIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+} from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  PhoneIcon,
+  PlayCircleIcon,
+} from "@heroicons/react/20/solid";
 
 const products = [
-  { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
-  { name: 'Engagement', description: 'Speak directly to your customers', href: '#', icon: CursorArrowRaysIcon },
-  { name: 'Security', description: 'Your customers’ data will be safe and secure', href: '#', icon: FingerPrintIcon },
-  { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
-  { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
-]
-const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
-]
-const company = [
-  { name: 'About us', href: '#', description: 'Learn more about our company values and mission to empower others' },
-  { name: 'Careers', href: '#', description: 'Looking for you next career opportunity? See all of our open positions' },
   {
-    name: 'Support',
-    href: '#',
-    description: 'Get in touch with our dedicated support team or reach out on our community forums',
+    name: "Analytics",
+    description: "Get a better understanding of your traffic",
+    href: "#",
+    icon: ChartPieIcon,
   },
-  { name: 'Blog', href: '#', description: 'Read our latest announcements and get perspectives from our team' },
-]
+  {
+    name: "Engagement",
+    description: "Speak directly to your customers",
+    href: "#",
+    icon: CursorArrowRaysIcon,
+  },
+  {
+    name: "Security",
+    description: "Your customers’ data will be safe and secure",
+    href: "#",
+    icon: FingerPrintIcon,
+  },
+  {
+    name: "Integrations",
+    description: "Connect with third-party tools",
+    href: "#",
+    icon: SquaresPlusIcon,
+  },
+  {
+    name: "Automations",
+    description: "Build strategic funnels that will convert",
+    href: "#",
+    icon: ArrowPathIcon,
+  },
+];
+const callsToAction = [
+  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
+  { name: "Contact sales", href: "#", icon: PhoneIcon },
+];
+const company = [
+  {
+    name: "About us",
+    href: "#",
+    description:
+      "Learn more about our company values and mission to empower others",
+  },
+  {
+    name: "Careers",
+    href: "#",
+    description:
+      "Looking for you next career opportunity? See all of our open positions",
+  },
+  {
+    name: "Support",
+    href: "#",
+    description:
+      "Get in touch with our dedicated support team or reach out on our community forums",
+  },
+  {
+    name: "Blog",
+    href: "#",
+    description:
+      "Read our latest announcements and get perspectives from our team",
+  },
+];
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-white dark:bg-gray-900">
-      <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+      <nav
+        aria-label="Global"
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+      >
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
@@ -70,7 +125,10 @@ export default function Example() {
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 dark:text-white">
               Product
-              <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400 dark:text-gray-500" />
+              <ChevronDownIcon
+                aria-hidden="true"
+                className="size-5 flex-none text-gray-400 dark:text-gray-500"
+              />
             </PopoverButton>
 
             <PopoverPanel
@@ -90,11 +148,16 @@ export default function Example() {
                       />
                     </div>
                     <div className="flex-auto">
-                      <a href={item.href} className="block font-semibold text-gray-900 dark:text-white">
+                      <a
+                        href={item.href}
+                        className="block font-semibold text-gray-900 dark:text-white"
+                      >
                         {item.name}
                         <span className="absolute inset-0" />
                       </a>
-                      <p className="mt-1 text-gray-600 dark:text-gray-400">{item.description}</p>
+                      <p className="mt-1 text-gray-600 dark:text-gray-400">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -106,7 +169,10 @@ export default function Example() {
                     href={item.href}
                     className="flex items-center justify-center gap-x-2.5 p-3 text-sm/6 font-semibold text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700/50"
                   >
-                    <item.icon aria-hidden="true" className="size-5 flex-none text-gray-400 dark:text-gray-500" />
+                    <item.icon
+                      aria-hidden="true"
+                      className="size-5 flex-none text-gray-400 dark:text-gray-500"
+                    />
                     {item.name}
                   </a>
                 ))}
@@ -114,17 +180,26 @@ export default function Example() {
             </PopoverPanel>
           </Popover>
 
-          <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+          <a
+            href="#"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+          >
             Features
           </a>
-          <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+          <a
+            href="#"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+          >
             Marketplace
           </a>
 
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 dark:text-white">
               Company
-              <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400 dark:text-gray-500" />
+              <ChevronDownIcon
+                aria-hidden="true"
+                className="size-5 flex-none text-gray-400 dark:text-gray-500"
+              />
             </PopoverButton>
 
             <PopoverPanel
@@ -132,24 +207,39 @@ export default function Example() {
               className="absolute left-1/2 z-10 mt-3 w-96 -translate-x-1/2 rounded-3xl bg-white p-4 shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in dark:bg-gray-800 dark:-outline-offset-1 dark:outline-white/10"
             >
               {company.map((item) => (
-                <div key={item.name} className="relative rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-white/5">
-                  <a href={item.href} className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                <div
+                  key={item.name}
+                  className="relative rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-white/5"
+                >
+                  <a
+                    href={item.href}
+                    className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                  >
                     {item.name}
                     <span className="absolute inset-0" />
                   </a>
-                  <p className="mt-1 text-sm/6 text-gray-600 dark:text-gray-400">{item.description}</p>
+                  <p className="mt-1 text-sm/6 text-gray-600 dark:text-gray-400">
+                    {item.description}
+                  </p>
                 </div>
               ))}
             </PopoverPanel>
           </Popover>
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+          <a
+            href="#"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+          >
             Log in <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </nav>
-      <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+      <Dialog
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+        className="lg:hidden"
+      >
         <div className="fixed inset-0 z-10" />
         <DialogPanel className="fixed inset-y-0 right-0 z-10 flex w-full flex-col justify-between overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-white/10">
           <div className="p-6">
@@ -244,5 +334,5 @@ export default function Example() {
         </DialogPanel>
       </Dialog>
     </header>
-  )
+  );
 }

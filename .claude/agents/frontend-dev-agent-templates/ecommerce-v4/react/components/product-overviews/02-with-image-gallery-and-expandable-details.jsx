@@ -7,93 +7,109 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
-import { StarIcon } from '@heroicons/react/20/solid'
-import { HeartIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
+} from "@headlessui/react";
+import { StarIcon } from "@heroicons/react/20/solid";
+import { HeartIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 const product = {
-  name: 'Zip Tote Basket',
-  price: '$140',
+  name: "Zip Tote Basket",
+  price: "$140",
   rating: 4,
   images: [
     {
       id: 1,
-      name: 'Angled view',
-      src: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-01.jpg',
-      alt: 'Angled front view with bag zipped and handles upright.',
+      name: "Angled view",
+      src:
+        "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-01.jpg",
+      alt: "Angled front view with bag zipped and handles upright.",
     },
     {
       id: 2,
-      name: 'Front view',
-      src: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-02.jpg',
-      alt: 'Front view with bag zipped and handles upright.',
+      name: "Front view",
+      src:
+        "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-02.jpg",
+      alt: "Front view with bag zipped and handles upright.",
     },
     {
       id: 3,
-      name: 'Back view',
-      src: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-03.jpg',
-      alt: 'Back view with bag zipped and straps hanging down.',
+      name: "Back view",
+      src:
+        "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-03.jpg",
+      alt: "Back view with bag zipped and straps hanging down.",
     },
     {
       id: 4,
-      name: 'Back angle open view',
-      src: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-04.jpg',
-      alt: 'Back angled view with bag open and handles to the side.',
+      name: "Back angle open view",
+      src:
+        "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-product-04.jpg",
+      alt: "Back angled view with bag open and handles to the side.",
     },
   ],
   colors: [
-    { id: 'washed-black', name: 'Washed Black', classes: 'bg-gray-700 checked:outline-gray-700' },
-    { id: 'white', name: 'White', classes: 'bg-white checked:outline-gray-400' },
-    { id: 'washed-gray', name: 'Washed Gray', classes: 'bg-gray-500 checked:outline-gray-500' },
+    {
+      id: "washed-black",
+      name: "Washed Black",
+      classes: "bg-gray-700 checked:outline-gray-700",
+    },
+    {
+      id: "white",
+      name: "White",
+      classes: "bg-white checked:outline-gray-400",
+    },
+    {
+      id: "washed-gray",
+      name: "Washed Gray",
+      classes: "bg-gray-500 checked:outline-gray-500",
+    },
   ],
   description: `
     <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
   `,
   details: [
     {
-      name: 'Features',
+      name: "Features",
       items: [
-        'Multiple strap configurations',
-        'Spacious interior with top zip',
-        'Leather handle and tabs',
-        'Interior dividers',
-        'Stainless strap loops',
-        'Double stitched construction',
-        'Water-resistant',
+        "Multiple strap configurations",
+        "Spacious interior with top zip",
+        "Leather handle and tabs",
+        "Interior dividers",
+        "Stainless strap loops",
+        "Double stitched construction",
+        "Water-resistant",
       ],
     },
     {
-      name: 'Care',
+      name: "Care",
       items: [
-        'Spot clean as needed',
-        'Hand wash with mild soap',
-        'Machine wash interior dividers',
-        'Treat handle and tabs with leather conditioner',
+        "Spot clean as needed",
+        "Hand wash with mild soap",
+        "Machine wash interior dividers",
+        "Treat handle and tabs with leather conditioner",
       ],
     },
     {
-      name: 'Shipping',
+      name: "Shipping",
       items: [
-        'Free shipping on orders over $300',
-        'International shipping available',
-        'Expedited shipping options',
-        'Signature required upon delivery',
+        "Free shipping on orders over $300",
+        "International shipping available",
+        "Expedited shipping options",
+        "Signature required upon delivery",
       ],
     },
     {
-      name: 'Returns',
+      name: "Returns",
       items: [
-        'Easy return requests',
-        'Pre-paid shipping label included',
-        '10% restocking fee for returns',
-        '60 day return window',
+        "Easy return requests",
+        "Pre-paid shipping label included",
+        "10% restocking fee for returns",
+        "60 day return window",
       ],
     },
   ],
-}
+};
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
@@ -113,7 +129,11 @@ export default function Example() {
                   >
                     <span className="sr-only">{image.name}</span>
                     <span className="absolute inset-0 overflow-hidden rounded-md">
-                      <img alt="" src={image.src} className="size-full object-cover" />
+                      <img
+                        alt=""
+                        src={image.src}
+                        className="size-full object-cover"
+                      />
                     </span>
                     <span
                       aria-hidden="true"
@@ -127,7 +147,11 @@ export default function Example() {
             <TabPanels>
               {product.images.map((image) => (
                 <TabPanel key={image.id}>
-                  <img alt={image.alt} src={image.src} className="aspect-square w-full object-cover sm:rounded-lg" />
+                  <img
+                    alt={image.alt}
+                    src={image.src}
+                    className="aspect-square w-full object-cover sm:rounded-lg"
+                  />
                 </TabPanel>
               ))}
             </TabPanels>
@@ -135,11 +159,15 @@ export default function Example() {
 
           {/* Product info */}
           <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">{product.name}</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+              {product.name}
+            </h1>
 
             <div className="mt-3">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">{product.price}</p>
+              <p className="text-3xl tracking-tight text-gray-900">
+                {product.price}
+              </p>
             </div>
 
             {/* Reviews */}
@@ -152,8 +180,10 @@ export default function Example() {
                       key={rating}
                       aria-hidden="true"
                       className={classNames(
-                        product.rating > rating ? 'text-indigo-500' : 'text-gray-300',
-                        'size-5 shrink-0',
+                        product.rating > rating
+                          ? "text-indigo-500"
+                          : "text-gray-300",
+                        "size-5 shrink-0",
                       )}
                     />
                   ))}
@@ -179,7 +209,10 @@ export default function Example() {
                 <fieldset aria-label="Choose a color" className="mt-2">
                   <div className="flex items-center gap-x-3">
                     {product.colors.map((color) => (
-                      <div key={color.id} className="flex rounded-full outline -outline-offset-1 outline-black/10">
+                      <div
+                        key={color.id}
+                        className="flex rounded-full outline -outline-offset-1 outline-black/10"
+                      >
                         <input
                           defaultValue={color.id}
                           defaultChecked={color === product.colors[0]}
@@ -188,7 +221,7 @@ export default function Example() {
                           aria-label={color.name}
                           className={classNames(
                             color.classes,
-                            'size-8 appearance-none rounded-full forced-color-adjust-none checked:outline-2 checked:outline-offset-2 focus-visible:outline-3 focus-visible:outline-offset-3',
+                            "size-8 appearance-none rounded-full forced-color-adjust-none checked:outline-2 checked:outline-offset-2 focus-visible:outline-3 focus-visible:outline-offset-3",
                           )}
                         />
                       </div>
@@ -241,7 +274,10 @@ export default function Example() {
                       </DisclosureButton>
                     </h3>
                     <DisclosurePanel className="pb-6">
-                      <ul role="list" className="list-disc space-y-1 pl-5 text-sm/6 text-gray-700 marker:text-gray-300">
+                      <ul
+                        role="list"
+                        className="list-disc space-y-1 pl-5 text-sm/6 text-gray-700 marker:text-gray-300"
+                      >
                         {detail.items.map((item) => (
                           <li key={item} className="pl-2">
                             {item}
@@ -257,5 +293,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

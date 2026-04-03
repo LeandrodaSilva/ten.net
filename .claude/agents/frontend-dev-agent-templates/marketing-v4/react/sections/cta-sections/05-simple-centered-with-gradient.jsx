@@ -7,8 +7,8 @@ export default function Example() {
             Boost your productivity. Start using our app today.
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg/8 text-pretty text-gray-600 dark:text-gray-300">
-            Incididunt sint fugiat pariatur cupidatat consectetur sit cillum anim id veniam aliqua proident excepteur
-            commodo do ea.
+            Incididunt sint fugiat pariatur cupidatat consectetur sit cillum
+            anim id veniam aliqua proident excepteur commodo do ea.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <a
@@ -31,7 +31,13 @@ export default function Example() {
         aria-hidden="true"
         className="absolute top-1/2 left-1/2 -z-10 size-256 -translate-x-1/2 mask-[radial-gradient(closest-side,white,transparent)]"
       >
-        <circle r={512} cx={512} cy={512} fill="url(#8d958450-c69f-4251-94bc-4e091a323369)" fillOpacity="0.7" />
+        <circle
+          r={512}
+          cx={512}
+          cy={512}
+          fill="url(#8d958450-c69f-4251-94bc-4e091a323369)"
+          fillOpacity="0.7"
+        />
         <defs>
           <radialGradient id="8d958450-c69f-4251-94bc-4e091a323369">
             <stop stopColor="#7775D6" />
@@ -40,5 +46,5 @@ export default function Example() {
         </defs>
       </svg>
     </div>
-  )
+  );
 }

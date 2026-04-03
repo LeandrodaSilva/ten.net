@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 import {
   Dialog,
   DialogPanel,
@@ -11,7 +11,7 @@ import {
   PopoverButton,
   PopoverGroup,
   PopoverPanel,
-} from '@headlessui/react'
+} from "@headlessui/react";
 import {
   ArrowPathIcon,
   Bars3Icon,
@@ -20,34 +20,66 @@ import {
   FingerPrintIcon,
   SquaresPlusIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+} from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  PhoneIcon,
+  PlayCircleIcon,
+} from "@heroicons/react/20/solid";
 
 const products = [
-  { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
-  { name: 'Engagement', description: 'Speak directly to your customers', href: '#', icon: CursorArrowRaysIcon },
-  { name: 'Security', description: 'Your customers’ data will be safe and secure', href: '#', icon: FingerPrintIcon },
-  { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
-  { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
-]
+  {
+    name: "Analytics",
+    description: "Get a better understanding of your traffic",
+    href: "#",
+    icon: ChartPieIcon,
+  },
+  {
+    name: "Engagement",
+    description: "Speak directly to your customers",
+    href: "#",
+    icon: CursorArrowRaysIcon,
+  },
+  {
+    name: "Security",
+    description: "Your customers’ data will be safe and secure",
+    href: "#",
+    icon: FingerPrintIcon,
+  },
+  {
+    name: "Integrations",
+    description: "Connect with third-party tools",
+    href: "#",
+    icon: SquaresPlusIcon,
+  },
+  {
+    name: "Automations",
+    description: "Build strategic funnels that will convert",
+    href: "#",
+    icon: ArrowPathIcon,
+  },
+];
 const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
-]
+  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
+  { name: "Contact sales", href: "#", icon: PhoneIcon },
+];
 const company = [
-  { name: 'About us', href: '#' },
-  { name: 'Careers', href: '#' },
-  { name: 'Support', href: '#' },
-  { name: 'Press', href: '#' },
-  { name: 'Blog', href: '#' },
-]
+  { name: "About us", href: "#" },
+  { name: "Careers", href: "#" },
+  { name: "Support", href: "#" },
+  { name: "Press", href: "#" },
+  { name: "Blog", href: "#" },
+];
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-white dark:bg-gray-900">
-      <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+      <nav
+        aria-label="Global"
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+      >
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
@@ -77,7 +109,10 @@ export default function Example() {
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 dark:text-white">
               Product
-              <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400 dark:text-gray-500" />
+              <ChevronDownIcon
+                aria-hidden="true"
+                className="size-5 flex-none text-gray-400 dark:text-gray-500"
+              />
             </PopoverButton>
 
             <PopoverPanel
@@ -97,11 +132,16 @@ export default function Example() {
                       />
                     </div>
                     <div className="flex-auto">
-                      <a href={item.href} className="block font-semibold text-gray-900 dark:text-white">
+                      <a
+                        href={item.href}
+                        className="block font-semibold text-gray-900 dark:text-white"
+                      >
                         {item.name}
                         <span className="absolute inset-0" />
                       </a>
-                      <p className="mt-1 text-gray-600 dark:text-gray-400">{item.description}</p>
+                      <p className="mt-1 text-gray-600 dark:text-gray-400">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -113,7 +153,10 @@ export default function Example() {
                     href={item.href}
                     className="flex items-center justify-center gap-x-2.5 p-3 text-sm/6 font-semibold text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700/50"
                   >
-                    <item.icon aria-hidden="true" className="size-5 flex-none text-gray-400 dark:text-gray-500" />
+                    <item.icon
+                      aria-hidden="true"
+                      className="size-5 flex-none text-gray-400 dark:text-gray-500"
+                    />
                     {item.name}
                   </a>
                 ))}
@@ -121,17 +164,26 @@ export default function Example() {
             </PopoverPanel>
           </Popover>
 
-          <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+          <a
+            href="#"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+          >
             Features
           </a>
-          <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+          <a
+            href="#"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+          >
             Marketplace
           </a>
 
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 dark:text-white">
               Company
-              <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400 dark:text-gray-500" />
+              <ChevronDownIcon
+                aria-hidden="true"
+                className="size-5 flex-none text-gray-400 dark:text-gray-500"
+              />
             </PopoverButton>
 
             <PopoverPanel
@@ -151,12 +203,19 @@ export default function Example() {
           </Popover>
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+          <a
+            href="#"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+          >
             Log in <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </nav>
-      <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+      <Dialog
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+        className="lg:hidden"
+      >
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-gray-100/10">
           <div className="flex items-center justify-between">
@@ -188,7 +247,10 @@ export default function Example() {
                 <Disclosure as="div" className="-mx-3">
                   <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5">
                     Product
-                    <ChevronDownIcon aria-hidden="true" className="size-5 flex-none group-data-open:rotate-180" />
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="size-5 flex-none group-data-open:rotate-180"
+                    />
                   </DisclosureButton>
                   <DisclosurePanel className="mt-2 space-y-2">
                     {[...products, ...callsToAction].map((item) => (
@@ -220,7 +282,10 @@ export default function Example() {
                 <Disclosure as="div" className="-mx-3">
                   <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-white/5">
                     Company
-                    <ChevronDownIcon aria-hidden="true" className="size-5 flex-none group-data-open:rotate-180" />
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="size-5 flex-none group-data-open:rotate-180"
+                    />
                   </DisclosureButton>
                   <DisclosurePanel className="mt-2 space-y-2">
                     {company.map((item) => (
@@ -249,5 +314,5 @@ export default function Example() {
         </DialogPanel>
       </Dialog>
     </header>
-  )
+  );
 }

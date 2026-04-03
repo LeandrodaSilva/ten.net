@@ -1,24 +1,53 @@
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import {
+  ChevronDownIcon,
+  PhoneIcon,
+  PlayCircleIcon,
+} from "@heroicons/react/20/solid";
 import {
   ArrowPathIcon,
   ChartPieIcon,
   CursorArrowRaysIcon,
   FingerPrintIcon,
   SquaresPlusIcon,
-} from '@heroicons/react/24/outline'
+} from "@heroicons/react/24/outline";
 
 const solutions = [
-  { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
-  { name: 'Engagement', description: 'Speak directly to your customers', href: '#', icon: CursorArrowRaysIcon },
-  { name: 'Security', description: "Your customers' data will be safe and secure", href: '#', icon: FingerPrintIcon },
-  { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
-  { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
-]
+  {
+    name: "Analytics",
+    description: "Get a better understanding of your traffic",
+    href: "#",
+    icon: ChartPieIcon,
+  },
+  {
+    name: "Engagement",
+    description: "Speak directly to your customers",
+    href: "#",
+    icon: CursorArrowRaysIcon,
+  },
+  {
+    name: "Security",
+    description: "Your customers' data will be safe and secure",
+    href: "#",
+    icon: FingerPrintIcon,
+  },
+  {
+    name: "Integrations",
+    description: "Connect with third-party tools",
+    href: "#",
+    icon: SquaresPlusIcon,
+  },
+  {
+    name: "Automations",
+    description: "Build strategic funnels that will convert",
+    href: "#",
+    icon: ArrowPathIcon,
+  },
+];
 const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
-]
+  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
+  { name: "Contact sales", href: "#", icon: PhoneIcon },
+];
 
 export default function Example() {
   return (
@@ -46,11 +75,16 @@ export default function Example() {
                   />
                 </div>
                 <div>
-                  <a href={item.href} className="font-semibold text-gray-900 dark:text-white">
+                  <a
+                    href={item.href}
+                    className="font-semibold text-gray-900 dark:text-white"
+                  >
                     {item.name}
                     <span className="absolute inset-0" />
                   </a>
-                  <p className="mt-1 text-gray-600 dark:text-gray-400">{item.description}</p>
+                  <p className="mt-1 text-gray-600 dark:text-gray-400">
+                    {item.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -62,7 +96,10 @@ export default function Example() {
                 href={item.href}
                 className="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700/50"
               >
-                <item.icon aria-hidden="true" className="size-5 flex-none text-gray-400 dark:text-gray-500" />
+                <item.icon
+                  aria-hidden="true"
+                  className="size-5 flex-none text-gray-400 dark:text-gray-500"
+                />
                 {item.name}
               </a>
             ))}
@@ -70,5 +107,5 @@ export default function Example() {
         </div>
       </PopoverPanel>
     </Popover>
-  )
+  );
 }

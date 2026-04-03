@@ -17,8 +17,9 @@ export default function Example() {
         <figure className="mt-10">
           <blockquote className="text-center text-xl/8 font-semibold text-gray-900 sm:text-2xl/9 dark:text-white">
             <p>
-              “Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo expedita voluptas culpa sapiente alias
-              molestiae. Numquam corrupti in laborum sed rerum et corporis.”
+              “Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
+              expedita voluptas culpa sapiente alias molestiae. Numquam corrupti
+              in laborum sed rerum et corporis.”
             </p>
           </blockquote>
           <figcaption className="mt-10">
@@ -28,15 +29,25 @@ export default function Example() {
               className="mx-auto size-10 rounded-full"
             />
             <div className="mt-4 flex items-center justify-center space-x-3 text-base">
-              <div className="font-semibold text-gray-900 dark:text-white">Judith Black</div>
-              <svg width={3} height={3} viewBox="0 0 2 2" aria-hidden="true" className="fill-gray-900 dark:fill-white">
+              <div className="font-semibold text-gray-900 dark:text-white">
+                Judith Black
+              </div>
+              <svg
+                width={3}
+                height={3}
+                viewBox="0 0 2 2"
+                aria-hidden="true"
+                className="fill-gray-900 dark:fill-white"
+              >
                 <circle r={1} cx={1} cy={1} />
               </svg>
-              <div className="text-gray-600 dark:text-gray-400">CEO of Workcation</div>
+              <div className="text-gray-600 dark:text-gray-400">
+                CEO of Workcation
+              </div>
             </div>
           </figcaption>
         </figure>
       </div>
     </section>
-  )
+  );
 }

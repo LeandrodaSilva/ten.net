@@ -1,25 +1,32 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Company', href: '#' },
-]
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Company", href: "#" },
+];
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-white dark:bg-gray-900">
-      <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+      <nav
+        aria-label="Global"
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+      >
         <div className="flex flex-1">
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+              >
                 {item.name}
               </a>
             ))}
@@ -49,12 +56,19 @@ export default function Example() {
           />
         </a>
         <div className="flex flex-1 justify-end">
-          <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+          <a
+            href="#"
+            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+          >
             Log in <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </nav>
-      <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+      <Dialog
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+        className="lg:hidden"
+      >
         <div className="fixed inset-0 z-10" />
         <DialogPanel className="fixed inset-y-0 left-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 dark:bg-gray-900">
           <div className="flex items-center justify-between">
@@ -82,7 +96,10 @@ export default function Example() {
               />
             </a>
             <div className="flex flex-1 justify-end">
-              <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+              <a
+                href="#"
+                className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+              >
                 Log in <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
@@ -101,5 +118,5 @@ export default function Example() {
         </DialogPanel>
       </Dialog>
     </header>
-  )
+  );
 }

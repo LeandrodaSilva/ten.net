@@ -5,10 +5,16 @@ export default function Example() {
       <div className="divide-y divide-gray-200 dark:divide-white/10">
         <div className="relative flex gap-3 pt-3.5 pb-4">
           <div className="min-w-0 flex-1 text-sm/6">
-            <label htmlFor="comments" className="font-medium text-gray-900 dark:text-white">
+            <label
+              htmlFor="comments"
+              className="font-medium text-gray-900 dark:text-white"
+            >
               Comments
             </label>
-            <p id="comments-description" className="text-gray-500 dark:text-gray-400">
+            <p
+              id="comments-description"
+              className="text-gray-500 dark:text-gray-400"
+            >
               Get notified when someones posts a comment on a posting.
             </p>
           </div>
@@ -47,10 +53,16 @@ export default function Example() {
         </div>
         <div className="relative flex gap-3 pt-3.5 pb-4">
           <div className="min-w-0 flex-1 text-sm/6">
-            <label htmlFor="candidates" className="font-medium text-gray-900 dark:text-white">
+            <label
+              htmlFor="candidates"
+              className="font-medium text-gray-900 dark:text-white"
+            >
               Candidates
             </label>
-            <p id="candidates-description" className="text-gray-500 dark:text-gray-400">
+            <p
+              id="candidates-description"
+              className="text-gray-500 dark:text-gray-400"
+            >
               Get notified when a candidate applies for a job.
             </p>
           </div>
@@ -88,10 +100,16 @@ export default function Example() {
         </div>
         <div className="relative flex gap-3 pt-3.5 pb-4">
           <div className="min-w-0 flex-1 text-sm/6">
-            <label htmlFor="offers" className="font-medium text-gray-900 dark:text-white">
+            <label
+              htmlFor="offers"
+              className="font-medium text-gray-900 dark:text-white"
+            >
               Offers
             </label>
-            <p id="offers-description" className="text-gray-500 dark:text-gray-400">
+            <p
+              id="offers-description"
+              className="text-gray-500 dark:text-gray-400"
+            >
               Get notified when a candidate accepts or rejects an offer.
             </p>
           </div>
@@ -129,5 +147,5 @@ export default function Example() {
         </div>
       </div>
     </fieldset>
-  )
+  );
 }

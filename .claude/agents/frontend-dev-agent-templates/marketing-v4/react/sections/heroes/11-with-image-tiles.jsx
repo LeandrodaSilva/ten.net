@@ -1,23 +1,26 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-]
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Marketplace", href: "#" },
+  { name: "Company", href: "#" },
+];
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white dark:bg-gray-900">
       <header className="absolute inset-x-0 top-0 z-50">
-        <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+        <nav
+          aria-label="Global"
+          className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        >
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
@@ -45,18 +48,29 @@ export default function Example() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+              >
                 {item.name}
               </a>
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+            <a
+              href="#"
+              className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+            >
               Log in <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="lg:hidden"
+        >
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-gray-100/10">
             <div className="flex items-center justify-between">
@@ -126,13 +140,22 @@ export default function Example() {
                 <path d="M.5 200V.5H200" fill="none" />
               </pattern>
             </defs>
-            <svg x="50%" y={-1} className="overflow-visible fill-gray-50 dark:fill-gray-800">
+            <svg
+              x="50%"
+              y={-1}
+              className="overflow-visible fill-gray-50 dark:fill-gray-800"
+            >
               <path
                 d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
                 strokeWidth={0}
               />
             </svg>
-            <rect fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)" width="100%" height="100%" strokeWidth={0} />
+            <rect
+              fill="url(#1f932ae7-37de-4c0a-a8b0-a6e3b4d44b84)"
+              width="100%"
+              height="100%"
+              strokeWidth={0}
+            />
           </svg>
           <div
             aria-hidden="true"
@@ -141,7 +164,7 @@ export default function Example() {
             <div
               style={{
                 clipPath:
-                  'polygon(63.1% 29.5%, 100% 17.1%, 76.6% 3%, 48.4% 0%, 44.6% 4.7%, 54.5% 25.3%, 59.8% 49%, 55.2% 57.8%, 44.4% 57.2%, 27.8% 47.9%, 35.1% 81.5%, 0% 97.7%, 39.2% 100%, 35.2% 81.4%, 97.2% 52.8%, 63.1% 29.5%)',
+                  "polygon(63.1% 29.5%, 100% 17.1%, 76.6% 3%, 48.4% 0%, 44.6% 4.7%, 54.5% 25.3%, 59.8% 49%, 55.2% 57.8%, 44.4% 57.2%, 27.8% 47.9%, 35.1% 81.5%, 0% 97.7%, 39.2% 100%, 35.2% 81.4%, 97.2% 52.8%, 63.1% 29.5%)",
               }}
               className="aspect-801/1036 w-200.25 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
             />
@@ -154,8 +177,10 @@ export default function Example() {
                     We’re changing the way people connect
                   </h1>
                   <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:max-w-md sm:text-xl/8 lg:max-w-none dark:text-gray-400">
-                    Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt
-                    amet fugiat veniam occaecat fugiat aliqua. Anim aute id magna aliqua ad ad non deserunt sunt.
+                    Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure
+                    qui lorem cupidatat commodo. Elit sunt amet fugiat veniam
+                    occaecat fugiat aliqua. Anim aute id magna aliqua ad ad non
+                    deserunt sunt.
                   </p>
                   <div className="mt-10 flex items-center gap-x-6">
                     <a
@@ -164,7 +189,10 @@ export default function Example() {
                     >
                       Get started
                     </a>
-                    <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    <a
+                      href="#"
+                      className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+                    >
                       Live demo <span aria-hidden="true">→</span>
                     </a>
                   </div>
@@ -223,5 +251,5 @@ export default function Example() {
         </div>
       </main>
     </div>
-  )
+  );
 }

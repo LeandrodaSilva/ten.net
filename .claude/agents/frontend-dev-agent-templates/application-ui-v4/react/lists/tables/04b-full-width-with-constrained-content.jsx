@@ -1,11 +1,41 @@
 const people = [
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-  { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-  { name: 'Tom Cook', title: 'Director of Product', email: 'tom.cook@example.com', role: 'Member' },
-  { name: 'Whitney Francis', title: 'Copywriter', email: 'whitney.francis@example.com', role: 'Admin' },
-  { name: 'Leonard Krasner', title: 'Senior Designer', email: 'leonard.krasner@example.com', role: 'Owner' },
-  { name: 'Floyd Miles', title: 'Principal Designer', email: 'floyd.miles@example.com', role: 'Member' },
-]
+  {
+    name: "Lindsay Walton",
+    title: "Front-end Developer",
+    email: "lindsay.walton@example.com",
+    role: "Member",
+  },
+  {
+    name: "Courtney Henry",
+    title: "Designer",
+    email: "courtney.henry@example.com",
+    role: "Admin",
+  },
+  {
+    name: "Tom Cook",
+    title: "Director of Product",
+    email: "tom.cook@example.com",
+    role: "Member",
+  },
+  {
+    name: "Whitney Francis",
+    title: "Copywriter",
+    email: "whitney.francis@example.com",
+    role: "Admin",
+  },
+  {
+    name: "Leonard Krasner",
+    title: "Senior Designer",
+    email: "leonard.krasner@example.com",
+    role: "Owner",
+  },
+  {
+    name: "Floyd Miles",
+    title: "Principal Designer",
+    email: "floyd.miles@example.com",
+    role: "Member",
+  },
+];
 
 export default function Example() {
   return (
@@ -13,9 +43,12 @@ export default function Example() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-base font-semibold text-gray-900 dark:text-white">Users</h1>
+            <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+              Users
+            </h1>
             <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
-              A list of all the users in your account including their name, title, email and role.
+              A list of all the users in your account including their name,
+              title, email and role.
             </p>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -53,7 +86,10 @@ export default function Example() {
                 >
                   Email
                 </th>
-                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                <th
+                  scope="col"
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+                >
                   Role
                 </th>
                 <th scope="col" className="py-3.5 pl-3">
@@ -75,7 +111,9 @@ export default function Example() {
                   <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell dark:text-gray-400">
                     {person.email}
                   </td>
-                  <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">{person.role}</td>
+                  <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    {person.role}
+                  </td>
                   <td className="py-4 pl-3 text-right text-sm font-medium">
                     <a
                       href="#"
@@ -91,5 +129,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

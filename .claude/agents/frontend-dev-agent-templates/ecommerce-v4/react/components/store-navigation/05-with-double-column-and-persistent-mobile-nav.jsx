@@ -1,80 +1,88 @@
-import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/react'
-import { MagnifyingGlassIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
+import {
+  Popover,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+} from "@headlessui/react";
+import {
+  MagnifyingGlassIcon,
+  ShoppingBagIcon,
+} from "@heroicons/react/24/outline";
 
 const navigation = {
   categories: [
     {
-      name: 'Women',
+      name: "Women",
       clothing: [
         [
-          { name: 'Tops', href: '#' },
-          { name: 'Dresses', href: '#' },
-          { name: 'Pants', href: '#' },
-          { name: 'Denim', href: '#' },
-          { name: 'Sweaters', href: '#' },
-          { name: 'T-Shirts', href: '#' },
+          { name: "Tops", href: "#" },
+          { name: "Dresses", href: "#" },
+          { name: "Pants", href: "#" },
+          { name: "Denim", href: "#" },
+          { name: "Sweaters", href: "#" },
+          { name: "T-Shirts", href: "#" },
         ],
         [
-          { name: 'Jackets', href: '#' },
-          { name: 'Activewear', href: '#' },
-          { name: 'Shorts', href: '#' },
-          { name: 'Swimwear', href: '#' },
-          { name: 'Browse All', href: '#' },
+          { name: "Jackets", href: "#" },
+          { name: "Activewear", href: "#" },
+          { name: "Shorts", href: "#" },
+          { name: "Swimwear", href: "#" },
+          { name: "Browse All", href: "#" },
         ],
       ],
       accessories: [
-        { name: 'Shoes', href: '#' },
-        { name: 'Jewelry', href: '#' },
-        { name: 'Handbags', href: '#' },
-        { name: 'Socks', href: '#' },
-        { name: 'Hats', href: '#' },
-        { name: 'Browse All', href: '#' },
+        { name: "Shoes", href: "#" },
+        { name: "Jewelry", href: "#" },
+        { name: "Handbags", href: "#" },
+        { name: "Socks", href: "#" },
+        { name: "Hats", href: "#" },
+        { name: "Browse All", href: "#" },
       ],
       categories: [
-        { name: 'New Arrivals', href: '#' },
-        { name: 'Sale', href: '#' },
-        { name: 'Basic Tees', href: '#' },
-        { name: 'Artwork Tees', href: '#' },
+        { name: "New Arrivals", href: "#" },
+        { name: "Sale", href: "#" },
+        { name: "Basic Tees", href: "#" },
+        { name: "Artwork Tees", href: "#" },
       ],
     },
     {
-      name: 'Men',
+      name: "Men",
       clothing: [
         [
-          { name: 'Dress Shirts', href: '#' },
-          { name: 'Pants', href: '#' },
-          { name: 'Jackets', href: '#' },
-          { name: 'T-Shirts', href: '#' },
-          { name: 'Jeans', href: '#' },
-          { name: 'Hoodies', href: '#' },
+          { name: "Dress Shirts", href: "#" },
+          { name: "Pants", href: "#" },
+          { name: "Jackets", href: "#" },
+          { name: "T-Shirts", href: "#" },
+          { name: "Jeans", href: "#" },
+          { name: "Hoodies", href: "#" },
         ],
         [
-          { name: 'Vests', href: '#' },
-          { name: 'Kilts', href: '#' },
-          { name: 'Outdoors', href: '#' },
-          { name: 'Capes', href: '#' },
-          { name: 'Browse All', href: '#' },
+          { name: "Vests", href: "#" },
+          { name: "Kilts", href: "#" },
+          { name: "Outdoors", href: "#" },
+          { name: "Capes", href: "#" },
+          { name: "Browse All", href: "#" },
         ],
       ],
       accessories: [
-        { name: 'Watches', href: '#' },
-        { name: 'Boots', href: '#' },
-        { name: 'Fanny Packs', href: '#' },
-        { name: 'Sunglasses', href: '#' },
-        { name: 'Browse All', href: '#' },
+        { name: "Watches", href: "#" },
+        { name: "Boots", href: "#" },
+        { name: "Fanny Packs", href: "#" },
+        { name: "Sunglasses", href: "#" },
+        { name: "Browse All", href: "#" },
       ],
       categories: [
-        { name: 'Just Added', href: '#' },
-        { name: 'Clearance', href: '#' },
-        { name: 'Graphic Tees', href: '#' },
+        { name: "Just Added", href: "#" },
+        { name: "Clearance", href: "#" },
+        { name: "Graphic Tees", href: "#" },
       ],
     },
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: "Company", href: "#" },
+    { name: "Stores", href: "#" },
   ],
-}
+};
 
 export default function Example() {
   return (
@@ -114,13 +122,19 @@ export default function Example() {
                         className="absolute inset-x-0 top-full z-20 w-full bg-white text-gray-500 transition data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in sm:text-sm"
                       >
                         {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                        <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow-sm" />
+                        <div
+                          aria-hidden="true"
+                          className="absolute inset-0 top-1/2 bg-white shadow-sm"
+                        />
                         <div className="relative bg-white">
                           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10 pt-10 pb-12 md:grid-cols-2 lg:gap-x-8">
                               <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:gap-x-8">
                                 <div>
-                                  <p id="clothing-heading" className="font-medium text-gray-900">
+                                  <p
+                                    id="clothing-heading"
+                                    className="font-medium text-gray-900"
+                                  >
                                     Clothing
                                   </p>
                                   <div className="mt-4 border-t border-gray-200 pt-6 sm:grid sm:grid-cols-2 sm:gap-x-6">
@@ -131,7 +145,10 @@ export default function Example() {
                                     >
                                       {category.clothing[0].map((item) => (
                                         <li key={item.name} className="flex">
-                                          <a href={item.href} className="hover:text-gray-800">
+                                          <a
+                                            href={item.href}
+                                            className="hover:text-gray-800"
+                                          >
                                             {item.name}
                                           </a>
                                         </li>
@@ -144,7 +161,10 @@ export default function Example() {
                                     >
                                       {category.clothing[1].map((item) => (
                                         <li key={item.name} className="flex">
-                                          <a href={item.href} className="hover:text-gray-800">
+                                          <a
+                                            href={item.href}
+                                            className="hover:text-gray-800"
+                                          >
                                             {item.name}
                                           </a>
                                         </li>
@@ -155,7 +175,10 @@ export default function Example() {
                               </div>
                               <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:gap-x-8">
                                 <div>
-                                  <p id="accessories-heading" className="font-medium text-gray-900">
+                                  <p
+                                    id="accessories-heading"
+                                    className="font-medium text-gray-900"
+                                  >
                                     Accessories
                                   </p>
                                   <ul
@@ -165,7 +188,10 @@ export default function Example() {
                                   >
                                     {category.accessories.map((item) => (
                                       <li key={item.name} className="flex">
-                                        <a href={item.href} className="hover:text-gray-800">
+                                        <a
+                                          href={item.href}
+                                          className="hover:text-gray-800"
+                                        >
                                           {item.name}
                                         </a>
                                       </li>
@@ -173,7 +199,10 @@ export default function Example() {
                                   </ul>
                                 </div>
                                 <div>
-                                  <p id="categories-heading" className="font-medium text-gray-900">
+                                  <p
+                                    id="categories-heading"
+                                    className="font-medium text-gray-900"
+                                  >
                                     Categories
                                   </p>
                                   <ul
@@ -183,7 +212,10 @@ export default function Example() {
                                   >
                                     {category.categories.map((item) => (
                                       <li key={item.name} className="flex">
-                                        <a href={item.href} className="hover:text-gray-800">
+                                        <a
+                                          href={item.href}
+                                          className="hover:text-gray-800"
+                                        >
                                           {item.name}
                                         </a>
                                       </li>
@@ -223,7 +255,9 @@ export default function Example() {
                       aria-hidden="true"
                       className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                      0
+                    </span>
                     <span className="sr-only">items in cart, view bag</span>
                   </a>
                 </div>
@@ -233,5 +267,5 @@ export default function Example() {
         </nav>
       </header>
     </div>
-  )
+  );
 }

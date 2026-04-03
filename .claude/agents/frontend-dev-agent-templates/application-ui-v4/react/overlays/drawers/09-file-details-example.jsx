@@ -1,16 +1,22 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel, TransitionChild } from '@headlessui/react'
-import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { PencilIcon, PlusIcon } from '@heroicons/react/20/solid'
+import { useState } from "react";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  TransitionChild,
+} from "@headlessui/react";
+import { HeartIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PlusIcon } from "@heroicons/react/20/solid";
 
 export default function Example() {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
 
   return (
     <div>
       <button
+        type="button"
         onClick={() => setOpen(true)}
         className="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
       >
@@ -53,9 +59,13 @@ export default function Example() {
                       <div className="mt-4 flex items-start justify-between">
                         <div>
                           <h2 className="text-base font-semibold text-gray-900 dark:text-white">
-                            <span className="sr-only">Details for </span>IMG_4985.HEIC
+                            <span className="sr-only">
+                              Details for
+                            </span>IMG_4985.HEIC
                           </h2>
-                          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">3.9 MB</p>
+                          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                            3.9 MB
+                          </p>
                         </div>
                         <button
                           type="button"
@@ -68,32 +78,56 @@ export default function Example() {
                       </div>
                     </div>
                     <div>
-                      <h3 className="font-medium text-gray-900 dark:text-white">Information</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        Information
+                      </h3>
                       <dl className="mt-2 divide-y divide-gray-200 border-t border-b border-gray-200 dark:divide-white/10 dark:border-white/10">
                         <div className="flex justify-between py-3 text-sm font-medium">
-                          <dt className="text-gray-500 dark:text-gray-400">Uploaded by</dt>
-                          <dd className="text-gray-900 dark:text-white">Marie Culver</dd>
+                          <dt className="text-gray-500 dark:text-gray-400">
+                            Uploaded by
+                          </dt>
+                          <dd className="text-gray-900 dark:text-white">
+                            Marie Culver
+                          </dd>
                         </div>
                         <div className="flex justify-between py-3 text-sm font-medium">
-                          <dt className="text-gray-500 dark:text-gray-400">Created</dt>
-                          <dd className="text-gray-900 dark:text-white">June 8, 2020</dd>
+                          <dt className="text-gray-500 dark:text-gray-400">
+                            Created
+                          </dt>
+                          <dd className="text-gray-900 dark:text-white">
+                            June 8, 2020
+                          </dd>
                         </div>
                         <div className="flex justify-between py-3 text-sm font-medium">
-                          <dt className="text-gray-500 dark:text-gray-400">Last modified</dt>
-                          <dd className="text-gray-900 dark:text-white">June 8, 2020</dd>
+                          <dt className="text-gray-500 dark:text-gray-400">
+                            Last modified
+                          </dt>
+                          <dd className="text-gray-900 dark:text-white">
+                            June 8, 2020
+                          </dd>
                         </div>
                         <div className="flex justify-between py-3 text-sm font-medium">
-                          <dt className="text-gray-500 dark:text-gray-400">Dimensions</dt>
-                          <dd className="text-gray-900 dark:text-white">4032 x 3024</dd>
+                          <dt className="text-gray-500 dark:text-gray-400">
+                            Dimensions
+                          </dt>
+                          <dd className="text-gray-900 dark:text-white">
+                            4032 x 3024
+                          </dd>
                         </div>
                         <div className="flex justify-between py-3 text-sm font-medium">
-                          <dt className="text-gray-500 dark:text-gray-400">Resolution</dt>
-                          <dd className="text-gray-900 dark:text-white">72 x 72</dd>
+                          <dt className="text-gray-500 dark:text-gray-400">
+                            Resolution
+                          </dt>
+                          <dd className="text-gray-900 dark:text-white">
+                            72 x 72
+                          </dd>
                         </div>
                       </dl>
                     </div>
                     <div>
-                      <h3 className="font-medium text-gray-900 dark:text-white">Description</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        Description
+                      </h3>
                       <div className="mt-2 flex items-center justify-between">
                         <p className="text-sm text-gray-500 italic dark:text-gray-400">
                           Add a description to this image.
@@ -109,7 +143,9 @@ export default function Example() {
                       </div>
                     </div>
                     <div>
-                      <h3 className="font-medium text-gray-900 dark:text-white">Shared with</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        Shared with
+                      </h3>
                       <ul
                         role="list"
                         className="mt-2 divide-y divide-gray-200 border-t border-b border-gray-200 dark:divide-white/10 dark:border-white/10"
@@ -121,13 +157,15 @@ export default function Example() {
                               src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=1024&h=1024&q=80"
                               className="size-8 rounded-full bg-gray-100 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10"
                             />
-                            <p className="ml-4 text-sm font-medium text-gray-900 dark:text-white">Aimee Douglas</p>
+                            <p className="ml-4 text-sm font-medium text-gray-900 dark:text-white">
+                              Aimee Douglas
+                            </p>
                           </div>
                           <button
                             type="button"
                             className="ml-6 rounded-md text-sm font-medium text-indigo-600 hover:text-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 dark:focus-visible:outline-indigo-500"
                           >
-                            Remove<span className="sr-only"> Aimee Douglas</span>
+                            Remove<span className="sr-only">Aimee Douglas</span>
                           </button>
                         </li>
                         <li className="flex items-center justify-between py-3">
@@ -137,13 +175,17 @@ export default function Example() {
                               src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixqx=oilqXxSqey&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                               className="size-8 rounded-full bg-gray-100 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10"
                             />
-                            <p className="ml-4 text-sm font-medium text-gray-900 dark:text-white">Andrea McMillan</p>
+                            <p className="ml-4 text-sm font-medium text-gray-900 dark:text-white">
+                              Andrea McMillan
+                            </p>
                           </div>
                           <button
                             type="button"
                             className="ml-6 rounded-md text-sm font-medium text-indigo-600 hover:text-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 dark:focus-visible:outline-indigo-500"
                           >
-                            Remove<span className="sr-only"> Andrea McMillan</span>
+                            Remove<span className="sr-only">
+                              Andrea McMillan
+                            </span>
                           </button>
                         </li>
                         <li className="flex items-center justify-between py-2">
@@ -183,5 +225,5 @@ export default function Example() {
         </div>
       </Dialog>
     </div>
-  )
+  );
 }

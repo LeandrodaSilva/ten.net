@@ -1,39 +1,47 @@
-import { MagnifyingGlassIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
+import {
+  MagnifyingGlassIcon,
+  ShoppingBagIcon,
+} from "@heroicons/react/24/outline";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 
 const navigation = [
-  { name: 'Women', href: '#' },
-  { name: 'Men', href: '#' },
-  { name: 'Company', href: '#' },
-  { name: 'Stores', href: '#' },
-]
+  { name: "Women", href: "#" },
+  { name: "Men", href: "#" },
+  { name: "Company", href: "#" },
+  { name: "Stores", href: "#" },
+];
 const products = [
   {
     id: 1,
-    name: 'Throwback Hip Bag',
-    href: '#',
-    color: 'Salmon',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-    imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
+    name: "Throwback Hip Bag",
+    href: "#",
+    color: "Salmon",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
+    imageAlt:
+      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
   },
   {
     id: 2,
-    name: 'Medium Stuff Satchel',
-    href: '#',
-    color: 'Blue',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
+    name: "Medium Stuff Satchel",
+    href: "#",
+    color: "Blue",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
     imageAlt:
-      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
+      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
   },
   {
     id: 3,
-    name: 'Zip Tote Basket',
-    href: '#',
-    color: 'White and black',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-03.jpg',
-    imageAlt: 'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
+    name: "Zip Tote Basket",
+    href: "#",
+    color: "White and black",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-03.jpg",
+    imageAlt:
+      "Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.",
   },
-]
+];
 
 export default function Example() {
   return (
@@ -56,7 +64,11 @@ export default function Example() {
             <div className="absolute inset-x-0 bottom-0 overflow-x-auto border-t border-gray-200 sm:static sm:border-t-0">
               <div className="flex h-14 items-center space-x-8 px-4 sm:h-auto">
                 {navigation.map((item) => (
-                  <a key={item.name} href={item.href} className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                  >
                     {item.name}
                   </a>
                 ))}
@@ -77,7 +89,9 @@ export default function Example() {
                     aria-hidden="true"
                     className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                   />
-                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                    0
+                  </span>
                   <span className="sr-only">items in cart, view bag</span>
                 </PopoverButton>
                 <PopoverPanel
@@ -113,7 +127,10 @@ export default function Example() {
                     </button>
 
                     <p className="mt-6 text-center">
-                      <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                      <a
+                        href="#"
+                        className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                      >
                         View Shopping Bag
                       </a>
                     </p>
@@ -125,5 +142,5 @@ export default function Example() {
         </div>
       </nav>
     </header>
-  )
+  );
 }

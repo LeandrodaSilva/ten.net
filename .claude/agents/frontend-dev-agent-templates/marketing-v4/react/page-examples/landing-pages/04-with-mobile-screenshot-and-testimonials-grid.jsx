@@ -1,120 +1,130 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
   ArrowPathIcon,
   ChevronRightIcon,
   CloudArrowUpIcon,
   LockClosedIcon,
   ServerIcon,
-} from '@heroicons/react/20/solid'
+} from "@heroicons/react/20/solid";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-]
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Marketplace", href: "#" },
+  { name: "Company", href: "#" },
+];
 const primaryFeatures = [
   {
-    name: 'Push to deploy.',
-    description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.',
+    name: "Push to deploy.",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
     icon: CloudArrowUpIcon,
   },
   {
-    name: 'SSL certificates.',
-    description: 'Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.',
+    name: "SSL certificates.",
+    description:
+      "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
     icon: LockClosedIcon,
   },
   {
-    name: 'Database backups.',
-    description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.',
+    name: "Database backups.",
+    description:
+      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus.",
     icon: ServerIcon,
   },
-]
+];
 const secondaryFeatures = [
   {
-    name: 'Push to deploy',
+    name: "Push to deploy",
     description:
-      'Commodo nec sagittis tortor mauris sed. Turpis tortor quis scelerisque diam id accumsan nullam tempus. Pulvinar etiam lacus volutpat eu. Phasellus praesent ligula sit faucibus.',
-    href: '#',
+      "Commodo nec sagittis tortor mauris sed. Turpis tortor quis scelerisque diam id accumsan nullam tempus. Pulvinar etiam lacus volutpat eu. Phasellus praesent ligula sit faucibus.",
+    href: "#",
     icon: CloudArrowUpIcon,
   },
   {
-    name: 'SSL certificates',
+    name: "SSL certificates",
     description:
-      'Pellentesque enim a commodo malesuada turpis eleifend risus. Facilisis donec placerat sapien consequat tempor fermentum nibh.',
-    href: '#',
+      "Pellentesque enim a commodo malesuada turpis eleifend risus. Facilisis donec placerat sapien consequat tempor fermentum nibh.",
+    href: "#",
     icon: LockClosedIcon,
   },
   {
-    name: 'Simple queues',
+    name: "Simple queues",
     description:
-      'Pellentesque sit elit congue ante nec amet. Dolor aenean curabitur viverra suspendisse iaculis eget. Nec mollis placerat ultricies euismod ut condimentum.',
-    href: '#',
+      "Pellentesque sit elit congue ante nec amet. Dolor aenean curabitur viverra suspendisse iaculis eget. Nec mollis placerat ultricies euismod ut condimentum.",
+    href: "#",
     icon: ArrowPathIcon,
   },
-]
+];
 const featuredTestimonial = {
-  body: 'Integer id nunc sit semper purus. Bibendum at lacus ut arcu blandit montes vitae auctor libero. Hac condimentum dignissim nibh vulputate ut nunc. Amet nibh orci mi venenatis blandit vel et proin. Non hendrerit in vel ac diam.',
+  body:
+    "Integer id nunc sit semper purus. Bibendum at lacus ut arcu blandit montes vitae auctor libero. Hac condimentum dignissim nibh vulputate ut nunc. Amet nibh orci mi venenatis blandit vel et proin. Non hendrerit in vel ac diam.",
   author: {
-    name: 'Brenna Goyette',
-    handle: 'brennagoyette',
+    name: "Brenna Goyette",
+    handle: "brennagoyette",
     imageUrl:
-      'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=1024&h=1024&q=80',
-    logoUrl: 'https://tailwindcss.com/plus-assets/img/logos/savvycal-logo-gray-900.svg',
+      "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=1024&h=1024&q=80",
+    logoUrl:
+      "https://tailwindcss.com/plus-assets/img/logos/savvycal-logo-gray-900.svg",
   },
-}
+};
 const testimonials = [
   [
     [
       {
-        body: 'Laborum quis quam. Dolorum et ut quod quia. Voluptas numquam delectus nihil. Aut enim doloremque et ipsam.',
+        body:
+          "Laborum quis quam. Dolorum et ut quod quia. Voluptas numquam delectus nihil. Aut enim doloremque et ipsam.",
         author: {
-          name: 'Leslie Alexander',
-          handle: 'lesliealexander',
+          name: "Leslie Alexander",
+          handle: "lesliealexander",
           imageUrl:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
       {
-        body: 'Quia dolorem qui et. Atque quo aliquid sit eos officia. Dolores similique laboriosam quaerat cupiditate.',
+        body:
+          "Quia dolorem qui et. Atque quo aliquid sit eos officia. Dolores similique laboriosam quaerat cupiditate.",
         author: {
-          name: 'Michael Foster',
-          handle: 'michaelfoster',
+          name: "Michael Foster",
+          handle: "michaelfoster",
           imageUrl:
-            'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
       {
-        body: 'Consequatur ut atque. Itaque nostrum molestiae id veniam eos cumque. Ut quia eum fugit laborum autem inventore ut voluptate.',
+        body:
+          "Consequatur ut atque. Itaque nostrum molestiae id veniam eos cumque. Ut quia eum fugit laborum autem inventore ut voluptate.",
         author: {
-          name: 'Dries Vincent',
-          handle: 'driesvincent',
+          name: "Dries Vincent",
+          handle: "driesvincent",
           imageUrl:
-            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
     ],
     [
       {
-        body: 'Aut reprehenderit voluptatem eum asperiores beatae id. Iure molestiae ipsam ut officia rem nulla blanditiis.',
+        body:
+          "Aut reprehenderit voluptatem eum asperiores beatae id. Iure molestiae ipsam ut officia rem nulla blanditiis.",
         author: {
-          name: 'Lindsay Walton',
-          handle: 'lindsaywalton',
+          name: "Lindsay Walton",
+          handle: "lindsaywalton",
           imageUrl:
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
       {
-        body: 'Nam nesciunt dolorem dolor asperiores cum. Incidunt molestiae quis deleniti vitae ut in earum delectus iusto.',
+        body:
+          "Nam nesciunt dolorem dolor asperiores cum. Incidunt molestiae quis deleniti vitae ut in earum delectus iusto.",
         author: {
-          name: 'Courtney Henry',
-          handle: 'courtneyhenry',
+          name: "Courtney Henry",
+          handle: "courtneyhenry",
           imageUrl:
-            'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
     ],
@@ -122,83 +132,88 @@ const testimonials = [
   [
     [
       {
-        body: 'Voluptas quos itaque ipsam in voluptatem est. Iste eos blanditiis repudiandae. Earum deserunt enim molestiae ipsum perferendis recusandae saepe corrupti.',
+        body:
+          "Voluptas quos itaque ipsam in voluptatem est. Iste eos blanditiis repudiandae. Earum deserunt enim molestiae ipsum perferendis recusandae saepe corrupti.",
         author: {
-          name: 'Tom Cook',
-          handle: 'tomcook',
+          name: "Tom Cook",
+          handle: "tomcook",
           imageUrl:
-            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
       {
-        body: 'Aliquid dolore praesentium ratione. Cumque ea officia repellendus laboriosam. Vitae quod id explicabo non sunt.',
+        body:
+          "Aliquid dolore praesentium ratione. Cumque ea officia repellendus laboriosam. Vitae quod id explicabo non sunt.",
         author: {
-          name: 'Whitney Francis',
-          handle: 'whitneyfrancis',
+          name: "Whitney Francis",
+          handle: "whitneyfrancis",
           imageUrl:
-            'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
     ],
     [
       {
-        body: 'Molestias ea earum quos nostrum doloremque sed. Quaerat quasi aut velit incidunt excepturi rerum voluptatem minus harum.',
+        body:
+          "Molestias ea earum quos nostrum doloremque sed. Quaerat quasi aut velit incidunt excepturi rerum voluptatem minus harum.",
         author: {
-          name: 'Leonard Krasner',
-          handle: 'leonardkrasner',
+          name: "Leonard Krasner",
+          handle: "leonardkrasner",
           imageUrl:
-            'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
       {
-        body: 'Architecto libero natus est. Est quam debitis officia enim atque et ut non. Sunt reiciendis quasi eaque. Itaque error ut et.',
+        body:
+          "Architecto libero natus est. Est quam debitis officia enim atque et ut non. Sunt reiciendis quasi eaque. Itaque error ut et.",
         author: {
-          name: 'Floyd Miles',
-          handle: 'floydmiles',
+          name: "Floyd Miles",
+          handle: "floydmiles",
           imageUrl:
-            'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
       {
-        body: 'Temporibus ea molestiae impedit adipisci perspiciatis illo aliquid. Quis ut ratione et voluptatem et. Nostrum explicabo iste unde beatae.',
+        body:
+          "Temporibus ea molestiae impedit adipisci perspiciatis illo aliquid. Quis ut ratione et voluptatem et. Nostrum explicabo iste unde beatae.",
         author: {
-          name: 'Emily Selman',
-          handle: 'emilyselman',
+          name: "Emily Selman",
+          handle: "emilyselman",
           imageUrl:
-            'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
         },
       },
     ],
   ],
-]
+];
 const footerNavigation = {
   solutions: [
-    { name: 'Marketing', href: '#' },
-    { name: 'Analytics', href: '#' },
-    { name: 'Automation', href: '#' },
-    { name: 'Commerce', href: '#' },
-    { name: 'Insights', href: '#' },
+    { name: "Marketing", href: "#" },
+    { name: "Analytics", href: "#" },
+    { name: "Automation", href: "#" },
+    { name: "Commerce", href: "#" },
+    { name: "Insights", href: "#" },
   ],
   support: [
-    { name: 'Submit ticket', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
+    { name: "Submit ticket", href: "#" },
+    { name: "Documentation", href: "#" },
+    { name: "Guides", href: "#" },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
+    { name: "About", href: "#" },
+    { name: "Blog", href: "#" },
+    { name: "Jobs", href: "#" },
+    { name: "Press", href: "#" },
   ],
   legal: [
-    { name: 'Terms of service', href: '#' },
-    { name: 'Privacy policy', href: '#' },
-    { name: 'License', href: '#' },
+    { name: "Terms of service", href: "#" },
+    { name: "Privacy policy", href: "#" },
+    { name: "License", href: "#" },
   ],
   social: [
     {
-      name: 'Facebook',
-      href: '#',
+      name: "Facebook",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -210,8 +225,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'Instagram',
-      href: '#',
+      name: "Instagram",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -223,8 +238,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'X',
-      href: '#',
+      name: "X",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" />
@@ -232,8 +247,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'GitHub',
-      href: '#',
+      name: "GitHub",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -245,8 +260,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'YouTube',
-      href: '#',
+      name: "YouTube",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -258,20 +273,23 @@ const footerNavigation = {
       ),
     },
   ],
-}
+};
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white dark:bg-gray-900">
       {/* Header */}
       <header className="absolute inset-x-0 top-0 z-50">
-        <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
+        <nav
+          aria-label="Global"
+          className="flex items-center justify-between p-6 lg:px-8"
+        >
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
@@ -299,18 +317,29 @@ export default function Example() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+              >
                 {item.name}
               </a>
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+            <a
+              href="#"
+              className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+            >
               Log in <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="lg:hidden"
+        >
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-gray-100/10">
             <div className="flex items-center justify-between">
@@ -382,24 +411,41 @@ export default function Example() {
                 <path d="M100 200V.5M.5 .5H200" fill="none" />
               </pattern>
             </defs>
-            <svg x="50%" y={-1} className="overflow-visible fill-gray-50 dark:fill-gray-800/50">
+            <svg
+              x="50%"
+              y={-1}
+              className="overflow-visible fill-gray-50 dark:fill-gray-800/50"
+            >
               <path
                 d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
                 strokeWidth={0}
               />
             </svg>
-            <rect fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)" width="100%" height="100%" strokeWidth={0} />
+            <rect
+              fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)"
+              width="100%"
+              height="100%"
+              strokeWidth={0}
+            />
           </svg>
           <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:py-40">
             <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
               <div className="flex">
                 <div className="relative flex items-center gap-x-4 rounded-full bg-white px-4 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:bg-white/5 dark:text-gray-300 dark:ring-white/10 dark:hover:ring-white/20">
-                  <span className="font-semibold text-indigo-600 dark:text-indigo-400">We’re hiring</span>
-                  <span aria-hidden="true" className="h-4 w-px bg-gray-900/10 dark:bg-white/10" />
+                  <span className="font-semibold text-indigo-600 dark:text-indigo-400">
+                    We’re hiring
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="h-4 w-px bg-gray-900/10 dark:bg-white/10"
+                  />
                   <a href="#" className="flex items-center gap-x-1">
                     <span aria-hidden="true" className="absolute inset-0" />
                     See open positions
-                    <ChevronRightIcon aria-hidden="true" className="-mr-2 size-5 text-gray-400" />
+                    <ChevronRightIcon
+                      aria-hidden="true"
+                      className="-mr-2 size-5 text-gray-400"
+                    />
                   </a>
                 </div>
               </div>
@@ -407,8 +453,10 @@ export default function Example() {
                 A better way to ship your projects
               </h1>
               <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8 dark:text-gray-400">
-                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-                fugiat veniam occaecat fugiat aliqua. Anim aute id magna aliqua ad ad non deserunt sunt.
+                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
+                lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
+                fugiat aliqua. Anim aute id magna aliqua ad ad non deserunt
+                sunt.
               </p>
               <div className="mt-10 flex items-center gap-x-6">
                 <a
@@ -417,13 +465,20 @@ export default function Example() {
                 >
                   Get started
                 </a>
-                <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                <a
+                  href="#"
+                  className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+                >
                   Learn more <span aria-hidden="true">→</span>
                 </a>
               </div>
             </div>
             <div className="mt-16 sm:mt-24 lg:mt-0 lg:shrink-0 lg:grow">
-              <svg role="img" viewBox="0 0 366 729" className="mx-auto w-91.5 max-w-full drop-shadow-xl">
+              <svg
+                role="img"
+                viewBox="0 0 366 729"
+                className="mx-auto w-91.5 max-w-full drop-shadow-xl"
+              >
                 <title>App screenshot</title>
                 <defs>
                   <clipPath id="2ade4387-9c63-4fc4-b754-10e687a0d332">
@@ -543,8 +598,9 @@ export default function Example() {
                   Boost your productivity. Start using our app today.
                 </h2>
                 <p className="mt-6 text-lg/8 text-gray-300">
-                  Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada adipiscing sagittis vel
-                  nulla. Ac euismod vel sit maecenas.
+                  Ac euismod vel sit maecenas id pellentesque eu sed
+                  consectetur. Malesuada adipiscing sagittis vel nulla. Ac
+                  euismod vel sit maecenas.
                 </p>
               </div>
               <img
@@ -564,7 +620,7 @@ export default function Example() {
                           className="absolute top-1 left-1 size-5 text-indigo-500 dark:text-indigo-400"
                         />
                         {feature.name}
-                      </dt>{' '}
+                      </dt>{" "}
                       <dd className="inline">{feature.description}</dd>
                     </div>
                   ))}
@@ -578,7 +634,7 @@ export default function Example() {
               <div
                 style={{
                   clipPath:
-                    'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                    "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
                 }}
                 className="aspect-1155/678 w-288.75 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-25 dark:opacity-20"
               />
@@ -589,13 +645,16 @@ export default function Example() {
         {/* Feature section */}
         <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Deploy faster</h2>
+            <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+              Deploy faster
+            </h2>
             <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance dark:text-white">
               Everything you need to deploy your app
             </p>
             <p className="mt-6 text-lg/8 text-gray-600 dark:text-gray-300">
-              Quis tellus eget adipiscing convallis sit sit eget aliquet quis. Suspendisse eget egestas a elementum
-              pulvinar et feugiat blandit at. In mi viverra elit nunc.
+              Quis tellus eget adipiscing convallis sit sit eget aliquet quis.
+              Suspendisse eget egestas a elementum pulvinar et feugiat blandit
+              at. In mi viverra elit nunc.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -633,7 +692,8 @@ export default function Example() {
               Get notified when we’re launching
             </h2>
             <p className="mx-auto mt-6 max-w-lg text-center text-lg text-gray-300">
-              Reprehenderit ad esse et non officia in nulla. Id proident tempor incididunt nostrud nulla et culpa.
+              Reprehenderit ad esse et non officia in nulla. Id proident tempor
+              incididunt nostrud nulla et culpa.
             </p>
             <form className="mx-auto mt-10 flex max-w-md gap-x-4">
               <label htmlFor="email-address" className="sr-only">
@@ -660,7 +720,13 @@ export default function Example() {
               aria-hidden="true"
               className="absolute top-1/2 left-1/2 -z-10 size-256 -translate-x-1/2"
             >
-              <circle r={512} cx={512} cy={512} fill="url(#759c1415-0410-454c-8f7c-9a820de03641)" fillOpacity="0.7" />
+              <circle
+                r={512}
+                cx={512}
+                cy={512}
+                fill="url(#759c1415-0410-454c-8f7c-9a820de03641)"
+                fillOpacity="0.7"
+              />
               <defs>
                 <radialGradient
                   r={1}
@@ -696,13 +762,22 @@ export default function Example() {
                 <path d="M.5 200V.5H200" fill="none" />
               </pattern>
             </defs>
-            <svg x="50%" y={0} className="overflow-visible fill-gray-50 dark:fill-gray-800/20">
+            <svg
+              x="50%"
+              y={0}
+              className="overflow-visible fill-gray-50 dark:fill-gray-800/20"
+            >
               <path
                 d="M-200.5 0h201v201h-201Z M599.5 0h201v201h-201Z M399.5 400h201v201h-201Z M-400.5 600h201v201h-201Z"
                 strokeWidth={0}
               />
             </svg>
-            <rect fill="url(#55d3d46d-692e-45f2-becd-d8bdc9344f45)" width="100%" height="100%" strokeWidth={0} />
+            <rect
+              fill="url(#55d3d46d-692e-45f2-becd-d8bdc9344f45)"
+              width="100%"
+              height="100%"
+              strokeWidth={0}
+            />
           </svg>
           <div className="relative">
             <div
@@ -712,7 +787,7 @@ export default function Example() {
               <div
                 style={{
                   clipPath:
-                    'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                    "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
                 }}
                 className="ml-[max(50%,38rem)] aspect-1313/771 w-328.25 bg-linear-to-tr from-[#ff80b5] to-[#9089fc]"
               />
@@ -724,14 +799,16 @@ export default function Example() {
               <div
                 style={{
                   clipPath:
-                    'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                    "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
                 }}
                 className="-ml-88 aspect-1313/771 w-328.25 flex-none origin-top-right rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] xl:mr-[calc(50%-12rem)] xl:ml-0"
               />
             </div>
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="mx-auto max-w-2xl text-center">
-                <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Testimonials</h2>
+                <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+                  Testimonials
+                </h2>
                 <p className="mt-2 text-4xl font-semibold tracking-tight text-balance text-gray-900 sm:text-5xl dark:text-white">
                   We have worked with thousands of amazing people
                 </p>
@@ -751,7 +828,9 @@ export default function Example() {
                       <div className="font-semibold text-gray-900 dark:text-white">
                         {featuredTestimonial.author.name}
                       </div>
-                      <div className="text-gray-600 dark:text-gray-400">{`@${featuredTestimonial.author.handle}`}</div>
+                      <div className="text-gray-600 dark:text-gray-400">
+                        {`@${featuredTestimonial.author.handle}`}
+                      </div>
                     </div>
                     <img
                       alt=""
@@ -760,22 +839,29 @@ export default function Example() {
                     />
                     <img
                       alt=""
-                      src={featuredTestimonial.author.logoUrl.replace('-gray-900', '-gray-100')}
+                      src={featuredTestimonial.author.logoUrl.replace(
+                        "-gray-900",
+                        "-gray-100",
+                      )}
                       className="h-10 w-auto flex-none not-dark:hidden"
                     />
                   </figcaption>
                 </figure>
                 {testimonials.map((columnGroup, columnGroupIdx) => (
-                  <div key={columnGroupIdx} className="space-y-8 xl:contents xl:space-y-0">
+                  <div
+                    key={columnGroupIdx}
+                    className="space-y-8 xl:contents xl:space-y-0"
+                  >
                     {columnGroup.map((column, columnIdx) => (
                       <div
                         key={columnIdx}
                         className={classNames(
                           (columnGroupIdx === 0 && columnIdx === 0) ||
-                            (columnGroupIdx === testimonials.length - 1 && columnIdx === columnGroup.length - 1)
-                            ? 'xl:row-span-2'
-                            : 'xl:row-start-1',
-                          'space-y-8',
+                            (columnGroupIdx === testimonials.length - 1 &&
+                              columnIdx === columnGroup.length - 1)
+                            ? "xl:row-span-2"
+                            : "xl:row-start-1",
+                          "space-y-8",
                         )}
                       >
                         {column.map((testimonial) => (
@@ -796,7 +882,9 @@ export default function Example() {
                                 <div className="font-semibold text-gray-900 dark:text-white">
                                   {testimonial.author.name}
                                 </div>
-                                <div className="text-gray-600 dark:text-gray-400">{`@${testimonial.author.handle}`}</div>
+                                <div className="text-gray-600 dark:text-gray-400">
+                                  {`@${testimonial.author.handle}`}
+                                </div>
                               </div>
                             </figcaption>
                           </figure>
@@ -828,7 +916,9 @@ export default function Example() {
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Solutions</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Solutions
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.solutions.map((item) => (
                       <li key={item.name}>
@@ -843,7 +933,9 @@ export default function Example() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Support</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Support
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.support.map((item) => (
                       <li key={item.name}>
@@ -860,7 +952,9 @@ export default function Example() {
               </div>
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Company</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Company
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.company.map((item) => (
                       <li key={item.name}>
@@ -875,7 +969,9 @@ export default function Example() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Legal</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Legal
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.legal.map((item) => (
                       <li key={item.name}>
@@ -894,9 +990,12 @@ export default function Example() {
           </div>
           <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 lg:flex lg:items-center lg:justify-between dark:border-white/10">
             <div>
-              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Subscribe to our newsletter</h3>
+              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                Subscribe to our newsletter
+              </h3>
               <p className="mt-2 text-sm/6 text-gray-600 dark:text-gray-400">
-                The latest news, articles, and resources, sent to your inbox weekly.
+                The latest news, articles, and resources, sent to your inbox
+                weekly.
               </p>
             </div>
             <form className="mt-6 sm:flex sm:max-w-md lg:mt-0">
@@ -942,5 +1041,5 @@ export default function Example() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { StarIcon } from '@heroicons/react/20/solid'
+import { StarIcon } from "@heroicons/react/20/solid";
 
 export default function Example() {
   return (
@@ -14,9 +14,11 @@ export default function Example() {
         </div>
         <blockquote className="mt-10 text-xl/8 font-semibold tracking-tight text-gray-900 sm:text-2xl/9 dark:text-white">
           <p>
-            “Qui dolor enim consectetur do et non ex amet culpa sint in ea non dolore. Enim minim magna anim id minim eu
-            cillum sunt dolore aliquip. Amet elit laborum culpa irure incididunt adipisicing culpa amet officia
-            exercitation. Eu non aute velit id velit Lorem elit anim pariatur.”
+            “Qui dolor enim consectetur do et non ex amet culpa sint in ea non
+            dolore. Enim minim magna anim id minim eu cillum sunt dolore
+            aliquip. Amet elit laborum culpa irure incididunt adipisicing culpa
+            amet officia exercitation. Eu non aute velit id velit Lorem elit
+            anim pariatur.”
           </p>
         </blockquote>
         <figcaption className="mt-10 flex items-center gap-x-6">
@@ -26,11 +28,15 @@ export default function Example() {
             className="size-12 rounded-full bg-gray-50 dark:bg-gray-800"
           />
           <div className="text-sm/6">
-            <div className="font-semibold text-gray-900 dark:text-white">Judith Black</div>
-            <div className="mt-0.5 text-gray-600 dark:text-gray-400">CEO of Workcation</div>
+            <div className="font-semibold text-gray-900 dark:text-white">
+              Judith Black
+            </div>
+            <div className="mt-0.5 text-gray-600 dark:text-gray-400">
+              CEO of Workcation
+            </div>
           </div>
         </figcaption>
       </figure>
     </section>
-  )
+  );
 }

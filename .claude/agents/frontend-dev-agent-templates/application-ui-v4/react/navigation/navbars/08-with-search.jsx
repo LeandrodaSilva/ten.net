@@ -1,6 +1,14 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function Example() {
   return (
@@ -70,8 +78,14 @@ export default function Example() {
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-600 dark:hover:bg-white/5 dark:hover:text-white dark:focus:outline-indigo-500">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
-              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
+              <Bars3Icon
+                aria-hidden="true"
+                className="block size-6 group-data-open:hidden"
+              />
+              <XMarkIcon
+                aria-hidden="true"
+                className="hidden size-6 group-data-open:block"
+              />
             </DisclosureButton>
           </div>
           <div className="hidden lg:ml-4 lg:flex lg:items-center">
@@ -172,8 +186,12 @@ export default function Example() {
               />
             </div>
             <div className="ml-3">
-              <div className="text-base font-medium text-gray-800 dark:text-gray-200">Tom Cook</div>
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">tom@example.com</div>
+              <div className="text-base font-medium text-gray-800 dark:text-gray-200">
+                Tom Cook
+              </div>
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                tom@example.com
+              </div>
             </div>
             <button
               type="button"
@@ -210,5 +228,5 @@ export default function Example() {
         </div>
       </DisclosurePanel>
     </Disclosure>
-  )
+  );
 }

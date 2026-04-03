@@ -1,16 +1,18 @@
-import { BellIcon } from '@heroicons/react/24/outline'
+import { BellIcon } from "@heroicons/react/24/outline";
 
 export default function Example() {
   return (
     <>
-      {/*
+      {
+        /*
         This example requires updating your template:
 
         ```
         <html class="h-full bg-white dark:bg-gray-900">
         <body class="h-full">
         ```
-      */}
+      */
+      }
       <div className="flex min-h-full flex-col">
         <header className="relative shrink-0 bg-gray-900 dark:before:pointer-events-none dark:before:absolute dark:before:inset-0 dark:before:border-b dark:before:border-white/10 dark:before:bg-black/10">
           <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -20,7 +22,10 @@ export default function Example() {
               className="h-8 w-auto"
             />
             <div className="flex items-center gap-x-8">
-              <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-white">
+              <button
+                type="button"
+                className="-m-2.5 p-2.5 text-gray-400 hover:text-white"
+              >
                 <span className="sr-only">View notifications</span>
                 <BellIcon aria-hidden="true" className="size-6" />
               </button>
@@ -44,7 +49,9 @@ export default function Example() {
               {/* Left column area */}
             </div>
 
-            <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">{/* Main area */}</div>
+            <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
+              {/* Main area */}
+            </div>
           </div>
 
           <div className="shrink-0 border-t border-gray-200 px-4 py-6 sm:px-6 lg:w-96 lg:border-t-0 lg:border-l lg:pr-8 xl:pr-6 dark:border-white/10">
@@ -53,5 +60,5 @@ export default function Example() {
         </div>
       </div>
     </>
-  )
+  );
 }

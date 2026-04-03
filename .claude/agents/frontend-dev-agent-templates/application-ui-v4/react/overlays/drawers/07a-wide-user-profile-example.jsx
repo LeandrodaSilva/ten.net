@@ -1,16 +1,25 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel, DialogTitle, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
+import { useState } from "react";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 
 export default function Example() {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
 
   return (
     <div>
       <button
+        type="button"
         onClick={() => setOpen(true)}
         className="rounded-md bg-gray-950/5 px-2.5 py-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-950/10 dark:bg-white/10 dark:text-white dark:inset-ring dark:inset-ring-white/5 dark:hover:bg-white/20"
       >
@@ -71,7 +80,9 @@ export default function Example() {
                                 <span className="sr-only">Online</span>
                               </span>
                             </div>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">@ashleyporter</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              @ashleyporter
+                            </p>
                           </div>
                           <div className="mt-5 flex flex-wrap space-y-3 sm:space-y-0 sm:space-x-3">
                             <button
@@ -87,11 +98,19 @@ export default function Example() {
                               Call
                             </button>
                             <div className="ml-3 inline-flex sm:ml-0">
-                              <Menu as="div" className="relative inline-block text-left">
+                              <Menu
+                                as="div"
+                                className="relative inline-block text-left"
+                              >
                                 <MenuButton className="relative inline-flex items-center rounded-md bg-white p-2 text-gray-400 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-gray-100 dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">
                                   <span className="absolute -inset-1" />
-                                  <span className="sr-only">Open options menu</span>
-                                  <EllipsisVerticalIcon aria-hidden="true" className="size-5" />
+                                  <span className="sr-only">
+                                    Open options menu
+                                  </span>
+                                  <EllipsisVerticalIcon
+                                    aria-hidden="true"
+                                    className="size-5"
+                                  />
                                 </MenuButton>
                                 <MenuItems
                                   transition
@@ -130,9 +149,10 @@ export default function Example() {
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0 sm:ml-6 dark:text-white">
                             <p>
-                              Enim feugiat ut ipsum, neque ut. Tristique mi id elementum praesent. Gravida in tempus
-                              feugiat netus enim aliquet a, quam scelerisque. Dictumst in convallis nec in bibendum
-                              aenean arcu.
+                              Enim feugiat ut ipsum, neque ut. Tristique mi id
+                              elementum praesent. Gravida in tempus feugiat
+                              netus enim aliquet a, quam scelerisque. Dictumst
+                              in convallis nec in bibendum aenean arcu.
                             </p>
                           </dd>
                         </div>
@@ -170,5 +190,5 @@ export default function Example() {
         </div>
       </Dialog>
     </div>
-  )
+  );
 }

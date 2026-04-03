@@ -1,14 +1,16 @@
 export default function Example() {
   return (
     <>
-      {/*
+      {
+        /*
         This example requires updating your template:
 
         ```
         <html class="h-full bg-gray-50 dark:bg-gray-900">
         <body class="h-full">
         ```
-      */}
+      */
+      }
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
@@ -30,7 +32,10 @@ export default function Example() {
           <div className="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
             <form action="#" method="POST" className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="email"
+                  className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+                >
                   Email address
                 </label>
                 <div className="mt-2">
@@ -46,7 +51,10 @@ export default function Example() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="password"
+                  className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+                >
                   Password
                 </label>
                 <div className="mt-2">
@@ -93,7 +101,10 @@ export default function Example() {
                       </svg>
                     </div>
                   </div>
-                  <label htmlFor="remember-me" className="block text-sm/6 text-gray-900 dark:text-white">
+                  <label
+                    htmlFor="remember-me"
+                    className="block text-sm/6 text-gray-900 dark:text-white"
+                  >
                     Remember me
                   </label>
                 </div>
@@ -121,7 +132,9 @@ export default function Example() {
             <div>
               <div className="mt-10 flex items-center gap-x-6">
                 <div className="w-full flex-1 border-t border-gray-200 dark:border-white/10" />
-                <p className="text-sm/6 font-medium text-nowrap text-gray-900 dark:text-white">Or continue with</p>
+                <p className="text-sm/6 font-medium text-nowrap text-gray-900 dark:text-white">
+                  Or continue with
+                </p>
                 <div className="w-full flex-1 border-t border-gray-200 dark:border-white/10" />
               </div>
 
@@ -130,7 +143,11 @@ export default function Example() {
                   href="#"
                   className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 focus-visible:inset-ring-transparent dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20"
                 >
-                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="h-5 w-5"
+                  >
                     <path
                       d="M12.0003 4.75C13.7703 4.75 15.3553 5.36002 16.6053 6.54998L20.0303 3.125C17.9502 1.19 15.2353 0 12.0003 0C7.31028 0 3.25527 2.69 1.28027 6.60998L5.27028 9.70498C6.21525 6.86002 8.87028 4.75 12.0003 4.75Z"
                       fill="#EA4335"
@@ -174,7 +191,7 @@ export default function Example() {
           </div>
 
           <p className="mt-10 text-center text-sm/6 text-gray-500 dark:text-gray-400">
-            Not a member?{' '}
+            Not a member?{" "}
             <a
               href="#"
               className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
@@ -185,5 +202,5 @@ export default function Example() {
         </div>
       </div>
     </>
-  )
+  );
 }
