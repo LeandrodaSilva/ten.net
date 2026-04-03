@@ -35,3 +35,14 @@ export {
 export { DynamicRouteRegistry } from "./routing/dynamicRouteRegistry.ts";
 export { BlogRouteRegistry } from "./routing/blogRouteRegistry.ts";
 export type { WidgetPageRenderer } from "./models/WidgetResolver.ts";
+export { TenCore } from "./core/tenCore.ts";
+export { decodeBase64Universal } from "./core/base64.ts";
+export type {
+  AdminPluginLikeCore,
+  Base64Decoder,
+  DynamicPageRenderer,
+  DynamicRouteLike,
+  DynamicRouteRegistryLike,
+  TenCoreOptions,
+  WidgetPageRendererCore,
+} from "./core/types.ts";

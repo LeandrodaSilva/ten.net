@@ -1,14 +1,16 @@
 import { routerEngine } from "./routerEngine.ts";
-import { viewEngine } from "./viewEngine.ts";
-import { paramsEngine } from "./paramsEngine.ts";
 import type { Route } from "./models/Route.ts";
 import type { AppManifest } from "./build/manifest.ts";
-import { embeddedRouterEngine } from "./embedded/embeddedRouterEngine.ts";
 import type { BuildOptions, BuildResult } from "./build/build.ts";
 import type { Middleware } from "./middleware/middleware.ts";
 import type { DynamicRouteRegistry } from "./routing/dynamicRouteRegistry.ts";
 import type { WidgetPageRenderer } from "./models/WidgetResolver.ts";
 import { renderDynamicPage } from "./routing/dynamicPageHandler.ts";
+import { TenCore } from "./core/tenCore.ts";
+import type {
+  AdminPluginLikeCore,
+  DynamicRouteRegistryLike,
+} from "./core/types.ts";
 
 /** Interface for an admin plugin that can be registered via useAdmin(). */
 export interface AdminPluginLike {
@@ -35,15 +37,36 @@ export interface AdminPluginLike {
 export class Ten {
   private readonly _appPath: string;
   private readonly _routeFileName = "route.ts";
-  private _routes: Route[] = [];
-  private _embedded?: AppManifest;
-  private _middlewares: Middleware[] = [];
-  private _dynamicRegistry?: DynamicRouteRegistry;
-  private _kv?: Deno.Kv;
-  private _widgetRenderer?: WidgetPageRenderer;
+  private _core: TenCore;
 
   private constructor(appPath = "./app") {
     this._appPath = appPath;
+    this._core = new TenCore({ appPath });
+    this._setDefaultDynamicPageRenderer();
+  }
+
+  /** Install the Deno-aware dynamic-page renderer on the core. */
+  private _setDefaultDynamicPageRenderer(): void {
+    this._core.setDynamicPageRenderer((dynamicRoute, req) => {
+      return renderDynamicPage(
+        {
+          id: dynamicRoute.id,
+          body: dynamicRoute.body,
+          title: dynamicRoute.title,
+          seo_title: dynamicRoute.seo_title,
+          seo_description: dynamicRoute.seo_description,
+          template: dynamicRoute.template,
+          widgets_enabled: dynamicRoute.widgets_enabled,
+        },
+        this._appPath,
+        this._core.kv as Deno.Kv | undefined,
+        req ? { url: new URL(req.url).href, type: "website" } : undefined,
+        this._core.widgetRenderer
+          ? (pageId, body, kv) =>
+            this._core.widgetRenderer!(pageId, body, kv as Deno.Kv)
+          : undefined,
+      );
+    });
   }
 
   /**
@@ -69,7 +92,12 @@ export class Ten {
   static net(options?: { embedded?: AppManifest; appPath?: string }): Ten {
     const instance = new Ten(options?.appPath);
     if (options?.embedded) {
-      instance._embedded = options.embedded;
+      instance._core = new TenCore({
+        embedded: options.embedded,
+        appPath: options?.appPath,
+      });
+      // Re-install the renderer on the new core instance.
+      instance._setDefaultDynamicPageRenderer();
     }
     return instance;
   }
@@ -102,7 +130,7 @@ export class Ten {
    * @param middleware - The middleware function to register
    */
   public use(middleware: Middleware): void {
-    this._middlewares.push(middleware);
+    this._core.use(middleware);
   }
 
   /**
@@ -124,180 +152,35 @@ export class Ten {
    * ```
    */
   public async useAdmin(admin: AdminPluginLike): Promise<void> {
-    const { routes, middlewares, dynamicRegistry, kv, widgetRenderer } =
-      await admin.init();
-    this._routes.push(...routes);
-    for (const mw of middlewares) {
-      this.use(mw);
-    }
-    if (dynamicRegistry) {
-      this._dynamicRegistry = dynamicRegistry;
-    }
-    if (kv) {
-      this._kv = kv;
-    }
-    if (widgetRenderer) {
-      this._widgetRenderer = widgetRenderer;
-    }
-  }
-
-  /**
-   * Handle a matched dynamic page by rendering it through the template engine.
-   * Returns a full HTML response with layouts and SEO meta tags applied.
-   */
-  private async _handleDynamicPage(
-    dynamicRoute: {
-      id: string;
-      body: string;
-      title: string;
-      seo_title: string;
-      seo_description: string;
-      template: string;
-      widgets_enabled?: boolean;
-    },
-    req?: Request,
-  ): Promise<Response> {
-    const html = await renderDynamicPage(
-      {
-        id: dynamicRoute.id,
-        body: dynamicRoute.body,
-        title: dynamicRoute.title,
-        seo_title: dynamicRoute.seo_title,
-        seo_description: dynamicRoute.seo_description,
-        template: dynamicRoute.template,
-        widgets_enabled: dynamicRoute.widgets_enabled,
+    const coreAdmin: AdminPluginLikeCore = {
+      init: async () => {
+        const result = await admin.init();
+        return {
+          routes: result.routes,
+          middlewares: result.middlewares,
+          dynamicRegistry: result.dynamicRegistry as
+            | DynamicRouteRegistryLike
+            | undefined,
+          kv: result.kv,
+          widgetRenderer: result.widgetRenderer
+            ? (pageId, body, kv) =>
+              result.widgetRenderer!(pageId, body, kv as Deno.Kv)
+            : undefined,
+        };
       },
-      this._appPath,
-      this._kv,
-      req ? { url: new URL(req.url).href, type: "website" } : undefined,
-      this._widgetRenderer,
-    );
-    return new Response(html, {
-      status: 200,
-      headers: { "Content-Type": "text/html" },
-    });
-  }
-
-  /**
-   * Handle 404 responses. If the DynamicRouteRegistry has a custom 404 page
-   * (slug "404"), render it. Otherwise, return a plain text "Not found" response.
-   */
-  private async _handle404(): Promise<Response> {
-    if (this._dynamicRegistry?.notFoundPage) {
-      const notFound = this._dynamicRegistry.notFoundPage;
-      const html = await renderDynamicPage(
-        {
-          id: notFound.id,
-          body: notFound.body,
-          title: notFound.title,
-          seo_title: notFound.seo_title,
-          seo_description: notFound.seo_description,
-          template: notFound.template,
-        },
-        this._appPath,
-        this._kv,
-        undefined,
-        this._widgetRenderer,
-      );
-      return new Response(html, {
-        status: 404,
-        headers: { "Content-Type": "text/html" },
-      });
-    }
-    return new Response("Not found", { status: 404 });
-  }
-
-  /** Route an incoming HTTP request through the middleware chain and router. */
-  private async _handleRequest(req: Request): Promise<Response> {
-    let index = 0;
-    const chain = this._middlewares;
-    const routeRequest = this._routeRequest.bind(this);
-
-    const next = async (): Promise<Response> => {
-      if (index < chain.length) {
-        const mw = chain[index++];
-        return await mw(req, next);
-      }
-      return await routeRequest(req);
     };
 
-    return await next();
+    // The default dynamic-page renderer (set in the constructor) reads
+    // this._core.kv and this._core.widgetRenderer lazily, so it automatically
+    // picks up the values set by useAdmin — no re-injection needed.
+    await this._core.useAdmin(coreAdmin);
   }
 
   /**
-   * Core routing logic.
-   * Priority: embedded assets > file-based + admin routes > dynamic pages (GET) > custom 404 > plain 404
+   * Exposes the core fetch handler for direct use (e.g. testing, Cloudflare).
    */
-  private async _routeRequest(req: Request): Promise<Response> {
-    const url = new URL(req.url);
-    const path = url.pathname;
-
-    if (this._embedded?.assets[path]) {
-      const asset = this._embedded.assets[path];
-      const { decodeBase64 } = await import("@std/encoding");
-      return new Response(decodeBase64(asset.dataBase64), {
-        headers: {
-          "Content-Type": asset.mimeType,
-          "Cache-Control": "public, max-age=31536000",
-        },
-      });
-    }
-
-    const route = this._routes.find((r) => {
-      if (!r.regex.test(path)) return false;
-      if (r.method !== "ALL" && r.method !== req.method.toUpperCase()) {
-        return false;
-      }
-      return true;
-    });
-
-    if (!route) {
-      // After file-based + admin route miss, try dynamic pages (GET only)
-      if (req.method === "GET" && this._dynamicRegistry) {
-        const dynamicRoute = this._dynamicRegistry.match(path);
-        if (dynamicRoute) {
-          return await this._handleDynamicPage(dynamicRoute, req);
-        }
-      }
-      return await this._handle404();
-    }
-
-    const requestMethod = req.method;
-
-    try {
-      await route.import(requestMethod);
-
-      const params = paramsEngine(path, route);
-
-      if (!route.isViewForMethod(requestMethod) && route.run) {
-        return route.run(req, {
-          params,
-        });
-      }
-
-      if (route.isViewForMethod(requestMethod)) {
-        try {
-          const page = await viewEngine({
-            _appPath: this._appPath,
-            route,
-            req,
-            params,
-            embedded: this._embedded,
-          });
-          return new Response(page, {
-            status: 200,
-            headers: { "Content-Type": "text/html" },
-          });
-        } catch {
-          console.error(`Error rendering page for route: ${route.path}`); // NOSONAR
-        }
-      }
-
-      return this._handle404();
-    } catch (e) {
-      console.error(`Error handling route: ${route?.path}`, e);
-      return new Response("Internal Server Error", { status: 500 });
-    }
+  get fetch(): (req: Request) => Promise<Response> {
+    return this._core.fetch;
   }
 
   /** Spawn a web worker that watches the app directory for file changes. */
@@ -311,9 +194,9 @@ export class Ten {
 
     worker.onmessage = async (event) => {
       console.info("Worker message: ", event);
-      this._routes = [];
-      this._routes.push(
-        ...await routerEngine(this._appPath, this._routeFileName),
+      this._core.clearRoutes();
+      this._core.addRoutes(
+        await routerEngine(this._appPath, this._routeFileName),
       );
     };
 
@@ -337,20 +220,55 @@ export class Ten {
   public async start(
     options?: Deno.ServeTcpOptions,
   ): Promise<Deno.HttpServer<Deno.NetAddr>> {
-    if (this._embedded) {
-      this._routes.push(...embeddedRouterEngine(this._embedded));
-    } else {
-      this._routes.push(
-        ...await routerEngine(this._appPath, this._routeFileName),
+    if (!this._core.embedded) {
+      this._core.addRoutes(
+        await routerEngine(this._appPath, this._routeFileName),
       );
     }
+    // Embedded routes are loaded lazily inside TenCore.init() on first fetch.
 
-    console.info("Routes:", this._routes.map((r) => r.path));
+    console.info(
+      "Routes:",
+      this._core.routes.map((r) => r.path),
+    );
 
-    if (!this._embedded && Deno.env.get("DEBUG")) {
+    if (!this._core.embedded && Deno.env.get("DEBUG")) {
       this._startFileWatcher();
     }
 
-    return Deno.serve(options ?? {}, this._handleRequest.bind(this));
+    return Deno.serve(options ?? {}, this._core.fetch);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Private compatibility shims — tests access these via type casting
+  // ---------------------------------------------------------------------------
+
+  /** @internal Used by tests via type casting. Delegates to TenCore. */
+  private _handleRequest(req: Request): Promise<Response> {
+    return this._core.fetch(req);
+  }
+
+  /** @internal Used by tests via type casting. */
+  private get _routes(): readonly Route[] {
+    return this._core.routes;
+  }
+
+  private set _routes(r: Route[]) {
+    this._core.clearRoutes();
+    if (r.length) this._core.addRoutes(r);
+  }
+
+  /** @internal Used by tests via type casting. */
+  private get _middlewares(): readonly Middleware[] {
+    return this._core.middlewares;
+  }
+
+  /** @internal Used by tests via type casting. */
+  private get _dynamicRegistry(): DynamicRouteRegistryLike | undefined {
+    return this._core.dynamicRegistry;
+  }
+
+  private set _dynamicRegistry(r: DynamicRouteRegistryLike | undefined) {
+    this._core.dynamicRegistryOverride = r;
   }
 }
