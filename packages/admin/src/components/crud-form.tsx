@@ -68,7 +68,31 @@ export function CrudForm({
         {() => {
           // @ts-ignore: DOM APIs available at runtime in browser
           const doc = globalThis.document;
-          if (!doc) return;
+          if (doc) {
+            const titleInput = doc.getElementById("title");
+            const slugInput = doc.getElementById("slug");
+            if (titleInput && slugInput) {
+              let slugManuallyEdited = slugInput.value.trim() !== "";
+
+              slugInput.addEventListener("input", () => {
+                slugManuallyEdited = true;
+              });
+
+              titleInput.addEventListener("input", () => {
+                if (!slugManuallyEdited) {
+                  const text = titleInput.value;
+                  slugInput.value = String(text)
+                    .trim()
+                    .replace(/([a-z])([A-Z])/g, "$1-$2")
+                    .replace(/[\s_]+/g, "-")
+                    .replace(/[^a-zA-Z0-9-]/g, "-")
+                    .replace(/--+/g, "-")
+                    .replace(/^-+|-+$/g, "")
+                    .toLowerCase();
+                }
+              });
+            }
+          }
         }}
       </Script>
     </>

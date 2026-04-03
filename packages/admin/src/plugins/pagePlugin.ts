@@ -27,8 +27,8 @@ export class PagePlugin extends Plugin {
     this.name = "PagePlugin";
     this.description = "Dynamic pages managed from the admin panel.";
     this.model = {
-      slug: "string",
       title: "string",
+      slug: "string",
       body: "string",
       status: "string",
       seo_title: "string",
