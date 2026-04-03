@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { VERSION } from "../../packages/core/src/version.ts";
+import { VERSION } from "../../src/version.ts";
 
 describe("cli", () => {
   it("should show help when run without arguments", async () => {
@@ -9,7 +9,7 @@ describe("cli", () => {
         "run",
         "--allow-all",
 
-        "packages/core/src/cli.ts",
+        "src/cli.ts",
       ],
       stdout: "piped",
       stderr: "piped",
@@ -30,7 +30,7 @@ describe("cli", () => {
         "run",
         "--allow-all",
 
-        "packages/core/src/cli.ts",
+        "src/cli.ts",
         "--version",
       ],
       stdout: "piped",
@@ -50,7 +50,7 @@ describe("cli", () => {
         "run",
         "--allow-all",
 
-        "packages/core/src/cli.ts",
+        "src/cli.ts",
         "build",
         "--help",
       ],
@@ -73,7 +73,7 @@ describe("cli", () => {
         "run",
         "--allow-all",
 
-        "packages/core/src/cli.ts",
+        "src/cli.ts",
         "unknown-command",
       ],
       stdout: "piped",

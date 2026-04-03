@@ -7,7 +7,7 @@ import { assertStringIncludes } from "@std/assert";
 import {
   generateCompiledApp,
   generateCompiledAppStandalone,
-} from "../../packages/core/src/build/codeGenerator.ts";
+} from "../../src/build/codeGenerator.ts";
 
 describe("codeGenerator", () => {
   it("generateCompiledApp should produce valid TS code", () => {

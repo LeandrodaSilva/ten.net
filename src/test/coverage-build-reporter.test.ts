@@ -4,8 +4,8 @@
  */
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { BuildReporter } from "../../packages/core/src/build/buildReporter.ts";
-import { stripAnsi } from "../../packages/core/src/terminalUi.ts";
+import { BuildReporter } from "../../src/build/buildReporter.ts";
+import { stripAnsi } from "../../src/terminalUi.ts";
 
 function createCapturingReporter(opts?: {
   interactive?: boolean;

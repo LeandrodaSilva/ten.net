@@ -5,15 +5,15 @@ import {
   assertNotMatch,
   assertStringIncludes,
 } from "@std/assert";
-import { stripAnsi } from "../../packages/core/src/terminalUi.ts";
-import { VERSION } from "../../packages/core/src/version.ts";
+import { stripAnsi } from "../../src/terminalUi.ts";
+import { VERSION } from "../../src/version.ts";
 
 function runBuildCommand(args: string[]) {
   return new Deno.Command("deno", {
     args: [
       "run",
       "--allow-all",
-      "packages/core/src/build/buildCommand.ts",
+      "src/build/buildCommand.ts",
       ...args,
     ],
     stdout: "piped",

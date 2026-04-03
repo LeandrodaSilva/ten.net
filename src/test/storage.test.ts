@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertExists } from "@std/assert";
-import { InMemoryStorage } from "../../packages/core/src/models/Storage.ts";
+import { InMemoryStorage } from "../../src/models/Storage.ts";
 
 describe("InMemoryStorage", () => {
   it("should return null for non-existent ID", async () => {

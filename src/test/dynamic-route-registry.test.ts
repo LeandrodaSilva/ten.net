@@ -1,8 +1,8 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { DynamicRouteRegistry } from "../../packages/core/src/routing/dynamicRouteRegistry.ts";
-import { InMemoryStorage } from "../../packages/core/src/models/Storage.ts";
-import type { StorageItem } from "../../packages/core/src/models/Storage.ts";
+import { DynamicRouteRegistry } from "../../src/routing/dynamicRouteRegistry.ts";
+import { InMemoryStorage } from "../../src/models/Storage.ts";
+import type { StorageItem } from "../../src/models/Storage.ts";
 
 /** Helper: create a published page StorageItem. */
 function makePage(

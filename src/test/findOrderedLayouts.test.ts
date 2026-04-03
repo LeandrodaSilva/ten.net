@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { findOrderedLayouts } from "../../packages/core/src/utils/findOrderedLayouts.ts";
+import { findOrderedLayouts } from "../../src/utils/findOrderedLayouts.ts";
 
 Deno.test("findOrderedLayouts - should return empty array when no layouts exist", async () => {
   const result = await findOrderedLayouts("/nonexistent", "/users/profile");

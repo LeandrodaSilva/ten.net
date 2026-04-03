@@ -1,6 +1,6 @@
-import { Ten } from "../../packages/core/src/ten.ts";
-import { Route } from "../../packages/core/src/models/Route.ts";
-import { getRegexRoute } from "../../packages/core/src/utils/getRegexRoute.ts";
+import { Ten } from "../../src/ten.ts";
+import { Route } from "../../src/models/Route.ts";
+import { getRegexRoute } from "../../src/utils/getRegexRoute.ts";
 
 export interface ServerContext {
   server: Deno.HttpServer<Deno.NetAddr>;

@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { toSlug } from "../../packages/core/src/utils/toSlug.ts";
+import { toSlug } from "../../src/utils/toSlug.ts";
 
 describe("toSlug", () => {
   it("should convert toSlug", () => {

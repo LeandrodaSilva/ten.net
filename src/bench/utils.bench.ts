@@ -1,9 +1,9 @@
-import { getRegexRoute } from "../../packages/core/src/utils/getRegexRoute.ts";
-import { pathNamedParams } from "../../packages/core/src/utils/pathNamedParams.ts";
-import { paramsEngine } from "../../packages/core/src/paramsEngine.ts";
-import { findOrderedLayouts } from "../../packages/core/src/utils/findOrderedLayouts.ts";
-import { findDocumentLayoutRoot } from "../../packages/core/src/utils/findDocumentLayoutRoot.ts";
-import { toSlug } from "../../packages/core/src/utils/toSlug.ts";
+import { getRegexRoute } from "../../src/utils/getRegexRoute.ts";
+import { pathNamedParams } from "../../src/utils/pathNamedParams.ts";
+import { paramsEngine } from "../../src/paramsEngine.ts";
+import { findOrderedLayouts } from "../../src/utils/findOrderedLayouts.ts";
+import { findDocumentLayoutRoot } from "../../src/utils/findDocumentLayoutRoot.ts";
+import { toSlug } from "../../src/utils/toSlug.ts";
 import { createRoute } from "./_helpers.ts";
 
 // --- getRegexRoute ---

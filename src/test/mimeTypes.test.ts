@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { getMimeType } from "../../packages/core/src/build/mimeTypes.ts";
+import { getMimeType } from "../../src/build/mimeTypes.ts";
 
 describe("getMimeType", () => {
   it("should return correct MIME type for common web files", () => {
