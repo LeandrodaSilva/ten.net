@@ -49,6 +49,7 @@ plugin system. Published to JSR.
 ## Commands
 
 ```bash
+deno run --allow-all --unstable-raw-imports example/main.ts  # Run example server
 deno task test       # Run all tests in parallel
 deno task coverage   # Run tests with coverage
 deno task fmt        # Format code
@@ -156,6 +157,8 @@ creates GitHub Release.
 
 ## Gotchas
 
+- `@deno-assert` in deno.json imports is legacy — prefer `@std/assert` in new
+  code
 - Most tasks require `--unstable-raw-imports` flag (already configured in
   `deno.json` tasks)
 - `deno task build` uses `src/build/buildCommand.ts` (not `build.ts`) as entry
