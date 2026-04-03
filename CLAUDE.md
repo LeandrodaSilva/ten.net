@@ -99,8 +99,8 @@ AES-256-GCM encryption for code protection. Entry point:
 `packages/core/src/build/buildCommand.ts`.
 
 **Plugin system**: Extend abstract `Plugin` class with `name`, `description`,
-`model`. The `AdminPluginLike` interface allows external admin plugins
-(like `@leproj/tennet-cms`) to register routes and middlewares. The
+`model`. The `AdminPluginLike` interface allows external admin plugins (like
+`@leproj/tennet-cms`) to register routes and middlewares. The
 `WidgetPageRenderer` type allows widget resolution to be injected externally.
 
 ## Code Conventions
@@ -118,9 +118,9 @@ AES-256-GCM encryption for code protection. Entry point:
 ## Testing
 
 Tests are in `src/test/` (~30 test files, core only). Uses `Deno.test()` and
-`describe/it` from `@std/testing/bdd`. Assertions from `@std/assert`
-(preferred) and `@deno-assert` (legacy). Snapshot tests use `assertSnapshot`
-from `@std/testing/snapshot`, stored in `src/test/__snapshots__/`.
+`describe/it` from `@std/testing/bdd`. Assertions from `@std/assert` (preferred)
+and `@deno-assert` (legacy). Snapshot tests use `assertSnapshot` from
+`@std/testing/snapshot`, stored in `src/test/__snapshots__/`.
 
 ## Release Process
 
