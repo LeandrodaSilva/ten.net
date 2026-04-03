@@ -44,8 +44,7 @@ export function CrudList({
     ...(canDelete
       ? [{
         label: "Delete",
-        href: (row: Record<string, unknown>) =>
-          `${basePath}/${row.id}/delete`,
+        href: (row: Record<string, unknown>) => `${basePath}/${row.id}/delete`,
         variant: "danger" as const,
         confirmMessage: (row: Record<string, unknown>) =>
           `Delete "${

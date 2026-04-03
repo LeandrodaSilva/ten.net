@@ -1,4 +1,4 @@
-import { type AuditLogEntry } from "./logs.tsx";
+import type { AuditLogEntry } from "./logs.tsx";
 import { type PluginCardProps, Plugins } from "./plugins.tsx";
 
 export interface HomeDashboardStats {
@@ -15,10 +15,22 @@ export interface HomeDashboardProps {
 }
 
 const statItems = [
-  { label: "Páginas", key: "pages" as const, href: "/admin/plugins/page-plugin" },
+  {
+    label: "Páginas",
+    key: "pages" as const,
+    href: "/admin/plugins/page-plugin",
+  },
   { label: "Posts", key: "posts" as const, href: "/admin/plugins/post-plugin" },
-  { label: "Mídias", key: "media" as const, href: "/admin/plugins/media-plugin" },
-  { label: "Usuários", key: "users" as const, href: "/admin/plugins/user-plugin" },
+  {
+    label: "Mídias",
+    key: "media" as const,
+    href: "/admin/plugins/media-plugin",
+  },
+  {
+    label: "Usuários",
+    key: "users" as const,
+    href: "/admin/plugins/user-plugin",
+  },
 ];
 
 const actionIcons: Record<string, { path: string; color: string }> = {

@@ -234,15 +234,16 @@ export function WidgetForm({ widgetDefinition, values }: WidgetFormProps) {
               document.head.appendChild(style);
 
               // @ts-ignore: dynamic imports
-              const { Editor } = await import(
-                "https://esm.sh/@tiptap/core"
-              );
+              // deno-lint-ignore no-import-prefix
+              const { Editor } = await import("https://esm.sh/@tiptap/core");
               // @ts-ignore: dynamic imports
               const { default: StarterKit } = await import(
+                // deno-lint-ignore no-import-prefix
                 "https://esm.sh/@tiptap/starter-kit"
               );
               // @ts-ignore: dynamic imports
               const { default: TiptapImage } = await import(
+                // deno-lint-ignore no-import-prefix
                 "https://esm.sh/@tiptap/extension-image"
               );
 
