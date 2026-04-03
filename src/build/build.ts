@@ -17,7 +17,11 @@ import {
   generateSalt,
   generateSecret,
 } from "./crypto.ts";
-import { generateCompiledApp } from "./codeGenerator.ts";
+import {
+  generateCompiledApp,
+  generateServiceWorkerApp,
+  generateServiceWorkerAppEncrypted,
+} from "./codeGenerator.ts";
 import type { AppManifest } from "./manifest.ts";
 import { bundleRoutes } from "./bundleRoutes.ts";
 import { formatBytes } from "../terminalUi.ts";
@@ -40,6 +44,8 @@ export interface BuildOptions {
   minify?: boolean;
   /** Whether to print progress to stdout (default: true) */
   verbose?: boolean;
+  /** Build target: "deno" (default) or "browser" (Service Worker) */
+  target?: "deno" | "browser";
 }
 
 /** Result returned by {@linkcode Ten.build} after compilation. */
@@ -52,6 +58,10 @@ export interface BuildResult {
   binaryPath?: string;
   /** Binary file size in bytes (undefined if compile=false) */
   binarySize?: number;
+  /** Path to bundled SW file (only for target=browser) */
+  swPath?: string;
+  /** SW bundle size in bytes */
+  swSize?: number;
   /** Manifest statistics */
   stats: {
     routes: number;
@@ -190,6 +200,7 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
   const shouldBundle = options?.bundle ?? false;
   const minify = options?.minify ?? false;
   const verbose = options?.verbose ?? true;
+  const target = options?.target ?? "deno";
   const reporter = new BuildReporter({ verbose });
   const startedAt = performance.now();
   let secret = options?.secret;
@@ -288,6 +299,142 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
       () => "Encrypted manifest payload ready",
     );
 
+    const manifestSummary = summarizeManifest(
+      manifest,
+      jsonBytes.manifestBytes.length,
+      jsonBytes.compressed.length,
+    );
+
+    if (target === "browser") {
+      // --- Browser (Service Worker) pipeline ---
+      if (options?.secret) {
+        reporter.warningBlock("Browser target with --secret", [
+          "The AES key is embedded in the SW bundle — this is obfuscation, not real protection.",
+          "Assets and manifest data in the bundle are publicly accessible.",
+        ]);
+      }
+
+      const manifestJson = JSON.stringify(manifest);
+      const swCode = await runBuildStep(
+        reporter,
+        "Generate SW app",
+        () => {
+          if (options?.secret) {
+            return generateServiceWorkerAppEncrypted(
+              encodeBase64(encryptedPayload.ciphertext),
+              encodeBase64(encryptedPayload.iv),
+              encodeBase64(encryptedPayload.keyRaw),
+            );
+          }
+          return generateServiceWorkerApp(manifestJson);
+        },
+        () => "Service Worker bootstrap created",
+      );
+
+      const swTsPath = `${outputDir}/_sw_app.ts`;
+      await runBuildStep(
+        reporter,
+        "Write artifact",
+        async () => {
+          await Deno.mkdir(outputDir, { recursive: true });
+          await Deno.writeTextFile(swTsPath, swCode);
+          return swTsPath;
+        },
+        (path) => path,
+      );
+
+      const swBundlePath = `${outputDir}/sw.js`;
+      const bundleOutcome = await runBuildStep(
+        reporter,
+        "Bundle SW",
+        async () => {
+          const esbuild = await import("esbuild");
+          const { denoPlugins } = await import("esbuild-deno-loader");
+
+          await esbuild.build({
+            // deno-lint-ignore no-explicit-any
+            plugins: [...denoPlugins()] as any,
+            entryPoints: [swTsPath],
+            outfile: swBundlePath,
+            bundle: true,
+            format: "esm",
+            target: "es2022",
+            minify: minify,
+          });
+          esbuild.stop();
+
+          let swSize: number | undefined;
+          try {
+            const stat = await Deno.stat(swBundlePath);
+            swSize = stat.size;
+          } catch {
+            // Best-effort size measurement
+          }
+
+          return { swPath: swBundlePath, swSize };
+        },
+        ({ swPath, swSize }) =>
+          swSize ? `${swPath} (${formatBytes(swSize!)})` : swPath,
+      );
+
+      // Write register.html
+      const registerHtml = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Ten.net SW</title></head>
+<body>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js", { type: "module", scope: "/" })
+    .then(r => console.log("[Ten.net] SW registered:", r.scope))
+    .catch(e => console.error("[Ten.net] SW registration failed:", e));
+}
+</script>
+</body>
+</html>`;
+      await Deno.writeTextFile(`${outputDir}/register.html`, registerHtml);
+
+      const result: BuildResult = {
+        secret,
+        compiledPath: swTsPath,
+        swPath: bundleOutcome.swPath,
+        swSize: bundleOutcome.swSize,
+        stats: {
+          routes: manifestSummary.routes,
+          layouts: manifestSummary.layouts,
+          assets: manifestSummary.assets,
+          manifestBytes: manifestSummary.manifestBytes,
+          compressedBytes: manifestSummary.compressedBytes,
+        },
+      };
+
+      reporter.finish({
+        appPath,
+        publicPath,
+        outputDir,
+        compiledPath: result.compiledPath,
+        binaryPath: result.swPath,
+        binarySize: result.swSize,
+        routes: manifestSummary.routes,
+        pageRoutes: manifestSummary.pageRoutes,
+        handlerOnlyRoutes: manifestSummary.handlerOnlyRoutes,
+        staticPages: manifestSummary.staticPages,
+        dynamicRoutes: manifestSummary.dynamicRoutes,
+        layouts: manifestSummary.layouts,
+        assets: manifestSummary.assets,
+        manifestBytes: manifestSummary.manifestBytes,
+        compressedBytes: manifestSummary.compressedBytes,
+        durationMs: performance.now() - startedAt,
+        secretGenerated,
+        secret,
+        nextStep:
+          `Serve ${outputDir}/ with an HTTP server and open register.html to install the Service Worker.`,
+        mode: "browser (Service Worker)",
+      });
+
+      return result;
+    }
+
+    // --- Deno (default) pipeline ---
     const compiledCode = await runBuildStep(
       reporter,
       "Generate compiled app",
@@ -310,12 +457,6 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
         return compiledPath;
       },
       (path) => path,
-    );
-
-    const manifestSummary = summarizeManifest(
-      manifest,
-      jsonBytes.manifestBytes.length,
-      jsonBytes.compressed.length,
     );
 
     const result: BuildResult = {

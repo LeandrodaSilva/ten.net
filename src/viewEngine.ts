@@ -1,5 +1,3 @@
-import { findOrderedLayouts } from "./utils/findOrderedLayouts.ts";
-import { findDocumentLayoutRoot } from "./utils/findDocumentLayoutRoot.ts";
 import type { Route } from "./models/Route.ts";
 import type { AppManifest } from "./build/manifest.ts";
 import { escapeHtml } from "./utils/htmlEscape.ts";
@@ -29,6 +27,12 @@ export async function viewEngine(args: IViewEngine) {
       pageModule = documentLayout.replace("{{content}}", pageModule);
       layoutContents = embedded.layouts[route.path] ?? [];
     } else {
+      const { findOrderedLayouts } = await import(
+        "./utils/findOrderedLayouts.ts"
+      );
+      const { findDocumentLayoutRoot } = await import(
+        "./utils/findDocumentLayoutRoot.ts"
+      );
       const layouts = await findOrderedLayouts(_appPath, route.path);
       const documentLayout = await findDocumentLayoutRoot(_appPath);
       pageModule = documentLayout.replace("{{content}}", pageModule);
