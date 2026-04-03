@@ -35,8 +35,6 @@ plugin system. Published to JSR.
 
 ## Related Packages
 
-The CMS ecosystem is split into separate repositories and JSR packages:
-
 - `@leproj/tennet-cms` — Admin dashboard, page builder, widgets, auth, RBAC
 - `@leproj/tennet-blog` — Blog posts, categories, RSS/JSON feeds
 - `@leproj/tennet-media` — Media library with chunked KV storage
@@ -62,28 +60,29 @@ deno task bench      # Run benchmarks with history tracking
 
 ## Project Structure
 
-**`packages/core/src/`** — Core framework:
+```
+src/                          # Framework source
+  mod.ts                      # Public entry point, exports { Ten }
+  ten.ts                      # Core class (server, routing, plugin registration)
+  cli.ts                      # CLI entry point
+  routerEngine.ts             # File-system route scanner and transpiler
+  viewEngine.ts               # HTML template renderer with nested layouts
+  paramsEngine.ts             # URL parameter extraction
+  models/                     # Plugin, Route, Storage, Permission, WidgetResolver
+  routing/                    # DynamicRouteRegistry, BlogRouteRegistry, dynamicPageHandler
+  utils/                      # Utility functions
+  build/                      # Build system: collector, code generator, crypto, CLI
+  embedded/                   # Embedded router engine for compiled binaries
+  middleware/                 # Middleware type definition
+  assets/                     # faviconData.ts, documentHtml.ts
+  bench/                      # Benchmarks with history tracking
 
-- `mod.ts` — Public entry point, exports `{ Ten }`
-- `ten.ts` — Core framework class (server, routing, plugin registration)
-- `routerEngine.ts` — File-system route scanner and transpiler
-- `viewEngine.ts` — HTML template renderer with nested layouts
-- `paramsEngine.ts` — URL parameter extraction
-- `models/` — Route, Plugin, Storage, Permission, WidgetResolver data models
-- `routing/` — Dynamic route registry, blog route registry, dynamic page handler
-- `utils/` — Utility functions (regex matching, transpilation, slug conversion,
-  layout discovery)
-- `build/` — Build system: collector, code generator, manifest types, crypto
-  (AES-256-GCM), CLI entry point
-- `embedded/` — Embedded router engine for compiled binaries
-- `middleware/` — Middleware type definition
-- `assets/` — Static assets (favicon data)
+_test_/                       # Core tests (~30 files, 61 tests)
 
-**Other:**
-
-- `app/` — Test fixtures (minimal app for build/router tests)
-- `src/test/` — Core framework tests (~30 test files)
-- `src/bench/` — Benchmarks with history tracking and regression thresholds
+example/
+  main.ts                     # Example server entry point
+  app/                        # Example file-based routes (also test fixtures)
+```
 
 ## Architecture
 
@@ -95,6 +94,13 @@ can have:
 - `layout.html` — wrapping layout (nests via `{{content}}`)
 - `document.html` — root HTML wrapper (app root only)
 - `[param]/` — dynamic route segments
+
+**Ten.net() accepts configurable appPath**:
+
+```ts
+const app = Ten.net(); // default: ./app
+const app = Ten.net({ appPath: "./src/app" }); // custom path
+```
 
 **Template engine**: Route handler JSON responses populate `{{key}}`
 placeholders in page templates. Layouts nest hierarchically from root to leaf
@@ -108,7 +114,7 @@ single binary. The collector scans `app/`, transpiles routes, and gathers assets
 into an `AppManifest`. The code generator produces a self-contained TypeScript
 file that uses `embeddedRouterEngine` instead of filesystem scanning. Optional
 AES-256-GCM encryption for code protection. Entry point:
-`packages/core/src/build/buildCommand.ts`.
+`src/build/buildCommand.ts`.
 
 **Plugin system**: Extend abstract `Plugin` class with `name`, `description`,
 `model`. The `AdminPluginLike` interface allows external admin plugins (like
@@ -129,10 +135,10 @@ AES-256-GCM encryption for code protection. Entry point:
 
 ## Testing
 
-Tests are in `src/test/` (~30 test files, core only). Uses `Deno.test()` and
+Tests are in `_test_/` (~30 test files, core only). Uses `Deno.test()` and
 `describe/it` from `@std/testing/bdd`. Assertions from `@std/assert` (preferred)
-and `@deno-assert` (legacy). Snapshot tests use `assertSnapshot` from
-`@std/testing/snapshot`, stored in `src/test/__snapshots__/`.
+and `@deno-assert` (legacy). Snapshots in `_test_/__snapshots__/`. Test fixtures
+in `example/app/`.
 
 ## Release Process
 
@@ -141,20 +147,19 @@ creates GitHub Release.
 
 ## JSR Entrypoints
 
-- `.` → `packages/core/src/mod.ts` — Main entry, exports `{ Ten }`
-- `./cli` → `packages/core/src/cli.ts` — CLI entry point
-- `./build` → `packages/core/src/build/build.ts` — Build system
-- `./build/manifest` → `packages/core/src/build/manifest.ts` — Build manifest
-  types (`EmbeddedRoute`, `AppManifest`)
-- `./build/crypto` → `packages/core/src/build/crypto.ts` — AES-256-GCM
-  encryption utilities
-- `./assets/favicon` → `packages/core/src/assets/faviconData.ts` — Favicon data
+- `.` → `src/mod.ts` — Main entry, exports `{ Ten }`
+- `./cli` → `src/cli.ts` — CLI entry point
+- `./build` → `src/build/build.ts` — Build system
+- `./build/manifest` → `src/build/manifest.ts` — Build manifest types
+- `./build/crypto` → `src/build/crypto.ts` — AES-256-GCM encryption utilities
+- `./assets/favicon` → `src/assets/faviconData.ts` — Favicon data
 
 ## Gotchas
 
 - Most tasks require `--unstable-raw-imports` flag (already configured in
   `deno.json` tasks)
-- `deno task check` has a double-space typo in deno.json but works correctly
-- `deno task build` uses `packages/core/src/build/buildCommand.ts` (not
-  `build.ts`) as entry
-- `app/` directory contains test fixtures, not a production demo app
+- `deno task build` uses `src/build/buildCommand.ts` (not `build.ts`) as entry
+- `example/app/` is used as test fixtures — pass `appPath: "./example/app"` to
+  `Ten.net()` in tests
+- `routerEngine` and `collector` dynamically strip the appPath prefix from entry
+  paths (no hardcoded `./app` regex)

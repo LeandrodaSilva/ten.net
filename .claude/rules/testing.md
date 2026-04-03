@@ -1,6 +1,6 @@
 ---
 paths:
-  - "src/test/**"
+  - "_test_/**"
   - "src/bench/**"
 ---
 
@@ -9,9 +9,8 @@ paths:
 - Use `@std/assert` for assertions (preferred over `@deno-assert` legacy)
 - Use `describe/it` from `@std/testing/bdd` for test structure
 - Snapshot tests use `assertSnapshot` from `@std/testing/snapshot`
-- Snapshots stored in `src/test/__snapshots__/`
-- E2E tests (`demo.test.ts`) spin up a real HTTP server — use `AbortController`
-  for cleanup
+- Snapshots stored in `_test_/__snapshots__/`
+- Test fixtures in `example/app/` — pass `appPath: "./example/app"` to Ten.net()
 - CI enforces 90% coverage threshold — ensure new code has tests
 - Benchmarks use `Deno.bench()` with history tracking in
   `benchmarks/history.json`
