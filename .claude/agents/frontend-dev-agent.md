@@ -85,26 +85,26 @@ Plus como referencia para patterns de UI.
    classes utilitarias, layout patterns ou componentes
 2. **Use WebFetch** para acessar exemplos de componentes em
    `https://tailwindcss.com/docs` ou `https://tailwindui.com`
-3. **Use WebSearch** para buscar patterns especificos: "tailwind sidebar layout",
-   "tailwind data table", "tailwind form validation"
+3. **Use WebSearch** para buscar patterns especificos: "tailwind sidebar
+   layout", "tailwind data table", "tailwind form validation"
 
 ### Mapeamento de Necessidades → Patterns
 
-| Necessidade          | Pattern Tailwind a buscar                  |
-| -------------------- | ------------------------------------------ |
-| Layout / sidebar     | "application shell sidebar"                |
-| Dashboard            | "dashboard stats cards grid"               |
-| Tabelas de dados     | "striped table sortable"                   |
-| Formularios          | "stacked form with validation"             |
-| Botoes               | "button group primary secondary"           |
-| Dropdowns            | "dropdown menu popover"                    |
-| Alerts / feedback    | "alert dismissible success error"          |
-| Pagination           | "pagination numbered"                      |
-| Breadcrumbs          | "breadcrumb chevron"                       |
-| Empty states         | "empty state illustration CTA"             |
-| Cards                | "card with header footer"                  |
-| Modals / drawers     | "modal dialog backdrop transition"         |
-| Login                | "sign in form centered"                    |
+| Necessidade       | Pattern Tailwind a buscar          |
+| ----------------- | ---------------------------------- |
+| Layout / sidebar  | "application shell sidebar"        |
+| Dashboard         | "dashboard stats cards grid"       |
+| Tabelas de dados  | "striped table sortable"           |
+| Formularios       | "stacked form with validation"     |
+| Botoes            | "button group primary secondary"   |
+| Dropdowns         | "dropdown menu popover"            |
+| Alerts / feedback | "alert dismissible success error"  |
+| Pagination        | "pagination numbered"              |
+| Breadcrumbs       | "breadcrumb chevron"               |
+| Empty states      | "empty state illustration CTA"     |
+| Cards             | "card with header footer"          |
+| Modals / drawers  | "modal dialog backdrop transition" |
+| Login             | "sign in form centered"            |
 
 ### Regras de Conversao HTML → React TSX
 
