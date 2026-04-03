@@ -17,7 +17,7 @@ import { RolesPlugin } from "../../packages/admin/src/plugins/rolesPlugin.ts";
 import { AuditLogPlugin } from "../../packages/admin/src/plugins/auditLogPlugin.ts";
 import { MediaPlugin } from "../../packages/admin/src/plugins/mediaPlugin.ts";
 import { createPasswordHash } from "../../packages/admin/src/auth/passwordHasher.ts";
-import type { UserStore } from "../../packages/admin/src/auth/userStore.ts";
+import type { UserStore as _UserStore } from "../../packages/admin/src/auth/userStore.ts";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -712,7 +712,7 @@ describe(
           "/admin/plugins/page-plugin",
           cookie,
         );
-        const listBody = await listRes.text();
+        const _listBody = await listRes.text();
 
         // We need a page with widgets_enabled — create one if needed
         const csrfToken = await getCsrf(baseUrl, cookie, "page-plugin");

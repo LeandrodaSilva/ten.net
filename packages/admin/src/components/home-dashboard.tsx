@@ -1,4 +1,4 @@
-import { type AuditLogEntry } from "./logs.tsx";
+import type { AuditLogEntry } from "./logs.tsx";
 import { type PluginCardProps, Plugins } from "./plugins.tsx";
 
 export interface HomeDashboardStats {
