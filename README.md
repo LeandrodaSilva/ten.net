@@ -6,7 +6,7 @@
 [![Coverage](https://img.shields.io/badge/coverage-%E2%89%A590%25-brightgreen)](https://github.com/LeandrodaSilva/ten.net/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A minimalist web microframework for [Deno](https://deno.com).
+A minimalist, extensible web microframework for TypeScript runtimes.
 
 ## Features
 
@@ -16,39 +16,48 @@ A minimalist web microframework for [Deno](https://deno.com).
 - **Nested layouts** — `layout.html` and `document.html` wrap pages
   hierarchically
 - **Dynamic route parameters** — `[param]/` directories for URL segments
-- **Plugin system** — extensible architecture with a built-in admin panel
+- **Plugin system** — extensible architecture via abstract `Plugin` class and
+  `AdminPluginLike` interface
+- **Self-contained binary** — compile your entire app into a single deployable
+  binary
 - **Dev mode** — file watcher with automatic route reload
 
 ## Vision
 
-### Self-Contained Binary Deployment
+Ten.net is a **production-ready microframework** focused on reliability,
+performance, flexibility, and extensibility. The core is intentionally minimal —
+advanced features like CMS, blog, media, and audit are available as independent
+plugins.
 
-Compile your entire application into a single production-ready binary with all
-routes, templates, and assets embedded. No runtime dependencies — just deploy
-and run.
+### Design Principles
 
-### Code Protection
+- **Minimal core** — routing, templating, and plugin infrastructure only
+- **Production-ready** — reliable, performant, battle-tested
+- **Extensible** — plugin system for adding any functionality
+- **Multi-runtime** — designed to support multiple JS/TS runtimes
 
-Application code is compressed with gzip and encrypted with AES-256-GCM
-(PBKDF2-derived keys, 100 000 iterations) before being embedded into the binary.
-This prevents casual inspection and reverse engineering of distributed
-deployments.
+### Plugin Ecosystem
 
-### Maximum Simplicity
+The admin panel and CMS features are separate packages:
 
-No boilerplate. Directories define routes. HTML files are the frontend engine.
-TypeScript files handle server logic. Two lines to start a server.
+| Package                                                       | Description                                        |
+| ------------------------------------------------------------- | -------------------------------------------------- |
+| [`@leproj/tennet-cms`](https://jsr.io/@leproj/tennet-cms)     | Admin dashboard, page builder, widgets, auth, RBAC |
+| [`@leproj/tennet-blog`](https://jsr.io/@leproj/tennet-blog)   | Blog posts, categories, RSS/JSON feeds             |
+| [`@leproj/tennet-media`](https://jsr.io/@leproj/tennet-media) | Media library with chunked KV storage              |
+| [`@leproj/tennet-audit`](https://jsr.io/@leproj/tennet-audit) | Audit logging with TTL                             |
 
-### Extensible Plugin System
+### Roadmap
 
-Extend the framework by subclassing `Plugin`. Custom plugins auto-register
-routes and appear in the admin dashboard.
-
-### Built-in Admin Panel (Roadmap)
-
-A server-rendered admin dashboard at `/admin` for marketing teams and
-non-technical users to manage the application in production. Currently in early
-development with basic plugin listing and dashboard structure.
+- **Reliability** — comprehensive error handling, graceful shutdown, connection
+  draining
+- **Performance** — route caching, template precompilation, zero-allocation hot
+  paths
+- **Flexibility** — middleware composition, custom renderers, response
+  interceptors
+- **Extensibility** — lifecycle hooks, event system, plugin communication
+- **Node.js runtime support** — run the same app on Node.js in addition to Deno
+- **Code protection** — AES-256-GCM encryption for compiled binaries (available)
 
 ## Installation
 
@@ -94,7 +103,7 @@ export function GET(_req: Request): Response {
 Run the server:
 
 ```bash
-deno run --allow-all --unstable-bundle --unstable-raw-imports main.ts
+deno run --allow-all --unstable-raw-imports main.ts
 ```
 
 Visit `http://localhost:8000/hello` to see "Hello World!".
@@ -223,8 +232,7 @@ Place a `document.html` at the `app/` root to define the outer HTML shell. Use
 </html>
 ```
 
-If no `document.html` is provided, a default one is used (includes Tailwind CSS
-via CDN).
+If no `document.html` is provided, a default one is used.
 
 ### Nested layouts
 
@@ -242,38 +250,46 @@ app/
 
 ## Plugins
 
-Ten.net includes a plugin system with a built-in admin panel at `/admin`:
+Extend Ten.net with plugins:
 
 ```ts
 import { Ten } from "@leproj/tennet";
 
 const app = Ten.net();
-// app.addPlugin(MyPlugin);
+await app.useAdmin(myAdminPlugin); // register an admin plugin
+await app.start();
+```
+
+With the CMS plugin:
+
+```ts
+import { Ten } from "@leproj/tennet";
+import { AdminPlugin, PagePlugin } from "@leproj/tennet-cms";
+
+const app = Ten.net();
+await app.useAdmin(new AdminPlugin({ plugins: [PagePlugin] }));
 await app.start();
 ```
 
 ## Building for Production
 
 Compile your entire application — routes, templates, and static assets — into a
-single encrypted binary. The build process:
+single encrypted binary:
 
-1. Collects all routes, layouts, and assets from your `app/` and `public/`
-   directories
-2. Compresses the manifest with gzip
+1. Collects all routes, layouts, and assets from `app/`
+2. Compresses with gzip
 3. Encrypts with AES-256-GCM (PBKDF2-derived key)
 4. Compiles into a standalone Deno binary via `deno compile`
 
-The resulting binary has **zero runtime dependencies** — just deploy and run.
+The resulting binary has **zero runtime dependencies**.
 
 ### CLI
-
-The fastest way to build:
 
 ```bash
 deno run -A jsr:@leproj/tennet/cli build
 ```
 
-Add it as a task in your project's `deno.json`:
+Add as a task:
 
 ```json
 {
@@ -281,13 +297,6 @@ Add it as a task in your project's `deno.json`:
     "build": "deno run -A jsr:@leproj/tennet/cli build"
   }
 }
-```
-
-Or install globally:
-
-```bash
-deno install -A --global -n tennet jsr:@leproj/tennet/cli
-tennet build
 ```
 
 #### CLI options
@@ -302,51 +311,23 @@ tennet build
 
 ### Programmatic API
 
-Use `Ten.build()` for full control over the build process:
-
-```ts
-import { Ten } from "@leproj/tennet";
-
-await Ten.build();
-```
-
-With options:
-
 ```ts
 import { Ten } from "@leproj/tennet";
 
 const result = await Ten.build({
-  appPath: "./src/app",
-  publicPath: "./static",
-  output: "./build",
+  appPath: "./app",
+  output: "./dist",
   secret: Deno.env.get("BUILD_SECRET"),
 });
 
 console.log(`Built ${result.stats.routes} routes`);
-console.log(`Binary: ${result.binaryPath}`);
-```
-
-You can also import the build function directly:
-
-```ts
-import { build } from "@leproj/tennet/build";
-
-const result = await build({ compile: false, verbose: false });
 ```
 
 ## Development
 
 ```bash
-deno task dev    # starts dev server with file watching and hot reload
-```
-
-Other useful commands:
-
-```bash
 deno task test       # run tests
-deno task bench:run  # run benchmarks (human-readable output)
-deno task bench      # run benchmarks + save history + update README table
-deno task bench:check # check for performance regressions
+deno task bench:run  # run benchmarks
 deno task fmt        # format code
 deno task lint       # lint code
 deno task check      # type check
@@ -354,7 +335,7 @@ deno task check      # type check
 
 ## Performance
 
-Benchmarks run against the demo app with `deno task bench`.
+Benchmarks run with `deno task bench`.
 
 <!-- BENCH:START -->
 

@@ -5,21 +5,33 @@ code in this repository.
 
 ## Project Overview
 
-Ten.net (`@leproj/tennet`) is a minimalist Deno web microframework with
-file-based routing, HTML templating, nested layouts, and a plugin system.
-Published to JSR.
+Ten.net (`@leproj/tennet`) is a minimalist, extensible web microframework for
+TypeScript runtimes. File-based routing, HTML templating, nested layouts, and a
+plugin system. Published to JSR.
 
 ## Project Vision & Purpose
 
-- **Self-contained binary**: The framework compiles the entire application
-  (server, routes, templates, static assets) into a single deployable binary. No
-  runtime dependencies required in production.
-- **Code protection (roadmap)**: Future obfuscation and encryption to prevent
-  reverse engineering of distributed application binaries.
+- **Production-ready**: Reliable, performant, battle-tested microframework
+- **Minimal core**: Routing, templating, and plugin infrastructure only — no
+  admin, CMS, or UI bundled in core
+- **Multi-runtime (roadmap)**: Designed to support Deno (current) and Node.js
+  (planned)
+- **Extensible**: Abstract `Plugin` class and `AdminPluginLike` interface for
+  external plugins
+- **Self-contained binary**: Compile entire app into a single deployable binary
+  with AES-256-GCM encryption
 - **Maximum simplicity**: Directory-based routing, HTML templates, `.ts` route
-  files. No decorators, no configuration ceremony, no boilerplate.
-- **Plugin extensibility**: Abstract `Plugin` class with `AdminPluginLike`
-  interface. CMS, blog, media, and audit plugins are separate JSR packages.
+  files. No decorators, no configuration ceremony
+
+## Roadmap
+
+- **Reliability** — error handling, graceful shutdown, connection draining
+- **Performance** — route caching, template precompilation, zero-allocation hot
+  paths
+- **Flexibility** — middleware composition, custom renderers, response
+  interceptors
+- **Extensibility** — lifecycle hooks, event system, plugin communication
+- **Node.js support** — run the same app on Node.js in addition to Deno
 
 ## Related Packages
 
