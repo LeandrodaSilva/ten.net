@@ -18,26 +18,27 @@ Published to JSR.
   reverse engineering of distributed application binaries.
 - **Maximum simplicity**: Directory-based routing, HTML templates, `.ts` route
   files. No decorators, no configuration ceremony, no boilerplate.
-- **Plugin extensibility**: Abstract `Plugin` class with auto-registered admin
-  routes. Users extend functionality without modifying the core.
-- **Admin panel for non-developers**: `/admin` React SSR dashboard designed for
-  marketing teams and end-users to manage the production application. Available
-  since v0.8.0 with 10 built-in plugins (posts, pages, categories, media
-  library, users, groups, roles, settings, audit log, admin dashboard), page
-  builder, media library, and RBAC.
+- **Plugin extensibility**: Abstract `Plugin` class with `AdminPluginLike`
+  interface. CMS, blog, media, and audit plugins are separate JSR packages.
+
+## Related Packages
+
+The CMS ecosystem is split into separate repositories and JSR packages:
+
+- `@leproj/tennet-cms` — Admin dashboard, page builder, widgets, auth, RBAC
+- `@leproj/tennet-blog` — Blog posts, categories, RSS/JSON feeds
+- `@leproj/tennet-media` — Media library with chunked KV storage
+- `@leproj/tennet-audit` — Audit logging with TTL
 
 ## Tech Stack
 
 - **Runtime**: Deno 2.x (NOT Node.js — no npm, no package.json)
-- **Language**: TypeScript with TSX for React components
-- **UI**: React 19 (server-side rendering only via `renderToString`), Tailwind
-  CSS (via CDN)
+- **Language**: TypeScript
 - **Package registry**: JSR (`@leproj/tennet`)
 
 ## Commands
 
 ```bash
-deno task dev        # Start dev server (with --watch, --inspect, file watcher)
 deno task test       # Run all tests in parallel
 deno task coverage   # Run tests with coverage
 deno task fmt        # Format code
@@ -49,8 +50,6 @@ deno task bench      # Run benchmarks with history tracking
 
 ## Project Structure
 
-This is a monorepo with three packages:
-
 **`packages/core/src/`** — Core framework:
 
 - `mod.ts` — Public entry point, exports `{ Ten }`
@@ -58,43 +57,21 @@ This is a monorepo with three packages:
 - `routerEngine.ts` — File-system route scanner and transpiler
 - `viewEngine.ts` — HTML template renderer with nested layouts
 - `paramsEngine.ts` — URL parameter extraction
-- `models/` — Route, Plugin, Storage data models
-- `routing/` — Dynamic route registry, blog route registry, page/widget handlers
+- `models/` — Route, Plugin, Storage, Permission, WidgetResolver data models
+- `routing/` — Dynamic route registry, blog route registry, dynamic page handler
 - `utils/` — Utility functions (regex matching, transpilation, slug conversion,
   layout discovery)
 - `build/` — Build system: collector, code generator, manifest types, crypto
   (AES-256-GCM), CLI entry point
 - `embedded/` — Embedded router engine for compiled binaries
-- `middleware/` — Auth, CSRF, security headers middleware
+- `middleware/` — Middleware type definition
 - `assets/` — Static assets (favicon data)
-
-**`packages/admin/src/`** — Admin panel (React SSR):
-
-- `app.tsx` — Admin app root component
-- `plugins/` — 10 built-in plugins: adminPlugin, pagePlugin, postsPlugin,
-  categoriesPlugin, mediaPlugin, usersPlugin, groupsPlugin, rolesPlugin,
-  settingsPlugin, auditLogPlugin
-- `components/` — Shared UI components (page builder, media library, CRUD, etc.)
-- `auth/` — Authentication handlers, session store, user store, password hasher
-- `storage/` — Deno KV-backed storage implementations
-- `layout/` — Admin layout components
-
-**`packages/widgets/src/`** — Built-in widgets:
-
-- `builtins/` — 10 widgets: hero, richText, image, gallery, columns, ctaButton,
-  html, spacer, embed, contactForm
-- `widgetRegistry.ts` — Widget registration and lookup
-- `widgetStore.ts`, `widgetPermissionsStore.ts`, `widgetAuditLogger.ts` — Widget
-  data and audit infrastructure
-- `mediaStore.ts` — Media storage for widgets
-- `types.ts` — Widget type definitions
 
 **Other:**
 
-- `app/demo.ts` — Dev server entry point (used by `deno task dev`)
-- `src/test/` — All tests (101 test files)
+- `app/` — Test fixtures (minimal app for build/router tests)
+- `src/test/` — Core framework tests (~30 test files)
 - `src/bench/` — Benchmarks with history tracking and regression thresholds
-- `app/` — Demo application using file-based routes
 
 ## Architecture
 
@@ -122,31 +99,28 @@ AES-256-GCM encryption for code protection. Entry point:
 `packages/core/src/build/buildCommand.ts`.
 
 **Plugin system**: Extend abstract `Plugin` class with `name`, `description`,
-`model`. Plugins auto-register admin routes and appear in the admin dashboard.
-The `packages/admin` package ships 10 built-in plugins; the framework core
-(`packages/core`) handles registration and routing.
+`model`. The `AdminPluginLike` interface allows external admin plugins
+(like `@leproj/tennet-cms`) to register routes and middlewares. The
+`WidgetPageRenderer` type allows widget resolution to be injected externally.
 
 ## Code Conventions
 
-- Use explicit `.ts`/`.tsx` file extensions in all imports (Deno requirement)
+- Use explicit `.ts` file extensions in all imports (Deno requirement)
 - Conventional Commits: `feat:`, `fix:`, `refactor:`, `style:`, `ci:`, `test:`
 - Format with `deno fmt` before committing
-- React components: functional components with Tailwind CSS classes
 
 ## Environment Setup
 
 - Requires Deno 2.x with `--unstable-kv` and `--unstable-raw-imports` flags
   (already configured in `deno.json` tasks)
 - No environment variables required for development
-- `deno task dev` starts server with file watcher and inspector
 
 ## Testing
 
-Tests are in `src/test/` (101 test files). Uses `Deno.test()` and `describe/it`
-from `@std/testing/bdd`. Assertions from `@std/assert` (preferred) and
-`@deno-assert` (legacy). Snapshot tests use `assertSnapshot` from
-`@std/testing/snapshot`, stored in `src/test/__snapshots__/`. CI enforces a
-**90% coverage threshold** via LCOV analysis.
+Tests are in `src/test/` (~30 test files, core only). Uses `Deno.test()` and
+`describe/it` from `@std/testing/bdd`. Assertions from `@std/assert`
+(preferred) and `@deno-assert` (legacy). Snapshot tests use `assertSnapshot`
+from `@std/testing/snapshot`, stored in `src/test/__snapshots__/`.
 
 ## Release Process
 
@@ -163,8 +137,6 @@ creates GitHub Release.
 - `./build/crypto` → `packages/core/src/build/crypto.ts` — AES-256-GCM
   encryption utilities
 - `./assets/favicon` → `packages/core/src/assets/faviconData.ts` — Favicon data
-- `./admin` → `packages/admin/src/mod.ts` — Admin panel
-- `./widgets` → `packages/widgets/src/mod.ts` — Built-in widgets
 
 ## Gotchas
 
@@ -173,3 +145,4 @@ creates GitHub Release.
 - `deno task check` has a double-space typo in deno.json but works correctly
 - `deno task build` uses `packages/core/src/build/buildCommand.ts` (not
   `build.ts`) as entry
+- `app/` directory contains test fixtures, not a production demo app

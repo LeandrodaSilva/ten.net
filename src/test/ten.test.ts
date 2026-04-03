@@ -2,8 +2,6 @@ import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { Ten } from "../../packages/core/src/ten.ts";
 import { Route } from "../../packages/core/src/models/Route.ts";
-import { AdminPlugin } from "../../packages/admin/src/plugins/adminPlugin.tsx";
-import { PagePlugin } from "../../packages/admin/src/plugins/pagePlugin.ts";
 import { DynamicRouteRegistry } from "../../packages/core/src/routing/dynamicRouteRegistry.ts";
 import type { StorageItem } from "../../packages/core/src/models/Storage.ts";
 
@@ -18,52 +16,6 @@ describe("Ten", () => {
       const app1 = Ten.net();
       const app2 = Ten.net();
       assertEquals(app1 !== app2, true);
-    });
-  });
-
-  describe("useAdmin", () => {
-    it("should register admin routes and middlewares", async () => {
-      const app = Ten.net();
-      const admin = new AdminPlugin({
-        storage: "memory",
-        plugins: [PagePlugin],
-      });
-      await app.useAdmin(admin);
-      const routes = (app as unknown as { _routes: Route[] })._routes;
-      // Dashboard + favicon + 6 CRUD routes for PagePlugin + 3 auth routes = 11
-      assertEquals(routes.length > 0, true);
-    });
-
-    it("should register middlewares from admin plugin", async () => {
-      const app = Ten.net();
-      const admin = new AdminPlugin({ storage: "memory", plugins: [] });
-      await app.useAdmin(admin);
-      const middlewares = (app as unknown as { _middlewares: unknown[] })
-        ._middlewares;
-      // securityHeaders, authMiddleware, csrfMiddleware
-      assertEquals(middlewares.length, 3);
-    });
-
-    it("should make admin routes accessible via request handler", async () => {
-      const app = Ten.net();
-      const admin = new AdminPlugin({
-        storage: "memory",
-        plugins: [PagePlugin],
-      });
-      await app.useAdmin(admin);
-
-      const handler = (app as unknown as {
-        _handleRequest: (req: Request) => Promise<Response>;
-      })._handleRequest.bind(app);
-
-      const response = await handler(
-        new Request("http://localhost/admin/favicon.ico"),
-      );
-      assertEquals(response.status, 200);
-      assertEquals(
-        response.headers.get("Content-Type"),
-        "image/x-icon",
-      );
     });
   });
 
@@ -395,65 +347,6 @@ describe("Ten", () => {
       assertEquals(response.status, 404);
       const body = await response.text();
       assertEquals(body, "Not found");
-    });
-  });
-
-  describe("preview route integration", () => {
-    it("should return preview with banner and X-Robots-Tag header", async () => {
-      const app = Ten.net();
-      const admin = new AdminPlugin({
-        storage: "memory",
-        plugins: [PagePlugin],
-      });
-      await app.useAdmin(admin);
-
-      // Seed a page into PagePlugin storage
-      const pagePlugin = admin.plugins.find((p) => p.slug === "page-plugin");
-      await pagePlugin!.storage.set("preview-1", {
-        id: "preview-1",
-        slug: "test-preview",
-        title: "Preview Test",
-        body: "<p>Preview content</p>",
-        status: "draft",
-        seo_title: "Preview",
-        seo_description: "",
-        template: "",
-        author_id: "",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      });
-
-      const handler = (app as unknown as {
-        _routeRequest: (req: Request) => Promise<Response>;
-      })._routeRequest.bind(app);
-
-      const response = await handler(
-        new Request("http://localhost/admin/preview/preview-1"),
-      );
-      assertEquals(response.status, 200);
-      assertEquals(response.headers.get("X-Robots-Tag"), "noindex");
-      assertEquals(response.headers.get("Content-Type"), "text/html");
-      const body = await response.text();
-      assertStringIncludes(body, "Preview Mode");
-      assertStringIncludes(body, "Preview content");
-    });
-
-    it("should return 404 for non-existent preview id", async () => {
-      const app = Ten.net();
-      const admin = new AdminPlugin({
-        storage: "memory",
-        plugins: [PagePlugin],
-      });
-      await app.useAdmin(admin);
-
-      const handler = (app as unknown as {
-        _routeRequest: (req: Request) => Promise<Response>;
-      })._routeRequest.bind(app);
-
-      const response = await handler(
-        new Request("http://localhost/admin/preview/nonexistent"),
-      );
-      assertEquals(response.status, 404);
     });
   });
 
