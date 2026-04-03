@@ -8,6 +8,7 @@ import { PostsPlugin } from "../postsPlugin.ts";
 import { UsersPlugin } from "../usersPlugin.ts";
 import { CategoriesPlugin } from "../categoriesPlugin.ts";
 import { RolesPlugin } from "../rolesPlugin.ts";
+import { PagePlugin } from "../pagePlugin.ts";
 
 /** Map a model field type to a form field type. */
 export function fieldType(type: string): FormFieldProps["type"] {
@@ -90,6 +91,20 @@ export async function getFieldConfig(
           options: [
             { value: "active", label: "Active" },
             { value: "inactive", label: "Inactive" },
+          ],
+        };
+    }
+  }
+  if (plugin instanceof PagePlugin) {
+    switch (fieldName) {
+      case "body":
+        return { type: "textarea", rows: 10 };
+      case "status":
+        return {
+          type: "select",
+          options: [
+            { value: "draft", label: "Draft" },
+            { value: "published", label: "Published" },
           ],
         };
     }

@@ -41,33 +41,34 @@ export const App = (
           {() => {
             // @ts-ignore: DOM APIs available at runtime in browser
             const doc = globalThis.document;
-            if (!doc) return;
-
-            // @ts-ignore: Confirm delete
-            doc.addEventListener("submit", (e) => {
-              // @ts-ignore: DOM API
-              const btn = e.target.querySelector("[data-confirm]");
-              if (btn) {
+            if (doc) {
+              // @ts-ignore: Confirm delete
+              doc.addEventListener("submit", (e) => {
                 // @ts-ignore: DOM API
-                const msg = btn.getAttribute("data-confirm") || "Are you sure?";
-                // @ts-ignore: DOM API
-                if (!confirm(msg)) e.preventDefault();
-              }
-            });
-
-            // @ts-ignore: Dismiss alerts
-            doc.querySelectorAll("[data-dismiss-alert]").forEach(
-              // @ts-ignore: DOM API
-              (btn) => {
-                // @ts-ignore: DOM API
-                btn.addEventListener("click", () => {
+                const btn = e.target.querySelector("[data-confirm]");
+                if (btn) {
                   // @ts-ignore: DOM API
-                  const alert = btn.closest("[role='alert']");
+                  const msg =
+                    btn.getAttribute("data-confirm") || "Are you sure?";
                   // @ts-ignore: DOM API
-                  if (alert) alert.remove();
-                });
-              },
-            );
+                  if (!confirm(msg)) e.preventDefault();
+                }
+              });
+
+              // @ts-ignore: Dismiss alerts
+              doc.querySelectorAll("[data-dismiss-alert]").forEach(
+                // @ts-ignore: DOM API
+                (btn) => {
+                  // @ts-ignore: DOM API
+                  btn.addEventListener("click", () => {
+                    // @ts-ignore: DOM API
+                    const alert = btn.closest("[role='alert']");
+                    // @ts-ignore: DOM API
+                    if (alert) alert.remove();
+                  });
+                },
+              );
+            }
           }}
         </Script>
       </body>
