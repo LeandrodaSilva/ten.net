@@ -11,6 +11,7 @@
     "./build/manifest": "./src/build/manifest.ts",
     "./build/crypto": "./src/build/crypto.ts",
     "./sw": "./src/sw/mod.ts",
+    "./storage/indexeddb": "./src/storage/mod.ts",
     "./assets/favicon": "./src/assets/faviconData.ts"
   },
   "tasks": {
@@ -37,7 +38,8 @@
     "@deno-walk": "jsr:@std/fs@1/walk",
     "@deno/emit": "jsr:@deno/emit@^0.46",
     "esbuild": "npm:esbuild@^0.25",
-    "esbuild-deno-loader": "jsr:@luca/esbuild-deno-loader@^0.11"
+    "esbuild-deno-loader": "jsr:@luca/esbuild-deno-loader@^0.11",
+    "fake-indexeddb": "npm:fake-indexeddb@^6"
   },
   "exclude": [
     ".git",
@@ -45,7 +47,8 @@
     "node_modules",
     "dist",
     "build",
-    "coverage"
+    "coverage",
+    "example/sw/dist"
   ],
   "permissions": {
     "default": {
