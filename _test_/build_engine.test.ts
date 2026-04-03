@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { build } from "../../src/build/build.ts";
+import { build } from "../src/build/build.ts";
 
 describe("build engine", () => {
   const testAppPath = "./example/app";

@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { Route } from "../../src/models/Route.ts";
+import { Route } from "../src/models/Route.ts";
 
 function createRoute(
   overrides?: Partial<{

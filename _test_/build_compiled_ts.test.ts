@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { build } from "../../src/build/build.ts";
+import { build } from "../src/build/build.ts";
 import {
   assert404,
   assertApiHello,
@@ -49,7 +49,7 @@ describe("Build Compiled TS E2E", () => {
     baseUrl = `http://localhost:${port}`;
 
     // Resolve project deno.json for import map resolution
-    const denoJsonPath = new URL("../../deno.json", import.meta.url).pathname;
+    const denoJsonPath = new URL("../deno.json", import.meta.url).pathname;
 
     const cmd = new Deno.Command("deno", {
       args: [

@@ -1,9 +1,9 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { Ten } from "../../src/ten.ts";
-import { Route } from "../../src/models/Route.ts";
-import { DynamicRouteRegistry } from "../../src/routing/dynamicRouteRegistry.ts";
-import type { StorageItem } from "../../src/models/Storage.ts";
+import { Ten } from "../src/ten.ts";
+import { Route } from "../src/models/Route.ts";
+import { DynamicRouteRegistry } from "../src/routing/dynamicRouteRegistry.ts";
+import type { StorageItem } from "../src/models/Storage.ts";
 
 describe("Ten", () => {
   describe("Ten.net()", () => {

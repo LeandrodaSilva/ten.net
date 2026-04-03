@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { BuildReporter } from "../../src/build/buildReporter.ts";
-import { stripAnsi, type TerminalWriter } from "../../src/terminalUi.ts";
+import { BuildReporter } from "../src/build/buildReporter.ts";
+import { stripAnsi, type TerminalWriter } from "../src/terminalUi.ts";
 
 class MemoryWriter implements TerminalWriter {
   stdout = "";

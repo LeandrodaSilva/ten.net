@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
-import { collectManifest } from "../../src/build/collector.ts";
+import { collectManifest } from "../src/build/collector.ts";
 
 describe("collectManifest", () => {
   it("should collect all routes from app directory", async () => {

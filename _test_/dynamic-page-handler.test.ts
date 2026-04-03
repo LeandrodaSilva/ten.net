@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertStringIncludes } from "@std/assert";
-import { renderDynamicPage } from "../../src/routing/dynamicPageHandler.ts";
-import type { StorageItem } from "../../src/models/Storage.ts";
+import { renderDynamicPage } from "../src/routing/dynamicPageHandler.ts";
+import type { StorageItem } from "../src/models/Storage.ts";
 
 /**
  * Tests for renderDynamicPage.
