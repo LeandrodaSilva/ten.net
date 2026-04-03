@@ -51,6 +51,8 @@
   },
   "exclude": [
     ".git",
+    ".claude/agents/frontend-dev-agent-templates",
+    ".claude/worktrees",
     "node_modules",
     "dist",
     "build",
