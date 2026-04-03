@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -14,168 +14,185 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingCartIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+} from "@headlessui/react";
+import {
+  Bars3Icon,
+  MagnifyingGlassIcon,
+  ShoppingCartIcon,
+  UserIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
-const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
+const currencies = ["CAD", "USD", "AUD", "EUR", "GBP"];
 const navigation = {
   categories: [
     {
-      name: 'Women',
+      name: "Women",
       featured: [
-        { name: 'Sleep', href: '#' },
-        { name: 'Swimwear', href: '#' },
-        { name: 'Underwear', href: '#' },
+        { name: "Sleep", href: "#" },
+        { name: "Swimwear", href: "#" },
+        { name: "Underwear", href: "#" },
       ],
       collection: [
-        { name: 'Everything', href: '#' },
-        { name: 'Core', href: '#' },
-        { name: 'New Arrivals', href: '#' },
-        { name: 'Sale', href: '#' },
+        { name: "Everything", href: "#" },
+        { name: "Core", href: "#" },
+        { name: "New Arrivals", href: "#" },
+        { name: "Sale", href: "#" },
       ],
       categories: [
-        { name: 'Basic Tees', href: '#' },
-        { name: 'Artwork Tees', href: '#' },
-        { name: 'Bottoms', href: '#' },
-        { name: 'Underwear', href: '#' },
-        { name: 'Accessories', href: '#' },
+        { name: "Basic Tees", href: "#" },
+        { name: "Artwork Tees", href: "#" },
+        { name: "Bottoms", href: "#" },
+        { name: "Underwear", href: "#" },
+        { name: "Accessories", href: "#" },
       ],
       brands: [
-        { name: 'Full Nelson', href: '#' },
-        { name: 'My Way', href: '#' },
-        { name: 'Re-Arranged', href: '#' },
-        { name: 'Counterfeit', href: '#' },
-        { name: 'Significant Other', href: '#' },
+        { name: "Full Nelson", href: "#" },
+        { name: "My Way", href: "#" },
+        { name: "Re-Arranged", href: "#" },
+        { name: "Counterfeit", href: "#" },
+        { name: "Significant Other", href: "#" },
       ],
     },
     {
-      name: 'Men',
+      name: "Men",
       featured: [
-        { name: 'Casual', href: '#' },
-        { name: 'Boxers', href: '#' },
-        { name: 'Outdoor', href: '#' },
+        { name: "Casual", href: "#" },
+        { name: "Boxers", href: "#" },
+        { name: "Outdoor", href: "#" },
       ],
       collection: [
-        { name: 'Everything', href: '#' },
-        { name: 'Core', href: '#' },
-        { name: 'New Arrivals', href: '#' },
-        { name: 'Sale', href: '#' },
+        { name: "Everything", href: "#" },
+        { name: "Core", href: "#" },
+        { name: "New Arrivals", href: "#" },
+        { name: "Sale", href: "#" },
       ],
       categories: [
-        { name: 'Artwork Tees', href: '#' },
-        { name: 'Pants', href: '#' },
-        { name: 'Accessories', href: '#' },
-        { name: 'Boxers', href: '#' },
-        { name: 'Basic Tees', href: '#' },
+        { name: "Artwork Tees", href: "#" },
+        { name: "Pants", href: "#" },
+        { name: "Accessories", href: "#" },
+        { name: "Boxers", href: "#" },
+        { name: "Basic Tees", href: "#" },
       ],
       brands: [
-        { name: 'Significant Other', href: '#' },
-        { name: 'My Way', href: '#' },
-        { name: 'Counterfeit', href: '#' },
-        { name: 'Re-Arranged', href: '#' },
-        { name: 'Full Nelson', href: '#' },
+        { name: "Significant Other", href: "#" },
+        { name: "My Way", href: "#" },
+        { name: "Counterfeit", href: "#" },
+        { name: "Re-Arranged", href: "#" },
+        { name: "Full Nelson", href: "#" },
       ],
     },
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: "Company", href: "#" },
+    { name: "Stores", href: "#" },
   ],
-}
+};
 const orders = [
   {
-    number: '4376',
-    status: 'Delivered on January 22, 2021',
-    href: '#',
-    invoiceHref: '#',
+    number: "4376",
+    status: "Delivered on January 22, 2021",
+    href: "#",
+    invoiceHref: "#",
     products: [
       {
         id: 1,
-        name: 'Machined Brass Puzzle',
-        href: '#',
-        price: '$95.00',
-        color: 'Brass',
+        name: "Machined Brass Puzzle",
+        href: "#",
+        price: "$95.00",
+        color: "Brass",
         size: '3" x 3" x 3"',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-07-product-01.jpg',
-        imageAlt: 'Brass puzzle in the shape of a jack with overlapping rounded posts.',
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-07-product-01.jpg",
+        imageAlt:
+          "Brass puzzle in the shape of a jack with overlapping rounded posts.",
       },
       {
         id: 2,
-        name: 'Earthen Planter',
-        href: '#',
-        price: '$62.00',
-        color: 'Natural',
-        size: 'Large',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-07-product-02.jpg',
-        imageAlt: 'Large cylindrical planter with textured natural porcelain color and separate drainage base.',
+        name: "Earthen Planter",
+        href: "#",
+        price: "$62.00",
+        color: "Natural",
+        size: "Large",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-07-product-02.jpg",
+        imageAlt:
+          "Large cylindrical planter with textured natural porcelain color and separate drainage base.",
       },
       {
         id: 3,
-        name: 'Minimalist Leather Wallet',
-        href: '#',
-        price: '$640.00',
-        color: 'Olive',
+        name: "Minimalist Leather Wallet",
+        href: "#",
+        price: "$640.00",
+        color: "Olive",
         size: '4" L x 2.75" W',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-07-product-03.jpg',
-        imageAlt: 'Olive green leather card-sized wallet with matching hand stitched and embossed logo on lower right.',
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-07-product-03.jpg",
+        imageAlt:
+          "Olive green leather card-sized wallet with matching hand stitched and embossed logo on lower right.",
       },
     ],
   },
   {
-    number: '4134',
-    status: 'Delivered on January 5, 2021',
-    href: '#',
-    invoiceHref: '#',
+    number: "4134",
+    status: "Delivered on January 5, 2021",
+    href: "#",
+    invoiceHref: "#",
     products: [
       {
         id: 1,
-        name: 'Machined Steel Bookends',
-        href: '#',
-        price: '$95.00',
-        color: 'Black',
+        name: "Machined Steel Bookends",
+        href: "#",
+        price: "$95.00",
+        color: "Black",
         size: '7.75" H x 6" W x 4.5" D',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-07-product-04.jpg',
-        imageAlt: 'Black powder coated steel bookends with bent rod l-shape.',
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-07-product-04.jpg",
+        imageAlt: "Black powder coated steel bookends with bent rod l-shape.",
       },
     ],
   },
-]
+];
 const footerNavigation = {
   account: [
-    { name: 'Manage Account', href: '#' },
-    { name: 'Saved Items', href: '#' },
-    { name: 'Orders', href: '#' },
-    { name: 'Redeem Gift card', href: '#' },
+    { name: "Manage Account", href: "#" },
+    { name: "Saved Items", href: "#" },
+    { name: "Orders", href: "#" },
+    { name: "Redeem Gift card", href: "#" },
   ],
   service: [
-    { name: 'Shipping & Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
-    { name: 'Get in touch', href: '#' },
+    { name: "Shipping & Returns", href: "#" },
+    { name: "Warranty", href: "#" },
+    { name: "FAQ", href: "#" },
+    { name: "Find a store", href: "#" },
+    { name: "Get in touch", href: "#" },
   ],
   company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
+    { name: "Who we are", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Careers", href: "#" },
+    { name: "Terms & Conditions", href: "#" },
+    { name: "Privacy", href: "#" },
   ],
   connect: [
-    { name: 'Facebook', href: '#' },
-    { name: 'Instagram', href: '#' },
-    { name: 'Pinterest', href: '#' },
+    { name: "Facebook", href: "#" },
+    { name: "Instagram", href: "#" },
+    { name: "Pinterest", href: "#" },
   ],
-}
+};
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white">
       {/* Mobile menu */}
-      <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="relative z-40 lg:hidden">
+      <Dialog
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+        className="relative z-40 lg:hidden"
+      >
         <DialogBackdrop
           transition
           className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
@@ -213,11 +230,17 @@ export default function Example() {
               </div>
               <TabPanels as={Fragment}>
                 {navigation.categories.map((category, categoryIdx) => (
-                  <TabPanel key={category.name} className="space-y-12 px-4 pt-10 pb-6">
+                  <TabPanel
+                    key={category.name}
+                    className="space-y-12 px-4 pt-10 pb-6"
+                  >
                     <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10">
                       <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                         <div>
-                          <p id={`mobile-featured-heading-${categoryIdx}`} className="font-medium text-gray-900">
+                          <p
+                            id={`mobile-featured-heading-${categoryIdx}`}
+                            className="font-medium text-gray-900"
+                          >
                             Featured
                           </p>
                           <ul
@@ -235,10 +258,17 @@ export default function Example() {
                           </ul>
                         </div>
                         <div>
-                          <p id="mobile-categories-heading" className="font-medium text-gray-900">
+                          <p
+                            id="mobile-categories-heading"
+                            className="font-medium text-gray-900"
+                          >
                             Categories
                           </p>
-                          <ul role="list" aria-labelledby="mobile-categories-heading" className="mt-6 space-y-6">
+                          <ul
+                            role="list"
+                            aria-labelledby="mobile-categories-heading"
+                            className="mt-6 space-y-6"
+                          >
                             {category.categories.map((item) => (
                               <li key={item.name} className="flex">
                                 <a href={item.href} className="text-gray-500">
@@ -251,10 +281,17 @@ export default function Example() {
                       </div>
                       <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                         <div>
-                          <p id="mobile-collection-heading" className="font-medium text-gray-900">
+                          <p
+                            id="mobile-collection-heading"
+                            className="font-medium text-gray-900"
+                          >
                             Collection
                           </p>
-                          <ul role="list" aria-labelledby="mobile-collection-heading" className="mt-6 space-y-6">
+                          <ul
+                            role="list"
+                            aria-labelledby="mobile-collection-heading"
+                            className="mt-6 space-y-6"
+                          >
                             {category.collection.map((item) => (
                               <li key={item.name} className="flex">
                                 <a href={item.href} className="text-gray-500">
@@ -266,10 +303,17 @@ export default function Example() {
                         </div>
 
                         <div>
-                          <p id="mobile-brand-heading" className="font-medium text-gray-900">
+                          <p
+                            id="mobile-brand-heading"
+                            className="font-medium text-gray-900"
+                          >
                             Brands
                           </p>
-                          <ul role="list" aria-labelledby="mobile-brand-heading" className="mt-6 space-y-6">
+                          <ul
+                            role="list"
+                            aria-labelledby="mobile-brand-heading"
+                            className="mt-6 space-y-6"
+                          >
                             {category.brands.map((item) => (
                               <li key={item.name} className="flex">
                                 <a href={item.href} className="text-gray-500">
@@ -289,7 +333,10 @@ export default function Example() {
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               {navigation.pages.map((page) => (
                 <div key={page.name} className="flow-root">
-                  <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                  <a
+                    href={page.href}
+                    className="-m-2 block p-2 font-medium text-gray-900"
+                  >
                     {page.name}
                   </a>
                 </div>
@@ -298,12 +345,18 @@ export default function Example() {
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Create an account
                 </a>
               </div>
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Sign in
                 </a>
               </div>
@@ -364,11 +417,17 @@ export default function Example() {
               </p>
 
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
+                <a
+                  href="#"
+                  className="text-sm font-medium text-white hover:text-gray-100"
+                >
                   Create an account
                 </a>
                 <span aria-hidden="true" className="h-6 w-px bg-gray-600" />
-                <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
+                <a
+                  href="#"
+                  className="text-sm font-medium text-white hover:text-gray-100"
+                >
                   Sign in
                 </a>
               </div>
@@ -412,7 +471,10 @@ export default function Example() {
                               className="absolute inset-x-0 top-full z-20 w-full bg-white text-sm text-gray-500 transition data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
                             >
                               {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                              <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow-sm" />
+                              <div
+                                aria-hidden="true"
+                                className="absolute inset-0 top-1/2 bg-white shadow-sm"
+                              />
                               <div className="relative bg-white">
                                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                                   <div className="grid grid-cols-2 items-start gap-x-8 gap-y-10 pt-10 pb-12">
@@ -430,8 +492,14 @@ export default function Example() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.featured.map((item) => (
-                                            <li key={item.name} className="flex">
-                                              <a href={item.href} className="hover:text-gray-800">
+                                            <li
+                                              key={item.name}
+                                              className="flex"
+                                            >
+                                              <a
+                                                href={item.href}
+                                                className="hover:text-gray-800"
+                                              >
                                                 {item.name}
                                               </a>
                                             </li>
@@ -439,7 +507,10 @@ export default function Example() {
                                         </ul>
                                       </div>
                                       <div>
-                                        <p id="desktop-categories-heading" className="font-medium text-gray-900">
+                                        <p
+                                          id="desktop-categories-heading"
+                                          className="font-medium text-gray-900"
+                                        >
                                           Categories
                                         </p>
                                         <ul
@@ -448,8 +519,14 @@ export default function Example() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.categories.map((item) => (
-                                            <li key={item.name} className="flex">
-                                              <a href={item.href} className="hover:text-gray-800">
+                                            <li
+                                              key={item.name}
+                                              className="flex"
+                                            >
+                                              <a
+                                                href={item.href}
+                                                className="hover:text-gray-800"
+                                              >
                                                 {item.name}
                                               </a>
                                             </li>
@@ -459,7 +536,10 @@ export default function Example() {
                                     </div>
                                     <div className="grid grid-cols-2 gap-x-8 gap-y-10">
                                       <div>
-                                        <p id="desktop-collection-heading" className="font-medium text-gray-900">
+                                        <p
+                                          id="desktop-collection-heading"
+                                          className="font-medium text-gray-900"
+                                        >
                                           Collection
                                         </p>
                                         <ul
@@ -468,8 +548,14 @@ export default function Example() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.collection.map((item) => (
-                                            <li key={item.name} className="flex">
-                                              <a href={item.href} className="hover:text-gray-800">
+                                            <li
+                                              key={item.name}
+                                              className="flex"
+                                            >
+                                              <a
+                                                href={item.href}
+                                                className="hover:text-gray-800"
+                                              >
                                                 {item.name}
                                               </a>
                                             </li>
@@ -478,7 +564,10 @@ export default function Example() {
                                       </div>
 
                                       <div>
-                                        <p id="desktop-brand-heading" className="font-medium text-gray-900">
+                                        <p
+                                          id="desktop-brand-heading"
+                                          className="font-medium text-gray-900"
+                                        >
                                           Brands
                                         </p>
                                         <ul
@@ -487,8 +576,14 @@ export default function Example() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.brands.map((item) => (
-                                            <li key={item.name} className="flex">
-                                              <a href={item.href} className="hover:text-gray-800">
+                                            <li
+                                              key={item.name}
+                                              className="flex"
+                                            >
+                                              <a
+                                                href={item.href}
+                                                className="hover:text-gray-800"
+                                              >
                                                 {item.name}
                                               </a>
                                             </li>
@@ -527,9 +622,15 @@ export default function Example() {
                     </button>
 
                     {/* Search */}
-                    <a href="#" className="ml-2 p-2 text-gray-400 hover:text-gray-500">
+                    <a
+                      href="#"
+                      className="ml-2 p-2 text-gray-400 hover:text-gray-500"
+                    >
                       <span className="sr-only">Search</span>
-                      <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                      <MagnifyingGlassIcon
+                        aria-hidden="true"
+                        className="size-6"
+                      />
                     </a>
                   </div>
 
@@ -547,30 +648,49 @@ export default function Example() {
                     <div className="flex items-center lg:ml-8">
                       <div className="flex space-x-8">
                         <div className="hidden lg:flex">
-                          <a href="#" className="-m-2 p-2 text-gray-400 hover:text-gray-500">
+                          <a
+                            href="#"
+                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
+                          >
                             <span className="sr-only">Search</span>
-                            <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                            <MagnifyingGlassIcon
+                              aria-hidden="true"
+                              className="size-6"
+                            />
                           </a>
                         </div>
 
                         <div className="flex">
-                          <a href="#" className="-m-2 p-2 text-gray-400 hover:text-gray-500">
+                          <a
+                            href="#"
+                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
+                          >
                             <span className="sr-only">Account</span>
                             <UserIcon aria-hidden="true" className="size-6" />
                           </a>
                         </div>
                       </div>
 
-                      <span aria-hidden="true" className="mx-4 h-6 w-px bg-gray-200 lg:mx-6" />
+                      <span
+                        aria-hidden="true"
+                        className="mx-4 h-6 w-px bg-gray-200 lg:mx-6"
+                      />
 
                       <div className="flow-root">
-                        <a href="#" className="group -m-2 flex items-center p-2">
+                        <a
+                          href="#"
+                          className="group -m-2 flex items-center p-2"
+                        >
                           <ShoppingCartIcon
                             aria-hidden="true"
                             className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                           />
-                          <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                          <span className="sr-only">items in cart, view bag</span>
+                          <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                            0
+                          </span>
+                          <span className="sr-only">
+                            items in cart, view bag
+                          </span>
                         </a>
                       </div>
                     </div>
@@ -584,27 +704,44 @@ export default function Example() {
 
       <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:pt-24 sm:pb-32 lg:px-8">
         <div className="max-w-xl">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Your Orders</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Your Orders
+          </h1>
           <p className="mt-2 text-sm text-gray-500">
-            Check the status of recent orders, manage returns, and discover similar products.
+            Check the status of recent orders, manage returns, and discover
+            similar products.
           </p>
         </div>
 
         <div className="mt-12 space-y-16 sm:mt-16">
           {orders.map((order) => (
-            <section key={order.number} aria-labelledby={`${order.number}-heading`}>
+            <section
+              key={order.number}
+              aria-labelledby={`${order.number}-heading`}
+            >
               <div className="space-y-1 md:flex md:items-baseline md:space-y-0 md:space-x-4">
-                <h2 id={`${order.number}-heading`} className="text-lg font-medium text-gray-900 md:shrink-0">
+                <h2
+                  id={`${order.number}-heading`}
+                  className="text-lg font-medium text-gray-900 md:shrink-0"
+                >
                   Order #{order.number}
                 </h2>
                 <div className="space-y-5 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 md:min-w-0 md:flex-1">
-                  <p className="text-sm font-medium text-gray-500">{order.status}</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    {order.status}
+                  </p>
                   <div className="flex text-sm font-medium">
-                    <a href={order.href} className="text-indigo-600 hover:text-indigo-500">
+                    <a
+                      href={order.href}
+                      className="text-indigo-600 hover:text-indigo-500"
+                    >
                       Manage order
                     </a>
                     <div className="ml-4 border-l border-gray-200 pl-4 sm:ml-6 sm:pl-6">
-                      <a href={order.invoiceHref} className="text-indigo-600 hover:text-indigo-500">
+                      <a
+                        href={order.invoiceHref}
+                        className="text-indigo-600 hover:text-indigo-500"
+                      >
                         View Invoice
                       </a>
                     </div>
@@ -626,13 +763,18 @@ export default function Example() {
                           <a href={product.href}>{product.name}</a>
                         </h3>
                         <p className="truncate text-sm text-gray-500">
-                          <span>{product.color}</span>{' '}
-                          <span aria-hidden="true" className="mx-1 text-gray-400">
+                          <span>{product.color}</span>{" "}
+                          <span
+                            aria-hidden="true"
+                            className="mx-1 text-gray-400"
+                          >
                             &middot;
-                          </span>{' '}
+                          </span>{" "}
                           <span>{product.size}</span>
                         </p>
-                        <p className="mt-1 font-medium text-gray-900">{product.price}</p>
+                        <p className="mt-1 font-medium text-gray-900">
+                          {product.price}
+                        </p>
                       </div>
                     </div>
                     <div className="mt-6 space-y-4 sm:mt-0 sm:ml-6 sm:w-40 sm:flex-none">
@@ -657,7 +799,10 @@ export default function Example() {
         </div>
       </main>
 
-      <footer aria-labelledby="footer-heading" className="border-t border-gray-200 bg-white">
+      <footer
+        aria-labelledby="footer-heading"
+        className="border-t border-gray-200 bg-white"
+      >
         <h2 id="footer-heading" className="sr-only">
           Footer
         </h2>
@@ -669,7 +814,10 @@ export default function Example() {
                 <ul role="list" className="mt-6 space-y-6">
                   {footerNavigation.account.map((item) => (
                     <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
                         {item.name}
                       </a>
                     </li>
@@ -681,7 +829,10 @@ export default function Example() {
                 <ul role="list" className="mt-6 space-y-6">
                   {footerNavigation.service.map((item) => (
                     <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
                         {item.name}
                       </a>
                     </li>
@@ -695,7 +846,10 @@ export default function Example() {
                 <ul role="list" className="mt-6 space-y-6">
                   {footerNavigation.company.map((item) => (
                     <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
                         {item.name}
                       </a>
                     </li>
@@ -707,7 +861,10 @@ export default function Example() {
                 <ul role="list" className="mt-6 space-y-6">
                   {footerNavigation.connect.map((item) => (
                     <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
                         {item.name}
                       </a>
                     </li>
@@ -722,10 +879,12 @@ export default function Example() {
               <p>Shipping to Canada ($CAD)</p>
               <p className="ml-3 border-l border-gray-200 pl-3">English</p>
             </div>
-            <p className="mt-6 text-center text-sm text-gray-500 sm:mt-0">&copy; 2021 Your Company, Inc.</p>
+            <p className="mt-6 text-center text-sm text-gray-500 sm:mt-0">
+              &copy; 2021 Your Company, Inc.
+            </p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

@@ -17,9 +17,11 @@ export default function Example() {
             <figure className="mt-10 flex flex-auto flex-col justify-between">
               <blockquote className="text-lg/8 text-gray-900 dark:text-gray-100">
                 <p>
-                  “Amet amet eget scelerisque tellus sit neque faucibus non eleifend. Integer eu praesent at a. Ornare
-                  arcu gravida natoque erat et cursus tortor consequat at. Vulputate gravida sociis enim nullam
-                  ultricies habitant malesuada lorem ac. Tincidunt urna dui pellentesque sagittis.”
+                  “Amet amet eget scelerisque tellus sit neque faucibus non
+                  eleifend. Integer eu praesent at a. Ornare arcu gravida
+                  natoque erat et cursus tortor consequat at. Vulputate gravida
+                  sociis enim nullam ultricies habitant malesuada lorem ac.
+                  Tincidunt urna dui pellentesque sagittis.”
                 </p>
               </blockquote>
               <figcaption className="mt-10 flex items-center gap-x-6">
@@ -29,8 +31,12 @@ export default function Example() {
                   className="size-14 rounded-full bg-gray-50 dark:bg-gray-800"
                 />
                 <div className="text-base">
-                  <div className="font-semibold text-gray-900 dark:text-white">Judith Black</div>
-                  <div className="mt-1 text-gray-500 dark:text-gray-400">CEO of Tuple</div>
+                  <div className="font-semibold text-gray-900 dark:text-white">
+                    Judith Black
+                  </div>
+                  <div className="mt-1 text-gray-500 dark:text-gray-400">
+                    CEO of Tuple
+                  </div>
                 </div>
               </figcaption>
             </figure>
@@ -49,9 +55,10 @@ export default function Example() {
             <figure className="mt-10 flex flex-auto flex-col justify-between">
               <blockquote className="text-lg/8 text-gray-900 dark:text-gray-100">
                 <p>
-                  “Excepteur veniam labore ullamco eiusmod. Pariatur consequat proident duis dolore nulla veniam
-                  reprehenderit nisi officia voluptate incididunt exercitation exercitation elit. Nostrud veniam sint
-                  dolor nisi ullamco.”
+                  “Excepteur veniam labore ullamco eiusmod. Pariatur consequat
+                  proident duis dolore nulla veniam reprehenderit nisi officia
+                  voluptate incididunt exercitation exercitation elit. Nostrud
+                  veniam sint dolor nisi ullamco.”
                 </p>
               </blockquote>
               <figcaption className="mt-10 flex items-center gap-x-6">
@@ -61,8 +68,12 @@ export default function Example() {
                   className="size-14 rounded-full bg-gray-50 dark:bg-gray-800"
                 />
                 <div className="text-base">
-                  <div className="font-semibold text-gray-900 dark:text-white">Joseph Rodriguez</div>
-                  <div className="mt-1 text-gray-500 dark:text-gray-400">CEO of Reform</div>
+                  <div className="font-semibold text-gray-900 dark:text-white">
+                    Joseph Rodriguez
+                  </div>
+                  <div className="mt-1 text-gray-500 dark:text-gray-400">
+                    CEO of Reform
+                  </div>
                 </div>
               </figcaption>
             </figure>
@@ -70,5 +81,5 @@ export default function Example() {
         </div>
       </div>
     </section>
-  )
+  );
 }

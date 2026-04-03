@@ -1,34 +1,38 @@
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
+  { name: "Dashboard", href: "#", current: true },
   {
-    name: 'Teams',
+    name: "Teams",
     current: false,
     children: [
-      { name: 'Engineering', href: '#' },
-      { name: 'Human Resources', href: '#' },
-      { name: 'Customer Success', href: '#' },
+      { name: "Engineering", href: "#" },
+      { name: "Human Resources", href: "#" },
+      { name: "Customer Success", href: "#" },
     ],
   },
   {
-    name: 'Projects',
+    name: "Projects",
     current: false,
     children: [
-      { name: 'GraphQL API', href: '#' },
-      { name: 'iOS App', href: '#' },
-      { name: 'Android App', href: '#' },
-      { name: 'New Customer Portal', href: '#' },
+      { name: "GraphQL API", href: "#" },
+      { name: "iOS App", href: "#" },
+      { name: "Android App", href: "#" },
+      { name: "New Customer Portal", href: "#" },
     ],
   },
-  { name: 'Calendar', href: '#', current: false },
-  { name: 'Documents', href: '#', current: false },
-  { name: 'Reports', href: '#', current: false },
-]
+  { name: "Calendar", href: "#", current: false },
+  { name: "Documents", href: "#", current: false },
+  { name: "Reports", href: "#", current: false },
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
@@ -52,50 +56,56 @@ export default function Example() {
             <ul role="list" className="-mx-2 space-y-1">
               {navigation.map((item) => (
                 <li key={item.name}>
-                  {!item.children ? (
-                    <a
-                      href={item.href}
-                      className={classNames(
-                        item.current ? 'bg-gray-50 dark:bg-white/5' : 'hover:bg-gray-50 dark:hover:bg-white/5',
-                        'block rounded-md py-2 pr-2 pl-10 text-sm/6 font-semibold text-gray-700 dark:text-gray-400',
-                      )}
-                    >
-                      {item.name}
-                    </a>
-                  ) : (
-                    <Disclosure as="div">
-                      <DisclosureButton
+                  {!item.children
+                    ? (
+                      <a
+                        href={item.href}
                         className={classNames(
-                          item.current ? 'bg-gray-50 dark:bg-white/5' : 'hover:bg-gray-50 dark:hover:bg-white/5',
-                          'group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm/6 font-semibold text-gray-700 dark:text-gray-400',
+                          item.current
+                            ? "bg-gray-50 dark:bg-white/5"
+                            : "hover:bg-gray-50 dark:hover:bg-white/5",
+                          "block rounded-md py-2 pr-2 pl-10 text-sm/6 font-semibold text-gray-700 dark:text-gray-400",
                         )}
                       >
-                        <ChevronRightIcon
-                          aria-hidden="true"
-                          className="size-5 shrink-0 text-gray-400 group-data-open:rotate-90 group-data-open:text-gray-500 dark:group-data-open:text-gray-400"
-                        />
                         {item.name}
-                      </DisclosureButton>
-                      <DisclosurePanel as="ul" className="mt-1 px-2">
-                        {item.children.map((subItem) => (
-                          <li key={subItem.name}>
-                            <DisclosureButton
-                              as="a"
-                              href={subItem.href}
-                              className={classNames(
-                                subItem.current
-                                  ? 'bg-gray-50 dark:bg-white/5'
-                                  : 'hover:bg-gray-50 dark:hover:bg-white/5',
-                                'block rounded-md py-2 pr-2 pl-9 text-sm/6 text-gray-700 dark:text-gray-400',
-                              )}
-                            >
-                              {subItem.name}
-                            </DisclosureButton>
-                          </li>
-                        ))}
-                      </DisclosurePanel>
-                    </Disclosure>
-                  )}
+                      </a>
+                    )
+                    : (
+                      <Disclosure as="div">
+                        <DisclosureButton
+                          className={classNames(
+                            item.current
+                              ? "bg-gray-50 dark:bg-white/5"
+                              : "hover:bg-gray-50 dark:hover:bg-white/5",
+                            "group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm/6 font-semibold text-gray-700 dark:text-gray-400",
+                          )}
+                        >
+                          <ChevronRightIcon
+                            aria-hidden="true"
+                            className="size-5 shrink-0 text-gray-400 group-data-open:rotate-90 group-data-open:text-gray-500 dark:group-data-open:text-gray-400"
+                          />
+                          {item.name}
+                        </DisclosureButton>
+                        <DisclosurePanel as="ul" className="mt-1 px-2">
+                          {item.children.map((subItem) => (
+                            <li key={subItem.name}>
+                              <DisclosureButton
+                                as="a"
+                                href={subItem.href}
+                                className={classNames(
+                                  subItem.current
+                                    ? "bg-gray-50 dark:bg-white/5"
+                                    : "hover:bg-gray-50 dark:hover:bg-white/5",
+                                  "block rounded-md py-2 pr-2 pl-9 text-sm/6 text-gray-700 dark:text-gray-400",
+                                )}
+                              >
+                                {subItem.name}
+                              </DisclosureButton>
+                            </li>
+                          ))}
+                        </DisclosurePanel>
+                      </Disclosure>
+                    )}
                 </li>
               ))}
             </ul>
@@ -117,5 +127,5 @@ export default function Example() {
         </ul>
       </nav>
     </div>
-  )
+  );
 }

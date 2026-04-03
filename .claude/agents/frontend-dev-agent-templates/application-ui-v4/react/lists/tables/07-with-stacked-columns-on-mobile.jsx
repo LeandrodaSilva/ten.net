@@ -1,20 +1,53 @@
 const people = [
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-  { name: 'Courtney Henry', title: 'Designer', email: 'courtney.henry@example.com', role: 'Admin' },
-  { name: 'Tom Cook', title: 'Director of Product', email: 'tom.cook@example.com', role: 'Member' },
-  { name: 'Whitney Francis', title: 'Copywriter', email: 'whitney.francis@example.com', role: 'Admin' },
-  { name: 'Leonard Krasner', title: 'Senior Designer', email: 'leonard.krasner@example.com', role: 'Owner' },
-  { name: 'Floyd Miles', title: 'Principal Designer', email: 'floyd.miles@example.com', role: 'Member' },
-]
+  {
+    name: "Lindsay Walton",
+    title: "Front-end Developer",
+    email: "lindsay.walton@example.com",
+    role: "Member",
+  },
+  {
+    name: "Courtney Henry",
+    title: "Designer",
+    email: "courtney.henry@example.com",
+    role: "Admin",
+  },
+  {
+    name: "Tom Cook",
+    title: "Director of Product",
+    email: "tom.cook@example.com",
+    role: "Member",
+  },
+  {
+    name: "Whitney Francis",
+    title: "Copywriter",
+    email: "whitney.francis@example.com",
+    role: "Admin",
+  },
+  {
+    name: "Leonard Krasner",
+    title: "Senior Designer",
+    email: "leonard.krasner@example.com",
+    role: "Owner",
+  },
+  {
+    name: "Floyd Miles",
+    title: "Principal Designer",
+    email: "floyd.miles@example.com",
+    role: "Member",
+  },
+];
 
 export default function Example() {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold text-gray-900 dark:text-white">Users</h1>
+          <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+            Users
+          </h1>
           <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
-            A list of all the users in your account including their name, title, email and role.
+            A list of all the users in your account including their name, title,
+            email and role.
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -48,7 +81,10 @@ export default function Example() {
               >
                 Email
               </th>
-              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+              <th
+                scope="col"
+                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white"
+              >
                 Role
               </th>
               <th scope="col" className="py-3.5 pr-4 pl-3 sm:pr-0">
@@ -63,9 +99,13 @@ export default function Example() {
                   {person.name}
                   <dl className="font-normal lg:hidden">
                     <dt className="sr-only">Title</dt>
-                    <dd className="mt-1 truncate text-gray-700 dark:text-gray-300">{person.title}</dd>
+                    <dd className="mt-1 truncate text-gray-700 dark:text-gray-300">
+                      {person.title}
+                    </dd>
                     <dt className="sr-only sm:hidden">Email</dt>
-                    <dd className="mt-1 truncate text-gray-500 sm:hidden dark:text-gray-400">{person.email}</dd>
+                    <dd className="mt-1 truncate text-gray-500 sm:hidden dark:text-gray-400">
+                      {person.email}
+                    </dd>
                   </dl>
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell dark:text-gray-400">
@@ -74,7 +114,9 @@ export default function Example() {
                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell dark:text-gray-400">
                   {person.email}
                 </td>
-                <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">{person.role}</td>
+                <td className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                  {person.role}
+                </td>
                 <td className="py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-0">
                   <a
                     href="#"
@@ -89,5 +131,5 @@ export default function Example() {
         </table>
       </div>
     </div>
-  )
+  );
 }

@@ -1,57 +1,62 @@
-import { CheckIcon } from '@heroicons/react/20/solid'
+import { CheckIcon } from "@heroicons/react/20/solid";
 
 const frequencies = [
-  { value: 'monthly', label: 'Monthly', priceSuffix: '/month' },
-  { value: 'annually', label: 'Annually', priceSuffix: '/year' },
-]
+  { value: "monthly", label: "Monthly", priceSuffix: "/month" },
+  { value: "annually", label: "Annually", priceSuffix: "/year" },
+];
 const tiers = [
   {
-    name: 'Freelancer',
-    id: 'tier-freelancer',
-    href: '#',
-    price: { monthly: '$19', annually: '$199' },
-    description: 'The essentials to provide your best work for clients.',
-    features: ['5 products', 'Up to 1,000 subscribers', 'Basic analytics', '48-hour support response time'],
-    featured: false,
-    cta: 'Buy plan',
-  },
-  {
-    name: 'Startup',
-    id: 'tier-startup',
-    href: '#',
-    price: { monthly: '$29', annually: '$299' },
-    description: 'A plan that scales with your rapidly growing business.',
+    name: "Freelancer",
+    id: "tier-freelancer",
+    href: "#",
+    price: { monthly: "$19", annually: "$199" },
+    description: "The essentials to provide your best work for clients.",
     features: [
-      '25 products',
-      'Up to 10,000 subscribers',
-      'Advanced analytics',
-      '24-hour support response time',
-      'Marketing automations',
+      "5 products",
+      "Up to 1,000 subscribers",
+      "Basic analytics",
+      "48-hour support response time",
     ],
     featured: false,
-    cta: 'Buy plan',
+    cta: "Buy plan",
   },
   {
-    name: 'Enterprise',
-    id: 'tier-enterprise',
-    href: '#',
-    price: 'Custom',
-    description: 'Dedicated support and infrastructure for your company.',
+    name: "Startup",
+    id: "tier-startup",
+    href: "#",
+    price: { monthly: "$29", annually: "$299" },
+    description: "A plan that scales with your rapidly growing business.",
     features: [
-      'Unlimited products',
-      'Unlimited subscribers',
-      'Advanced analytics',
-      '1-hour, dedicated support response time',
-      'Marketing automations',
-      'Custom reporting tools',
+      "25 products",
+      "Up to 10,000 subscribers",
+      "Advanced analytics",
+      "24-hour support response time",
+      "Marketing automations",
+    ],
+    featured: false,
+    cta: "Buy plan",
+  },
+  {
+    name: "Enterprise",
+    id: "tier-enterprise",
+    href: "#",
+    price: "Custom",
+    description: "Dedicated support and infrastructure for your company.",
+    features: [
+      "Unlimited products",
+      "Unlimited subscribers",
+      "Advanced analytics",
+      "1-hour, dedicated support response time",
+      "Marketing automations",
+      "Custom reporting tools",
     ],
     featured: true,
-    cta: 'Contact sales',
+    cta: "Contact sales",
   },
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
@@ -59,14 +64,16 @@ export default function Example() {
     <form className="group/tiers bg-white py-24 sm:py-32 dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Pricing</h2>
+          <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+            Pricing
+          </h2>
           <p className="mt-2 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-6xl dark:text-white">
             Pricing that grows with you
           </p>
         </div>
         <p className="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 sm:text-xl/8 dark:text-gray-400">
-          Choose an affordable plan that’s packed with the best features for engaging your audience, creating customer
-          loyalty, and driving sales.
+          Choose an affordable plan that’s packed with the best features for
+          engaging your audience, creating customer loyalty, and driving sales.
         </p>
         <div className="mt-16 flex justify-center">
           <fieldset aria-label="Payment frequency">
@@ -79,7 +86,9 @@ export default function Example() {
                   type="radio"
                   className="absolute inset-0 appearance-none rounded-full"
                 />
-                <span className="text-gray-500 group-has-checked:text-white dark:text-gray-400">Monthly</span>
+                <span className="text-gray-500 group-has-checked:text-white dark:text-gray-400">
+                  Monthly
+                </span>
               </label>
               <label className="group relative rounded-full px-2.5 py-1 has-checked:bg-indigo-600 dark:has-checked:bg-indigo-500">
                 <input
@@ -88,7 +97,9 @@ export default function Example() {
                   type="radio"
                   className="absolute inset-0 appearance-none rounded-full"
                 />
-                <span className="text-gray-500 group-has-checked:text-white dark:text-gray-400">Annually</span>
+                <span className="text-gray-500 group-has-checked:text-white dark:text-gray-400">
+                  Annually
+                </span>
               </label>
             </div>
           </fieldset>
@@ -97,7 +108,7 @@ export default function Example() {
           {tiers.map((tier) => (
             <div
               key={tier.id}
-              data-featured={tier.featured ? 'true' : undefined}
+              data-featured={tier.featured ? "true" : undefined}
               className="group/tier rounded-3xl p-8 ring-1 ring-gray-200 data-featured:bg-gray-900 data-featured:ring-gray-900 xl:p-10 dark:bg-gray-800/50 dark:ring-white/10 dark:data-featured:bg-gray-800/50 dark:data-featured:ring-2 dark:data-featured:ring-indigo-500"
             >
               <h3
@@ -109,30 +120,32 @@ export default function Example() {
               <p className="mt-4 text-sm/6 text-gray-600 group-data-featured/tier:text-gray-300 dark:text-gray-300">
                 {tier.description}
               </p>
-              {typeof tier.price === 'string' ? (
-                <p className="mt-6 text-4xl font-semibold tracking-tight text-gray-900 group-data-featured/tier:text-white dark:text-white">
-                  {tier.price}
-                </p>
-              ) : (
-                <>
-                  <p className="mt-6 flex items-baseline gap-x-1 group-not-has-[[name=frequency][value=monthly]:checked]/tiers:hidden">
-                    <span className="text-4xl font-semibold tracking-tight text-gray-900 group-data-featured/tier:text-white dark:text-white">
-                      {tier.price.monthly}
-                    </span>
-                    <span className="text-sm/6 font-semibold text-gray-600 group-data-featured/tier:text-gray-300 dark:text-gray-400">
-                      /month
-                    </span>
+              {typeof tier.price === "string"
+                ? (
+                  <p className="mt-6 text-4xl font-semibold tracking-tight text-gray-900 group-data-featured/tier:text-white dark:text-white">
+                    {tier.price}
                   </p>
-                  <p className="mt-6 flex items-baseline gap-x-1 group-not-has-[[name=frequency][value=annually]:checked]/tiers:hidden">
-                    <span className="text-4xl font-semibold tracking-tight text-gray-900 group-data-featured/tier:text-white dark:text-white">
-                      {tier.price.annually}
-                    </span>
-                    <span className="text-sm/6 font-semibold text-gray-600 group-data-featured/tier:text-gray-300 dark:text-gray-400">
-                      /year
-                    </span>
-                  </p>
-                </>
-              )}
+                )
+                : (
+                  <>
+                    <p className="mt-6 flex items-baseline gap-x-1 group-not-has-[[name=frequency][value=monthly]:checked]/tiers:hidden">
+                      <span className="text-4xl font-semibold tracking-tight text-gray-900 group-data-featured/tier:text-white dark:text-white">
+                        {tier.price.monthly}
+                      </span>
+                      <span className="text-sm/6 font-semibold text-gray-600 group-data-featured/tier:text-gray-300 dark:text-gray-400">
+                        /month
+                      </span>
+                    </p>
+                    <p className="mt-6 flex items-baseline gap-x-1 group-not-has-[[name=frequency][value=annually]:checked]/tiers:hidden">
+                      <span className="text-4xl font-semibold tracking-tight text-gray-900 group-data-featured/tier:text-white dark:text-white">
+                        {tier.price.annually}
+                      </span>
+                      <span className="text-sm/6 font-semibold text-gray-600 group-data-featured/tier:text-gray-300 dark:text-gray-400">
+                        /year
+                      </span>
+                    </p>
+                  </>
+                )}
 
               <button
                 value={tier.id}
@@ -152,8 +165,10 @@ export default function Example() {
                     <CheckIcon
                       aria-hidden="true"
                       className={classNames(
-                        tier.featured ? 'text-white dark:text-indigo-400' : 'text-indigo-600 dark:text-indigo-400',
-                        'h-6 w-5 flex-none',
+                        tier.featured
+                          ? "text-white dark:text-indigo-400"
+                          : "text-indigo-600 dark:text-indigo-400",
+                        "h-6 w-5 flex-none",
                       )}
                     />
                     {feature}
@@ -165,5 +180,5 @@ export default function Example() {
         </div>
       </div>
     </form>
-  )
+  );
 }

@@ -1,54 +1,64 @@
 const products = [
   {
     id: 1,
-    name: 'Fusion',
-    category: 'UI Kit',
-    href: '#',
-    price: '$49',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-05-related-product-01.jpg',
+    name: "Fusion",
+    category: "UI Kit",
+    href: "#",
+    price: "$49",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-05-related-product-01.jpg",
     imageAlt:
-      'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
+      "Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.",
   },
   {
     id: 2,
-    name: 'Marketing Icon Pack',
-    category: 'Icons',
-    href: '#',
-    price: '$19',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-05-related-product-02.jpg',
-    imageAlt: 'Calendar user interface screenshot with icon buttons and orange-yellow theme.',
+    name: "Marketing Icon Pack",
+    category: "Icons",
+    href: "#",
+    price: "$19",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-05-related-product-02.jpg",
+    imageAlt:
+      "Calendar user interface screenshot with icon buttons and orange-yellow theme.",
   },
   {
     id: 3,
-    name: 'Scaffold',
-    category: 'Wireframe Kit',
-    href: '#',
-    price: '$29',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-05-related-product-03.jpg',
+    name: "Scaffold",
+    category: "Wireframe Kit",
+    href: "#",
+    price: "$29",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-05-related-product-03.jpg",
     imageAlt:
-      'Pricing page screenshot with tiered plan options and comparison table on colorful blue and green background.',
+      "Pricing page screenshot with tiered plan options and comparison table on colorful blue and green background.",
   },
   {
     id: 4,
-    name: 'Bones',
-    category: 'Wireframe Kit',
-    href: '#',
-    price: '$29',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-05-related-product-04.jpg',
+    name: "Bones",
+    category: "Wireframe Kit",
+    href: "#",
+    price: "$29",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-05-related-product-04.jpg",
     imageAlt:
-      'Application screenshot with tiered navigation and account settings form on color red and purple background.',
+      "Application screenshot with tiered navigation and account settings form on color red and purple background.",
   },
-]
+];
 
 export default function Example() {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <div className="flex items-center justify-between space-x-4">
-          <h2 className="text-lg font-medium text-gray-900">Customers also viewed</h2>
-          <a href="#" className="text-sm font-medium whitespace-nowrap text-indigo-600 hover:text-indigo-500">
+          <h2 className="text-lg font-medium text-gray-900">
+            Customers also viewed
+          </h2>
+          <a
+            href="#"
+            className="text-sm font-medium whitespace-nowrap text-indigo-600 hover:text-indigo-500"
+          >
             View all
-            <span aria-hidden="true"> &rarr;</span>
+            <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
@@ -84,5 +94,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

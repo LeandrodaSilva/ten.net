@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Combobox,
@@ -6,10 +6,10 @@ import {
   ComboboxOption,
   ComboboxOptions,
   Dialog,
-  DialogPanel,
   DialogBackdrop,
-} from '@headlessui/react'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+  DialogPanel,
+} from "@headlessui/react";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import {
   Bars4Icon,
   CalendarIcon,
@@ -22,43 +22,40 @@ import {
   TableCellsIcon,
   VideoCameraIcon,
   ViewColumnsIcon,
-} from '@heroicons/react/24/outline'
-import { useState } from 'react'
+} from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 const items = [
   {
     id: 1,
-    name: 'Text',
-    description: 'Add freeform text with basic formatting options.',
-    url: '#',
-    color: 'bg-indigo-500',
+    name: "Text",
+    description: "Add freeform text with basic formatting options.",
+    url: "#",
+    color: "bg-indigo-500",
     icon: PencilSquareIcon,
   },
   // More items...
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
-  const [query, setQuery] = useState('')
-  const [open, setOpen] = useState(true)
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(true);
 
-  const filteredItems =
-    query === ''
-      ? []
-      : items.filter((item) => {
-          return item.name.toLowerCase().includes(query.toLowerCase())
-        })
+  const filteredItems = query === "" ? [] : items.filter((item) => {
+    return item.name.toLowerCase().includes(query.toLowerCase());
+  });
 
   return (
     <Dialog
       className="relative z-10"
       open={open}
       onClose={() => {
-        setOpen(false)
-        setQuery('')
+        setOpen(false);
+        setQuery("");
       }}
     >
       <DialogBackdrop
@@ -74,7 +71,7 @@ export default function Example() {
           <Combobox
             onChange={(item) => {
               if (item) {
-                window.location = item.url
+                window.location = item.url;
               }
             }}
           >
@@ -84,7 +81,7 @@ export default function Example() {
                 className="col-start-1 row-start-1 h-12 w-full pr-4 pl-11 text-base text-gray-900 outline-hidden placeholder:text-gray-400 sm:text-sm dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500"
                 placeholder="Search..."
                 onChange={(event) => setQuery(event.target.value)}
-                onBlur={() => setQuery('')}
+                onBlur={() => setQuery("")}
               />
               <MagnifyingGlassIcon
                 className="pointer-events-none col-start-1 row-start-1 ml-4 size-5 self-center text-gray-400 dark:text-gray-500"
@@ -93,7 +90,10 @@ export default function Example() {
             </div>
 
             {filteredItems.length > 0 && (
-              <ComboboxOptions static className="max-h-96 transform-gpu scroll-py-3 overflow-y-auto p-3">
+              <ComboboxOptions
+                static
+                className="max-h-96 transform-gpu scroll-py-3 overflow-y-auto p-3"
+              >
                 {filteredItems.map((item) => (
                   <ComboboxOption
                     key={item.id}
@@ -102,11 +102,14 @@ export default function Example() {
                   >
                     <div
                       className={classNames(
-                        'flex size-10 flex-none items-center justify-center rounded-lg',
+                        "flex size-10 flex-none items-center justify-center rounded-lg",
                         item.color,
                       )}
                     >
-                      <item.icon className="size-6 text-white" aria-hidden="true" />
+                      <item.icon
+                        className="size-6 text-white"
+                        aria-hidden="true"
+                      />
                     </div>
                     <div className="ml-4 flex-auto">
                       <p className="text-sm font-medium text-gray-700 group-data-focus:text-gray-900 dark:text-gray-300 dark:group-data-focus:text-white">
@@ -121,14 +124,16 @@ export default function Example() {
               </ComboboxOptions>
             )}
 
-            {query !== '' && filteredItems.length === 0 && (
+            {query !== "" && filteredItems.length === 0 && (
               <div className="px-6 py-14 text-center text-sm sm:px-14">
                 <ExclamationCircleIcon
                   type="outline"
                   name="exclamation-circle"
                   className="mx-auto size-6 text-gray-400 dark:text-gray-500"
                 />
-                <p className="mt-4 font-semibold text-gray-900 dark:text-white">No results found</p>
+                <p className="mt-4 font-semibold text-gray-900 dark:text-white">
+                  No results found
+                </p>
                 <p className="mt-2 text-gray-500 dark:text-gray-400">
                   No components found for this search term. Please try again.
                 </p>
@@ -138,5 +143,5 @@ export default function Example() {
         </DialogPanel>
       </div>
     </Dialog>
-  )
+  );
 }

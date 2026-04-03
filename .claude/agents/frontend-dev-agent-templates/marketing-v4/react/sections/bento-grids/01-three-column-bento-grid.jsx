@@ -2,7 +2,9 @@ export default function Example() {
   return (
     <div className="bg-gray-50 py-24 sm:py-32 dark:bg-gray-900">
       <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-        <h2 className="text-center text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Deploy faster</h2>
+        <h2 className="text-center text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+          Deploy faster
+        </h2>
         <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl dark:text-white">
           Everything you need to deploy your app
         </p>
@@ -15,7 +17,8 @@ export default function Example() {
                   Mobile friendly
                 </p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center dark:text-gray-400">
-                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.
+                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure
+                  qui lorem cupidatat commodo.
                 </p>
               </div>
               <div className="@container relative min-h-120 w-full grow max-lg:mx-auto max-lg:max-w-sm">
@@ -38,7 +41,8 @@ export default function Example() {
                   Performance
                 </p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center dark:text-gray-400">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit maiores impedit.
+                  Lorem ipsum, dolor sit amet consectetur adipisicing elit
+                  maiores impedit.
                 </p>
               </div>
               <div className="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
@@ -64,7 +68,8 @@ export default function Example() {
                   Security
                 </p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center dark:text-gray-400">
-                  Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi.
+                  Morbi viverra dui mi arcu sed. Tellus semper adipiscing
+                  suspendisse semper morbi.
                 </p>
               </div>
               <div className="@container flex flex-1 items-center max-lg:py-6 lg:pb-2">
@@ -90,7 +95,8 @@ export default function Example() {
                   Powerful APIs
                 </p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center dark:text-gray-400">
-                  Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget sem sodales gravida.
+                  Sit quis amet rutrum tellus ullamcorper ultricies libero dolor
+                  eget sem sodales gravida.
                 </p>
               </div>
               <div className="relative min-h-120 w-full grow">
@@ -100,10 +106,14 @@ export default function Example() {
                       <div className="border-r border-b border-r-white/10 border-b-white/20 bg-white/5 px-4 py-2 text-white">
                         NotificationSetting.jsx
                       </div>
-                      <div className="border-r border-gray-600/10 px-4 py-2">App.jsx</div>
+                      <div className="border-r border-gray-600/10 px-4 py-2">
+                        App.jsx
+                      </div>
                     </div>
                   </div>
-                  <div className="px-6 pt-6 pb-14">{/* Your code example */}</div>
+                  <div className="px-6 pt-6 pb-14">
+                    {/* Your code example */}
+                  </div>
                 </div>
               </div>
             </div>
@@ -112,5 +122,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

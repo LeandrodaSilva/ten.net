@@ -1,25 +1,33 @@
 const incentives = [
   {
-    name: 'Free Shipping',
-    description: "It's not actually free we just price it into the products. Someone's paying for it, and it's not us.",
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce/icons/icon-delivery-light.svg',
+    name: "Free Shipping",
+    description:
+      "It's not actually free we just price it into the products. Someone's paying for it, and it's not us.",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce/icons/icon-delivery-light.svg",
   },
   {
-    name: '24/7 Customer Support',
-    description: 'Our AI chat widget is powered by a naive series of if/else statements. Guaranteed to irritate.',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce/icons/icon-chat-light.svg',
+    name: "24/7 Customer Support",
+    description:
+      "Our AI chat widget is powered by a naive series of if/else statements. Guaranteed to irritate.",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce/icons/icon-chat-light.svg",
   },
   {
-    name: 'Fast Shopping Cart',
-    description: "Look how fast that cart is going. What does this mean for the actual experience? I don't know.",
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce/icons/icon-fast-checkout-light.svg',
+    name: "Fast Shopping Cart",
+    description:
+      "Look how fast that cart is going. What does this mean for the actual experience? I don't know.",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce/icons/icon-fast-checkout-light.svg",
   },
   {
-    name: 'Gift Cards',
-    description: "Buy them for your friends, especially if they don't like our store. Free money for us, it's great.",
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce/icons/icon-gift-card-light.svg',
+    name: "Gift Cards",
+    description:
+      "Buy them for your friends, especially if they don't like our store. Free money for us, it's great.",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce/icons/icon-gift-card-light.svg",
   },
-]
+];
 
 export default function Example() {
   return (
@@ -29,12 +37,16 @@ export default function Example() {
           {incentives.map((incentive) => (
             <div key={incentive.name}>
               <img alt="" src={incentive.imageSrc} className="h-24 w-auto" />
-              <h3 className="mt-6 text-sm font-medium text-gray-900">{incentive.name}</h3>
-              <p className="mt-2 text-sm text-gray-500">{incentive.description}</p>
+              <h3 className="mt-6 text-sm font-medium text-gray-900">
+                {incentive.name}
+              </h3>
+              <p className="mt-2 text-sm text-gray-500">
+                {incentive.description}
+              </p>
             </div>
           ))}
         </div>
       </div>
     </div>
-  )
+  );
 }

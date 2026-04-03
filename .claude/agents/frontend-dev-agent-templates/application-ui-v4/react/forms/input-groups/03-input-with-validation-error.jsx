@@ -1,9 +1,12 @@
-import { ExclamationCircleIcon } from '@heroicons/react/16/solid'
+import { ExclamationCircleIcon } from "@heroicons/react/16/solid";
 
 export default function Example() {
   return (
     <div>
-      <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
+      <label
+        htmlFor="email"
+        className="block text-sm/6 font-medium text-gray-900 dark:text-white"
+      >
         Email
       </label>
       <div className="mt-2 grid grid-cols-1">
@@ -22,9 +25,12 @@ export default function Example() {
           className="pointer-events-none col-start-1 row-start-1 mr-3 size-5 self-center justify-self-end text-red-500 sm:size-4 dark:text-red-400"
         />
       </div>
-      <p id="email-error" className="mt-2 text-sm text-red-600 dark:text-red-400">
+      <p
+        id="email-error"
+        className="mt-2 text-sm text-red-600 dark:text-red-400"
+      >
         Not a valid email address.
       </p>
     </div>
-  )
+  );
 }

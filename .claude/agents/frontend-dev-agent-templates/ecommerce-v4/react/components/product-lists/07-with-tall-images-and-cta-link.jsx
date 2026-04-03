@@ -1,40 +1,48 @@
 const products = [
   {
     id: 1,
-    name: 'Black Basic Tee',
-    price: '$32',
-    href: '#',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-favorite-01.jpg',
+    name: "Black Basic Tee",
+    price: "$32",
+    href: "#",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-favorite-01.jpg",
     imageAlt: "Model wearing women's black cotton crewneck tee.",
   },
   {
     id: 2,
-    name: 'Off-White Basic Tee',
-    price: '$32',
-    href: '#',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-favorite-02.jpg',
+    name: "Off-White Basic Tee",
+    price: "$32",
+    href: "#",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-favorite-02.jpg",
     imageAlt: "Model wearing women's off-white cotton crewneck tee.",
   },
   {
     id: 3,
-    name: 'Mountains Artwork Tee',
-    price: '$36',
-    href: '#',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-favorite-03.jpg',
+    name: "Mountains Artwork Tee",
+    price: "$36",
+    href: "#",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-favorite-03.jpg",
     imageAlt:
       "Model wearing women's burgundy red crewneck artwork tee with small white triangle overlapping larger black triangle.",
   },
-]
+];
 
 export default function Example() {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div className="sm:flex sm:items-baseline sm:justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">Our Favorites</h2>
-          <a href="#" className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+            Our Favorites
+          </h2>
+          <a
+            href="#"
+            className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block"
+          >
             Browse all favorites
-            <span aria-hidden="true"> &rarr;</span>
+            <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
 
@@ -58,12 +66,15 @@ export default function Example() {
         </div>
 
         <div className="mt-6 sm:hidden">
-          <a href="#" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+          <a
+            href="#"
+            className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+          >
             Browse all favorites
-            <span aria-hidden="true"> &rarr;</span>
+            <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -112,26 +112,26 @@ Root: `.claude/agents/frontend-dev-agent-templates/`
 
 ### Mapeamento Template → Componente
 
-| Necessidade do Admin          | Diretorio de Templates                  |
-| ----------------------------- | --------------------------------------- |
-| Layout / sidebar shell        | `application-shells/sidebar/`           |
-| Home dashboard                | `page-examples/home-screens/`           |
-| Stats / metricas              | `data-display/stats/`                   |
-| Tabelas de dados              | `lists/tables/`                         |
-| Formularios                   | `forms/`                                |
-| Botoes                        | `elements/buttons/`                     |
-| Dropdowns / menu usuario      | `elements/dropdowns/`                   |
-| Avatars                       | `elements/avatars/`                     |
-| Alerts / feedback             | `feedback/alerts/`                      |
-| Notificacoes / toasts         | `overlays/notifications/`               |
-| Sidebar navigation            | `navigation/sidebar-navigation/`        |
-| Pagination                    | `navigation/pagination/`                |
-| Breadcrumbs                   | `navigation/breadcrumbs/`               |
-| Empty states                  | `feedback/empty-states/`                |
-| Cards                         | `layout/cards/`                         |
-| Headings de pagina            | `headings/page-headings/`               |
-| Modals / drawers              | `overlays/`                             |
-| Sign-in forms                 | `forms/sign-in-forms/`                  |
+| Necessidade do Admin     | Diretorio de Templates           |
+| ------------------------ | -------------------------------- |
+| Layout / sidebar shell   | `application-shells/sidebar/`    |
+| Home dashboard           | `page-examples/home-screens/`    |
+| Stats / metricas         | `data-display/stats/`            |
+| Tabelas de dados         | `lists/tables/`                  |
+| Formularios              | `forms/`                         |
+| Botoes                   | `elements/buttons/`              |
+| Dropdowns / menu usuario | `elements/dropdowns/`            |
+| Avatars                  | `elements/avatars/`              |
+| Alerts / feedback        | `feedback/alerts/`               |
+| Notificacoes / toasts    | `overlays/notifications/`        |
+| Sidebar navigation       | `navigation/sidebar-navigation/` |
+| Pagination               | `navigation/pagination/`         |
+| Breadcrumbs              | `navigation/breadcrumbs/`        |
+| Empty states             | `feedback/empty-states/`         |
+| Cards                    | `layout/cards/`                  |
+| Headings de pagina       | `headings/page-headings/`        |
+| Modals / drawers         | `overlays/`                      |
+| Sign-in forms            | `forms/sign-in-forms/`           |
 
 ### Regras de Conversao HTML → React TSX
 
@@ -145,8 +145,8 @@ Root: `.claude/agents/frontend-dev-agent-templates/`
 - `tabindex` → `tabIndex`
 - Self-closing: `<input>` → `<input />`, `<img>` → `<img />`
 - `command`, `commandfor` → manter como esta (HTML Invoker API nativo)
-- `el-dialog`, `el-dropdown`, `el-menu`, `el-dialog-backdrop`,
-  `el-dialog-panel` → manter (web components do `@tailwindplus/elements`)
+- `el-dialog`, `el-dropdown`, `el-menu`, `el-dialog-backdrop`, `el-dialog-panel`
+  → manter (web components do `@tailwindplus/elements`)
 
 ### Compatibilidade SSR com Tailwind Plus Elements
 
@@ -154,8 +154,8 @@ Root: `.claude/agents/frontend-dev-agent-templates/`
 - Eles se inicializam no browser via CDN script ja carregado em `app.tsx`
 - A Invoker API (`command`, `commandfor`) e API nativa do browser — sem JS extra
 - `popover` no `el-menu` usa Popover API nativa
-- `data-closed`, `data-enter`, `data-leave` sao atributos de transicao
-  tratados client-side pelo `@tailwindplus/elements`
+- `data-closed`, `data-enter`, `data-leave` sao atributos de transicao tratados
+  client-side pelo `@tailwindplus/elements`
 - Tudo funciona sem hydration React — perfeito para nosso SSR-only
 
 ---
@@ -225,8 +225,8 @@ Em `packages/admin/src/plugins/admin/crud.tsx`:
 // CRUD form: renderAdminPage(CrudForm, props, navItems)
 ```
 
-O `renderAdminPage` produz HTML SSR completo com Dashboard layout wrapper.
-Todas as rotas recebem `navItems` para popular a sidebar.
+O `renderAdminPage` produz HTML SSR completo com Dashboard layout wrapper. Todas
+as rotas recebem `navItems` para popular a sidebar.
 
 ## Padroes SSR-Compatible
 

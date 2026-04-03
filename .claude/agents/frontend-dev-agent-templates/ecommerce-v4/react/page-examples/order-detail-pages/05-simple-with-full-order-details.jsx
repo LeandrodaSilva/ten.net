@@ -1,16 +1,17 @@
 const products = [
   {
     id: 1,
-    name: 'Cold Brew Bottle',
+    name: "Cold Brew Bottle",
     description:
-      'This glass bottle comes with a mesh insert for steeping tea or cold-brewing coffee. Pour from any angle and remove the top for easy cleaning.',
-    href: '#',
+      "This glass bottle comes with a mesh insert for steeping tea or cold-brewing coffee. Pour from any angle and remove the top for easy cleaning.",
+    href: "#",
     quantity: 1,
-    price: '$32.00',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/confirmation-page-05-product-01.jpg',
-    imageAlt: 'Glass bottle with black plastic pour top and mesh insert.',
+    price: "$32.00",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/confirmation-page-05-product-01.jpg",
+    imageAlt: "Glass bottle with black plastic pour top and mesh insert.",
   },
-]
+];
 
 export default function Example() {
   return (
@@ -18,8 +19,12 @@ export default function Example() {
       <div className="mx-auto max-w-3xl">
         <div className="max-w-xl">
           <h1 className="text-base font-medium text-indigo-600">Thank you!</h1>
-          <p className="mt-2 text-4xl font-bold tracking-tight">It's on the way!</p>
-          <p className="mt-2 text-base text-gray-500">Your order #14034056 has shipped and will be with you soon.</p>
+          <p className="mt-2 text-4xl font-bold tracking-tight">
+            It's on the way!
+          </p>
+          <p className="mt-2 text-base text-gray-500">
+            Your order #14034056 has shipped and will be with you soon.
+          </p>
 
           <dl className="mt-12 text-sm font-medium">
             <dt className="text-gray-900">Tracking number</dt>
@@ -27,14 +32,20 @@ export default function Example() {
           </dl>
         </div>
 
-        <section aria-labelledby="order-heading" className="mt-10 border-t border-gray-200">
+        <section
+          aria-labelledby="order-heading"
+          className="mt-10 border-t border-gray-200"
+        >
           <h2 id="order-heading" className="sr-only">
             Your order
           </h2>
 
           <h3 className="sr-only">Items</h3>
           {products.map((product) => (
-            <div key={product.id} className="flex space-x-6 border-b border-gray-200 py-10">
+            <div
+              key={product.id}
+              className="flex space-x-6 border-b border-gray-200 py-10"
+            >
               <img
                 alt={product.imageAlt}
                 src={product.imageSrc}
@@ -45,7 +56,9 @@ export default function Example() {
                   <h4 className="font-medium text-gray-900">
                     <a href={product.href}>{product.name}</a>
                   </h4>
-                  <p className="mt-2 text-sm text-gray-600">{product.description}</p>
+                  <p className="mt-2 text-sm text-gray-600">
+                    {product.description}
+                  </p>
                 </div>
                 <div className="mt-6 flex flex-1 items-end">
                   <dl className="flex divide-x divide-gray-200 text-sm">
@@ -99,7 +112,7 @@ export default function Example() {
                   <p>Mastercard</p>
                   <p>
                     <span aria-hidden="true">••••</span>
-                    <span className="sr-only">Ending in </span>1545
+                    <span className="sr-only">Ending in</span>1545
                   </p>
                 </dd>
               </div>
@@ -122,7 +135,9 @@ export default function Example() {
               <div className="flex justify-between">
                 <dt className="flex font-medium text-gray-900">
                   Discount
-                  <span className="ml-2 rounded-full bg-gray-200 px-2 py-0.5 text-xs text-gray-600">STUDENT50</span>
+                  <span className="ml-2 rounded-full bg-gray-200 px-2 py-0.5 text-xs text-gray-600">
+                    STUDENT50
+                  </span>
                 </dt>
                 <dd className="text-gray-700">-$18.00 (50%)</dd>
               </div>
@@ -139,5 +154,5 @@ export default function Example() {
         </section>
       </div>
     </main>
-  )
+  );
 }

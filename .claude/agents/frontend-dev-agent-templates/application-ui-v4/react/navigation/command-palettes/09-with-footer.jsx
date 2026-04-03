@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Combobox,
@@ -6,59 +6,66 @@ import {
   ComboboxOption,
   ComboboxOptions,
   Dialog,
-  DialogPanel,
   DialogBackdrop,
-} from '@headlessui/react'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { ExclamationTriangleIcon, FolderIcon, LifebuoyIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
+  DialogPanel,
+} from "@headlessui/react";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import {
+  ExclamationTriangleIcon,
+  FolderIcon,
+  LifebuoyIcon,
+} from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 const projects = [
-  { id: 1, name: 'Workflow Inc. / Website Redesign', category: 'Projects', url: '#' },
+  {
+    id: 1,
+    name: "Workflow Inc. / Website Redesign",
+    category: "Projects",
+    url: "#",
+  },
   // More projects...
-]
+];
 
 const users = [
   {
     id: 1,
-    name: 'Leslie Alexander',
-    url: '#',
+    name: "Leslie Alexander",
+    url: "#",
     imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   // More users...
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
-  const [open, setOpen] = useState(true)
-  const [rawQuery, setRawQuery] = useState('')
-  const query = rawQuery.toLowerCase().replace(/^[#>]/, '')
+  const [open, setOpen] = useState(true);
+  const [rawQuery, setRawQuery] = useState("");
+  const query = rawQuery.toLowerCase().replace(/^[#>]/, "");
 
-  const filteredProjects =
-    rawQuery === '#'
-      ? projects
-      : query === '' || rawQuery.startsWith('>')
-        ? []
-        : projects.filter((project) => project.name.toLowerCase().includes(query))
+  const filteredProjects = rawQuery === "#"
+    ? projects
+    : query === "" || rawQuery.startsWith(">")
+    ? []
+    : projects.filter((project) => project.name.toLowerCase().includes(query));
 
-  const filteredUsers =
-    rawQuery === '>'
-      ? users
-      : query === '' || rawQuery.startsWith('#')
-        ? []
-        : users.filter((user) => user.name.toLowerCase().includes(query))
+  const filteredUsers = rawQuery === ">"
+    ? users
+    : query === "" || rawQuery.startsWith("#")
+    ? []
+    : users.filter((user) => user.name.toLowerCase().includes(query));
 
   return (
     <Dialog
       className="relative z-10"
       open={open}
       onClose={() => {
-        setOpen(false)
-        setRawQuery('')
+        setOpen(false);
+        setRawQuery("");
       }}
     >
       <DialogBackdrop
@@ -74,7 +81,7 @@ export default function Example() {
           <Combobox
             onChange={(item) => {
               if (item) {
-                window.location = item.url
+                window.location = item.url;
               }
             }}
           >
@@ -84,7 +91,7 @@ export default function Example() {
                 className="col-start-1 row-start-1 h-12 w-full pr-4 pl-11 text-base text-gray-900 outline-hidden placeholder:text-gray-400 sm:text-sm dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500"
                 placeholder="Search..."
                 onChange={(event) => setRawQuery(event.target.value)}
-                onBlur={() => setRawQuery('')}
+                onBlur={() => setRawQuery("")}
               />
               <MagnifyingGlassIcon
                 className="pointer-events-none col-start-1 row-start-1 ml-4 size-5 self-center text-gray-400 dark:text-gray-500"
@@ -100,7 +107,9 @@ export default function Example() {
               >
                 {filteredProjects.length > 0 && (
                   <li>
-                    <h2 className="text-xs font-semibold text-gray-900 dark:text-white">Projects</h2>
+                    <h2 className="text-xs font-semibold text-gray-900 dark:text-white">
+                      Projects
+                    </h2>
                     <ul className="-mx-4 mt-2 text-sm text-gray-700 dark:text-gray-300">
                       {filteredProjects.map((project) => (
                         <ComboboxOption
@@ -113,7 +122,9 @@ export default function Example() {
                             className="size-6 flex-none text-gray-400 group-data-focus:text-white dark:text-gray-500 forced-colors:group-data-focus:text-[Highlight]"
                             aria-hidden="true"
                           />
-                          <span className="ml-3 flex-auto truncate">{project.name}</span>
+                          <span className="ml-3 flex-auto truncate">
+                            {project.name}
+                          </span>
                         </ComboboxOption>
                       ))}
                     </ul>
@@ -121,7 +132,9 @@ export default function Example() {
                 )}
                 {filteredUsers.length > 0 && (
                   <li>
-                    <h2 className="text-xs font-semibold text-gray-900 dark:text-white">Users</h2>
+                    <h2 className="text-xs font-semibold text-gray-900 dark:text-white">
+                      Users
+                    </h2>
                     <ul className="-mx-4 mt-2 text-sm text-gray-700 dark:text-gray-300">
                       {filteredUsers.map((user) => (
                         <ComboboxOption
@@ -135,7 +148,9 @@ export default function Example() {
                             alt=""
                             className="size-6 flex-none rounded-full bg-gray-100 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10"
                           />
-                          <span className="ml-3 flex-auto truncate">{user.name}</span>
+                          <span className="ml-3 flex-auto truncate">
+                            {user.name}
+                          </span>
                         </ComboboxOption>
                       ))}
                     </ul>
@@ -144,21 +159,34 @@ export default function Example() {
               </ComboboxOptions>
             )}
 
-            {rawQuery === '?' && (
+            {rawQuery === "?" && (
               <div className="px-6 py-14 text-center text-sm sm:px-14">
-                <LifebuoyIcon className="mx-auto size-6 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-                <p className="mt-4 font-semibold text-gray-900 dark:text-white">Help with searching</p>
+                <LifebuoyIcon
+                  className="mx-auto size-6 text-gray-400 dark:text-gray-500"
+                  aria-hidden="true"
+                />
+                <p className="mt-4 font-semibold text-gray-900 dark:text-white">
+                  Help with searching
+                </p>
                 <p className="mt-2 text-gray-500 dark:text-gray-400">
-                  Use this tool to quickly search for users and projects across our entire platform. You can also use
-                  the search modifiers found in the footer below to limit the results to just users or projects.
+                  Use this tool to quickly search for users and projects across
+                  our entire platform. You can also use the search modifiers
+                  found in the footer below to limit the results to just users
+                  or projects.
                 </p>
               </div>
             )}
 
-            {query !== '' && rawQuery !== '?' && filteredProjects.length === 0 && filteredUsers.length === 0 && (
+            {query !== "" && rawQuery !== "?" &&
+              filteredProjects.length === 0 && filteredUsers.length === 0 && (
               <div className="px-6 py-14 text-center text-sm sm:px-14">
-                <ExclamationTriangleIcon className="mx-auto size-6 text-gray-400" aria-hidden="true" />
-                <p className="mt-4 font-semibold text-gray-900 dark:text-white">No results found</p>
+                <ExclamationTriangleIcon
+                  className="mx-auto size-6 text-gray-400"
+                  aria-hidden="true"
+                />
+                <p className="mt-4 font-semibold text-gray-900 dark:text-white">
+                  No results found
+                </p>
                 <p className="mt-2 text-gray-500 dark:text-gray-400">
                   We couldn’t find anything with that term. Please try again.
                 </p>
@@ -166,45 +194,45 @@ export default function Example() {
             )}
 
             <div className="flex flex-wrap items-center bg-gray-50 px-4 py-2.5 text-xs text-gray-700 dark:bg-gray-800/50 dark:text-gray-300">
-              Type{' '}
+              Type{" "}
               <kbd
                 className={classNames(
-                  'mx-1 flex size-5 items-center justify-center rounded-sm border bg-white font-semibold sm:mx-2 dark:bg-gray-800',
-                  rawQuery.startsWith('#')
-                    ? 'border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-500'
-                    : 'border-gray-400 text-gray-900 dark:border-white/10 dark:text-white',
+                  "mx-1 flex size-5 items-center justify-center rounded-sm border bg-white font-semibold sm:mx-2 dark:bg-gray-800",
+                  rawQuery.startsWith("#")
+                    ? "border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-500"
+                    : "border-gray-400 text-gray-900 dark:border-white/10 dark:text-white",
                 )}
               >
                 #
-              </kbd>{' '}
+              </kbd>{" "}
               <span className="sm:hidden">for projects,</span>
               <span className="hidden sm:inline">to access projects,</span>
               <kbd
                 className={classNames(
-                  'mx-1 flex size-5 items-center justify-center rounded-sm border bg-white font-semibold sm:mx-2 dark:bg-gray-800',
-                  rawQuery.startsWith('>')
-                    ? 'border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-500'
-                    : 'border-gray-400 text-gray-900 dark:border-white/10 dark:text-white',
+                  "mx-1 flex size-5 items-center justify-center rounded-sm border bg-white font-semibold sm:mx-2 dark:bg-gray-800",
+                  rawQuery.startsWith(">")
+                    ? "border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-500"
+                    : "border-gray-400 text-gray-900 dark:border-white/10 dark:text-white",
                 )}
               >
                 &gt;
-              </kbd>{' '}
-              for users, and{' '}
+              </kbd>{" "}
+              for users, and{" "}
               <kbd
                 className={classNames(
-                  'mx-1 flex size-5 items-center justify-center rounded-sm border bg-white font-semibold sm:mx-2 dark:bg-gray-800',
-                  rawQuery === '?'
-                    ? 'border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-500'
-                    : 'border-gray-400 text-gray-900 dark:border-white/10 dark:text-white',
+                  "mx-1 flex size-5 items-center justify-center rounded-sm border bg-white font-semibold sm:mx-2 dark:bg-gray-800",
+                  rawQuery === "?"
+                    ? "border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-500"
+                    : "border-gray-400 text-gray-900 dark:border-white/10 dark:text-white",
                 )}
               >
                 ?
-              </kbd>{' '}
+              </kbd>{" "}
               for help.
             </div>
           </Combobox>
         </DialogPanel>
       </div>
     </Dialog>
-  )
+  );
 }

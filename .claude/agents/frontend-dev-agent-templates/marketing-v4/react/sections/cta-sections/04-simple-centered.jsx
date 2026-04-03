@@ -7,8 +7,8 @@ export default function Example() {
             Boost your productivity. Start using our app today.
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg/8 text-pretty text-gray-600 dark:text-gray-300">
-            Incididunt sint fugiat pariatur cupidatat consectetur sit cillum anim id veniam aliqua proident excepteur
-            commodo do ea.
+            Incididunt sint fugiat pariatur cupidatat consectetur sit cillum
+            anim id veniam aliqua proident excepteur commodo do ea.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <a
@@ -17,12 +17,15 @@ export default function Example() {
             >
               Get started
             </a>
-            <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+            <a
+              href="#"
+              className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+            >
               Learn more <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -148,15 +148,16 @@ Ao criar testes E2E para qualquer tela do admin, voce DEVE seguir este workflow:
 ANTES de escrever testes para uma tela, leia o componente que a renderiza e
 catalogue TODOS os elementos interativos:
 
-- **Links** (`<a href>`) — verificar que TODOS retornam status 200 (link checker)
-- **Botoes** (`<button>`) — verificar presenca no HTML, tipo (submit/button),
-  e que acoes funcionam (submit forms, triggers de dialog)
+- **Links** (`<a href>`) — verificar que TODOS retornam status 200 (link
+  checker)
+- **Botoes** (`<button>`) — verificar presenca no HTML, tipo (submit/button), e
+  que acoes funcionam (submit forms, triggers de dialog)
 - **Forms** (`<form>`) — testar submit com dados VALIDOS e INVALIDOS, verificar
   CSRF token presente em todos os forms
-- **Dropdowns** (`el-dropdown` / `el-menu`) — verificar presenca no HTML,
-  itens de menu com links/acoes corretas
-- **Dialogs** (`el-dialog` / `<dialog>`) — verificar presenca no HTML,
-  trigger buttons com `command`/`commandfor`
+- **Dropdowns** (`el-dropdown` / `el-menu`) — verificar presenca no HTML, itens
+  de menu com links/acoes corretas
+- **Dialogs** (`el-dialog` / `<dialog>`) — verificar presenca no HTML, trigger
+  buttons com `command`/`commandfor`
 - **Data attributes** — verificar presenca de TODOS:
   - `data-confirm` — confirmacao de delete
   - `data-dismiss-alert` — fechar alertas
@@ -201,18 +202,23 @@ Ao executar testes E2E, compilar um relatorio markdown documentando:
 # Relatorio E2E — Admin Ten.net
 
 ## Links Quebrados
+
 - [rota] → [status recebido] (esperado: [status])
 
 ## Forms sem CSRF
+
 - [rota] → [form action] sem campo _csrf
 
 ## Elementos Interativos com Problema
+
 - [componente] → [descricao do problema]
 
 ## Comportamento Inesperado
+
 - [rota] → [descricao]
 
 ## Recomendacoes de Correcao
+
 - [prioridade] [item] → [sugestao de fix]
 ```
 
@@ -226,18 +232,18 @@ Use esta referencia para garantir cobertura 100%:
 
 - **Auth**: GET /admin/login, POST /admin/login, POST /admin/logout (3)
 - **Dashboard**: GET /admin, GET /admin/favicon.ico (2)
-- **CRUD por plugin** (9 plugins x 5 rotas = 45):
-  GET /admin/plugins/{slug} (list), POST /admin/plugins/{slug} (create),
-  GET /admin/plugins/{slug}/new (form), GET /admin/plugins/{slug}/{id} (edit),
-  POST /admin/plugins/{slug}/{id} (update),
-  POST /admin/plugins/{slug}/{id}/delete (delete)
+- **CRUD por plugin** (9 plugins x 5 rotas = 45): GET /admin/plugins/{slug}
+  (list), POST /admin/plugins/{slug} (create), GET /admin/plugins/{slug}/new
+  (form), GET /admin/plugins/{slug}/{id} (edit), POST /admin/plugins/{slug}/{id}
+  (update), POST /admin/plugins/{slug}/{id}/delete (delete)
 - **Preview**: GET /admin/preview/{id} (1)
-- **Builder**: GET /admin/pages/{id}/builder, GET /admin/pages/{id}/builder/preview,
-  GET /admin/pages/{id}/widgets, POST create/reorder/update/delete/duplicate (8)
-- **Media**: GET /admin/media, POST /admin/media/upload,
-  GET /admin/media/picker, POST /admin/media/{id}/delete, GET /media/{filename} (5)
-- **Blog**: GET /blog, GET /blog/rss.xml, GET /blog/category/{slug},
-  GET /blog/{slug} (4)
+- **Builder**: GET /admin/pages/{id}/builder, GET
+  /admin/pages/{id}/builder/preview, GET /admin/pages/{id}/widgets, POST
+  create/reorder/update/delete/duplicate (8)
+- **Media**: GET /admin/media, POST /admin/media/upload, GET
+  /admin/media/picker, POST /admin/media/{id}/delete, GET /media/{filename} (5)
+- **Blog**: GET /blog, GET /blog/rss.xml, GET /blog/category/{slug}, GET
+  /blog/{slug} (4)
 - **SEO**: GET /sitemap.xml, GET /robots.txt (2)
 
 ---

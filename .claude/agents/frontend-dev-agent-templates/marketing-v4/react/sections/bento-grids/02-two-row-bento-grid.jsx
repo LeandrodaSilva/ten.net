@@ -2,7 +2,9 @@ export default function Example() {
   return (
     <div className="bg-gray-50 py-24 sm:py-32 dark:bg-gray-900">
       <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-        <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Deploy faster</h2>
+        <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+          Deploy faster
+        </h2>
         <p className="mt-2 max-w-lg text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl dark:text-white">
           Everything you need to deploy your app
         </p>
@@ -20,11 +22,16 @@ export default function Example() {
                 className="h-80 object-cover object-left not-dark:hidden"
               />
               <div className="p-10">
-                <h3 className="text-sm/4 font-semibold text-gray-500 dark:text-gray-400">Releases</h3>
-                <p className="mt-2 text-lg font-medium tracking-tight text-gray-900 dark:text-white">Push to deploy</p>
+                <h3 className="text-sm/4 font-semibold text-gray-500 dark:text-gray-400">
+                  Releases
+                </h3>
+                <p className="mt-2 text-lg font-medium tracking-tight text-gray-900 dark:text-white">
+                  Push to deploy
+                </p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-gray-400">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In gravida justo et nulla efficitur, maximus
-                  egestas sem pellentesque.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
+                  gravida justo et nulla efficitur, maximus egestas sem
+                  pellentesque.
                 </p>
               </div>
             </div>
@@ -42,12 +49,15 @@ export default function Example() {
                 className="h-80 object-cover not-dark:hidden"
               />
               <div className="p-10">
-                <h3 className="text-sm/4 font-semibold text-gray-500 dark:text-gray-400">Integrations</h3>
+                <h3 className="text-sm/4 font-semibold text-gray-500 dark:text-gray-400">
+                  Integrations
+                </h3>
                 <p className="mt-2 text-lg font-medium tracking-tight text-gray-900 dark:text-white">
                   Connect your favorite tools
                 </p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-gray-400">
-                  Curabitur auctor, ex quis auctor venenatis, eros arcu rhoncus massa.
+                  Curabitur auctor, ex quis auctor venenatis, eros arcu rhoncus
+                  massa.
                 </p>
               </div>
             </div>
@@ -65,12 +75,15 @@ export default function Example() {
                 className="h-80 object-cover not-dark:hidden"
               />
               <div className="p-10">
-                <h3 className="text-sm/4 font-semibold text-gray-500 dark:text-gray-400">Security</h3>
+                <h3 className="text-sm/4 font-semibold text-gray-500 dark:text-gray-400">
+                  Security
+                </h3>
                 <p className="mt-2 text-lg font-medium tracking-tight text-gray-900 dark:text-white">
                   Advanced access control
                 </p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-gray-400">
-                  Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia.
+                  Vestibulum ante ipsum primis in faucibus orci luctus et
+                  ultrices posuere cubilia.
                 </p>
               </div>
             </div>
@@ -88,13 +101,16 @@ export default function Example() {
                 className="h-80 object-cover object-left not-dark:hidden"
               />
               <div className="p-10">
-                <h3 className="text-sm/4 font-semibold text-gray-500 dark:text-gray-400">Performance</h3>
+                <h3 className="text-sm/4 font-semibold text-gray-500 dark:text-gray-400">
+                  Performance
+                </h3>
                 <p className="mt-2 text-lg font-medium tracking-tight text-gray-900 dark:text-white">
                   Lightning-fast builds
                 </p>
                 <p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-gray-400">
-                  Sed congue eros non finibus molestie. Vestibulum euismod augue vel commodo vulputate. Maecenas at
-                  augue sed elit dictum vulputate.
+                  Sed congue eros non finibus molestie. Vestibulum euismod augue
+                  vel commodo vulputate. Maecenas at augue sed elit dictum
+                  vulputate.
                 </p>
               </div>
             </div>
@@ -102,5 +118,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

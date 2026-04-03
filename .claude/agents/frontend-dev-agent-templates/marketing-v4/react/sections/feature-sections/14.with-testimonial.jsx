@@ -5,13 +5,16 @@ export default function Example() {
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start">
           <div className="lg:pt-4 lg:pr-4">
             <div className="lg:max-w-lg">
-              <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Deploy faster</h2>
+              <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+                Deploy faster
+              </h2>
               <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl dark:text-white">
                 A better workflow
               </p>
               <p className="mt-6 text-lg/8 text-gray-700 dark:text-gray-300">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque,
-                iste dolor cupiditate blanditiis ratione.
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Maiores impedit perferendis suscipit eaque, iste dolor
+                cupiditate blanditiis ratione.
               </p>
               <div className="mt-8">
                 <a
@@ -24,9 +27,10 @@ export default function Example() {
               <figure className="mt-16 border-l border-gray-200 pl-8 text-gray-700 dark:border-gray-700 dark:text-gray-300">
                 <blockquote className="text-base/7">
                   <p>
-                    “Vel ultricies morbi odio facilisi ultrices accumsan donec lacus purus. Lectus nibh ullamcorper ac
-                    dictum justo in euismod. Risus aenean ut elit massa. In amet aliquet eget cras. Sem volutpat enim
-                    tristique.”
+                    “Vel ultricies morbi odio facilisi ultrices accumsan donec
+                    lacus purus. Lectus nibh ullamcorper ac dictum justo in
+                    euismod. Risus aenean ut elit massa. In amet aliquet eget
+                    cras. Sem volutpat enim tristique.”
                   </p>
                 </blockquote>
                 <figcaption className="mt-6 flex gap-x-4 text-sm/6">
@@ -36,8 +40,13 @@ export default function Example() {
                     className="size-6 flex-none rounded-full"
                   />
                   <div>
-                    <span className="font-semibold text-gray-900 dark:text-white">Maria Hill</span> –{' '}
-                    <span className="text-gray-600 dark:text-gray-400">Marketing Manager</span>
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      Maria Hill
+                    </span>{" "}
+                    –{" "}
+                    <span className="text-gray-600 dark:text-gray-400">
+                      Marketing Manager
+                    </span>
                   </div>
                 </figcaption>
               </figure>
@@ -53,5 +62,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

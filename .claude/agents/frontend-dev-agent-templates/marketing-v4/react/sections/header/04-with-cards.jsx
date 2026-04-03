@@ -1,22 +1,29 @@
-import { LifebuoyIcon, NewspaperIcon, PhoneIcon } from '@heroicons/react/20/solid'
+import {
+  LifebuoyIcon,
+  NewspaperIcon,
+  PhoneIcon,
+} from "@heroicons/react/20/solid";
 
 const cards = [
   {
-    name: 'Sales',
-    description: 'Consectetur vel non. Rerum ut consequatur nobis unde. Enim est quo corrupti consequatur.',
+    name: "Sales",
+    description:
+      "Consectetur vel non. Rerum ut consequatur nobis unde. Enim est quo corrupti consequatur.",
     icon: PhoneIcon,
   },
   {
-    name: 'Technical Support',
-    description: 'Quod possimus sit modi rerum exercitationem quaerat atque tenetur ullam.',
+    name: "Technical Support",
+    description:
+      "Quod possimus sit modi rerum exercitationem quaerat atque tenetur ullam.",
     icon: LifebuoyIcon,
   },
   {
-    name: 'Media Inquiries',
-    description: 'Ratione et porro eligendi est sed ratione rerum itaque. Placeat accusantium impedit eum odit.',
+    name: "Media Inquiries",
+    description:
+      "Ratione et porro eligendi est sed ratione rerum itaque. Placeat accusantium impedit eum odit.",
     icon: NewspaperIcon,
   },
-]
+];
 
 export default function Example() {
   return (
@@ -35,7 +42,7 @@ export default function Example() {
         <div
           style={{
             clipPath:
-              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
           }}
           className="aspect-1097/845 w-274.25 bg-linear-to-tr from-[#ff4694] to-[#776fff] opacity-15 dark:opacity-20"
         />
@@ -44,7 +51,7 @@ export default function Example() {
         <div
           style={{
             clipPath:
-              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
           }}
           className="aspect-1097/845 w-274.25 bg-linear-to-tr from-[#ff4694] to-[#776fff] opacity-15 dark:opacity-20"
         />
@@ -55,8 +62,9 @@ export default function Example() {
             Support center
           </h2>
           <p className="mt-8 text-lg font-medium text-pretty text-gray-600 sm:text-xl/8 dark:text-gray-400">
-            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-            fugiat veniam occaecat fugiat.
+            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
+            lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
+            fugiat.
           </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-8">
@@ -65,15 +73,22 @@ export default function Example() {
               key={card.name}
               className="flex gap-x-4 rounded-xl bg-white/30 p-6 ring-1 ring-gray-900/5 backdrop-blur-sm dark:bg-white/5 dark:inset-ring dark:inset-ring-white/5"
             >
-              <card.icon aria-hidden="true" className="h-7 w-5 flex-none text-indigo-600 dark:text-indigo-400" />
+              <card.icon
+                aria-hidden="true"
+                className="h-7 w-5 flex-none text-indigo-600 dark:text-indigo-400"
+              />
               <div className="text-base/7">
-                <h3 className="font-semibold text-gray-900 dark:text-white">{card.name}</h3>
-                <p className="mt-2 text-gray-700 dark:text-gray-300">{card.description}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  {card.name}
+                </h3>
+                <p className="mt-2 text-gray-700 dark:text-gray-300">
+                  {card.description}
+                </p>
               </div>
             </div>
           ))}
         </div>
       </div>
     </div>
-  )
+  );
 }

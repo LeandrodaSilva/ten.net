@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -21,291 +21,328 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
+} from "@headlessui/react";
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
   QuestionMarkCircleIcon,
   ShoppingBagIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+} from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
-const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
+const currencies = ["CAD", "USD", "AUD", "EUR", "GBP"];
 const navigation = {
   categories: [
     {
-      name: 'Women',
+      name: "Women",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg",
+          imageAlt:
+            "Models sitting back to back, wearing Basic Tee in black and bone.",
         },
         {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+          name: "Basic Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg",
+          imageAlt:
+            "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
         },
         {
-          name: 'Accessories',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-03.jpg',
-          imageAlt: 'Model wearing minimalist watch with black wristband and white watch face.',
+          name: "Accessories",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-03.jpg",
+          imageAlt:
+            "Model wearing minimalist watch with black wristband and white watch face.",
         },
         {
-          name: 'Carry',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-04.jpg',
-          imageAlt: 'Model opening tan leather long wallet with credit card pockets and cash pouch.',
+          name: "Carry",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-04.jpg",
+          imageAlt:
+            "Model opening tan leather long wallet with credit card pockets and cash pouch.",
         },
       ],
     },
     {
-      name: 'Men',
+      name: "Men",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-01.jpg',
-          imageAlt: 'Hats and sweaters on wood shelves next to various colors of t-shirts on hangers.',
-        },
-        {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-02.jpg',
-          imageAlt: 'Model wearing light heather gray t-shirt.',
-        },
-        {
-          name: 'Accessories',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-03.jpg',
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-01.jpg",
           imageAlt:
-            'Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.',
+            "Hats and sweaters on wood shelves next to various colors of t-shirts on hangers.",
         },
         {
-          name: 'Carry',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-04.jpg',
-          imageAlt: 'Model putting folded cash into slim card holder olive leather wallet with hand stitching.',
+          name: "Basic Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-02.jpg",
+          imageAlt: "Model wearing light heather gray t-shirt.",
+        },
+        {
+          name: "Accessories",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-03.jpg",
+          imageAlt:
+            "Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.",
+        },
+        {
+          name: "Carry",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-01-men-category-04.jpg",
+          imageAlt:
+            "Model putting folded cash into slim card holder olive leather wallet with hand stitching.",
         },
       ],
     },
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: "Company", href: "#" },
+    { name: "Stores", href: "#" },
   ],
-}
+};
 const sortOptions = [
-  { name: 'Most Popular', href: '#' },
-  { name: 'Best Rating', href: '#' },
-  { name: 'Newest', href: '#' },
-  { name: 'Price: Low to High', href: '#' },
-  { name: 'Price: High to Low', href: '#' },
-]
+  { name: "Most Popular", href: "#" },
+  { name: "Best Rating", href: "#" },
+  { name: "Newest", href: "#" },
+  { name: "Price: Low to High", href: "#" },
+  { name: "Price: High to Low", href: "#" },
+];
 const filters = [
   {
-    id: 'category',
-    name: 'Category',
+    id: "category",
+    name: "Category",
     options: [
-      { value: 'tees', label: 'Tees' },
-      { value: 'crewnecks', label: 'Crewnecks' },
-      { value: 'hats', label: 'Hats' },
-      { value: 'bundles', label: 'Bundles' },
-      { value: 'carry', label: 'Carry' },
-      { value: 'objects', label: 'Objects' },
+      { value: "tees", label: "Tees" },
+      { value: "crewnecks", label: "Crewnecks" },
+      { value: "hats", label: "Hats" },
+      { value: "bundles", label: "Bundles" },
+      { value: "carry", label: "Carry" },
+      { value: "objects", label: "Objects" },
     ],
   },
   {
-    id: 'brand',
-    name: 'Brand',
+    id: "brand",
+    name: "Brand",
     options: [
-      { value: 'clothing-company', label: 'Clothing Company' },
-      { value: 'fashion-inc', label: 'Fashion Inc.' },
-      { value: 'shoes-n-more', label: "Shoes 'n More" },
-      { value: 'supplies-n-stuff', label: "Supplies 'n Stuff" },
+      { value: "clothing-company", label: "Clothing Company" },
+      { value: "fashion-inc", label: "Fashion Inc." },
+      { value: "shoes-n-more", label: "Shoes 'n More" },
+      { value: "supplies-n-stuff", label: "Supplies 'n Stuff" },
     ],
   },
   {
-    id: 'color',
-    name: 'Color',
+    id: "color",
+    name: "Color",
     options: [
-      { value: 'white', label: 'White' },
-      { value: 'black', label: 'Black' },
-      { value: 'grey', label: 'Grey' },
-      { value: 'blue', label: 'Blue' },
-      { value: 'olive', label: 'Olive' },
-      { value: 'tan', label: 'Tan' },
+      { value: "white", label: "White" },
+      { value: "black", label: "Black" },
+      { value: "grey", label: "Grey" },
+      { value: "blue", label: "Blue" },
+      { value: "olive", label: "Olive" },
+      { value: "tan", label: "Tan" },
     ],
   },
   {
-    id: 'sizes',
-    name: 'Sizes',
+    id: "sizes",
+    name: "Sizes",
     options: [
-      { value: 'xs', label: 'XS' },
-      { value: 's', label: 'S' },
-      { value: 'm', label: 'M' },
-      { value: 'l', label: 'L' },
-      { value: 'xl', label: 'XL' },
-      { value: '2xl', label: '2XL' },
+      { value: "xs", label: "XS" },
+      { value: "s", label: "S" },
+      { value: "m", label: "M" },
+      { value: "l", label: "L" },
+      { value: "xl", label: "XL" },
+      { value: "2xl", label: "2XL" },
     ],
   },
-]
+];
 const products1 = [
   {
     id: 1,
-    name: 'Focus Paper Refill',
-    href: '#',
-    price: '$13',
-    description: '3 sizes available',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-01.jpg',
-    imageAlt: 'Person using a pen to cross a task off a productivity paper card.',
+    name: "Focus Paper Refill",
+    href: "#",
+    price: "$13",
+    description: "3 sizes available",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-01.jpg",
+    imageAlt:
+      "Person using a pen to cross a task off a productivity paper card.",
   },
   {
     id: 2,
-    name: 'Focus Card Holder',
-    href: '#',
-    price: '$64',
-    description: 'Walnut',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-02.jpg',
-    imageAlt: 'Paper card sitting upright in walnut card holder on desk.',
+    name: "Focus Card Holder",
+    href: "#",
+    price: "$64",
+    description: "Walnut",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-02.jpg",
+    imageAlt: "Paper card sitting upright in walnut card holder on desk.",
   },
   {
     id: 3,
-    name: 'Focus Carry Pouch',
-    href: '#',
-    price: '$32',
-    description: 'Heather Gray',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-03.jpg',
-    imageAlt: 'Textured gray felt pouch for paper cards with snap button flap and elastic pen holder loop.',
+    name: "Focus Carry Pouch",
+    href: "#",
+    price: "$32",
+    description: "Heather Gray",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-03.jpg",
+    imageAlt:
+      "Textured gray felt pouch for paper cards with snap button flap and elastic pen holder loop.",
   },
   {
     id: 4,
-    name: 'Focus Multi-Pack',
-    href: '#',
-    price: '$39',
-    description: '3 refill packs',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-04.jpg',
-    imageAlt: 'Stack of 3 small drab green cardboard paper card refill boxes with white text.',
+    name: "Focus Multi-Pack",
+    href: "#",
+    price: "$39",
+    description: "3 refill packs",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-04.jpg",
+    imageAlt:
+      "Stack of 3 small drab green cardboard paper card refill boxes with white text.",
   },
   {
     id: 5,
-    name: 'Machined Mechanical Pencil',
-    href: '#',
-    price: '$35',
-    description: 'Black and brass',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-05.jpg',
-    imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
+    name: "Machined Mechanical Pencil",
+    href: "#",
+    price: "$35",
+    description: "Black and brass",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-05.jpg",
+    imageAlt:
+      "Hand holding black machined steel mechanical pencil with brass tip and top.",
   },
   {
     id: 6,
-    name: 'Brass Scissors',
-    href: '#',
-    price: '$50',
-    description: 'Includes brass stand',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-06.jpg',
-    imageAlt: 'Brass scissors with geometric design, black steel finger holes, and included upright brass stand.',
+    name: "Brass Scissors",
+    href: "#",
+    price: "$50",
+    description: "Includes brass stand",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-06.jpg",
+    imageAlt:
+      "Brass scissors with geometric design, black steel finger holes, and included upright brass stand.",
   },
-]
+];
 const products2 = [
   {
     id: 7,
-    name: 'Electric Kettle',
-    href: '#',
-    price: '$149',
-    description: 'Black',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-07.jpg',
-    imageAlt: 'Close up of long kettle spout pouring boiling water into pour-over coffee mug with frothy coffee.',
+    name: "Electric Kettle",
+    href: "#",
+    price: "$149",
+    description: "Black",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-07.jpg",
+    imageAlt:
+      "Close up of long kettle spout pouring boiling water into pour-over coffee mug with frothy coffee.",
   },
   {
     id: 8,
-    name: 'Leather Workspace Pad',
-    href: '#',
-    price: '$165',
-    description: 'Black',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-08.jpg',
+    name: "Leather Workspace Pad",
+    href: "#",
+    price: "$165",
+    description: "Black",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-08.jpg",
     imageAlt:
-      'Extra large black leather workspace pad on desk with computer, wooden shelf, desk organizer, and computer peripherals.',
+      "Extra large black leather workspace pad on desk with computer, wooden shelf, desk organizer, and computer peripherals.",
   },
   {
     id: 9,
-    name: 'Leather Long Wallet',
-    href: '#',
-    price: '$118',
-    description: 'Natural',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-09.jpg',
+    name: "Leather Long Wallet",
+    href: "#",
+    price: "$118",
+    description: "Natural",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-09.jpg",
     imageAlt:
-      'Leather long wallet held open with hand-stitched card dividers, full-length bill pocket, and simple tab closure.',
+      "Leather long wallet held open with hand-stitched card dividers, full-length bill pocket, and simple tab closure.",
   },
   {
     id: 10,
-    name: 'Machined Sphere Puzzle',
-    href: '#',
-    price: '$95',
-    description: 'Includes brass stand',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-10.jpg',
+    name: "Machined Sphere Puzzle",
+    href: "#",
+    price: "$95",
+    description: "Includes brass stand",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-10.jpg",
     imageAlt:
-      'Machined steel sphere puzzle with smooth finish, geometric seams, and included brass stand on wood desk.',
+      "Machined steel sphere puzzle with smooth finish, geometric seams, and included brass stand on wood desk.",
   },
   {
     id: 11,
-    name: 'Minimalist Wristwatch',
-    href: '#',
-    price: '$149',
-    description: '3 wrist band options',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-11.jpg',
+    name: "Minimalist Wristwatch",
+    href: "#",
+    price: "$149",
+    description: "3 wrist band options",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-11.jpg",
     imageAlt:
-      'Arm modeling wristwatch with black leather band, white watch face, thin watch hands, and fine time markings.',
+      "Arm modeling wristwatch with black leather band, white watch face, thin watch hands, and fine time markings.",
   },
   {
     id: 12,
-    name: 'Motto Leather Coaster Set',
-    href: '#',
-    price: '$18',
-    description: 'Natural',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-12.jpg',
-    imageAlt: 'Circular leather coaster set with natural color and "Enjoy the Journey" embossed type.',
+    name: "Motto Leather Coaster Set",
+    href: "#",
+    price: "$18",
+    description: "Natural",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-01-image-card-12.jpg",
+    imageAlt:
+      'Circular leather coaster set with natural color and "Enjoy the Journey" embossed type.',
   },
-]
+];
 const footerNavigation = {
   products: [
-    { name: 'Bags', href: '#' },
-    { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' },
+    { name: "Bags", href: "#" },
+    { name: "Tees", href: "#" },
+    { name: "Objects", href: "#" },
+    { name: "Home Goods", href: "#" },
+    { name: "Accessories", href: "#" },
   ],
   company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
+    { name: "Who we are", href: "#" },
+    { name: "Sustainability", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Careers", href: "#" },
+    { name: "Terms & Conditions", href: "#" },
+    { name: "Privacy", href: "#" },
   ],
   customerService: [
-    { name: 'Contact', href: '#' },
-    { name: 'Shipping', href: '#' },
-    { name: 'Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'Secure Payments', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
+    { name: "Contact", href: "#" },
+    { name: "Shipping", href: "#" },
+    { name: "Returns", href: "#" },
+    { name: "Warranty", href: "#" },
+    { name: "Secure Payments", href: "#" },
+    { name: "FAQ", href: "#" },
+    { name: "Find a store", href: "#" },
   ],
-}
+};
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return (
     <div className="bg-gray-50">
       <div>
         {/* Mobile menu */}
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="relative z-40 lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="relative z-40 lg:hidden"
+        >
           <DialogBackdrop
             transition
             className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
@@ -343,7 +380,10 @@ export default function Example() {
                 </div>
                 <TabPanels as={Fragment}>
                   {navigation.categories.map((category) => (
-                    <TabPanel key={category.name} className="space-y-12 px-4 py-6">
+                    <TabPanel
+                      key={category.name}
+                      className="space-y-12 px-4 py-6"
+                    >
                       <div className="grid grid-cols-2 gap-x-4 gap-y-10">
                         {category.featured.map((item) => (
                           <div key={item.name} className="group relative">
@@ -352,11 +392,20 @@ export default function Example() {
                               src={item.imageSrc}
                               className="aspect-square w-full rounded-md bg-gray-100 object-cover group-hover:opacity-75"
                             />
-                            <a href={item.href} className="mt-6 block text-sm font-medium text-gray-900">
-                              <span aria-hidden="true" className="absolute inset-0 z-10" />
+                            <a
+                              href={item.href}
+                              className="mt-6 block text-sm font-medium text-gray-900"
+                            >
+                              <span
+                                aria-hidden="true"
+                                className="absolute inset-0 z-10"
+                              />
                               {item.name}
                             </a>
-                            <p aria-hidden="true" className="mt-1 text-sm text-gray-500">
+                            <p
+                              aria-hidden="true"
+                              className="mt-1 text-sm text-gray-500"
+                            >
                               Shop now
                             </p>
                           </div>
@@ -370,7 +419,10 @@ export default function Example() {
               <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                 {navigation.pages.map((page) => (
                   <div key={page.name} className="flow-root">
-                    <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                    <a
+                      href={page.href}
+                      className="-m-2 block p-2 font-medium text-gray-900"
+                    >
                       {page.name}
                     </a>
                   </div>
@@ -379,12 +431,18 @@ export default function Example() {
 
               <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                 <div className="flow-root">
-                  <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                  <a
+                    href="#"
+                    className="-m-2 block p-2 font-medium text-gray-900"
+                  >
                     Create an account
                   </a>
                 </div>
                 <div className="flow-root">
-                  <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                  <a
+                    href="#"
+                    className="-m-2 block p-2 font-medium text-gray-900"
+                  >
                     Sign in
                   </a>
                 </div>
@@ -441,10 +499,16 @@ export default function Example() {
                 </form>
 
                 <div className="flex items-center space-x-6">
-                  <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
+                  <a
+                    href="#"
+                    className="text-sm font-medium text-white hover:text-gray-100"
+                  >
                     Sign in
                   </a>
-                  <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
+                  <a
+                    href="#"
+                    className="text-sm font-medium text-white hover:text-gray-100"
+                  >
                     Create an account
                   </a>
                 </div>
@@ -487,19 +551,31 @@ export default function Example() {
                               className="group/popover-panel absolute inset-x-0 top-full z-20 w-full bg-white text-sm text-gray-500 transition data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
                             >
                               {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                              <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow-sm" />
+                              <div
+                                aria-hidden="true"
+                                className="absolute inset-0 top-1/2 bg-white shadow-sm"
+                              />
                               <div className="relative bg-white">
                                 <div className="mx-auto max-w-7xl px-8">
                                   <div className="grid grid-cols-4 gap-x-8 gap-y-10 py-16">
                                     {category.featured.map((item) => (
-                                      <div key={item.name} className="group relative">
+                                      <div
+                                        key={item.name}
+                                        className="group relative"
+                                      >
                                         <img
                                           alt={item.imageAlt}
                                           src={item.imageSrc}
                                           className="aspect-square w-full rounded-md bg-gray-100 object-cover group-hover:opacity-75"
                                         />
-                                        <a href={item.href} className="mt-4 block font-medium text-gray-900">
-                                          <span aria-hidden="true" className="absolute inset-0 z-10" />
+                                        <a
+                                          href={item.href}
+                                          className="mt-4 block font-medium text-gray-900"
+                                        >
+                                          <span
+                                            aria-hidden="true"
+                                            className="absolute inset-0 z-10"
+                                          />
                                           {item.name}
                                         </a>
                                         <p aria-hidden="true" className="mt-1">
@@ -545,9 +621,15 @@ export default function Example() {
                     </button>
 
                     {/* Search */}
-                    <a href="#" className="ml-2 p-2 text-gray-400 hover:text-gray-500">
+                    <a
+                      href="#"
+                      className="ml-2 p-2 text-gray-400 hover:text-gray-500"
+                    >
                       <span className="sr-only">Search</span>
-                      <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                      <MagnifyingGlassIcon
+                        aria-hidden="true"
+                        className="size-6"
+                      />
                     </a>
                   </div>
 
@@ -562,29 +644,48 @@ export default function Example() {
                   </a>
 
                   <div className="flex flex-1 items-center justify-end">
-                    <a href="#" className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block">
+                    <a
+                      href="#"
+                      className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
+                    >
                       Search
                     </a>
 
                     <div className="flex items-center lg:ml-8">
                       {/* Help */}
-                      <a href="#" className="p-2 text-gray-400 hover:text-gray-500 lg:hidden">
+                      <a
+                        href="#"
+                        className="p-2 text-gray-400 hover:text-gray-500 lg:hidden"
+                      >
                         <span className="sr-only">Help</span>
-                        <QuestionMarkCircleIcon aria-hidden="true" className="size-6" />
+                        <QuestionMarkCircleIcon
+                          aria-hidden="true"
+                          className="size-6"
+                        />
                       </a>
-                      <a href="#" className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block">
+                      <a
+                        href="#"
+                        className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
+                      >
                         Help
                       </a>
 
                       {/* Cart */}
                       <div className="ml-4 flow-root lg:ml-8">
-                        <a href="#" className="group -m-2 flex items-center p-2">
+                        <a
+                          href="#"
+                          className="group -m-2 flex items-center p-2"
+                        >
                           <ShoppingBagIcon
                             aria-hidden="true"
                             className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                           />
-                          <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                          <span className="sr-only">items in cart, view bag</span>
+                          <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                            0
+                          </span>
+                          <span className="sr-only">
+                            items in cart, view bag
+                          </span>
                         </a>
                       </div>
                     </div>
@@ -598,7 +699,11 @@ export default function Example() {
 
       <div>
         {/* Mobile filter dialog */}
-        <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative z-40 sm:hidden">
+        <Dialog
+          open={mobileFiltersOpen}
+          onClose={setMobileFiltersOpen}
+          className="relative z-40 sm:hidden"
+        >
           <DialogBackdrop
             transition
             className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
@@ -625,10 +730,16 @@ export default function Example() {
               {/* Filters */}
               <form className="mt-4">
                 {filters.map((section) => (
-                  <Disclosure key={section.name} as="div" className="border-t border-gray-200 px-4 py-6">
+                  <Disclosure
+                    key={section.name}
+                    as="div"
+                    className="border-t border-gray-200 px-4 py-6"
+                  >
                     <h3 className="-mx-2 -my-3 flow-root">
                       <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
-                        <span className="font-medium text-gray-900">{section.name}</span>
+                        <span className="font-medium text-gray-900">
+                          {section.name}
+                        </span>
                         <span className="ml-6 flex items-center">
                           <ChevronDownIcon
                             aria-hidden="true"
@@ -693,14 +804,20 @@ export default function Example() {
         <main>
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="py-24 text-center">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+                New Arrivals
+              </h1>
               <p className="mx-auto mt-4 max-w-3xl text-base text-gray-500">
-                Thoughtfully designed objects for the workspace, home, and travel.
+                Thoughtfully designed objects for the workspace, home, and
+                travel.
               </p>
             </div>
 
             {/* Filters */}
-            <section aria-labelledby="filter-heading" className="border-t border-gray-200 pt-6">
+            <section
+              aria-labelledby="filter-heading"
+              className="border-t border-gray-200 pt-6"
+            >
               <h2 id="filter-heading" className="sr-only">
                 Product filters
               </h2>
@@ -744,15 +861,20 @@ export default function Example() {
 
                 <PopoverGroup className="hidden sm:flex sm:items-baseline sm:space-x-8">
                   {filters.map((section, sectionIdx) => (
-                    <Popover key={section.name} className="relative inline-block text-left">
+                    <Popover
+                      key={section.name}
+                      className="relative inline-block text-left"
+                    >
                       <div>
                         <PopoverButton className="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                           <span>{section.name}</span>
-                          {sectionIdx === 0 ? (
-                            <span className="ml-1.5 rounded-sm bg-gray-200 px-1.5 py-0.5 text-xs font-semibold text-gray-700 tabular-nums">
-                              1
-                            </span>
-                          ) : null}
+                          {sectionIdx === 0
+                            ? (
+                              <span className="ml-1.5 rounded-sm bg-gray-200 px-1.5 py-0.5 text-xs font-semibold text-gray-700 tabular-nums">
+                                1
+                              </span>
+                            )
+                            : null}
                           <ChevronDownIcon
                             aria-hidden="true"
                             className="-mr-1 ml-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
@@ -833,13 +955,18 @@ export default function Example() {
                       <h3>{product.name}</h3>
                       <p>{product.price}</p>
                     </div>
-                    <p className="mt-1 text-sm text-gray-500 italic">{product.description}</p>
+                    <p className="mt-1 text-sm text-gray-500 italic">
+                      {product.description}
+                    </p>
                   </a>
                 ))}
               </div>
             </section>
 
-            <section aria-labelledby="featured-heading" className="relative mt-16 overflow-hidden rounded-lg lg:h-96">
+            <section
+              aria-labelledby="featured-heading"
+              className="relative mt-16 overflow-hidden rounded-lg lg:h-96"
+            >
               <div className="absolute inset-0">
                 <img
                   alt=""
@@ -847,15 +974,25 @@ export default function Example() {
                   className="size-full object-cover"
                 />
               </div>
-              <div aria-hidden="true" className="relative h-96 w-full lg:hidden" />
-              <div aria-hidden="true" className="relative h-32 w-full lg:hidden" />
+              <div
+                aria-hidden="true"
+                className="relative h-96 w-full lg:hidden"
+              />
+              <div
+                aria-hidden="true"
+                className="relative h-32 w-full lg:hidden"
+              />
               <div className="absolute inset-x-0 bottom-0 rounded-br-lg rounded-bl-lg bg-black/75 p-6 backdrop-blur-sm backdrop-filter sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-96 lg:flex-col lg:items-start lg:rounded-tl-lg lg:rounded-br-none">
                 <div>
-                  <h2 id="featured-heading" className="text-xl font-bold text-white">
+                  <h2
+                    id="featured-heading"
+                    className="text-xl font-bold text-white"
+                  >
                     Workspace Collection
                   </h2>
                   <p className="mt-1 text-sm text-gray-300">
-                    Upgrade your desk with objects that keep you organized and clear-minded.
+                    Upgrade your desk with objects that keep you organized and
+                    clear-minded.
                   </p>
                 </div>
                 <a
@@ -867,7 +1004,10 @@ export default function Example() {
               </div>
             </section>
 
-            <section aria-labelledby="more-products-heading" className="mt-16 pb-24">
+            <section
+              aria-labelledby="more-products-heading"
+              className="mt-16 pb-24"
+            >
               <h2 id="more-products-heading" className="sr-only">
                 More products
               </h2>
@@ -884,7 +1024,9 @@ export default function Example() {
                       <h3>{product.name}</h3>
                       <p>{product.price}</p>
                     </div>
-                    <p className="mt-1 text-sm text-gray-500 italic">{product.description}</p>
+                    <p className="mt-1 text-sm text-gray-500 italic">
+                      {product.description}
+                    </p>
                   </a>
                 ))}
               </div>
@@ -892,7 +1034,10 @@ export default function Example() {
           </div>
         </main>
 
-        <footer aria-labelledby="footer-heading" className="border-t border-gray-200 bg-white">
+        <footer
+          aria-labelledby="footer-heading"
+          className="border-t border-gray-200 bg-white"
+        >
           <h2 id="footer-heading" className="sr-only">
             Footer
           </h2>
@@ -912,11 +1057,16 @@ export default function Example() {
                 <div className="col-span-6 mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-8 md:col-start-3 md:row-start-1 md:mt-0 lg:col-span-6 lg:col-start-2">
                   <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Products</h3>
+                      <h3 className="text-sm font-medium text-gray-900">
+                        Products
+                      </h3>
                       <ul role="list" className="mt-6 space-y-6">
                         {footerNavigation.products.map((item) => (
                           <li key={item.name} className="text-sm">
-                            <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                            <a
+                              href={item.href}
+                              className="text-gray-500 hover:text-gray-600"
+                            >
                               {item.name}
                             </a>
                           </li>
@@ -924,11 +1074,16 @@ export default function Example() {
                       </ul>
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Company</h3>
+                      <h3 className="text-sm font-medium text-gray-900">
+                        Company
+                      </h3>
                       <ul role="list" className="mt-6 space-y-6">
                         {footerNavigation.company.map((item) => (
                           <li key={item.name} className="text-sm">
-                            <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                            <a
+                              href={item.href}
+                              className="text-gray-500 hover:text-gray-600"
+                            >
                               {item.name}
                             </a>
                           </li>
@@ -937,11 +1092,16 @@ export default function Example() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">Customer Service</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Customer Service
+                    </h3>
                     <ul role="list" className="mt-6 space-y-6">
                       {footerNavigation.customerService.map((item) => (
                         <li key={item.name} className="text-sm">
-                          <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                          <a
+                            href={item.href}
+                            className="text-gray-500 hover:text-gray-600"
+                          >
                             {item.name}
                           </a>
                         </li>
@@ -952,8 +1112,12 @@ export default function Example() {
 
                 {/* Newsletter section */}
                 <div className="mt-12 md:col-span-8 md:col-start-3 md:row-start-2 md:mt-0 lg:col-span-4 lg:col-start-9 lg:row-start-1">
-                  <h3 className="text-sm font-medium text-gray-900">Sign up for our newsletter</h3>
-                  <p className="mt-6 text-sm text-gray-500">The latest deals and savings, sent to your inbox weekly.</p>
+                  <h3 className="text-sm font-medium text-gray-900">
+                    Sign up for our newsletter
+                  </h3>
+                  <p className="mt-6 text-sm text-gray-500">
+                    The latest deals and savings, sent to your inbox weekly.
+                  </p>
                   <form className="mt-2 flex sm:max-w-md">
                     <input
                       id="email-address"
@@ -977,11 +1141,13 @@ export default function Example() {
             </div>
 
             <div className="border-t border-gray-100 py-10 text-center">
-              <p className="text-sm text-gray-500">&copy; 2021 Your Company, Inc. All rights reserved.</p>
+              <p className="text-sm text-gray-500">
+                &copy; 2021 Your Company, Inc. All rights reserved.
+              </p>
             </div>
           </div>
         </footer>
       </div>
     </div>
-  )
+  );
 }

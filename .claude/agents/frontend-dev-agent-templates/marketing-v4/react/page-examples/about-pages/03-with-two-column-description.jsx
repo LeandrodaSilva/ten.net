@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
   AcademicCapIcon,
   CheckCircleIcon,
@@ -11,146 +11,152 @@ import {
   SparklesIcon,
   SunIcon,
   UserGroupIcon,
-} from '@heroicons/react/20/solid'
+} from "@heroicons/react/20/solid";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-]
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Marketplace", href: "#" },
+  { name: "Company", href: "#" },
+];
 const stats = [
-  { label: 'Business was founded', value: '2012' },
-  { label: 'People on the team', value: '120+' },
-  { label: 'Users on the platform', value: '250k' },
-  { label: 'Paid out to creators', value: '$70M' },
-]
+  { label: "Business was founded", value: "2012" },
+  { label: "People on the team", value: "120+" },
+  { label: "Users on the platform", value: "250k" },
+  { label: "Paid out to creators", value: "$70M" },
+];
 const values = [
   {
-    name: 'Be world-class.',
-    description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.',
+    name: "Be world-class.",
+    description:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.",
     icon: RocketLaunchIcon,
   },
   {
-    name: 'Take responsibility.',
-    description: 'Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.',
+    name: "Take responsibility.",
+    description:
+      "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
     icon: HandRaisedIcon,
   },
   {
-    name: 'Be supportive.',
-    description: 'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus voluptas blanditiis et.',
+    name: "Be supportive.",
+    description:
+      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus voluptas blanditiis et.",
     icon: UserGroupIcon,
   },
   {
-    name: 'Always learning.',
-    description: 'Iure sed ab. Aperiam optio placeat dolor facere. Officiis pariatur eveniet atque et dolor.',
+    name: "Always learning.",
+    description:
+      "Iure sed ab. Aperiam optio placeat dolor facere. Officiis pariatur eveniet atque et dolor.",
     icon: AcademicCapIcon,
   },
   {
-    name: 'Share everything you know.',
-    description: 'Laudantium tempora sint ut consectetur ratione. Ut illum ut rem numquam fuga delectus.',
+    name: "Share everything you know.",
+    description:
+      "Laudantium tempora sint ut consectetur ratione. Ut illum ut rem numquam fuga delectus.",
     icon: SparklesIcon,
   },
   {
-    name: 'Enjoy downtime.',
-    description: 'Culpa dolorem voluptatem velit autem rerum qui et corrupti. Quibusdam quo placeat.',
+    name: "Enjoy downtime.",
+    description:
+      "Culpa dolorem voluptatem velit autem rerum qui et corrupti. Quibusdam quo placeat.",
     icon: SunIcon,
   },
-]
+];
 const team = [
   {
-    name: 'Leslie Alexander',
-    role: 'Co-Founder / CEO',
+    name: "Leslie Alexander",
+    role: "Co-Founder / CEO",
     imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    location: 'Toronto, Canada',
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    location: "Toronto, Canada",
   },
   {
-    name: 'Michael Foster',
-    role: 'Co-Founder / CTO',
+    name: "Michael Foster",
+    role: "Co-Founder / CTO",
     imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    location: 'Glasgow, Scotland',
+      "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    location: "Glasgow, Scotland",
   },
   {
-    name: 'Dries Vincent',
-    role: 'Business Relations',
+    name: "Dries Vincent",
+    role: "Business Relations",
     imageUrl:
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    location: 'Niagara Falls, Canada',
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    location: "Niagara Falls, Canada",
   },
   {
-    name: 'Lindsay Walton',
-    role: 'Front-end Developer',
+    name: "Lindsay Walton",
+    role: "Front-end Developer",
     imageUrl:
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    location: 'London, England',
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    location: "London, England",
   },
   {
-    name: 'Courtney Henry',
-    role: 'Designer',
+    name: "Courtney Henry",
+    role: "Designer",
     imageUrl:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    location: 'Toronto, Canada',
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    location: "Toronto, Canada",
   },
   {
-    name: 'Tom Cook',
-    role: 'Director of Product',
+    name: "Tom Cook",
+    role: "Director of Product",
     imageUrl:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    location: 'Toronto, Canada',
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    location: "Toronto, Canada",
   },
   {
-    name: 'Whitney Francis',
-    role: 'Copywriter',
+    name: "Whitney Francis",
+    role: "Copywriter",
     imageUrl:
-      'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    location: 'Toronto, Canada',
+      "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    location: "Toronto, Canada",
   },
   {
-    name: 'Leonard Krasner',
-    role: 'Senior Designer',
+    name: "Leonard Krasner",
+    role: "Senior Designer",
     imageUrl:
-      'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    location: 'Toronto, Canada',
+      "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+    location: "Toronto, Canada",
   },
-]
+];
 const benefits = [
-  'Competitive salaries',
-  'Flexible work hours',
-  '30 days of paid vacation',
-  'Annual team retreats',
-  'Benefits for you and your family',
-  'A great work environment',
-]
+  "Competitive salaries",
+  "Flexible work hours",
+  "30 days of paid vacation",
+  "Annual team retreats",
+  "Benefits for you and your family",
+  "A great work environment",
+];
 const footerNavigation = {
   solutions: [
-    { name: 'Marketing', href: '#' },
-    { name: 'Analytics', href: '#' },
-    { name: 'Automation', href: '#' },
-    { name: 'Commerce', href: '#' },
-    { name: 'Insights', href: '#' },
+    { name: "Marketing", href: "#" },
+    { name: "Analytics", href: "#" },
+    { name: "Automation", href: "#" },
+    { name: "Commerce", href: "#" },
+    { name: "Insights", href: "#" },
   ],
   support: [
-    { name: 'Submit ticket', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
+    { name: "Submit ticket", href: "#" },
+    { name: "Documentation", href: "#" },
+    { name: "Guides", href: "#" },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
+    { name: "About", href: "#" },
+    { name: "Blog", href: "#" },
+    { name: "Jobs", href: "#" },
+    { name: "Press", href: "#" },
   ],
   legal: [
-    { name: 'Terms of service', href: '#' },
-    { name: 'Privacy policy', href: '#' },
-    { name: 'License', href: '#' },
+    { name: "Terms of service", href: "#" },
+    { name: "Privacy policy", href: "#" },
+    { name: "License", href: "#" },
   ],
   social: [
     {
-      name: 'Facebook',
-      href: '#',
+      name: "Facebook",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -162,8 +168,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'Instagram',
-      href: '#',
+      name: "Instagram",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -175,8 +181,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'X',
-      href: '#',
+      name: "X",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" />
@@ -184,8 +190,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'GitHub',
-      href: '#',
+      name: "GitHub",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -197,8 +203,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'YouTube',
-      href: '#',
+      name: "YouTube",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -210,16 +216,19 @@ const footerNavigation = {
       ),
     },
   ],
-}
+};
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white dark:bg-gray-900">
       {/* Header */}
       <header className="absolute inset-x-0 top-0 z-50">
-        <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+        <nav
+          aria-label="Global"
+          className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        >
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
@@ -247,18 +256,29 @@ export default function Example() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+              >
                 {item.name}
               </a>
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+            <a
+              href="#"
+              className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+            >
               Log in <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="lg:hidden"
+        >
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-gray-100/10">
             <div className="flex items-center justify-between">
@@ -320,7 +340,7 @@ export default function Example() {
           <div
             style={{
               clipPath:
-                'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
+                "polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)",
             }}
             className="aspect-1108/632 w-277 flex-none bg-linear-to-r from-[#80caff] to-[#4f46e5] opacity-25"
           />
@@ -333,8 +353,9 @@ export default function Example() {
               We love creators
             </h1>
             <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8 dark:text-gray-400">
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-              fugiat veniam occaecat fugiat.
+              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
+              lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
+              fugiat.
             </p>
           </div>
         </div>
@@ -345,27 +366,33 @@ export default function Example() {
             <div className="grid max-w-xl grid-cols-1 gap-8 text-base/7 text-gray-600 lg:max-w-none lg:grid-cols-2 dark:text-gray-300">
               <div>
                 <p>
-                  Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris semper sed amet
-                  vitae sed turpis id. Id dolor praesent donec est. Odio penatibus risus viverra tellus varius sit neque
-                  erat velit. Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris
-                  semper sed amet vitae sed turpis id.
+                  Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget
+                  risus enim. Mattis mauris semper sed amet vitae sed turpis id.
+                  Id dolor praesent donec est. Odio penatibus risus viverra
+                  tellus varius sit neque erat velit. Faucibus commodo massa
+                  rhoncus, volutpat. Dignissim sed eget risus enim. Mattis
+                  mauris semper sed amet vitae sed turpis id.
                 </p>
                 <p className="mt-8">
-                  Et vitae blandit facilisi magna lacus commodo. Vitae sapien duis odio id et. Id blandit molestie
-                  auctor fermentum dignissim. Lacus diam tincidunt ac cursus in vel. Mauris varius vulputate et ultrices
-                  hac adipiscing egestas.
+                  Et vitae blandit facilisi magna lacus commodo. Vitae sapien
+                  duis odio id et. Id blandit molestie auctor fermentum
+                  dignissim. Lacus diam tincidunt ac cursus in vel. Mauris
+                  varius vulputate et ultrices hac adipiscing egestas.
                 </p>
               </div>
               <div>
                 <p>
-                  Erat pellentesque dictumst ligula porttitor risus eget et eget. Ultricies tellus felis id dignissim
-                  eget. Est augue maecenas risus nulla ultrices congue nunc tortor. Enim et nesciunt doloremque nesciunt
-                  voluptate.
+                  Erat pellentesque dictumst ligula porttitor risus eget et
+                  eget. Ultricies tellus felis id dignissim eget. Est augue
+                  maecenas risus nulla ultrices congue nunc tortor. Enim et
+                  nesciunt doloremque nesciunt voluptate.
                 </p>
                 <p className="mt-8">
-                  Et vitae blandit facilisi magna lacus commodo. Vitae sapien duis odio id et. Id blandit molestie
-                  auctor fermentum dignissim. Lacus diam tincidunt ac cursus in vel. Mauris varius vulputate et ultrices
-                  hac adipiscing egestas. Iaculis convallis ac tempor et ut. Ac lorem vel integer orci.
+                  Et vitae blandit facilisi magna lacus commodo. Vitae sapien
+                  duis odio id et. Id blandit molestie auctor fermentum
+                  dignissim. Lacus diam tincidunt ac cursus in vel. Mauris
+                  varius vulputate et ultrices hac adipiscing egestas. Iaculis
+                  convallis ac tempor et ut. Ac lorem vel integer orci.
                 </p>
               </div>
             </div>
@@ -375,8 +402,12 @@ export default function Example() {
                   key={statIdx}
                   className="flex flex-col-reverse gap-y-3 border-l border-gray-200 pl-6 dark:border-white/20"
                 >
-                  <dt className="text-base/7 text-gray-600 dark:text-gray-300">{stat.label}</dt>
-                  <dd className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">{stat.value}</dd>
+                  <dt className="text-base/7 text-gray-600 dark:text-gray-300">
+                    {stat.label}
+                  </dt>
+                  <dd className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                    {stat.value}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -399,8 +430,9 @@ export default function Example() {
               Our values
             </h2>
             <p className="mt-6 text-lg/8 text-gray-700 dark:text-gray-300">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste
-              dolor cupiditate blanditiis.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores
+              impedit perferendis suscipit eaque, iste dolor cupiditate
+              blanditiis.
             </p>
           </div>
           <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 text-base/7 text-gray-600 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16 dark:text-gray-400">
@@ -412,7 +444,7 @@ export default function Example() {
                     className="absolute top-1 left-1 size-5 text-indigo-600 dark:text-indigo-500"
                   />
                   {value.name}
-                </dt>{' '}
+                </dt>{" "}
                 <dd className="inline">{value.description}</dd>
               </div>
             ))}
@@ -426,8 +458,9 @@ export default function Example() {
               Our team
             </h2>
             <p className="mt-6 text-lg/8 text-gray-600 dark:text-gray-400">
-              We’re a dynamic group of individuals who are passionate about what we do and dedicated to delivering the
-              best results for our clients.
+              We’re a dynamic group of individuals who are passionate about what
+              we do and dedicated to delivering the best results for our
+              clients.
             </p>
           </div>
           <ul
@@ -444,7 +477,9 @@ export default function Example() {
                 <h3 className="mt-6 text-lg/8 font-semibold tracking-tight text-gray-900 dark:text-white">
                   {person.name}
                 </h3>
-                <p className="text-base/7 text-gray-600 dark:text-gray-300">{person.role}</p>
+                <p className="text-base/7 text-gray-600 dark:text-gray-300">
+                  {person.role}
+                </p>
                 <p className="text-sm/6 text-gray-500">{person.location}</p>
               </li>
             ))}
@@ -465,8 +500,8 @@ export default function Example() {
                   Join our team
                 </h2>
                 <p className="mt-6 text-lg/8 text-pretty text-gray-600 dark:text-gray-400">
-                  Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum cupiditate veritatis
-                  in accusamus quisquam.
+                  Lorem ipsum dolor sit amet consect adipisicing elit. Possimus
+                  magnam voluptatum cupiditate veritatis in accusamus quisquam.
                 </p>
                 <ul
                   role="list"
@@ -501,7 +536,7 @@ export default function Example() {
             <div
               style={{
                 clipPath:
-                  'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
+                  "polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)",
               }}
               className="aspect-1318/752 w-329.5 flex-none bg-linear-to-r from-[#9fd6fc] to-[#8680fd] opacity-50 dark:from-[#80caff] dark:to-[#4f46e5] dark:opacity-20"
             />
@@ -524,7 +559,8 @@ export default function Example() {
               className="h-9 not-dark:hidden"
             />
             <p className="text-sm/6 text-balance text-gray-600 dark:text-gray-400">
-              Making the world a better place through constructing elegant hierarchies.
+              Making the world a better place through constructing elegant
+              hierarchies.
             </p>
             <div className="flex gap-x-6">
               {footerNavigation.social.map((item) => (
@@ -542,7 +578,9 @@ export default function Example() {
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Solutions</h3>
+                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  Solutions
+                </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {footerNavigation.solutions.map((item) => (
                     <li key={item.name}>
@@ -557,7 +595,9 @@ export default function Example() {
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Support</h3>
+                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  Support
+                </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {footerNavigation.support.map((item) => (
                     <li key={item.name}>
@@ -574,7 +614,9 @@ export default function Example() {
             </div>
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Company</h3>
+                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  Company
+                </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {footerNavigation.company.map((item) => (
                     <li key={item.name}>
@@ -589,7 +631,9 @@ export default function Example() {
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Legal</h3>
+                <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  Legal
+                </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {footerNavigation.legal.map((item) => (
                     <li key={item.name}>
@@ -613,5 +657,5 @@ export default function Example() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

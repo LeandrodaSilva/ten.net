@@ -1,10 +1,12 @@
-import { PlusSmallIcon } from '@heroicons/react/20/solid'
+import { PlusSmallIcon } from "@heroicons/react/20/solid";
 
 export default function Example() {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
-        <h1 className="text-base/7 font-semibold text-gray-900 dark:text-white">Cashflow</h1>
+        <h1 className="text-base/7 font-semibold text-gray-900 dark:text-white">
+          Cashflow
+        </h1>
         <div className="order-last flex w-full gap-x-8 text-sm/6 font-semibold sm:order-0 sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:text-sm/7 dark:sm:border-white/15">
           <a href="#" className="text-indigo-600 dark:text-indigo-400">
             Last 7 days
@@ -25,5 +27,5 @@ export default function Example() {
         </a>
       </div>
     </div>
-  )
+  );
 }

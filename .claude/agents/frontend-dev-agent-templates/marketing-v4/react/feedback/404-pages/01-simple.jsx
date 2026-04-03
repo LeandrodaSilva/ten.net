@@ -1,17 +1,21 @@
 export default function Example() {
   return (
     <>
-      {/*
+      {
+        /*
         This example requires updating your template:
 
         ```
         <html class="h-full">
         <body class="h-full">
         ```
-      */}
+      */
+      }
       <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8 dark:bg-gray-900">
         <div className="text-center">
-          <p className="text-base font-semibold text-indigo-600 dark:text-indigo-400">404</p>
+          <p className="text-base font-semibold text-indigo-600 dark:text-indigo-400">
+            404
+          </p>
           <h1 className="mt-4 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl dark:text-white">
             Page not found
           </h1>
@@ -25,12 +29,15 @@ export default function Example() {
             >
               Go back home
             </a>
-            <a href="#" className="text-sm font-semibold text-gray-900 dark:text-white">
+            <a
+              href="#"
+              className="text-sm font-semibold text-gray-900 dark:text-white"
+            >
               Contact support <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </div>
       </main>
     </>
-  )
+  );
 }

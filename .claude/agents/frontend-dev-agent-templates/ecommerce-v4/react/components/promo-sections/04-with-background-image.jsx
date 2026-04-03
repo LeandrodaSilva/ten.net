@@ -17,9 +17,10 @@ export default function Example() {
                 <span className="block sm:inline">your desk</span>
               </h2>
               <p className="mt-3 text-xl text-white">
-                Make your desk beautiful and organized. Post a picture to social media and watch it get more likes than
-                life-changing announcements. Reflect on the shallow nature of existence. At least you have a really nice
-                desk setup.
+                Make your desk beautiful and organized. Post a picture to social
+                media and watch it get more likes than life-changing
+                announcements. Reflect on the shallow nature of existence. At
+                least you have a really nice desk setup.
               </p>
               <a
                 href="#"
@@ -32,5 +33,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

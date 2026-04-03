@@ -1,22 +1,24 @@
-import { ChevronDownIcon } from '@heroicons/react/16/solid'
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
 const tabs = [
-  { name: 'Applied', href: '#', current: false },
-  { name: 'Phone Screening', href: '#', current: false },
-  { name: 'Interview', href: '#', current: true },
-  { name: 'Offer', href: '#', current: false },
-  { name: 'Hired', href: '#', current: false },
-]
+  { name: "Applied", href: "#", current: false },
+  { name: "Phone Screening", href: "#", current: false },
+  { name: "Interview", href: "#", current: true },
+  { name: "Offer", href: "#", current: false },
+  { name: "Hired", href: "#", current: false },
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
   return (
     <div className="relative border-b border-gray-200 pb-5 sm:pb-0 dark:border-white/10">
       <div className="md:flex md:items-center md:justify-between">
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">Candidates</h3>
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+          Candidates
+        </h3>
         <div className="mt-3 flex md:absolute md:top-3 md:right-0 md:mt-0">
           <button
             type="button"
@@ -40,9 +42,7 @@ export default function Example() {
             aria-label="Select a tab"
             className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-white"
           >
-            {tabs.map((tab) => (
-              <option key={tab.name}>{tab.name}</option>
-            ))}
+            {tabs.map((tab) => <option key={tab.name}>{tab.name}</option>)}
           </select>
           <ChevronDownIcon
             aria-hidden="true"
@@ -55,12 +55,12 @@ export default function Example() {
               <a
                 key={tab.name}
                 href={tab.href}
-                aria-current={tab.current ? 'page' : undefined}
+                aria-current={tab.current ? "page" : undefined}
                 className={classNames(
                   tab.current
-                    ? 'border-indigo-500 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-white',
-                  'border-b-2 px-1 pb-4 text-sm font-medium whitespace-nowrap',
+                    ? "border-indigo-500 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-white",
+                  "border-b-2 px-1 pb-4 text-sm font-medium whitespace-nowrap",
                 )}
               >
                 {tab.name}
@@ -70,5 +70,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

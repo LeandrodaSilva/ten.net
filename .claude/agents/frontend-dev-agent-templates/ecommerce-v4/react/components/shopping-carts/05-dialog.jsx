@@ -1,43 +1,48 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/16/solid'
+import { useState } from "react";
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
 const products = [
   {
     id: 1,
-    name: 'Zip Tote Basket',
-    href: '#',
-    color: 'White and black',
-    price: '$140.00',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-03.jpg',
-    imageAlt: 'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
+    name: "Zip Tote Basket",
+    href: "#",
+    color: "White and black",
+    price: "$140.00",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-03.jpg",
+    imageAlt:
+      "Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.",
   },
   {
     id: 2,
-    name: 'Throwback Hip Bag',
-    href: '#',
-    color: 'Salmon',
-    price: '$90.00',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-    imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
+    name: "Throwback Hip Bag",
+    href: "#",
+    color: "Salmon",
+    price: "$90.00",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
+    imageAlt:
+      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
   },
   {
     id: 3,
-    name: 'Medium Stuff Satchel',
-    href: '#',
-    color: 'Blue',
-    price: '$32.00',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
+    name: "Medium Stuff Satchel",
+    href: "#",
+    color: "Blue",
+    price: "$32.00",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
     imageAlt:
-      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
+      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
   },
-]
+];
 
 export default function Example() {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
 
   return (
     <div>
@@ -61,8 +66,14 @@ export default function Example() {
             >
               <form className="relative flex w-full flex-col overflow-hidden bg-white pt-6 pb-8 sm:rounded-lg sm:pb-6 lg:py-8">
                 <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8">
-                  <h2 className="text-lg font-medium text-gray-900">Shopping Cart</h2>
-                  <button type="button" onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-500">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Shopping Cart
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    className="text-gray-400 hover:text-gray-500"
+                  >
                     <span className="sr-only">Close</span>
                     <XMarkIcon aria-hidden="true" className="size-6" />
                   </button>
@@ -73,9 +84,15 @@ export default function Example() {
                     Items in your shopping cart
                   </h2>
 
-                  <ul role="list" className="divide-y divide-gray-200 px-4 sm:px-6 lg:px-8">
+                  <ul
+                    role="list"
+                    className="divide-y divide-gray-200 px-4 sm:px-6 lg:px-8"
+                  >
                     {products.map((product, productIdx) => (
-                      <li key={product.id} className="flex py-8 text-sm sm:items-center">
+                      <li
+                        key={product.id}
+                        className="flex py-8 text-sm sm:items-center"
+                      >
                         <img
                           alt={product.imageAlt}
                           src={product.imageSrc}
@@ -86,7 +103,9 @@ export default function Example() {
                             <h3 className="font-medium text-gray-900">
                               <a href={product.href}>{product.name}</a>
                             </h3>
-                            <p className="mt-1 text-gray-500">{product.color}</p>
+                            <p className="mt-1 text-gray-500">
+                              {product.color}
+                            </p>
                           </div>
                           <p className="row-span-2 row-end-2 font-medium text-gray-900 sm:order-1 sm:ml-6 sm:w-1/3 sm:flex-none sm:text-right">
                             {product.price}
@@ -126,7 +145,10 @@ export default function Example() {
                   </ul>
                 </section>
 
-                <section aria-labelledby="summary-heading" className="mt-auto sm:px-6 lg:px-8">
+                <section
+                  aria-labelledby="summary-heading"
+                  className="mt-auto sm:px-6 lg:px-8"
+                >
                   <div className="bg-gray-50 p-6 sm:rounded-lg sm:p-8">
                     <h2 id="summary-heading" className="sr-only">
                       Order summary
@@ -147,8 +169,12 @@ export default function Example() {
                           <dd className="font-medium text-gray-900">$53.40</dd>
                         </div>
                         <div className="flex items-center justify-between py-4">
-                          <dt className="text-base font-medium text-gray-900">Order total</dt>
-                          <dd className="text-base font-medium text-gray-900">$320.40</dd>
+                          <dt className="text-base font-medium text-gray-900">
+                            Order total
+                          </dt>
+                          <dd className="text-base font-medium text-gray-900">
+                            $320.40
+                          </dd>
                         </div>
                       </dl>
                     </div>
@@ -169,5 +195,5 @@ export default function Example() {
         </div>
       </Dialog>
     </div>
-  )
+  );
 }

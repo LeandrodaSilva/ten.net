@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -16,56 +16,56 @@ import {
   PopoverButton,
   PopoverGroup,
   PopoverPanel,
-} from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+} from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 const sortOptions = [
-  { name: 'Most Popular', href: '#' },
-  { name: 'Best Rating', href: '#' },
-  { name: 'Newest', href: '#' },
-]
+  { name: "Most Popular", href: "#" },
+  { name: "Best Rating", href: "#" },
+  { name: "Newest", href: "#" },
+];
 const filters = [
   {
-    id: 'category',
-    name: 'Category',
+    id: "category",
+    name: "Category",
     options: [
-      { value: 'tees', label: 'Tees' },
-      { value: 'crewnecks', label: 'Crewnecks' },
-      { value: 'hats', label: 'Hats' },
+      { value: "tees", label: "Tees" },
+      { value: "crewnecks", label: "Crewnecks" },
+      { value: "hats", label: "Hats" },
     ],
   },
   {
-    id: 'brand',
-    name: 'Brand',
+    id: "brand",
+    name: "Brand",
     options: [
-      { value: 'clothing-company', label: 'Clothing Company' },
-      { value: 'fashion-inc', label: 'Fashion Inc.' },
-      { value: 'shoes-n-more', label: "Shoes 'n More" },
+      { value: "clothing-company", label: "Clothing Company" },
+      { value: "fashion-inc", label: "Fashion Inc." },
+      { value: "shoes-n-more", label: "Shoes 'n More" },
     ],
   },
   {
-    id: 'color',
-    name: 'Color',
+    id: "color",
+    name: "Color",
     options: [
-      { value: 'white', label: 'White' },
-      { value: 'black', label: 'Black' },
-      { value: 'grey', label: 'Grey' },
+      { value: "white", label: "White" },
+      { value: "black", label: "Black" },
+      { value: "grey", label: "Grey" },
     ],
   },
   {
-    id: 'sizes',
-    name: 'Sizes',
+    id: "sizes",
+    name: "Sizes",
     options: [
-      { value: 's', label: 'S' },
-      { value: 'm', label: 'M' },
-      { value: 'l', label: 'L' },
+      { value: "s", label: "S" },
+      { value: "m", label: "M" },
+      { value: "l", label: "L" },
     ],
   },
-]
+];
 
 export default function Example() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="bg-gray-50">
@@ -97,10 +97,16 @@ export default function Example() {
             {/* Filters */}
             <form className="mt-4">
               {filters.map((section) => (
-                <Disclosure key={section.name} as="div" className="border-t border-gray-200 px-4 py-6">
+                <Disclosure
+                  key={section.name}
+                  as="div"
+                  className="border-t border-gray-200 px-4 py-6"
+                >
                   <h3 className="-mx-2 -my-3 flow-root">
                     <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
-                      <span className="font-medium text-gray-900">{section.name}</span>
+                      <span className="font-medium text-gray-900">
+                        {section.name}
+                      </span>
                       <span className="ml-6 flex items-center">
                         <ChevronDownIcon
                           aria-hidden="true"
@@ -144,7 +150,10 @@ export default function Example() {
                               </svg>
                             </div>
                           </div>
-                          <label htmlFor={`filter-mobile-${section.id}-${optionIdx}`} className="text-sm text-gray-500">
+                          <label
+                            htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                            className="text-sm text-gray-500"
+                          >
                             {option.label}
                           </label>
                         </div>
@@ -160,13 +169,18 @@ export default function Example() {
 
       <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="py-24">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+            New Arrivals
+          </h1>
           <p className="mx-auto mt-4 max-w-3xl text-base text-gray-500">
             Thoughtfully designed objects for the workspace, home, and travel.
           </p>
         </div>
 
-        <section aria-labelledby="filter-heading" className="border-t border-gray-200 py-6">
+        <section
+          aria-labelledby="filter-heading"
+          className="border-t border-gray-200 py-6"
+        >
           <h2 id="filter-heading" className="sr-only">
             Product filters
           </h2>
@@ -210,15 +224,20 @@ export default function Example() {
 
             <PopoverGroup className="hidden sm:flex sm:items-baseline sm:space-x-8">
               {filters.map((section, sectionIdx) => (
-                <Popover key={section.name} className="relative inline-block text-left">
+                <Popover
+                  key={section.name}
+                  className="relative inline-block text-left"
+                >
                   <div>
                     <PopoverButton className="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                       <span>{section.name}</span>
-                      {sectionIdx === 0 ? (
-                        <span className="ml-1.5 rounded-sm bg-gray-200 px-1.5 py-0.5 text-xs font-semibold text-gray-700 tabular-nums">
-                          1
-                        </span>
-                      ) : null}
+                      {sectionIdx === 0
+                        ? (
+                          <span className="ml-1.5 rounded-sm bg-gray-200 px-1.5 py-0.5 text-xs font-semibold text-gray-700 tabular-nums">
+                            1
+                          </span>
+                        )
+                        : null}
                       <ChevronDownIcon
                         aria-hidden="true"
                         className="-mr-1 ml-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
@@ -281,5 +300,5 @@ export default function Example() {
         </section>
       </div>
     </div>
-  )
+  );
 }

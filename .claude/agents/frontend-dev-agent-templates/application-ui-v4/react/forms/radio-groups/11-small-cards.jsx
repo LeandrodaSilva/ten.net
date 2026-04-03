@@ -1,17 +1,19 @@
 const memoryOptions = [
-  { id: '4gb', name: '4 GB', inStock: true },
-  { id: '8gb', name: '8 GB', inStock: true },
-  { id: '16gb', name: '16 GB', inStock: true },
-  { id: '32gb', name: '32 GB', inStock: true },
-  { id: '64gb', name: '64 GB', inStock: true },
-  { id: '128gb', name: '128 GB', inStock: false },
-]
+  { id: "4gb", name: "4 GB", inStock: true },
+  { id: "8gb", name: "8 GB", inStock: true },
+  { id: "16gb", name: "16 GB", inStock: true },
+  { id: "32gb", name: "32 GB", inStock: true },
+  { id: "64gb", name: "64 GB", inStock: true },
+  { id: "128gb", name: "128 GB", inStock: false },
+];
 
 export default function Example() {
   return (
     <fieldset aria-label="Choose a memory option">
       <div className="flex items-center justify-between">
-        <div className="text-sm/6 font-medium text-gray-900 dark:text-white">RAM</div>
+        <div className="text-sm/6 font-medium text-gray-900 dark:text-white">
+          RAM
+        </div>
         <a
           href="#"
           className="text-sm/6 font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
@@ -41,5 +43,5 @@ export default function Example() {
         ))}
       </div>
     </fieldset>
-  )
+  );
 }

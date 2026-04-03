@@ -1,28 +1,28 @@
-import { InboxIcon, TrashIcon, UsersIcon } from '@heroicons/react/24/outline'
+import { InboxIcon, TrashIcon, UsersIcon } from "@heroicons/react/24/outline";
 
 const features = [
   {
-    name: 'Unlimited inboxes',
+    name: "Unlimited inboxes",
     description:
-      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
-    href: '#',
+      "Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.",
+    href: "#",
     icon: InboxIcon,
   },
   {
-    name: 'Manage team members',
+    name: "Manage team members",
     description:
-      'Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.',
-    href: '#',
+      "Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.",
+    href: "#",
     icon: UsersIcon,
   },
   {
-    name: 'Spam report',
+    name: "Spam report",
     description:
-      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
-    href: '#',
+      "Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.",
+    href: "#",
     icon: TrashIcon,
   },
-]
+];
 
 export default function Example() {
   return (
@@ -33,8 +33,8 @@ export default function Example() {
             Stay on top of customer support
           </h2>
           <p className="mt-6 text-lg/8 text-gray-600 dark:text-gray-300">
-            Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum cupiditate veritatis in
-            accusamus quisquam.
+            Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
+            voluptatum cupiditate veritatis in accusamus quisquam.
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -43,7 +43,10 @@ export default function Example() {
               <div key={feature.name} className="flex flex-col">
                 <dt className="text-base/7 font-semibold text-gray-900 dark:text-white">
                   <div className="mb-6 flex size-10 items-center justify-center rounded-lg bg-indigo-600 dark:bg-indigo-500">
-                    <feature.icon aria-hidden="true" className="size-6 text-white" />
+                    <feature.icon
+                      aria-hidden="true"
+                      className="size-6 text-white"
+                    />
                   </div>
                   {feature.name}
                 </dt>
@@ -64,5 +67,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

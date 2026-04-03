@@ -3,9 +3,10 @@ export default function Example() {
     <div className="pointer-events-none fixed inset-x-0 bottom-0 px-6 pb-6">
       <div className="pointer-events-auto max-w-xl rounded-xl bg-white p-6 shadow-lg outline-1 outline-gray-900/10 dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
         <p className="text-sm/6 text-gray-900 dark:text-white">
-          This website uses cookies to supplement a balanced diet and provide a much deserved reward to the senses after
-          consuming bland but nutritious meals. Accepting our cookies is optional but recommended, as they are
-          delicious. See our{' '}
+          This website uses cookies to supplement a balanced diet and provide a
+          much deserved reward to the senses after consuming bland but
+          nutritious meals. Accepting our cookies is optional but recommended,
+          as they are delicious. See our{" "}
           <a
             href="#"
             className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
@@ -30,5 +31,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

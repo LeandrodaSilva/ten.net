@@ -472,9 +472,7 @@ describe("App — userName propagation", () => {
 // 5. renderAdminPage — navItems and userName wiring
 // ═══════════════════════════════════════════════════════════════════════
 describe("renderAdminPage — navItems and userName", () => {
-  const SimpleComponent = ({ title }: { title: string }) => (
-    <h1>{title}</h1>
-  );
+  const SimpleComponent = ({ title }: { title: string }) => <h1>{title}</h1>;
 
   it("should render component with props", () => {
     const html = renderAdminPage(SimpleComponent, { title: "My Page" });

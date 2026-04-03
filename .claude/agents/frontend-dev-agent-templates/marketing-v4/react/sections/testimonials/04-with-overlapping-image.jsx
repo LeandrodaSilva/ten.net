@@ -28,13 +28,16 @@ export default function Example() {
               </svg>
               <blockquote className="text-xl/8 font-semibold text-white sm:text-2xl/9 dark:text-gray-100">
                 <p>
-                  Gravida quam mi erat tortor neque molestie. Auctor aliquet at porttitor a enim nunc suscipit tincidunt
-                  nunc. Et non lorem tortor posuere. Nunc eu scelerisque interdum eget tellus non nibh scelerisque
-                  bibendum.
+                  Gravida quam mi erat tortor neque molestie. Auctor aliquet at
+                  porttitor a enim nunc suscipit tincidunt nunc. Et non lorem
+                  tortor posuere. Nunc eu scelerisque interdum eget tellus non
+                  nibh scelerisque bibendum.
                 </p>
               </blockquote>
               <figcaption className="mt-8 text-base">
-                <div className="font-semibold text-white dark:text-gray-100">Judith Black</div>
+                <div className="font-semibold text-white dark:text-gray-100">
+                  Judith Black
+                </div>
                 <div className="mt-1 text-gray-400">CEO of Workcation</div>
               </figcaption>
             </figure>
@@ -42,5 +45,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

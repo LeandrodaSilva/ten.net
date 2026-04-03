@@ -15,12 +15,16 @@ export default function Example() {
               Let's work together
             </h2>
             <p className="mt-2 text-lg/8 text-gray-600 dark:text-gray-400">
-              Proin volutpat consequat porttitor cras nullam gravida at orci molestie a eu arcu sed ut tincidunt magna.
+              Proin volutpat consequat porttitor cras nullam gravida at orci
+              molestie a eu arcu sed ut tincidunt magna.
             </p>
             <form action="#" method="POST" className="mt-16">
               <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="first-name" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  <label
+                    htmlFor="first-name"
+                    className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                  >
                     First name
                   </label>
                   <div className="mt-2.5">
@@ -34,7 +38,10 @@ export default function Example() {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="last-name" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  <label
+                    htmlFor="last-name"
+                    className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                  >
                     Last name
                   </label>
                   <div className="mt-2.5">
@@ -48,7 +55,10 @@ export default function Example() {
                   </div>
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor="email" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                  >
                     Email
                   </label>
                   <div className="mt-2.5">
@@ -62,7 +72,10 @@ export default function Example() {
                   </div>
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor="company" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                  <label
+                    htmlFor="company"
+                    className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                  >
                     Company
                   </label>
                   <div className="mt-2.5">
@@ -77,10 +90,16 @@ export default function Example() {
                 </div>
                 <div className="sm:col-span-2">
                   <div className="flex justify-between text-sm/6">
-                    <label htmlFor="phone" className="block font-semibold text-gray-900 dark:text-white">
+                    <label
+                      htmlFor="phone"
+                      className="block font-semibold text-gray-900 dark:text-white"
+                    >
                       Phone
                     </label>
-                    <p id="phone-description" className="text-gray-400 dark:text-gray-500">
+                    <p
+                      id="phone-description"
+                      className="text-gray-400 dark:text-gray-500"
+                    >
                       Optional
                     </p>
                   </div>
@@ -97,10 +116,16 @@ export default function Example() {
                 </div>
                 <div className="sm:col-span-2">
                   <div className="flex justify-between text-sm/6">
-                    <label htmlFor="message" className="block text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    <label
+                      htmlFor="message"
+                      className="block text-sm/6 font-semibold text-gray-900 dark:text-white"
+                    >
                       How can we help you?
                     </label>
-                    <p id="message-description" className="text-gray-400 dark:text-gray-500">
+                    <p
+                      id="message-description"
+                      className="text-gray-400 dark:text-gray-500"
+                    >
                       Max 500 characters
                     </p>
                   </div>
@@ -111,7 +136,7 @@ export default function Example() {
                       rows={4}
                       aria-describedby="message-description"
                       className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500"
-                      defaultValue={''}
+                      defaultValue={""}
                     />
                   </div>
                 </div>
@@ -177,5 +202,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

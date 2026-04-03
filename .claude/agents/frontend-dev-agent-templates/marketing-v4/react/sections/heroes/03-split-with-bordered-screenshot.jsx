@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
 
 export default function Example() {
   return (
@@ -19,7 +19,12 @@ export default function Example() {
             <path d="M.5 200V.5H200" fill="none" />
           </pattern>
         </defs>
-        <rect fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)" width="100%" height="100%" strokeWidth={0} />
+        <rect
+          fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)"
+          width="100%"
+          height="100%"
+          strokeWidth={0}
+        />
       </svg>
       <div className="mx-auto max-w-7xl px-6 pt-10 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-40">
         <div className="mx-auto max-w-2xl lg:mx-0 lg:shrink-0 lg:pt-8">
@@ -40,7 +45,10 @@ export default function Example() {
               </span>
               <span className="inline-flex items-center space-x-2 text-sm/6 font-medium text-gray-600 dark:text-gray-300">
                 <span>Just shipped v1.0</span>
-                <ChevronRightIcon aria-hidden="true" className="size-5 text-gray-400 dark:text-gray-500" />
+                <ChevronRightIcon
+                  aria-hidden="true"
+                  className="size-5 text-gray-400 dark:text-gray-500"
+                />
               </span>
             </a>
           </div>
@@ -48,8 +56,8 @@ export default function Example() {
             Deploy to the cloud with confidence
           </h1>
           <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8 dark:text-gray-400">
-            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-            fugiat veniam occaecat.
+            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
+            lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat.
           </p>
           <div className="mt-10 flex items-center gap-x-6">
             <a
@@ -58,7 +66,10 @@ export default function Example() {
             >
               Get started
             </a>
-            <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+            <a
+              href="#"
+              className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+            >
               Learn more <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -85,5 +96,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

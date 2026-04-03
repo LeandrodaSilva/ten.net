@@ -5,13 +5,13 @@
 
 ## Links Quebrados
 
-| Rota                   | Status | Onde aparece                                                | Prioridade |
-| ---------------------- | ------ | ----------------------------------------------------------- | ---------- |
-| ~~`/admin/profile`~~   | ~~404~~ | ~~Header/dropdown do usuario~~ | ~~Media~~ **CORRIGIDO 2026-04-02** (link removido) |
-| ~~`/admin/plugins/pages`~~ | ~~404~~ | ~~Dashboard cards~~ | ~~Alta~~ **CORRIGIDO 2026-04-02** |
-| ~~`/admin/plugins/posts`~~ | ~~404~~ | ~~Dashboard cards~~ | ~~Alta~~ **CORRIGIDO 2026-04-02** |
-| ~~`/admin/plugins/media`~~ | ~~404~~ | ~~Dashboard cards~~ | ~~Alta~~ **CORRIGIDO 2026-04-02** |
-| ~~`/admin/plugins/users`~~ | ~~404~~ | ~~Dashboard cards~~ | ~~Alta~~ **CORRIGIDO 2026-04-02** |
+| Rota                       | Status  | Onde aparece                   | Prioridade                                         |
+| -------------------------- | ------- | ------------------------------ | -------------------------------------------------- |
+| ~~`/admin/profile`~~       | ~~404~~ | ~~Header/dropdown do usuario~~ | ~~Media~~ **CORRIGIDO 2026-04-02** (link removido) |
+| ~~`/admin/plugins/pages`~~ | ~~404~~ | ~~Dashboard cards~~            | ~~Alta~~ **CORRIGIDO 2026-04-02**                  |
+| ~~`/admin/plugins/posts`~~ | ~~404~~ | ~~Dashboard cards~~            | ~~Alta~~ **CORRIGIDO 2026-04-02**                  |
+| ~~`/admin/plugins/media`~~ | ~~404~~ | ~~Dashboard cards~~            | ~~Alta~~ **CORRIGIDO 2026-04-02**                  |
+| ~~`/admin/plugins/users`~~ | ~~404~~ | ~~Dashboard cards~~            | ~~Alta~~ **CORRIGIDO 2026-04-02**                  |
 
 **Causa raiz**: O componente de dashboard stats (`HomeDashboardStats`) usa
 resource names (`pages`, `posts`, `media`, `users`) nos links em vez dos plugin

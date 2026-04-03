@@ -1,53 +1,61 @@
-import { ChevronDownIcon } from '@heroicons/react/16/solid'
-import { CheckIcon, ClockIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { CheckIcon, ClockIcon } from "@heroicons/react/20/solid";
 
 const products = [
   {
     id: 1,
-    name: 'Nomad Tumbler',
-    href: '#',
-    price: '$35.00',
-    color: 'White',
+    name: "Nomad Tumbler",
+    href: "#",
+    price: "$35.00",
+    color: "White",
     inStock: true,
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-03.jpg',
-    imageAlt: 'Insulated bottle with white base and black snap lid.',
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-03.jpg",
+    imageAlt: "Insulated bottle with white base and black snap lid.",
   },
   {
     id: 2,
-    name: 'Basic Tee',
-    href: '#',
-    price: '$32.00',
-    color: 'Sienna',
+    name: "Basic Tee",
+    href: "#",
+    price: "$32.00",
+    color: "Sienna",
     inStock: true,
-    size: 'Large',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-01.jpg',
+    size: "Large",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-01.jpg",
     imageAlt: "Front of men's Basic Tee in sienna.",
   },
   {
     id: 3,
-    name: 'Basic Tee',
-    href: '#',
-    price: '$32.00',
-    color: 'Black',
+    name: "Basic Tee",
+    href: "#",
+    price: "$32.00",
+    color: "Black",
     inStock: false,
-    leadTime: '3–4 weeks',
-    size: 'Large',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-02.jpg',
+    leadTime: "3–4 weeks",
+    size: "Large",
+    imageSrc:
+      "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-product-02.jpg",
     imageAlt: "Front of men's Basic Tee in black.",
   },
-]
+];
 
 export default function Example() {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Shopping Cart</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          Shopping Cart
+        </h1>
 
         <form className="mt-12">
           <div>
             <h2 className="sr-only">Items in your shopping cart</h2>
 
-            <ul role="list" className="divide-y divide-gray-200 border-t border-b border-gray-200">
+            <ul
+              role="list"
+              className="divide-y divide-gray-200 border-t border-b border-gray-200"
+            >
               {products.map((product, productIdx) => (
                 <li key={product.id} className="flex py-6 sm:py-10">
                   <div className="shrink-0">
@@ -63,15 +71,28 @@ export default function Example() {
                       <div className="flex justify-between sm:grid sm:grid-cols-2">
                         <div className="pr-6">
                           <h3 className="text-sm">
-                            <a href={product.href} className="font-medium text-gray-700 hover:text-gray-800">
+                            <a
+                              href={product.href}
+                              className="font-medium text-gray-700 hover:text-gray-800"
+                            >
                               {product.name}
                             </a>
                           </h3>
-                          <p className="mt-1 text-sm text-gray-500">{product.color}</p>
-                          {product.size ? <p className="mt-1 text-sm text-gray-500">{product.size}</p> : null}
+                          <p className="mt-1 text-sm text-gray-500">
+                            {product.color}
+                          </p>
+                          {product.size
+                            ? (
+                              <p className="mt-1 text-sm text-gray-500">
+                                {product.size}
+                              </p>
+                            )
+                            : null}
                         </div>
 
-                        <p className="text-right text-sm font-medium text-gray-900">{product.price}</p>
+                        <p className="text-right text-sm font-medium text-gray-900">
+                          {product.price}
+                        </p>
                       </div>
 
                       <div className="mt-4 flex items-center sm:absolute sm:top-0 sm:left-1/2 sm:mt-0 sm:block">
@@ -106,13 +127,25 @@ export default function Example() {
                     </div>
 
                     <p className="mt-4 flex space-x-2 text-sm text-gray-700">
-                      {product.inStock ? (
-                        <CheckIcon aria-hidden="true" className="size-5 shrink-0 text-green-500" />
-                      ) : (
-                        <ClockIcon aria-hidden="true" className="size-5 shrink-0 text-gray-300" />
-                      )}
+                      {product.inStock
+                        ? (
+                          <CheckIcon
+                            aria-hidden="true"
+                            className="size-5 shrink-0 text-green-500"
+                          />
+                        )
+                        : (
+                          <ClockIcon
+                            aria-hidden="true"
+                            className="size-5 shrink-0 text-gray-300"
+                          />
+                        )}
 
-                      <span>{product.inStock ? 'In stock' : `Ships in ${product.leadTime}`}</span>
+                      <span>
+                        {product.inStock
+                          ? "In stock"
+                          : `Ships in ${product.leadTime}`}
+                      </span>
                     </p>
                   </div>
                 </li>
@@ -140,8 +173,12 @@ export default function Example() {
                     <dd className="font-medium text-gray-900">$8.32</dd>
                   </div>
                   <div className="flex items-center justify-between py-4">
-                    <dt className="text-base font-medium text-gray-900">Order total</dt>
-                    <dd className="text-base font-medium text-gray-900">$112.32</dd>
+                    <dt className="text-base font-medium text-gray-900">
+                      Order total
+                    </dt>
+                    <dd className="text-base font-medium text-gray-900">
+                      $112.32
+                    </dd>
                   </div>
                 </dl>
               </div>
@@ -157,10 +194,13 @@ export default function Example() {
 
             <div className="mt-6 text-center text-sm text-gray-500">
               <p>
-                or{' '}
-                <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                or{" "}
+                <a
+                  href="#"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
                   Continue Shopping
-                  <span aria-hidden="true"> &rarr;</span>
+                  <span aria-hidden="true">&rarr;</span>
                 </a>
               </p>
             </div>
@@ -168,5 +208,5 @@ export default function Example() {
         </form>
       </div>
     </div>
-  )
+  );
 }

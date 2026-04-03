@@ -2,9 +2,10 @@ export default function Example() {
   return (
     <div className="fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 border-t border-gray-900/10 bg-white p-6 shadow-lg md:flex-row md:items-center lg:px-8 dark:border-white/10 dark:bg-gray-800 dark:shadow-none">
       <p className="max-w-4xl text-sm/6 text-gray-900 dark:text-white">
-        This website uses cookies to supplement a balanced diet and provide a much deserved reward to the senses after
-        consuming bland but nutritious meals. Accepting our cookies is optional but recommended, as they are delicious.
-        See our{' '}
+        This website uses cookies to supplement a balanced diet and provide a
+        much deserved reward to the senses after consuming bland but nutritious
+        meals. Accepting our cookies is optional but recommended, as they are
+        delicious. See our{" "}
         <a
           href="#"
           className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
@@ -28,5 +29,5 @@ export default function Example() {
         </button>
       </div>
     </div>
-  )
+  );
 }

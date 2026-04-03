@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -14,237 +14,254 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
-import { Bars3Icon, CheckIcon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+} from "@headlessui/react";
+import {
+  Bars3Icon,
+  CheckIcon,
+  MagnifyingGlassIcon,
+  ShoppingBagIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 const navigation = {
   categories: [
     {
-      id: 'women',
-      name: 'Women',
+      id: "women",
+      name: "Women",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg",
+          imageAlt:
+            "Models sitting back to back, wearing Basic Tee in black and bone.",
         },
         {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+          name: "Basic Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg",
+          imageAlt:
+            "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
         },
       ],
       sections: [
         {
-          id: 'clothing',
-          name: 'Clothing',
+          id: "clothing",
+          name: "Clothing",
           items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Dresses', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Denim', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: "Tops", href: "#" },
+            { name: "Dresses", href: "#" },
+            { name: "Pants", href: "#" },
+            { name: "Denim", href: "#" },
+            { name: "Sweaters", href: "#" },
+            { name: "T-Shirts", href: "#" },
+            { name: "Jackets", href: "#" },
+            { name: "Activewear", href: "#" },
+            { name: "Browse All", href: "#" },
           ],
         },
         {
-          id: 'accessories',
-          name: 'Accessories',
+          id: "accessories",
+          name: "Accessories",
           items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
+            { name: "Watches", href: "#" },
+            { name: "Wallets", href: "#" },
+            { name: "Bags", href: "#" },
+            { name: "Sunglasses", href: "#" },
+            { name: "Hats", href: "#" },
+            { name: "Belts", href: "#" },
           ],
         },
         {
-          id: 'brands',
-          name: 'Brands',
+          id: "brands",
+          name: "Brands",
           items: [
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Significant Other', href: '#' },
+            { name: "Full Nelson", href: "#" },
+            { name: "My Way", href: "#" },
+            { name: "Re-Arranged", href: "#" },
+            { name: "Counterfeit", href: "#" },
+            { name: "Significant Other", href: "#" },
           ],
         },
       ],
     },
     {
-      id: 'men',
-      name: 'Men',
+      id: "men",
+      name: "Men",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
+          name: "New Arrivals",
+          href: "#",
           imageSrc:
-            'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
+          imageAlt:
+            "Drawstring top with elastic loop closure and textured interior padding.",
         },
         {
-          name: 'Artwork Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-06.jpg',
+          name: "Artwork Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-06.jpg",
           imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
+            "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
         },
       ],
       sections: [
         {
-          id: 'clothing',
-          name: 'Clothing',
+          id: "clothing",
+          name: "Clothing",
           items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: "Tops", href: "#" },
+            { name: "Pants", href: "#" },
+            { name: "Sweaters", href: "#" },
+            { name: "T-Shirts", href: "#" },
+            { name: "Jackets", href: "#" },
+            { name: "Activewear", href: "#" },
+            { name: "Browse All", href: "#" },
           ],
         },
         {
-          id: 'accessories',
-          name: 'Accessories',
+          id: "accessories",
+          name: "Accessories",
           items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
+            { name: "Watches", href: "#" },
+            { name: "Wallets", href: "#" },
+            { name: "Bags", href: "#" },
+            { name: "Sunglasses", href: "#" },
+            { name: "Hats", href: "#" },
+            { name: "Belts", href: "#" },
           ],
         },
         {
-          id: 'brands',
-          name: 'Brands',
+          id: "brands",
+          name: "Brands",
           items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
+            { name: "Re-Arranged", href: "#" },
+            { name: "Counterfeit", href: "#" },
+            { name: "Full Nelson", href: "#" },
+            { name: "My Way", href: "#" },
           ],
         },
       ],
     },
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: "Company", href: "#" },
+    { name: "Stores", href: "#" },
   ],
-}
+};
 const orders = [
   {
-    number: 'WU88191111',
-    date: 'January 22, 2021',
-    datetime: '2021-01-22',
-    href: '#',
-    invoiceHref: '#',
-    total: '$302.00',
+    number: "WU88191111",
+    date: "January 22, 2021",
+    datetime: "2021-01-22",
+    href: "#",
+    invoiceHref: "#",
+    total: "$302.00",
     products: [
       {
         id: 1,
-        name: 'Nomad Tumbler',
+        name: "Nomad Tumbler",
         description:
           "This durable double-walled insulated tumbler keeps your beverages at the perfect temperature all day long. Hot, cold, or even lukewarm if you're weird like that, this bottle is ready for your next adventure.",
-        href: '#',
-        price: '$35.00',
-        status: 'out-for-delivery',
-        date: 'January 5, 2021',
-        datetime: '2021-01-05',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-06-product-01.jpg',
-        imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.',
+        href: "#",
+        price: "$35.00",
+        status: "out-for-delivery",
+        date: "January 5, 2021",
+        datetime: "2021-01-05",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-06-product-01.jpg",
+        imageAlt:
+          "Olive drab green insulated bottle with flared screw lid and flat top.",
       },
       {
         id: 2,
-        name: 'Leather Long Wallet',
+        name: "Leather Long Wallet",
         description:
           "We're not sure who carries cash anymore, but this leather long wallet will keep those bills nice and fold-free. The cashier hasn't seen print money in years, but you'll make a damn fine impression with your pristine cash monies.",
-        href: '#',
-        price: '$118.00',
-        status: 'delivered',
-        date: 'January 25, 2021',
-        datetime: '2021-01-25',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-06-product-02.jpg',
+        href: "#",
+        price: "$118.00",
+        status: "delivered",
+        date: "January 25, 2021",
+        datetime: "2021-01-25",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-06-product-02.jpg",
         imageAlt:
-          'Leather long wallet held open with hand-stitched card dividers, full-length bill pocket, and simple tab closure.',
+          "Leather long wallet held open with hand-stitched card dividers, full-length bill pocket, and simple tab closure.",
       },
       {
         id: 3,
-        name: 'Minimalist Wristwatch',
+        name: "Minimalist Wristwatch",
         description:
           "This contemporary wristwatch has a clean, minimalist look and high quality components. Everyone knows you'll never use it to check the time, but wow, does that wrist look good with this timepiece on it.",
-        href: '#',
-        price: '$149.00',
-        status: 'delivered',
-        date: 'January 25, 2021',
-        datetime: '2021-01-25',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-06-product-03.jpg',
+        href: "#",
+        price: "$149.00",
+        status: "delivered",
+        date: "January 25, 2021",
+        datetime: "2021-01-25",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-06-product-03.jpg",
         imageAlt:
-          'Wristwatch with black leather band, brass ring-3, white watch face, thin watch hands, and fine time markings.',
+          "Wristwatch with black leather band, brass ring-3, white watch face, thin watch hands, and fine time markings.",
       },
     ],
   },
   {
-    number: 'WU88191009',
-    date: 'January 5, 2021',
-    datetime: '2021-01-05',
-    href: '#',
-    invoiceHref: '#',
-    total: '$27.00',
+    number: "WU88191009",
+    date: "January 5, 2021",
+    datetime: "2021-01-05",
+    href: "#",
+    invoiceHref: "#",
+    total: "$27.00",
     products: [
       {
         id: 1,
-        name: 'Mini Sketchbook Set',
+        name: "Mini Sketchbook Set",
         description:
-          'These pocket-sized sketchbooks feature recycled paper covers and screen printed designs from our top-selling poster collection. You have ideas, doodles, and notes, but nowhere to write them down. We have paper, wrapped in sturdier paper.',
-        href: '#',
-        price: '$27.00',
-        status: 'cancelled',
-        date: 'January 7, 2021',
-        datetime: '2021-01-07',
-        imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-06-product-04.jpg',
-        imageAlt: 'Set of three light and dark brown mini sketch books.',
+          "These pocket-sized sketchbooks feature recycled paper covers and screen printed designs from our top-selling poster collection. You have ideas, doodles, and notes, but nowhere to write them down. We have paper, wrapped in sturdier paper.",
+        href: "#",
+        price: "$27.00",
+        status: "cancelled",
+        date: "January 7, 2021",
+        datetime: "2021-01-07",
+        imageSrc:
+          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-06-product-04.jpg",
+        imageAlt: "Set of three light and dark brown mini sketch books.",
       },
     ],
   },
-]
+];
 const footerNavigation = {
   products: [
-    { name: 'Bags', href: '#' },
-    { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' },
+    { name: "Bags", href: "#" },
+    { name: "Tees", href: "#" },
+    { name: "Objects", href: "#" },
+    { name: "Home Goods", href: "#" },
+    { name: "Accessories", href: "#" },
   ],
   company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
+    { name: "Who we are", href: "#" },
+    { name: "Sustainability", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Careers", href: "#" },
+    { name: "Terms & Conditions", href: "#" },
+    { name: "Privacy", href: "#" },
   ],
   customerService: [
-    { name: 'Contact', href: '#' },
-    { name: 'Shipping', href: '#' },
-    { name: 'Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'Secure Payments', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
+    { name: "Contact", href: "#" },
+    { name: "Shipping", href: "#" },
+    { name: "Returns", href: "#" },
+    { name: "Warranty", href: "#" },
+    { name: "Secure Payments", href: "#" },
+    { name: "FAQ", href: "#" },
+    { name: "Find a store", href: "#" },
   ],
-}
+};
 
 export default function Example() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="bg-white">
@@ -287,7 +304,10 @@ export default function Example() {
               </div>
               <TabPanels as={Fragment}>
                 {navigation.categories.map((category) => (
-                  <TabPanel key={category.name} className="space-y-10 px-4 pt-10 pb-8">
+                  <TabPanel
+                    key={category.name}
+                    className="space-y-10 px-4 pt-10 pb-8"
+                  >
                     <div className="grid grid-cols-2 gap-x-4">
                       {category.featured.map((item) => (
                         <div key={item.name} className="group relative text-sm">
@@ -296,8 +316,14 @@ export default function Example() {
                             src={item.imageSrc}
                             className="aspect-square w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75"
                           />
-                          <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                            <span aria-hidden="true" className="absolute inset-0 z-10" />
+                          <a
+                            href={item.href}
+                            className="mt-6 block font-medium text-gray-900"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="absolute inset-0 z-10"
+                            />
                             {item.name}
                           </a>
                           <p aria-hidden="true" className="mt-1">
@@ -308,7 +334,10 @@ export default function Example() {
                     </div>
                     {category.sections.map((section) => (
                       <div key={section.name}>
-                        <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-gray-900">
+                        <p
+                          id={`${category.id}-${section.id}-heading-mobile`}
+                          className="font-medium text-gray-900"
+                        >
                           {section.name}
                         </p>
                         <ul
@@ -318,7 +347,10 @@ export default function Example() {
                         >
                           {section.items.map((item) => (
                             <li key={item.name} className="flow-root">
-                              <a href={item.href} className="-m-2 block p-2 text-gray-500">
+                              <a
+                                href={item.href}
+                                className="-m-2 block p-2 text-gray-500"
+                              >
                                 {item.name}
                               </a>
                             </li>
@@ -334,7 +366,10 @@ export default function Example() {
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               {navigation.pages.map((page) => (
                 <div key={page.name} className="flow-root">
-                  <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                  <a
+                    href={page.href}
+                    className="-m-2 block p-2 font-medium text-gray-900"
+                  >
                     {page.name}
                   </a>
                 </div>
@@ -343,12 +378,18 @@ export default function Example() {
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Sign in
                 </a>
               </div>
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Create account
                 </a>
               </div>
@@ -361,7 +402,9 @@ export default function Example() {
                   src="https://tailwindcss.com/plus-assets/img/flags/flag-canada.svg"
                   className="block h-auto w-5 shrink-0"
                 />
-                <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
+                <span className="ml-3 block text-base font-medium text-gray-900">
+                  CAD
+                </span>
                 <span className="sr-only">, change currency</span>
               </a>
             </div>
@@ -374,7 +417,10 @@ export default function Example() {
           Get free delivery on orders over $100
         </p>
 
-        <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav
+          aria-label="Top"
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+        >
           <div className="border-b border-gray-200">
             <div className="flex h-16 items-center">
               <button
@@ -418,20 +464,32 @@ export default function Example() {
                         className="absolute inset-x-0 top-full z-20 w-full bg-white text-sm text-gray-500 transition data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
                       >
                         {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                        <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow-sm" />
+                        <div
+                          aria-hidden="true"
+                          className="absolute inset-0 top-1/2 bg-white shadow-sm"
+                        />
                         <div className="relative bg-white">
                           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
                               <div className="col-start-2 grid grid-cols-2 gap-x-8">
                                 {category.featured.map((item) => (
-                                  <div key={item.name} className="group relative text-base sm:text-sm">
+                                  <div
+                                    key={item.name}
+                                    className="group relative text-base sm:text-sm"
+                                  >
                                     <img
                                       alt={item.imageAlt}
                                       src={item.imageSrc}
                                       className="aspect-square w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75"
                                     />
-                                    <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                                      <span aria-hidden="true" className="absolute inset-0 z-10" />
+                                    <a
+                                      href={item.href}
+                                      className="mt-6 block font-medium text-gray-900"
+                                    >
+                                      <span
+                                        aria-hidden="true"
+                                        className="absolute inset-0 z-10"
+                                      />
                                       {item.name}
                                     </a>
                                     <p aria-hidden="true" className="mt-1">
@@ -443,7 +501,10 @@ export default function Example() {
                               <div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
                                 {category.sections.map((section) => (
                                   <div key={section.name}>
-                                    <p id={`${section.name}-heading`} className="font-medium text-gray-900">
+                                    <p
+                                      id={`${section.name}-heading`}
+                                      className="font-medium text-gray-900"
+                                    >
                                       {section.name}
                                     </p>
                                     <ul
@@ -453,7 +514,10 @@ export default function Example() {
                                     >
                                       {section.items.map((item) => (
                                         <li key={item.name} className="flex">
-                                          <a href={item.href} className="hover:text-gray-800">
+                                          <a
+                                            href={item.href}
+                                            className="hover:text-gray-800"
+                                          >
                                             {item.name}
                                           </a>
                                         </li>
@@ -482,17 +546,26 @@ export default function Example() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                  <a
+                    href="#"
+                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                  >
                     Sign in
                   </a>
                   <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                  <a
+                    href="#"
+                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                  >
                     Create account
                   </a>
                 </div>
 
                 <div className="hidden lg:ml-8 lg:flex">
-                  <a href="#" className="flex items-center text-gray-700 hover:text-gray-800">
+                  <a
+                    href="#"
+                    className="flex items-center text-gray-700 hover:text-gray-800"
+                  >
                     <img
                       alt=""
                       src="https://tailwindcss.com/plus-assets/img/flags/flag-canada.svg"
@@ -507,7 +580,10 @@ export default function Example() {
                 <div className="flex lg:ml-6">
                   <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">Search</span>
-                    <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                    <MagnifyingGlassIcon
+                      aria-hidden="true"
+                      className="size-6"
+                    />
                   </a>
                 </div>
 
@@ -518,7 +594,9 @@ export default function Example() {
                       aria-hidden="true"
                       className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                      0
+                    </span>
                     <span className="sr-only">items in cart, view bag</span>
                   </a>
                 </div>
@@ -531,9 +609,12 @@ export default function Example() {
       <main className="pt-16 pb-14 sm:px-6 sm:pt-24 sm:pb-20 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <div className="px-4 sm:px-0">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Order history</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+              Order history
+            </h1>
             <p className="mt-2 text-sm text-gray-500">
-              Check the status of recent orders, manage returns, and download invoices.
+              Check the status of recent orders, manage returns, and download
+              invoices.
             </p>
           </div>
 
@@ -546,24 +627,33 @@ export default function Example() {
               {orders.map((order) => (
                 <div key={order.number}>
                   <h3 className="sr-only">
-                    Order placed on <time dateTime={order.datetime}>{order.date}</time>
+                    Order placed on{" "}
+                    <time dateTime={order.datetime}>{order.date}</time>
                   </h3>
 
                   <div className="bg-gray-50 px-4 py-6 sm:rounded-lg sm:p-6 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-8">
                     <dl className="flex-auto divide-y divide-gray-200 text-sm text-gray-600 md:grid md:grid-cols-3 md:gap-x-6 md:divide-y-0 lg:w-1/2 lg:flex-none lg:gap-x-8">
                       <div className="max-md:flex max-md:justify-between max-md:py-4 max-md:first:pt-0 max-md:last:pb-0">
-                        <dt className="font-medium text-gray-900">Order number</dt>
+                        <dt className="font-medium text-gray-900">
+                          Order number
+                        </dt>
                         <dd className="md:mt-1">{order.number}</dd>
                       </div>
                       <div className="max-md:flex max-md:justify-between max-md:py-4 max-md:first:pt-0 max-md:last:pb-0">
-                        <dt className="font-medium text-gray-900">Date placed</dt>
+                        <dt className="font-medium text-gray-900">
+                          Date placed
+                        </dt>
                         <dd className="md:mt-1">
                           <time dateTime={order.datetime}>{order.date}</time>
                         </dd>
                       </div>
                       <div className="max-md:flex max-md:justify-between max-md:py-4 max-md:first:pt-0 max-md:last:pb-0">
-                        <dt className="font-medium text-gray-900">Total amount</dt>
-                        <dd className="font-medium text-gray-900 md:mt-1">{order.total}</dd>
+                        <dt className="font-medium text-gray-900">
+                          Total amount
+                        </dt>
+                        <dd className="font-medium text-gray-900 md:mt-1">
+                          {order.total}
+                        </dd>
                       </div>
                     </dl>
                     <div className="mt-6 space-y-4 sm:flex sm:space-y-0 sm:space-x-4 md:mt-0">
@@ -579,7 +669,9 @@ export default function Example() {
                         className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden md:w-auto"
                       >
                         View Invoice
-                        <span className="sr-only">for order {order.number}</span>
+                        <span className="sr-only">
+                          for order {order.number}
+                        </span>
                       </a>
                     </div>
                   </div>
@@ -592,39 +684,59 @@ export default function Example() {
                             <div className="lg:flex-1">
                               <div className="sm:flex">
                                 <div>
-                                  <h4 className="font-medium text-gray-900">{product.name}</h4>
-                                  <p className="mt-2 hidden text-sm text-gray-500 sm:block">{product.description}</p>
+                                  <h4 className="font-medium text-gray-900">
+                                    {product.name}
+                                  </h4>
+                                  <p className="mt-2 hidden text-sm text-gray-500 sm:block">
+                                    {product.description}
+                                  </p>
                                 </div>
-                                <p className="mt-1 font-medium text-gray-900 sm:mt-0 sm:ml-6">{product.price}</p>
+                                <p className="mt-1 font-medium text-gray-900 sm:mt-0 sm:ml-6">
+                                  {product.price}
+                                </p>
                               </div>
                               <div className="mt-2 flex text-sm font-medium sm:mt-4">
-                                <a href={product.href} className="text-indigo-600 hover:text-indigo-500">
+                                <a
+                                  href={product.href}
+                                  className="text-indigo-600 hover:text-indigo-500"
+                                >
                                   View Product
                                 </a>
                                 <div className="ml-4 border-l border-gray-200 pl-4 sm:ml-6 sm:pl-6">
-                                  <a href="#" className="text-indigo-600 hover:text-indigo-500">
+                                  <a
+                                    href="#"
+                                    className="text-indigo-600 hover:text-indigo-500"
+                                  >
                                     Buy Again
                                   </a>
                                 </div>
                               </div>
                             </div>
                             <div className="mt-6 font-medium">
-                              {product.status === 'delivered' ? (
-                                <div className="flex space-x-2">
-                                  <CheckIcon aria-hidden="true" className="size-6 flex-none text-green-500" />
-                                  <p>
-                                    Delivered
-                                    <span className="hidden sm:inline">
-                                      {' '}
-                                      on <time dateTime={product.datetime}>{product.date}</time>
-                                    </span>
-                                  </p>
-                                </div>
-                              ) : product.status === 'out-for-delivery' ? (
-                                <p>Out for delivery</p>
-                              ) : product.status === 'cancelled' ? (
-                                <p className="text-gray-500">Cancelled</p>
-                              ) : null}
+                              {product.status === "delivered"
+                                ? (
+                                  <div className="flex space-x-2">
+                                    <CheckIcon
+                                      aria-hidden="true"
+                                      className="size-6 flex-none text-green-500"
+                                    />
+                                    <p>
+                                      Delivered
+                                      <span className="hidden sm:inline">
+                                        {" "}
+                                        on{" "}
+                                        <time dateTime={product.datetime}>
+                                          {product.date}
+                                        </time>
+                                      </span>
+                                    </p>
+                                  </div>
+                                )
+                                : product.status === "out-for-delivery"
+                                ? <p>Out for delivery</p>
+                                : product.status === "cancelled"
+                                ? <p className="text-gray-500">Cancelled</p>
+                                : null}
                             </div>
                           </div>
                           <div className="ml-4 shrink-0 sm:order-first sm:m-0 sm:mr-6">
@@ -665,11 +777,16 @@ export default function Example() {
               <div className="col-span-6 mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-8 md:col-start-3 md:row-start-1 md:mt-0 lg:col-span-6 lg:col-start-2">
                 <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">Products</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Products
+                    </h3>
                     <ul role="list" className="mt-6 space-y-6">
                       {footerNavigation.products.map((item) => (
                         <li key={item.name} className="text-sm">
-                          <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                          <a
+                            href={item.href}
+                            className="text-gray-500 hover:text-gray-600"
+                          >
                             {item.name}
                           </a>
                         </li>
@@ -677,11 +794,16 @@ export default function Example() {
                     </ul>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">Company</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Company
+                    </h3>
                     <ul role="list" className="mt-6 space-y-6">
                       {footerNavigation.company.map((item) => (
                         <li key={item.name} className="text-sm">
-                          <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                          <a
+                            href={item.href}
+                            className="text-gray-500 hover:text-gray-600"
+                          >
                             {item.name}
                           </a>
                         </li>
@@ -690,11 +812,16 @@ export default function Example() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900">Customer Service</h3>
+                  <h3 className="text-sm font-medium text-gray-900">
+                    Customer Service
+                  </h3>
                   <ul role="list" className="mt-6 space-y-6">
                     {footerNavigation.customerService.map((item) => (
                       <li key={item.name} className="text-sm">
-                        <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -705,8 +832,12 @@ export default function Example() {
 
               {/* Newsletter section */}
               <div className="mt-12 md:col-span-8 md:col-start-3 md:row-start-2 md:mt-0 lg:col-span-4 lg:col-start-9 lg:row-start-1">
-                <h3 className="text-sm font-medium text-gray-900">Sign up for our newsletter</h3>
-                <p className="mt-6 text-sm text-gray-500">The latest deals and savings, sent to your inbox weekly.</p>
+                <h3 className="text-sm font-medium text-gray-900">
+                  Sign up for our newsletter
+                </h3>
+                <p className="mt-6 text-sm text-gray-500">
+                  The latest deals and savings, sent to your inbox weekly.
+                </p>
                 <form className="mt-2 flex sm:max-w-md">
                   <input
                     id="email-address"
@@ -730,10 +861,12 @@ export default function Example() {
           </div>
 
           <div className="border-t border-gray-100 py-10 text-center">
-            <p className="text-sm text-gray-500">&copy; 2021 Your Company, Inc. All rights reserved.</p>
+            <p className="text-sm text-gray-500">
+              &copy; 2021 Your Company, Inc. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

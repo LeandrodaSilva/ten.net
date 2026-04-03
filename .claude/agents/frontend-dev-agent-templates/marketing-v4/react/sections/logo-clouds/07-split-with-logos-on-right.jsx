@@ -8,8 +8,9 @@ export default function Example() {
               Trusted by the most innovative teams
             </h2>
             <p className="mt-6 text-lg/8 text-gray-600 dark:text-gray-300">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam sed. Quam a
-              scelerisque amet ullamcorper eu enim et fermentum, augue.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et,
+              egestas tempus tellus etiam sed. Quam a scelerisque amet
+              ullamcorper eu enim et fermentum, augue.
             </p>
             <div className="mt-8 flex items-center gap-x-6">
               <a
@@ -120,5 +121,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

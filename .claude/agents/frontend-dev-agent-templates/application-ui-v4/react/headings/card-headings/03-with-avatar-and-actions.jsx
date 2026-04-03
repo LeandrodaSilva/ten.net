@@ -1,4 +1,4 @@
-import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/20/solid'
+import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/20/solid";
 
 export default function Example() {
   return (
@@ -14,7 +14,9 @@ export default function Example() {
               />
             </div>
             <div className="ml-4">
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white">Tom Cook</h3>
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                Tom Cook
+              </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 <a href="#">@tom_cook</a>
               </p>
@@ -26,18 +28,24 @@ export default function Example() {
             type="button"
             className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20"
           >
-            <PhoneIcon aria-hidden="true" className="mr-1.5 -ml-0.5 size-5 text-gray-400" />
+            <PhoneIcon
+              aria-hidden="true"
+              className="mr-1.5 -ml-0.5 size-5 text-gray-400"
+            />
             <span>Phone</span>
           </button>
           <button
             type="button"
             className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20"
           >
-            <EnvelopeIcon aria-hidden="true" className="mr-1.5 -ml-0.5 size-5 text-gray-400" />
+            <EnvelopeIcon
+              aria-hidden="true"
+              className="mr-1.5 -ml-0.5 size-5 text-gray-400"
+            />
             <span>Email</span>
           </button>
         </div>
       </div>
     </div>
-  )
+  );
 }

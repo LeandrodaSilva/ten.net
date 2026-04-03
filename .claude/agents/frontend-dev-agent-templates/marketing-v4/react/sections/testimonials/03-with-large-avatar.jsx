@@ -20,8 +20,9 @@ export default function Example() {
             </svg>
             <blockquote className="text-xl/8 font-semibold text-gray-900 sm:text-2xl/9 dark:text-white">
               <p>
-                Commodo amet fugiat excepteur sunt qui ea elit cupidatat ullamco consectetur ipsum elit consequat. Elit
-                sunt proident ea nulla ad nulla dolore ad pariatur tempor non. Sint veniam minim et ea.
+                Commodo amet fugiat excepteur sunt qui ea elit cupidatat ullamco
+                consectetur ipsum elit consequat. Elit sunt proident ea nulla ad
+                nulla dolore ad pariatur tempor non. Sint veniam minim et ea.
               </p>
             </blockquote>
           </div>
@@ -33,11 +34,15 @@ export default function Example() {
             />
           </div>
           <figcaption className="text-base lg:col-start-1 lg:row-start-3">
-            <div className="font-semibold text-gray-900 dark:text-white">Judith Black</div>
-            <div className="mt-1 text-gray-500 dark:text-gray-400">CEO of Workcation</div>
+            <div className="font-semibold text-gray-900 dark:text-white">
+              Judith Black
+            </div>
+            <div className="mt-1 text-gray-500 dark:text-gray-400">
+              CEO of Workcation
+            </div>
           </figcaption>
         </figure>
       </div>
     </section>
-  )
+  );
 }

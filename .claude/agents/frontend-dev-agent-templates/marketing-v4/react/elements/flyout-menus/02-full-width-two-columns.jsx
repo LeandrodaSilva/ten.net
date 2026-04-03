@@ -1,5 +1,5 @@
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import {
   BookOpenIcon,
   BriefcaseIcon,
@@ -10,46 +10,47 @@ import {
   UserGroupIcon,
   UsersIcon,
   VideoCameraIcon,
-} from '@heroicons/react/24/outline'
+} from "@heroicons/react/24/outline";
 
 const engagement = [
-  { name: 'About', href: '#', icon: InformationCircleIcon },
-  { name: 'Customers', href: '#', icon: UsersIcon },
-  { name: 'Press', href: '#', icon: NewspaperIcon },
-  { name: 'Careers', href: '#', icon: BriefcaseIcon },
-  { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
-]
+  { name: "About", href: "#", icon: InformationCircleIcon },
+  { name: "Customers", href: "#", icon: UsersIcon },
+  { name: "Press", href: "#", icon: NewspaperIcon },
+  { name: "Careers", href: "#", icon: BriefcaseIcon },
+  { name: "Privacy", href: "#", icon: ShieldCheckIcon },
+];
 const resources = [
-  { name: 'Community', href: '#', icon: UserGroupIcon },
-  { name: 'Partners', href: '#', icon: GlobeAltIcon },
-  { name: 'Guides', href: '#', icon: BookOpenIcon },
-  { name: 'Webinars', href: '#', icon: VideoCameraIcon },
-]
+  { name: "Community", href: "#", icon: UserGroupIcon },
+  { name: "Partners", href: "#", icon: GlobeAltIcon },
+  { name: "Guides", href: "#", icon: BookOpenIcon },
+  { name: "Webinars", href: "#", icon: VideoCameraIcon },
+];
 const recentPosts = [
   {
     id: 1,
-    title: 'Boost your conversion rate',
-    href: '#',
-    date: 'Mar 16, 2023',
-    datetime: '2023-03-16',
-    category: { title: 'Marketing', href: '#' },
+    title: "Boost your conversion rate",
+    href: "#",
+    date: "Mar 16, 2023",
+    datetime: "2023-03-16",
+    category: { title: "Marketing", href: "#" },
     imageUrl:
-      'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80',
+      "https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80",
     description:
-      'Et et dolore officia quis nostrud esse aute cillum irure do esse. Eiusmod ad deserunt cupidatat est magna Lorem.',
+      "Et et dolore officia quis nostrud esse aute cillum irure do esse. Eiusmod ad deserunt cupidatat est magna Lorem.",
   },
   {
     id: 2,
-    title: 'How to use search engine optimization to drive sales',
-    href: '#',
-    date: 'Mar 10, 2023',
-    datetime: '2023-03-10',
-    category: { title: 'Sales', href: '#' },
+    title: "How to use search engine optimization to drive sales",
+    href: "#",
+    date: "Mar 10, 2023",
+    datetime: "2023-03-10",
+    category: { title: "Sales", href: "#" },
     imageUrl:
-      'https://images.unsplash.com/photo-1547586696-ea22b4d4235d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3270&q=80',
-    description: 'Optio cum necessitatibus dolor voluptatum provident commodi et.',
+      "https://images.unsplash.com/photo-1547586696-ea22b4d4235d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3270&q=80",
+    description:
+      "Optio cum necessitatibus dolor voluptatum provident commodi et.",
   },
-]
+];
 
 export default function Example() {
   return (
@@ -76,7 +77,9 @@ export default function Example() {
           <div className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-6 py-10 lg:grid-cols-2 lg:px-8">
             <div className="grid grid-cols-2 gap-x-6 sm:gap-x-8">
               <div>
-                <h3 className="text-sm/6 font-medium text-gray-500 dark:text-gray-400">Engagement</h3>
+                <h3 className="text-sm/6 font-medium text-gray-500 dark:text-gray-400">
+                  Engagement
+                </h3>
                 <div className="mt-6 flow-root">
                   <div className="-my-2">
                     {engagement.map((item) => (
@@ -85,7 +88,10 @@ export default function Example() {
                         href={item.href}
                         className="flex gap-x-4 py-2 text-sm/6 font-semibold text-gray-900 dark:text-white"
                       >
-                        <item.icon aria-hidden="true" className="size-6 flex-none text-gray-400 dark:text-gray-500" />
+                        <item.icon
+                          aria-hidden="true"
+                          className="size-6 flex-none text-gray-400 dark:text-gray-500"
+                        />
                         {item.name}
                       </a>
                     ))}
@@ -93,7 +99,9 @@ export default function Example() {
                 </div>
               </div>
               <div>
-                <h3 className="text-sm/6 font-medium text-gray-500 dark:text-gray-400">Resources</h3>
+                <h3 className="text-sm/6 font-medium text-gray-500 dark:text-gray-400">
+                  Resources
+                </h3>
                 <div className="mt-6 flow-root">
                   <div className="-my-2">
                     {resources.map((item) => (
@@ -102,7 +110,10 @@ export default function Example() {
                         href={item.href}
                         className="flex gap-x-4 py-2 text-sm/6 font-semibold text-gray-900 dark:text-white"
                       >
-                        <item.icon aria-hidden="true" className="size-6 flex-none text-gray-400 dark:text-gray-500" />
+                        <item.icon
+                          aria-hidden="true"
+                          className="size-6 flex-none text-gray-400 dark:text-gray-500"
+                        />
                         {item.name}
                       </a>
                     ))}
@@ -127,7 +138,10 @@ export default function Example() {
                   </div>
                   <div>
                     <div className="flex items-center gap-x-4">
-                      <time dateTime={post.datetime} className="text-sm/6 text-gray-600 dark:text-gray-400">
+                      <time
+                        dateTime={post.datetime}
+                        className="text-sm/6 text-gray-600 dark:text-gray-400"
+                      >
                         {post.date}
                       </time>
                       <a
@@ -143,7 +157,9 @@ export default function Example() {
                         {post.title}
                       </a>
                     </h4>
-                    <p className="mt-2 text-sm/6 text-gray-600 dark:text-gray-400">{post.description}</p>
+                    <p className="mt-2 text-sm/6 text-gray-600 dark:text-gray-400">
+                      {post.description}
+                    </p>
                   </div>
                 </article>
               ))}
@@ -152,5 +168,5 @@ export default function Example() {
         </div>
       </PopoverPanel>
     </Popover>
-  )
+  );
 }

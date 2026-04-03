@@ -1,102 +1,102 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Resources', href: '#' },
-  { name: 'Company', href: '#' },
-]
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Resources", href: "#" },
+  { name: "Company", href: "#" },
+];
 const timeline = [
   {
-    name: 'Founded company',
+    name: "Founded company",
     description:
-      'Nihil aut nam. Dignissimos a pariatur et quos omnis. Aspernatur asperiores et dolorem dolorem optio voluptate repudiandae.',
-    date: 'Aug 2021',
-    dateTime: '2021-08',
+      "Nihil aut nam. Dignissimos a pariatur et quos omnis. Aspernatur asperiores et dolorem dolorem optio voluptate repudiandae.",
+    date: "Aug 2021",
+    dateTime: "2021-08",
   },
   {
-    name: 'Secured $65m in funding',
+    name: "Secured $65m in funding",
     description:
-      'Provident quia ut esse. Vero vel eos repudiandae aspernatur. Cumque minima impedit sapiente a architecto nihil.',
-    date: 'Dec 2021',
-    dateTime: '2021-12',
+      "Provident quia ut esse. Vero vel eos repudiandae aspernatur. Cumque minima impedit sapiente a architecto nihil.",
+    date: "Dec 2021",
+    dateTime: "2021-12",
   },
   {
-    name: 'Released beta',
+    name: "Released beta",
     description:
-      'Sunt perspiciatis incidunt. Non necessitatibus aliquid. Consequatur ut officiis earum eum quia facilis. Hic deleniti dolorem quia et.',
-    date: 'Feb 2022',
-    dateTime: '2022-02',
+      "Sunt perspiciatis incidunt. Non necessitatibus aliquid. Consequatur ut officiis earum eum quia facilis. Hic deleniti dolorem quia et.",
+    date: "Feb 2022",
+    dateTime: "2022-02",
   },
   {
-    name: 'Global launch of product',
+    name: "Global launch of product",
     description:
-      'Ut ipsa sint distinctio quod itaque nam qui. Possimus aut unde id architecto voluptatem hic aut pariatur velit.',
-    date: 'Dec 2022',
-    dateTime: '2022-12',
+      "Ut ipsa sint distinctio quod itaque nam qui. Possimus aut unde id architecto voluptatem hic aut pariatur velit.",
+    date: "Dec 2022",
+    dateTime: "2022-12",
   },
-]
+];
 const jobOpenings = [
   {
     id: 1,
-    role: 'Full-time designer',
-    href: '#',
+    role: "Full-time designer",
+    href: "#",
     description:
-      'Quos sunt ad dolore ullam qui. Enim et quisquam dicta molestias. Corrupti quo voluptatum eligendi autem labore.',
-    salary: '$75,000 USD',
-    location: 'San Francisco, CA',
+      "Quos sunt ad dolore ullam qui. Enim et quisquam dicta molestias. Corrupti quo voluptatum eligendi autem labore.",
+    salary: "$75,000 USD",
+    location: "San Francisco, CA",
   },
   {
     id: 2,
-    role: 'Laravel developer',
-    href: '#',
+    role: "Laravel developer",
+    href: "#",
     description:
-      'Et veniam et officia dolorum rerum. Et voluptas consequatur magni sapiente amet voluptates dolorum. Ut porro aut eveniet.',
-    salary: '$125,000 USD',
-    location: 'San Francisco, CA',
+      "Et veniam et officia dolorum rerum. Et voluptas consequatur magni sapiente amet voluptates dolorum. Ut porro aut eveniet.",
+    salary: "$125,000 USD",
+    location: "San Francisco, CA",
   },
   {
     id: 3,
-    role: 'React Native developer',
-    href: '#',
+    role: "React Native developer",
+    href: "#",
     description:
-      'Veniam ipsam nisi quas architecto eos non voluptatem in nemo. Est occaecati nihil omnis delectus illum est.',
-    salary: '$105,000 USD',
-    location: 'San Francisco, CA',
+      "Veniam ipsam nisi quas architecto eos non voluptatem in nemo. Est occaecati nihil omnis delectus illum est.",
+    salary: "$105,000 USD",
+    location: "San Francisco, CA",
   },
-]
+];
 const footerNavigation = {
   solutions: [
-    { name: 'Marketing', href: '#' },
-    { name: 'Analytics', href: '#' },
-    { name: 'Automation', href: '#' },
-    { name: 'Commerce', href: '#' },
-    { name: 'Insights', href: '#' },
+    { name: "Marketing", href: "#" },
+    { name: "Analytics", href: "#" },
+    { name: "Automation", href: "#" },
+    { name: "Commerce", href: "#" },
+    { name: "Insights", href: "#" },
   ],
   support: [
-    { name: 'Submit ticket', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
+    { name: "Submit ticket", href: "#" },
+    { name: "Documentation", href: "#" },
+    { name: "Guides", href: "#" },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
+    { name: "About", href: "#" },
+    { name: "Blog", href: "#" },
+    { name: "Jobs", href: "#" },
+    { name: "Press", href: "#" },
   ],
   legal: [
-    { name: 'Terms of service', href: '#' },
-    { name: 'Privacy policy', href: '#' },
-    { name: 'License', href: '#' },
+    { name: "Terms of service", href: "#" },
+    { name: "Privacy policy", href: "#" },
+    { name: "License", href: "#" },
   ],
   social: [
     {
-      name: 'Facebook',
-      href: '#',
+      name: "Facebook",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -108,8 +108,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'Instagram',
-      href: '#',
+      name: "Instagram",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -121,8 +121,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'X',
-      href: '#',
+      name: "X",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" />
@@ -130,8 +130,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'GitHub',
-      href: '#',
+      name: "GitHub",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -143,8 +143,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'YouTube',
-      href: '#',
+      name: "YouTube",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -156,16 +156,19 @@ const footerNavigation = {
       ),
     },
   ],
-}
+};
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white dark:bg-gray-900">
       {/* Header */}
       <header className="absolute inset-x-0 top-0 z-50">
-        <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+        <nav
+          aria-label="Global"
+          className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        >
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
@@ -193,18 +196,29 @@ export default function Example() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+              >
                 {item.name}
               </a>
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+            <a
+              href="#"
+              className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+            >
               Log in <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="lg:hidden"
+        >
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-gray-100/10">
             <div className="flex items-center justify-between">
@@ -267,13 +281,15 @@ export default function Example() {
           <div className="mx-auto max-w-7xl px-6 py-32 sm:py-40 lg:px-8">
             <div className="mx-auto max-w-2xl lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:gap-x-16 lg:gap-y-8 xl:grid-cols-1 xl:grid-rows-1 xl:gap-x-8">
               <h1 className="max-w-2xl text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl lg:col-span-2 xl:col-auto dark:text-white">
-                We’re a passionate group of people building the future of ecommerce
+                We’re a passionate group of people building the future of
+                ecommerce
               </h1>
               <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
                 <p className="text-lg font-medium text-pretty text-gray-500 sm:text-xl/8 dark:text-gray-400">
-                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt
-                  amet fugiat veniam occaecat fugiat aliqua. Anim aute id magna aliqua ad ad non deserunt sunt. Qui
-                  irure qui lorem cupidatat commodo.
+                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure
+                  qui lorem cupidatat commodo. Elit sunt amet fugiat veniam
+                  occaecat fugiat aliqua. Anim aute id magna aliqua ad ad non
+                  deserunt sunt. Qui irure qui lorem cupidatat commodo.
                 </p>
               </div>
               <img
@@ -295,7 +311,11 @@ export default function Example() {
                   dateTime={item.dateTime}
                   className="flex items-center text-sm/6 font-semibold text-indigo-600 dark:text-indigo-400"
                 >
-                  <svg viewBox="0 0 4 4" aria-hidden="true" className="mr-4 size-1 flex-none">
+                  <svg
+                    viewBox="0 0 4 4"
+                    aria-hidden="true"
+                    className="mr-4 size-1 flex-none"
+                  >
                     <circle r={2} cx={2} cy={2} fill="currentColor" />
                   </svg>
                   {item.date}
@@ -304,8 +324,12 @@ export default function Example() {
                     className="absolute -ml-2 h-px w-screen -translate-x-full bg-gray-900/10 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0 dark:bg-white/15"
                   />
                 </time>
-                <p className="mt-6 text-lg/8 font-semibold tracking-tight text-gray-900 dark:text-white">{item.name}</p>
-                <p className="mt-1 text-base/7 text-gray-600 dark:text-gray-400">{item.description}</p>
+                <p className="mt-6 text-lg/8 font-semibold tracking-tight text-gray-900 dark:text-white">
+                  {item.name}
+                </p>
+                <p className="mt-1 text-base/7 text-gray-600 dark:text-gray-400">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
@@ -318,8 +342,9 @@ export default function Example() {
               Our customers love us
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg/8 text-gray-300">
-              Aliquip reprehenderit incididunt amet quis fugiat ut velit. Sit occaecat labore proident cillum in nisi
-              adipisicing officia excepteur tempor deserunt.
+              Aliquip reprehenderit incididunt amet quis fugiat ut velit. Sit
+              occaecat labore proident cillum in nisi adipisicing officia
+              excepteur tempor deserunt.
             </p>
             <div className="mx-auto mt-20 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 sm:gap-y-14 lg:max-w-4xl lg:grid-cols-5">
               <img
@@ -358,11 +383,14 @@ export default function Example() {
                 className="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1"
               />
             </div>
-            <div aria-hidden="true" className="absolute -top-24 right-0 -z-10 transform-gpu blur-3xl">
+            <div
+              aria-hidden="true"
+              className="absolute -top-24 right-0 -z-10 transform-gpu blur-3xl"
+            >
               <div
                 style={{
                   clipPath:
-                    'polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)',
+                    "polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%)",
                 }}
                 className="aspect-1404/767 w-351 bg-linear-to-r from-[#80caff] to-[#4f46e5] opacity-25"
               />
@@ -379,12 +407,15 @@ export default function Example() {
                   Our people
                 </h2>
                 <p className="mt-6 text-xl/8 text-gray-700 dark:text-gray-300">
-                  Quasi est quaerat. Sit molestiae et. Provident ad dolorem occaecati eos iste. Soluta rerum quidem
-                  minus ut molestiae velit error quod. Excepturi quidem expedita molestias quas.
+                  Quasi est quaerat. Sit molestiae et. Provident ad dolorem
+                  occaecati eos iste. Soluta rerum quidem minus ut molestiae
+                  velit error quod. Excepturi quidem expedita molestias quas.
                 </p>
                 <p className="mt-6 text-base/7 text-gray-600 dark:text-gray-400">
-                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt
-                  amet fugiat veniam occaecat fugiat. Quasi aperiam sit non sit neque reprehenderit.
+                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure
+                  qui lorem cupidatat commodo. Elit sunt amet fugiat veniam
+                  occaecat fugiat. Quasi aperiam sit non sit neque
+                  reprehenderit.
                 </p>
               </div>
               <div className="flex flex-wrap items-start justify-end gap-6 sm:gap-8 lg:contents">
@@ -430,13 +461,16 @@ export default function Example() {
               We approach work as a place to make the world better
             </h2>
             <p className="mt-6 text-base/7 text-gray-600 dark:text-gray-300">
-              Diam nunc lacus lacus aliquam turpis enim. Eget hac velit est euismod lacus. Est non placerat nam arcu.
-              Cras purus nibh cursus sit eu in id. Integer vel nibh.
+              Diam nunc lacus lacus aliquam turpis enim. Eget hac velit est
+              euismod lacus. Est non placerat nam arcu. Cras purus nibh cursus
+              sit eu in id. Integer vel nibh.
             </p>
           </div>
           <div className="mx-auto mt-16 flex max-w-2xl flex-col gap-8 lg:mx-0 lg:mt-20 lg:max-w-none lg:flex-row lg:items-end">
             <div className="flex flex-col-reverse justify-between gap-x-16 gap-y-8 rounded-2xl bg-gray-50 p-8 sm:w-3/4 sm:max-w-md sm:flex-row-reverse sm:items-end lg:w-72 lg:max-w-none lg:flex-none lg:flex-col lg:items-start dark:bg-white/5 dark:inset-ring dark:inset-ring-white/10">
-              <p className="flex-none text-3xl font-bold tracking-tight text-gray-900 dark:text-white">250k</p>
+              <p className="flex-none text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+                250k
+              </p>
               <div className="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
                 <p className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
                   Users on the platform
@@ -447,10 +481,13 @@ export default function Example() {
               </div>
             </div>
             <div className="flex flex-col-reverse justify-between gap-x-16 gap-y-8 rounded-2xl bg-gray-900 p-8 sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-sm lg:flex-auto lg:flex-col lg:items-start lg:gap-y-44 dark:bg-gray-700 dark:inset-ring dark:inset-ring-white/10">
-              <p className="flex-none text-3xl font-bold tracking-tight text-white">$8.9 billion</p>
+              <p className="flex-none text-3xl font-bold tracking-tight text-white">
+                $8.9 billion
+              </p>
               <div className="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
                 <p className="text-lg font-semibold tracking-tight text-white">
-                  We’re proud that our customers have made over $8 billion in total revenue.
+                  We’re proud that our customers have made over $8 billion in
+                  total revenue.
                 </p>
                 <p className="mt-2 text-base/7 text-gray-400 dark:text-gray-300">
                   Eu duis porta aliquam ornare. Elementum eget magna egestas.
@@ -458,11 +495,16 @@ export default function Example() {
               </div>
             </div>
             <div className="flex flex-col-reverse justify-between gap-x-16 gap-y-8 rounded-2xl bg-indigo-600 p-8 sm:w-11/12 sm:max-w-xl sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-none lg:flex-auto lg:flex-col lg:items-start lg:gap-y-28 dark:inset-ring dark:inset-ring-white/10">
-              <p className="flex-none text-3xl font-bold tracking-tight text-white">401,093</p>
+              <p className="flex-none text-3xl font-bold tracking-tight text-white">
+                401,093
+              </p>
               <div className="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
-                <p className="text-lg font-semibold tracking-tight text-white">Transactions this year</p>
+                <p className="text-lg font-semibold tracking-tight text-white">
+                  Transactions this year
+                </p>
                 <p className="mt-2 text-base/7 text-indigo-200 dark:text-indigo-100">
-                  Eu duis porta aliquam ornare. Elementum eget magna egestas. Eu duis porta aliquam ornare.
+                  Eu duis porta aliquam ornare. Elementum eget magna egestas. Eu
+                  duis porta aliquam ornare.
                 </p>
               </div>
             </div>
@@ -477,8 +519,9 @@ export default function Example() {
                 We’re always looking for awesome people to join us
               </h2>
               <p className="mt-6 text-xl/8 text-gray-600 dark:text-gray-400">
-                Diam nunc lacus lacus aliquam turpis enim. Eget hac velit est euismod lacus. Est non placerat nam arcu.
-                Cras purus nibh cursus sit eu in id.
+                Diam nunc lacus lacus aliquam turpis enim. Eget hac velit est
+                euismod lacus. Est non placerat nam arcu. Cras purus nibh cursus
+                sit eu in id.
               </p>
               <img
                 alt=""
@@ -496,7 +539,10 @@ export default function Example() {
                       <dd className="w-full flex-none text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
                         <a href={opening.href}>
                           {opening.role}
-                          <span aria-hidden="true" className="absolute inset-0" />
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0"
+                          />
                         </a>
                       </dd>
                       <dt className="sr-only">Description</dt>
@@ -504,7 +550,9 @@ export default function Example() {
                         {opening.description}
                       </dd>
                       <dt className="sr-only">Salary</dt>
-                      <dd className="mt-4 text-base/7 font-semibold text-gray-900 dark:text-white">{opening.salary}</dd>
+                      <dd className="mt-4 text-base/7 font-semibold text-gray-900 dark:text-white">
+                        {opening.salary}
+                      </dd>
                       <dt className="sr-only">Location</dt>
                       <dd className="mt-4 flex items-center gap-x-3 text-base/7 text-gray-500 dark:text-gray-400">
                         <svg
@@ -540,7 +588,9 @@ export default function Example() {
             <div className="grid grid-cols-2 gap-8 xl:col-span-2">
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Solutions</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Solutions
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.solutions.map((item) => (
                       <li key={item.name}>
@@ -555,7 +605,9 @@ export default function Example() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Support</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Support
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.support.map((item) => (
                       <li key={item.name}>
@@ -572,7 +624,9 @@ export default function Example() {
               </div>
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Company</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Company
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.company.map((item) => (
                       <li key={item.name}>
@@ -587,7 +641,9 @@ export default function Example() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Legal</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Legal
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.legal.map((item) => (
                       <li key={item.name}>
@@ -604,9 +660,12 @@ export default function Example() {
               </div>
             </div>
             <div className="mt-10 xl:mt-0">
-              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Subscribe to our newsletter</h3>
+              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                Subscribe to our newsletter
+              </h3>
               <p className="mt-2 text-sm/6 text-gray-600 dark:text-gray-400">
-                The latest news, articles, and resources, sent to your inbox weekly.
+                The latest news, articles, and resources, sent to your inbox
+                weekly.
               </p>
               <form className="mt-6 sm:flex sm:max-w-md">
                 <label htmlFor="email-address" className="sr-only">
@@ -652,5 +711,5 @@ export default function Example() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

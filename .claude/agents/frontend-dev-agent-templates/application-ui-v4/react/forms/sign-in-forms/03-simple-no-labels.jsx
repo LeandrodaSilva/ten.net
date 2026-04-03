@@ -1,14 +1,16 @@
 export default function Example() {
   return (
     <>
-      {/*
+      {
+        /*
         This example requires updating your template:
 
         ```
         <html class="h-full bg-white dark:bg-gray-900">
         <body class="h-full">
         ```
-      */}
+      */
+      }
       <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-sm space-y-10">
           <div>
@@ -86,7 +88,10 @@ export default function Example() {
                     </svg>
                   </div>
                 </div>
-                <label htmlFor="remember-me" className="block text-sm/6 text-gray-900 dark:text-gray-300">
+                <label
+                  htmlFor="remember-me"
+                  className="block text-sm/6 text-gray-900 dark:text-gray-300"
+                >
                   Remember me
                 </label>
               </div>
@@ -112,7 +117,7 @@ export default function Example() {
           </form>
 
           <p className="text-center text-sm/6 text-gray-500 dark:text-gray-400">
-            Not a member?{' '}
+            Not a member?{" "}
             <a
               href="#"
               className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
@@ -123,5 +128,5 @@ export default function Example() {
         </div>
       </div>
     </>
-  )
+  );
 }

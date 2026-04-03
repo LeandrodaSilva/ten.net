@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -16,52 +16,52 @@ import {
   PopoverButton,
   PopoverGroup,
   PopoverPanel,
-} from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+} from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-]
+  { name: "Most Popular", href: "#", current: true },
+  { name: "Best Rating", href: "#", current: false },
+  { name: "Newest", href: "#", current: false },
+];
 const filters = [
   {
-    id: 'category',
-    name: 'Category',
+    id: "category",
+    name: "Category",
     options: [
-      { value: 'new-arrivals', label: 'All New Arrivals', checked: false },
-      { value: 'tees', label: 'Tees', checked: false },
-      { value: 'objects', label: 'Objects', checked: true },
+      { value: "new-arrivals", label: "All New Arrivals", checked: false },
+      { value: "tees", label: "Tees", checked: false },
+      { value: "objects", label: "Objects", checked: true },
     ],
   },
   {
-    id: 'color',
-    name: 'Color',
+    id: "color",
+    name: "Color",
     options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: false },
+      { value: "white", label: "White", checked: false },
+      { value: "beige", label: "Beige", checked: false },
+      { value: "blue", label: "Blue", checked: false },
     ],
   },
   {
-    id: 'sizes',
-    name: 'Sizes',
+    id: "sizes",
+    name: "Sizes",
     options: [
-      { value: 's', label: 'S', checked: false },
-      { value: 'm', label: 'M', checked: false },
-      { value: 'l', label: 'L', checked: false },
+      { value: "s", label: "S", checked: false },
+      { value: "m", label: "M", checked: false },
+      { value: "l", label: "L", checked: false },
     ],
   },
-]
-const activeFilters = [{ value: 'objects', label: 'Objects' }]
+];
+const activeFilters = [{ value: "objects", label: "Objects" }];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="bg-white">
@@ -93,10 +93,16 @@ export default function Example() {
             {/* Filters */}
             <form className="mt-4">
               {filters.map((section) => (
-                <Disclosure key={section.name} as="div" className="border-t border-gray-200 px-4 py-6">
+                <Disclosure
+                  key={section.name}
+                  as="div"
+                  className="border-t border-gray-200 px-4 py-6"
+                >
                   <h3 className="-mx-2 -my-3 flow-root">
                     <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
-                      <span className="font-medium text-gray-900">{section.name}</span>
+                      <span className="font-medium text-gray-900">
+                        {section.name}
+                      </span>
                       <span className="ml-6 flex items-center">
                         <ChevronDownIcon
                           aria-hidden="true"
@@ -141,7 +147,10 @@ export default function Example() {
                               </svg>
                             </div>
                           </div>
-                          <label htmlFor={`filter-mobile-${section.id}-${optionIdx}`} className="text-sm text-gray-500">
+                          <label
+                            htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                            className="text-sm text-gray-500"
+                          >
                             {option.label}
                           </label>
                         </div>
@@ -156,10 +165,13 @@ export default function Example() {
       </Dialog>
 
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Workspace sale</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          Workspace sale
+        </h1>
         <p className="mt-4 max-w-xl text-sm text-gray-700">
-          Our thoughtfully designed workspace objects are crafted in limited runs. Improve your productivity and
-          organization with these sale items before we run out.
+          Our thoughtfully designed workspace objects are crafted in limited
+          runs. Improve your productivity and organization with these sale items
+          before we run out.
         </p>
       </div>
 
@@ -190,8 +202,10 @@ export default function Example() {
                       <a
                         href={option.href}
                         className={classNames(
-                          option.current ? 'font-medium text-gray-900' : 'text-gray-500',
-                          'block px-4 py-2 text-sm data-focus:bg-gray-100 data-focus:outline-hidden',
+                          option.current
+                            ? "font-medium text-gray-900"
+                            : "text-gray-500",
+                          "block px-4 py-2 text-sm data-focus:bg-gray-100 data-focus:outline-hidden",
                         )}
                       >
                         {option.name}
@@ -214,14 +228,19 @@ export default function Example() {
               <div className="flow-root">
                 <PopoverGroup className="-mx-4 flex items-center divide-x divide-gray-200">
                   {filters.map((section, sectionIdx) => (
-                    <Popover key={section.name} className="relative inline-block px-4 text-left">
+                    <Popover
+                      key={section.name}
+                      className="relative inline-block px-4 text-left"
+                    >
                       <PopoverButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                         <span>{section.name}</span>
-                        {sectionIdx === 0 ? (
-                          <span className="ml-1.5 rounded-sm bg-gray-200 px-1.5 py-0.5 text-xs font-semibold text-gray-700 tabular-nums">
-                            1
-                          </span>
-                        ) : null}
+                        {sectionIdx === 0
+                          ? (
+                            <span className="ml-1.5 rounded-sm bg-gray-200 px-1.5 py-0.5 text-xs font-semibold text-gray-700 tabular-nums">
+                              1
+                            </span>
+                          )
+                          : null}
                         <ChevronDownIcon
                           aria-hidden="true"
                           className="-mr-1 ml-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
@@ -293,7 +312,10 @@ export default function Example() {
               <span className="sr-only">, active</span>
             </h3>
 
-            <div aria-hidden="true" className="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block" />
+            <div
+              aria-hidden="true"
+              className="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block"
+            />
 
             <div className="mt-2 sm:mt-0 sm:ml-4">
               <div className="-m-1 flex flex-wrap items-center">
@@ -307,9 +329,20 @@ export default function Example() {
                       type="button"
                       className="ml-1 inline-flex size-4 shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
                     >
-                      <span className="sr-only">Remove filter for {activeFilter.label}</span>
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 8 8" className="size-2">
-                        <path d="M1 1l6 6m0-6L1 7" strokeWidth="1.5" strokeLinecap="round" />
+                      <span className="sr-only">
+                        Remove filter for {activeFilter.label}
+                      </span>
+                      <svg
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 8 8"
+                        className="size-2"
+                      >
+                        <path
+                          d="M1 1l6 6m0-6L1 7"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
                       </svg>
                     </button>
                   </span>
@@ -320,5 +353,5 @@ export default function Example() {
         </div>
       </section>
     </div>
-  )
+  );
 }

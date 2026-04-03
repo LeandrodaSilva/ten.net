@@ -1,17 +1,24 @@
 const features = [
   {
-    name: 'Sleek design',
+    name: "Sleek design",
     description:
-      'The machined kettle has a smooth black finish and contemporary shape that stands apart from most plastic appliances.',
+      "The machined kettle has a smooth black finish and contemporary shape that stands apart from most plastic appliances.",
   },
-  { name: 'Comfort handle', description: 'Shaped for steady pours and insulated to prevent burns.' },
   {
-    name: 'One-button control',
-    description:
-      'The one button control has a digital readout for setting temperature and turning the kettle on and off.',
+    name: "Comfort handle",
+    description: "Shaped for steady pours and insulated to prevent burns.",
   },
-  { name: 'Long spout', description: "Designed specifically for controlled pour-overs that don't slash or sputter." },
-]
+  {
+    name: "One-button control",
+    description:
+      "The one button control has a digital readout for setting temperature and turning the kettle on and off.",
+  },
+  {
+    name: "Long spout",
+    description:
+      "Designed specifically for controlled pour-overs that don't slash or sputter.",
+  },
+];
 
 export default function Example() {
   return (
@@ -21,14 +28,20 @@ export default function Example() {
           <div>
             <div className="border-b border-gray-200 pb-10">
               <h2 className="font-medium text-gray-500">Machined Kettle</h2>
-              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Elegant simplicity</p>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Elegant simplicity
+              </p>
             </div>
 
             <dl className="mt-10 space-y-10">
               {features.map((feature) => (
                 <div key={feature.name}>
-                  <dt className="text-sm font-medium text-gray-900">{feature.name}</dt>
-                  <dd className="mt-3 text-sm text-gray-500">{feature.description}</dd>
+                  <dt className="text-sm font-medium text-gray-900">
+                    {feature.name}
+                  </dt>
+                  <dd className="mt-3 text-sm text-gray-500">
+                    {feature.description}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -56,5 +69,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

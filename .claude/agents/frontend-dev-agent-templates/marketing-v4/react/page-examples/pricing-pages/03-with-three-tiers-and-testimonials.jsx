@@ -1,57 +1,62 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { CheckIcon } from '@heroicons/react/20/solid'
+import { useState } from "react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { CheckIcon } from "@heroicons/react/20/solid";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-]
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Marketplace", href: "#" },
+  { name: "Company", href: "#" },
+];
 const pricing = {
   tiers: [
     {
-      id: 'freelancer',
-      name: 'Freelancer',
-      price: { monthly: '$19', annually: '$199' },
-      description: 'The essentials to provide your best work for clients.',
-      features: ['5 products', 'Up to 1,000 subscribers', 'Basic analytics', '48-hour support response time'],
+      id: "freelancer",
+      name: "Freelancer",
+      price: { monthly: "$19", annually: "$199" },
+      description: "The essentials to provide your best work for clients.",
+      features: [
+        "5 products",
+        "Up to 1,000 subscribers",
+        "Basic analytics",
+        "48-hour support response time",
+      ],
       featured: false,
     },
     {
-      id: 'startup',
-      name: 'Startup',
-      price: { monthly: '$29', annually: '$299' },
-      description: 'A plan that scales with your rapidly growing business.',
+      id: "startup",
+      name: "Startup",
+      price: { monthly: "$29", annually: "$299" },
+      description: "A plan that scales with your rapidly growing business.",
       features: [
-        '25 products',
-        'Up to 10,000 subscribers',
-        'Advanced analytics',
-        '24-hour support response time',
-        'Marketing automations',
+        "25 products",
+        "Up to 10,000 subscribers",
+        "Advanced analytics",
+        "24-hour support response time",
+        "Marketing automations",
       ],
       featured: true,
     },
     {
-      id: 'enterprise',
-      name: 'Enterprise',
-      price: { monthly: '$59', annually: '$599' },
-      description: 'Dedicated support and infrastructure for your company.',
+      id: "enterprise",
+      name: "Enterprise",
+      price: { monthly: "$59", annually: "$599" },
+      description: "Dedicated support and infrastructure for your company.",
       features: [
-        'Unlimited products',
-        'Unlimited subscribers',
-        'Advanced analytics',
-        '1-hour, dedicated support response time',
-        'Marketing automations',
-        'Custom reporting tools',
+        "Unlimited products",
+        "Unlimited subscribers",
+        "Advanced analytics",
+        "1-hour, dedicated support response time",
+        "Marketing automations",
+        "Custom reporting tools",
       ],
       featured: false,
     },
   ],
-}
+};
 const faqs = [
   {
     id: 1,
@@ -61,62 +66,63 @@ const faqs = [
   },
   {
     id: 2,
-    question: 'How do you make holy water?',
+    question: "How do you make holy water?",
     answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+      "You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
   },
   {
     id: 3,
-    question: 'Why do you never see elephants hiding in trees?',
+    question: "Why do you never see elephants hiding in trees?",
     answer:
       "Because they're so good at it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
   },
   {
     id: 4,
-    question: 'What do you call someone with no body and no nose?',
-    answer: 'Nobody knows. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+    question: "What do you call someone with no body and no nose?",
+    answer:
+      "Nobody knows. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
   },
   {
     id: 5,
     question: "Why can't you hear a pterodactyl go to the bathroom?",
     answer:
-      'Because the pee is silent. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+      "Because the pee is silent. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
   },
   {
     id: 6,
-    question: 'Why did the invisible man turn down the job offer?',
+    question: "Why did the invisible man turn down the job offer?",
     answer:
       "He couldn't see himself doing it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
   },
-]
+];
 const footerNavigation = {
   solutions: [
-    { name: 'Marketing', href: '#' },
-    { name: 'Analytics', href: '#' },
-    { name: 'Automation', href: '#' },
-    { name: 'Commerce', href: '#' },
-    { name: 'Insights', href: '#' },
+    { name: "Marketing", href: "#" },
+    { name: "Analytics", href: "#" },
+    { name: "Automation", href: "#" },
+    { name: "Commerce", href: "#" },
+    { name: "Insights", href: "#" },
   ],
   support: [
-    { name: 'Submit ticket', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
+    { name: "Submit ticket", href: "#" },
+    { name: "Documentation", href: "#" },
+    { name: "Guides", href: "#" },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
+    { name: "About", href: "#" },
+    { name: "Blog", href: "#" },
+    { name: "Jobs", href: "#" },
+    { name: "Press", href: "#" },
   ],
   legal: [
-    { name: 'Terms of service', href: '#' },
-    { name: 'Privacy policy', href: '#' },
-    { name: 'License', href: '#' },
+    { name: "Terms of service", href: "#" },
+    { name: "Privacy policy", href: "#" },
+    { name: "License", href: "#" },
   ],
   social: [
     {
-      name: 'Facebook',
-      href: '#',
+      name: "Facebook",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -128,8 +134,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'Instagram',
-      href: '#',
+      name: "Instagram",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -141,8 +147,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'X',
-      href: '#',
+      name: "X",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" />
@@ -150,8 +156,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'GitHub',
-      href: '#',
+      name: "GitHub",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -163,8 +169,8 @@ const footerNavigation = {
       ),
     },
     {
-      name: 'YouTube',
-      href: '#',
+      name: "YouTube",
+      href: "#",
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -176,16 +182,19 @@ const footerNavigation = {
       ),
     },
   ],
-}
+};
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white dark:bg-gray-900">
       {/* Header */}
       <header>
-        <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+        <nav
+          aria-label="Global"
+          className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        >
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
@@ -213,18 +222,29 @@ export default function Example() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+              >
                 {item.name}
               </a>
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+            <a
+              href="#"
+              className="text-sm/6 font-semibold text-gray-900 dark:text-white"
+            >
               Log in <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+        <Dialog
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+          className="lg:hidden"
+        >
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-gray-100/10">
             <div className="flex items-center justify-between">
@@ -282,14 +302,17 @@ export default function Example() {
         <form className="group/tiers pt-24 sm:pt-32">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-4xl text-center">
-              <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Pricing</h2>
+              <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+                Pricing
+              </h2>
               <p className="mt-2 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-6xl dark:text-white">
                 Pricing that grows with you
               </p>
             </div>
             <p className="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 sm:text-xl/8 dark:text-gray-400">
-              Choose an affordable plan that’s packed with the best features for engaging your audience, creating
-              customer loyalty, and driving sales.
+              Choose an affordable plan that’s packed with the best features for
+              engaging your audience, creating customer loyalty, and driving
+              sales.
             </p>
             <div className="mt-16 flex justify-center">
               <fieldset aria-label="Payment frequency">
@@ -302,7 +325,9 @@ export default function Example() {
                       type="radio"
                       className="absolute inset-0 appearance-none rounded-full"
                     />
-                    <span className="text-gray-500 group-has-checked:text-white dark:text-gray-400">Monthly</span>
+                    <span className="text-gray-500 group-has-checked:text-white dark:text-gray-400">
+                      Monthly
+                    </span>
                   </label>
                   <label className="group relative rounded-full px-2.5 py-1 has-checked:bg-indigo-600 dark:has-checked:bg-indigo-500">
                     <input
@@ -311,7 +336,9 @@ export default function Example() {
                       type="radio"
                       className="absolute inset-0 appearance-none rounded-full"
                     />
-                    <span className="text-gray-500 group-has-checked:text-white dark:text-gray-400">Annually</span>
+                    <span className="text-gray-500 group-has-checked:text-white dark:text-gray-400">
+                      Annually
+                    </span>
                   </label>
                 </div>
               </fieldset>
@@ -320,7 +347,7 @@ export default function Example() {
               {pricing.tiers.map((tier) => (
                 <div
                   key={tier.id}
-                  data-featured={tier.featured ? 'true' : undefined}
+                  data-featured={tier.featured ? "true" : undefined}
                   className="group/tier rounded-3xl p-8 ring-1 ring-gray-200 data-featured:ring-2 data-featured:ring-indigo-600 xl:p-10 dark:bg-gray-800/50 dark:ring-white/15 dark:data-featured:ring-indigo-400"
                 >
                   <div className="flex items-center justify-between gap-x-4">
@@ -334,18 +361,24 @@ export default function Example() {
                       Most popular
                     </p>
                   </div>
-                  <p className="mt-4 text-sm/6 text-gray-600 dark:text-gray-300">{tier.description}</p>
+                  <p className="mt-4 text-sm/6 text-gray-600 dark:text-gray-300">
+                    {tier.description}
+                  </p>
                   <p className="mt-6 flex items-baseline gap-x-1 group-not-has-[[name=frequency][value=monthly]:checked]/tiers:hidden">
                     <span className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
                       {tier.price.monthly}
                     </span>
-                    <span className="text-sm/6 font-semibold text-gray-600 dark:text-gray-400">/month</span>
+                    <span className="text-sm/6 font-semibold text-gray-600 dark:text-gray-400">
+                      /month
+                    </span>
                   </p>
                   <p className="mt-6 flex items-baseline gap-x-1 group-not-has-[[name=frequency][value=annually]:checked]/tiers:hidden">
                     <span className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
                       {tier.price.annually}
                     </span>
-                    <span className="text-sm/6 font-semibold text-gray-600 dark:text-gray-400">/year</span>
+                    <span className="text-sm/6 font-semibold text-gray-600 dark:text-gray-400">
+                      /year
+                    </span>
                   </p>
                   <a
                     href={tier.href}
@@ -354,7 +387,10 @@ export default function Example() {
                   >
                     Buy plan
                   </a>
-                  <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-600 xl:mt-10 dark:text-gray-300">
+                  <ul
+                    role="list"
+                    className="mt-8 space-y-3 text-sm/6 text-gray-600 xl:mt-10 dark:text-gray-300"
+                  >
                     {tier.features.map((feature) => (
                       <li key={feature} className="flex gap-x-3">
                         <CheckIcon
@@ -388,9 +424,11 @@ export default function Example() {
               <figure className="mt-10 flex flex-auto flex-col justify-between">
                 <blockquote className="text-lg/8 text-gray-900 dark:text-gray-100">
                   <p>
-                    “Amet amet eget scelerisque tellus sit neque faucibus non eleifend. Integer eu praesent at a. Ornare
-                    arcu gravida natoque erat et cursus tortor consequat at. Vulputate gravida sociis enim nullam
-                    ultricies habitant malesuada lorem ac. Tincidunt urna dui pellentesque sagittis.”
+                    “Amet amet eget scelerisque tellus sit neque faucibus non
+                    eleifend. Integer eu praesent at a. Ornare arcu gravida
+                    natoque erat et cursus tortor consequat at. Vulputate
+                    gravida sociis enim nullam ultricies habitant malesuada
+                    lorem ac. Tincidunt urna dui pellentesque sagittis.”
                   </p>
                 </blockquote>
                 <figcaption className="mt-10 flex items-center gap-x-6">
@@ -400,8 +438,12 @@ export default function Example() {
                     className="size-14 rounded-full bg-gray-50 dark:bg-gray-800"
                   />
                   <div className="text-base">
-                    <div className="font-semibold text-gray-900 dark:text-white">Judith Black</div>
-                    <div className="mt-1 text-gray-500 dark:text-gray-400">CEO of Tuple</div>
+                    <div className="font-semibold text-gray-900 dark:text-white">
+                      Judith Black
+                    </div>
+                    <div className="mt-1 text-gray-500 dark:text-gray-400">
+                      CEO of Tuple
+                    </div>
                   </div>
                 </figcaption>
               </figure>
@@ -420,9 +462,10 @@ export default function Example() {
               <figure className="mt-10 flex flex-auto flex-col justify-between">
                 <blockquote className="text-lg/8 text-gray-900 dark:text-gray-100">
                   <p>
-                    “Excepteur veniam labore ullamco eiusmod. Pariatur consequat proident duis dolore nulla veniam
-                    reprehenderit nisi officia voluptate incididunt exercitation exercitation elit. Nostrud veniam sint
-                    dolor nisi ullamco.”
+                    “Excepteur veniam labore ullamco eiusmod. Pariatur consequat
+                    proident duis dolore nulla veniam reprehenderit nisi officia
+                    voluptate incididunt exercitation exercitation elit. Nostrud
+                    veniam sint dolor nisi ullamco.”
                   </p>
                 </blockquote>
                 <figcaption className="mt-10 flex items-center gap-x-6">
@@ -432,8 +475,12 @@ export default function Example() {
                     className="size-14 rounded-full bg-gray-50 dark:bg-gray-800"
                   />
                   <div className="text-base">
-                    <div className="font-semibold text-gray-900 dark:text-white">Joseph Rodriguez</div>
-                    <div className="mt-1 text-gray-500 dark:text-gray-400">CEO of Reform</div>
+                    <div className="font-semibold text-gray-900 dark:text-white">
+                      Joseph Rodriguez
+                    </div>
+                    <div className="mt-1 text-gray-500 dark:text-gray-400">
+                      CEO of Reform
+                    </div>
                   </div>
                 </figcaption>
               </figure>
@@ -447,21 +494,26 @@ export default function Example() {
             Frequently asked questions
           </h2>
           <p className="mt-6 max-w-2xl text-base/7 text-gray-600 dark:text-gray-400">
-            Have a different question and can’t find the answer you’re looking for? Reach out to our support team by{' '}
+            Have a different question and can’t find the answer you’re looking
+            for? Reach out to our support team by{" "}
             <a
               href="#"
               className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
             >
               sending us an email
-            </a>{' '}
+            </a>{" "}
             and we’ll get back to you as soon as we can.
           </p>
           <div className="mt-20">
             <dl className="space-y-16 sm:grid sm:grid-cols-2 sm:space-y-0 sm:gap-x-6 sm:gap-y-16 lg:gap-x-10">
               {faqs.map((faq) => (
                 <div key={faq.id}>
-                  <dt className="text-base/7 font-semibold text-gray-900 dark:text-white">{faq.question}</dt>
-                  <dd className="mt-2 text-base/7 text-gray-600 dark:text-gray-400">{faq.answer}</dd>
+                  <dt className="text-base/7 font-semibold text-gray-900 dark:text-white">
+                    {faq.question}
+                  </dt>
+                  <dd className="mt-2 text-base/7 text-gray-600 dark:text-gray-400">
+                    {faq.answer}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -476,7 +528,9 @@ export default function Example() {
             <div className="grid grid-cols-2 gap-8 xl:col-span-2">
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Solutions</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Solutions
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.solutions.map((item) => (
                       <li key={item.name}>
@@ -491,7 +545,9 @@ export default function Example() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Support</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Support
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.support.map((item) => (
                       <li key={item.name}>
@@ -508,7 +564,9 @@ export default function Example() {
               </div>
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Company</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Company
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.company.map((item) => (
                       <li key={item.name}>
@@ -523,7 +581,9 @@ export default function Example() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Legal</h3>
+                  <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                    Legal
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.legal.map((item) => (
                       <li key={item.name}>
@@ -540,9 +600,12 @@ export default function Example() {
               </div>
             </div>
             <div className="mt-10 xl:mt-0">
-              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">Subscribe to our newsletter</h3>
+              <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                Subscribe to our newsletter
+              </h3>
               <p className="mt-2 text-sm/6 text-gray-600 dark:text-gray-400">
-                The latest news, articles, and resources, sent to your inbox weekly.
+                The latest news, articles, and resources, sent to your inbox
+                weekly.
               </p>
               <form className="mt-6 sm:flex sm:max-w-md">
                 <label htmlFor="email-address" className="sr-only">
@@ -588,5 +651,5 @@ export default function Example() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
