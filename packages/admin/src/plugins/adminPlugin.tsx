@@ -1,6 +1,10 @@
 import type { Plugin } from "@leproj/tennet";
-import type { Middleware } from "@leproj/tennet";
-import { BlogRouteRegistry, DynamicRouteRegistry } from "@leproj/tennet";
+import type { Middleware, WidgetPageRenderer } from "@leproj/tennet";
+import {
+  BlogRouteRegistry,
+  DynamicRouteRegistry,
+  renderWidgetPage,
+} from "@leproj/tennet";
 import { createAuthRoutes } from "../auth/loginHandler.ts";
 import { authMiddleware } from "../auth/authMiddleware.ts";
 import { csrfMiddleware } from "../auth/csrfMiddleware.ts";
@@ -26,9 +30,32 @@ import {
 } from "./admin/builder.ts";
 import { addMediaRoutes } from "./admin/media.ts";
 
+/**
+ * Interface for sub-plugins that extend the admin panel with additional routes.
+ *
+ * Sub-plugins are initialized after the core admin setup and receive the full
+ * AdminContext. They can register additional routes, plugins, and registries.
+ *
+ * This enables separating blog, media, audit, and other features into
+ * independent packages that plug into the admin panel.
+ */
+export interface AdminSubPlugin {
+  /** Unique name for this sub-plugin. */
+  name: string;
+  /** Register routes and any additional setup. Called during AdminPlugin.init(). */
+  registerRoutes(
+    ctx: AdminContext,
+    routes: import("@leproj/tennet").Route[],
+  ): void | Promise<void>;
+  /** Return additional Plugin constructors to register in the admin panel. */
+  getPlugins?(): (new () => Plugin)[];
+}
+
 /** Configuration for AdminPlugin. */
 export interface AdminPluginOptions {
   plugins?: (new () => Plugin)[];
+  /** Sub-plugins that extend the admin panel (blog, media, audit, etc.). */
+  subPlugins?: AdminSubPlugin[];
   /** Storage backend: "memory" (default for tests) or "kv" (Deno KV, default). */
   storage?: "memory" | "kv";
   /** Path to the Deno KV database file. Undefined = default path. */
@@ -42,12 +69,14 @@ export interface AdminPluginOptions {
  */
 export class AdminPlugin {
   private _pluginConstructors: (new () => Plugin)[];
+  private _subPlugins: AdminSubPlugin[];
   private _storageMode: "memory" | "kv";
   private _kvPath?: string;
   private _ctx?: AdminContext;
 
   constructor(options?: AdminPluginOptions) {
     this._pluginConstructors = options?.plugins ?? [];
+    this._subPlugins = options?.subPlugins ?? [];
     this._storageMode = options?.storage ?? "kv";
     this._kvPath = options?.kvPath;
   }
@@ -58,11 +87,20 @@ export class AdminPlugin {
     dynamicRegistry?: DynamicRouteRegistry;
     blogRegistry?: BlogRouteRegistry;
     kv?: Deno.Kv;
+    widgetRenderer?: WidgetPageRenderer;
   }> {
+    // Collect additional plugins from sub-plugins
+    const extraPluginConstructors: (new () => Plugin)[] = [];
+    for (const sub of this._subPlugins) {
+      if (sub.getPlugins) {
+        extraPluginConstructors.push(...sub.getPlugins());
+      }
+    }
+
     // Instantiate content plugins (only on first init; re-init reuses existing instances)
     if (!this._ctx) {
       this._ctx = await initAdmin(
-        this._pluginConstructors,
+        [...this._pluginConstructors, ...extraPluginConstructors],
         this._storageMode,
         this._kvPath,
       );
@@ -87,6 +125,8 @@ export class AdminPlugin {
     // Page Builder routes (requires KV storage)
     if (ctx.kv) {
       registerBuiltinWidgets();
+      // Set widget renderer in context for admin route handlers
+      ctx.widgetRenderer = renderWidgetPage;
       // Preview route registered BEFORE builder UI to avoid regex conflicts
       addBuilderPreviewRoute(ctx, routes);
       // UI route registered BEFORE widget API routes to avoid regex conflicts
@@ -139,12 +179,18 @@ export class AdminPlugin {
     // SEO routes — public, no auth required
     addSeoRoutes(ctx, routes);
 
+    // Execute sub-plugin route registration
+    for (const sub of this._subPlugins) {
+      await sub.registerRoutes(ctx, routes);
+    }
+
     return {
       routes,
       middlewares,
       dynamicRegistry,
       blogRegistry,
       kv: ctx.kv ?? undefined,
+      widgetRenderer: ctx.widgetRenderer,
     };
   }
 

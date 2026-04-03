@@ -7,7 +7,7 @@ import { embeddedRouterEngine } from "./embedded/embeddedRouterEngine.ts";
 import type { BuildOptions, BuildResult } from "./build/build.ts";
 import type { Middleware } from "./middleware/middleware.ts";
 import type { DynamicRouteRegistry } from "./routing/dynamicRouteRegistry.ts";
-import type { BlogRouteRegistry } from "./routing/blogRouteRegistry.ts";
+import type { WidgetPageRenderer } from "./models/WidgetResolver.ts";
 import { renderDynamicPage } from "./routing/dynamicPageHandler.ts";
 
 /** Interface for an admin plugin that can be registered via useAdmin(). */
@@ -16,8 +16,8 @@ export interface AdminPluginLike {
     routes: Route[];
     middlewares: Middleware[];
     dynamicRegistry?: DynamicRouteRegistry;
-    blogRegistry?: BlogRouteRegistry;
     kv?: Deno.Kv;
+    widgetRenderer?: WidgetPageRenderer;
   }>;
 }
 
@@ -40,6 +40,7 @@ export class Ten {
   private _middlewares: Middleware[] = [];
   private _dynamicRegistry?: DynamicRouteRegistry;
   private _kv?: Deno.Kv;
+  private _widgetRenderer?: WidgetPageRenderer;
 
   /**
    * Creates and returns a new instance of the Ten class.
@@ -116,7 +117,8 @@ export class Ten {
    * ```
    */
   public async useAdmin(admin: AdminPluginLike): Promise<void> {
-    const { routes, middlewares, dynamicRegistry, kv } = await admin.init();
+    const { routes, middlewares, dynamicRegistry, kv, widgetRenderer } =
+      await admin.init();
     this._routes.push(...routes);
     for (const mw of middlewares) {
       this.use(mw);
@@ -126,6 +128,9 @@ export class Ten {
     }
     if (kv) {
       this._kv = kv;
+    }
+    if (widgetRenderer) {
+      this._widgetRenderer = widgetRenderer;
     }
   }
 
@@ -158,6 +163,7 @@ export class Ten {
       this._appPath,
       this._kv,
       req ? { url: new URL(req.url).href, type: "website" } : undefined,
+      this._widgetRenderer,
     );
     return new Response(html, {
       status: 200,
@@ -183,6 +189,8 @@ export class Ten {
         },
         this._appPath,
         this._kv,
+        undefined,
+        this._widgetRenderer,
       );
       return new Response(html, {
         status: 404,

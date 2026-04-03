@@ -1,7 +1,7 @@
 import { findDocumentLayoutRoot } from "../utils/findDocumentLayoutRoot.ts";
 import { findOrderedLayouts } from "../utils/findOrderedLayouts.ts";
 import type { StorageItem } from "../models/Storage.ts";
-import { renderWidgetPage } from "./widgetPageHandler.ts";
+import type { WidgetPageRenderer } from "../models/WidgetResolver.ts";
 
 /** Open Graph / Twitter Card options for a dynamic page. */
 export interface SeoOptions {
@@ -27,6 +27,7 @@ export interface SeoOptions {
  * @param appPath - Path to the app/ directory (for loading layouts and document.html).
  * @param kv - Optional Deno KV instance. Required when widgets_enabled === "true".
  * @param seoOptions - Optional Open Graph / Twitter Card metadata.
+ * @param widgetRenderer - Optional function to resolve {{widgets:name}} placeholders. Provided by the CMS plugin.
  * @returns The fully rendered HTML string.
  */
 export async function renderDynamicPage(
@@ -34,14 +35,17 @@ export async function renderDynamicPage(
   appPath: string,
   kv?: Deno.Kv,
   seoOptions?: SeoOptions,
+  widgetRenderer?: WidgetPageRenderer,
 ): Promise<string> {
   let body = String(item.body ?? "");
   const seoTitle = String(item.seo_title ?? item.title ?? "");
   const seoDescription = String(item.seo_description ?? "");
 
   // Widget pipeline: resolve {{widgets:name}} placeholders when enabled
-  if (String(item.widgets_enabled) === "true" && kv && item.id) {
-    body = await renderWidgetPage(String(item.id), body, kv);
+  if (
+    String(item.widgets_enabled) === "true" && kv && item.id && widgetRenderer
+  ) {
+    body = await widgetRenderer(String(item.id), body, kv);
   }
 
   // Start with the resolved body HTML (unescaped — this is intentional for rich content)

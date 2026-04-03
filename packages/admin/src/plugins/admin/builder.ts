@@ -2,11 +2,11 @@ import { Route } from "@leproj/tennet";
 import { renderDynamicPage } from "@leproj/tennet";
 import { renderBuilderPage } from "../../app.tsx";
 import {
-  WidgetAuditLogger,
   WidgetPermissionsStore,
   widgetRegistry,
   WidgetStore,
 } from "@leproj/tennet-widgets";
+import { WidgetAuditLogger } from "./widgetAuditLogger.ts";
 import type {
   PlaceholderMap,
   WidgetInstance,
@@ -53,7 +53,13 @@ export function addBuilderPreviewRoute(
     const page = await pagePlugin.storage.get(id);
     if (!page) return new Response("Not found", { status: 404 });
 
-    const html = await renderDynamicPage(page, ctx.appPath, kv);
+    const html = await renderDynamicPage(
+      page,
+      ctx.appPath,
+      kv,
+      undefined,
+      ctx.widgetRenderer,
+    );
 
     return new Response(html, {
       status: 200,

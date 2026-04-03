@@ -7,7 +7,7 @@ import { PermissionsStore } from "../../auth/permissionsStore.ts";
 import { ROLE_PERMISSIONS } from "../../auth/types.ts";
 import { RolesPlugin } from "../rolesPlugin.ts";
 import { AuditLogPlugin } from "../auditLogPlugin.ts";
-import { MediaStore } from "@leproj/tennet-widgets";
+import { MediaStore } from "./mediaStore.ts";
 import type { AdminContext } from "./context.ts";
 
 /** Seed built-in roles and their permissions on first init. */

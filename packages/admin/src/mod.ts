@@ -18,7 +18,13 @@
 
 // Admin orchestrator
 export { AdminPlugin } from "./plugins/adminPlugin.tsx";
-export type { AdminPluginOptions } from "./plugins/adminPlugin.tsx";
+export type {
+  AdminPluginOptions,
+  AdminSubPlugin,
+} from "./plugins/adminPlugin.tsx";
+
+// Admin context (for sub-plugins)
+export type { AdminContext } from "./plugins/admin/context.ts";
 
 // Content plugins
 export { PagePlugin } from "./plugins/pagePlugin.ts";

@@ -34,3 +34,5 @@ export {
 } from "./routing/dynamicPageHandler.ts";
 export { DynamicRouteRegistry } from "./routing/dynamicRouteRegistry.ts";
 export { BlogRouteRegistry } from "./routing/blogRouteRegistry.ts";
+export type { WidgetPageRenderer } from "./models/WidgetResolver.ts";
+export { renderWidgetPage } from "./routing/widgetPageHandler.ts";

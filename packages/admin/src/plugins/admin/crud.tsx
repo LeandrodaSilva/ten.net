@@ -630,7 +630,13 @@ export function addPreviewRoute(ctx: AdminContext, routes: Route[]): void {
     const item = await pagePlugin.storage.get(id);
     if (!item) return new Response("Not found", { status: 404 });
 
-    let html = await renderDynamicPage(item, ctx.appPath, kv);
+    let html = await renderDynamicPage(
+      item,
+      ctx.appPath,
+      kv,
+      undefined,
+      ctx.widgetRenderer,
+    );
 
     // Inject preview banner at the top of <body>
     const banner =

@@ -1,9 +1,13 @@
 import type { Plugin } from "@leproj/tennet";
-import type { BlogRouteRegistry, DynamicRouteRegistry } from "@leproj/tennet";
+import type {
+  BlogRouteRegistry,
+  DynamicRouteRegistry,
+  WidgetPageRenderer,
+} from "@leproj/tennet";
 import type { SessionStore } from "../../auth/sessionStore.ts";
 import type { UserStore } from "../../auth/userStore.ts";
 import type { AuditLogPlugin } from "../auditLogPlugin.ts";
-import type { MediaStore } from "@leproj/tennet-widgets";
+import type { MediaStore } from "./mediaStore.ts";
 
 /** Shared context passed to every admin sub-module. */
 export interface AdminContext {
@@ -16,4 +20,5 @@ export interface AdminContext {
   blogRegistry?: BlogRouteRegistry;
   auditLogPlugin?: AuditLogPlugin;
   mediaStore?: MediaStore;
+  widgetRenderer?: WidgetPageRenderer;
 }

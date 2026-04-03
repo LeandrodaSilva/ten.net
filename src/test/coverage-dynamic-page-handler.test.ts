@@ -5,6 +5,7 @@
 import { afterEach, beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { renderDynamicPage } from "../../packages/core/src/routing/dynamicPageHandler.ts";
+import { renderWidgetPage } from "../../packages/core/src/routing/widgetPageHandler.ts";
 import { WidgetStore } from "../../packages/widgets/src/widgetStore.ts";
 import { registerBuiltinWidgets } from "../../packages/widgets/src/builtins/index.ts";
 import type { StorageItem } from "../../packages/core/src/models/Storage.ts";
@@ -54,7 +55,13 @@ describe("renderDynamicPage", () => {
       seo_description: "",
       widgets_enabled: "true",
     };
-    const html = await renderDynamicPage(item, APP_PATH, kv);
+    const html = await renderDynamicPage(
+      item,
+      APP_PATH,
+      kv,
+      undefined,
+      renderWidgetPage,
+    );
     assertStringIncludes(html, "Widget content");
     assertEquals(html.includes("{{widgets:main}}"), false);
   });
