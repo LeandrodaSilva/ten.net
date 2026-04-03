@@ -7,7 +7,10 @@ import {
 
 describe("discoverRouteEntrypoints", () => {
   it("should discover all route.ts files in app directory", async () => {
-    const entrypoints = await discoverRouteEntrypoints("./app", "route.ts");
+    const entrypoints = await discoverRouteEntrypoints(
+      "./example/app",
+      "route.ts",
+    );
 
     assertEquals(entrypoints.length > 0, true);
 
@@ -31,7 +34,7 @@ describe("bundleRoutes", () => {
 
     try {
       const result = await bundleRoutes({
-        appPath: "./app",
+        appPath: "./example/app",
         outputDir: tempDir,
       });
 

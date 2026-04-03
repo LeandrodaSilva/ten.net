@@ -51,9 +51,9 @@ Deno.bench("regex_test_nomatch", () => {
 // --- I/O utils ---
 
 Deno.bench("findOrderedLayouts", () => {
-  findOrderedLayouts("./app", "/hello");
+  findOrderedLayouts("./example/app", "/hello");
 });
 
 Deno.bench("findDocumentLayoutRoot", () => {
-  findDocumentLayoutRoot("./app");
+  findDocumentLayoutRoot("./example/app");
 });

@@ -3,7 +3,7 @@ import { assertEquals } from "@std/assert";
 import { build } from "../../src/build/build.ts";
 
 describe("build engine", () => {
-  const testAppPath = "./app";
+  const testAppPath = "./example/app";
   const testPublicPath = "./public";
   const testOutput = "./dist/_test_build";
 

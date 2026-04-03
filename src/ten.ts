@@ -33,7 +33,7 @@ export interface AdminPluginLike {
  * ```
  */
 export class Ten {
-  private readonly _appPath = "./app";
+  private readonly _appPath: string;
   private readonly _routeFileName = "route.ts";
   private _routes: Route[] = [];
   private _embedded?: AppManifest;
@@ -42,12 +42,16 @@ export class Ten {
   private _kv?: Deno.Kv;
   private _widgetRenderer?: WidgetPageRenderer;
 
+  private constructor(appPath = "./app") {
+    this._appPath = appPath;
+  }
+
   /**
    * Creates and returns a new instance of the Ten class.
    * When called with an `embedded` manifest, the framework runs in compiled mode
    * using pre-bundled and obfuscated routes, templates, and assets.
    *
-   * @param options - Optional configuration. Pass `embedded` for compiled binary mode.
+   * @param options - Optional configuration.
    * @returns A new Ten instance
    *
    * @example
@@ -55,12 +59,15 @@ export class Ten {
    * // Development mode
    * const app = Ten.net();
    *
+   * // Custom app path
+   * const app = Ten.net({ appPath: "./src/app" });
+   *
    * // Compiled mode (used by generated binary)
    * const app = Ten.net({ embedded: manifest });
    * ```
    */
-  static net(options?: { embedded?: AppManifest }): Ten {
-    const instance = new Ten();
+  static net(options?: { embedded?: AppManifest; appPath?: string }): Ten {
+    const instance = new Ten(options?.appPath);
     if (options?.embedded) {
       instance._embedded = options.embedded;
     }

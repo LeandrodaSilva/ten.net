@@ -7,7 +7,7 @@ suppressConsole();
 // --- routerEngine ---
 
 Deno.bench("routerEngine_full", { n: 5, warmup: 1 }, async () => {
-  await routerEngine("./app", "route.ts");
+  await routerEngine("./example/app", "route.ts");
 });
 
 // --- viewEngine ---
@@ -21,7 +21,7 @@ staticRoute.method = "GET";
 
 Deno.bench("viewEngine_static", async () => {
   await viewEngine({
-    _appPath: "./app",
+    _appPath: "./example/app",
     route: staticRoute,
     req: new Request("http://localhost/"),
     params: {},
@@ -41,7 +41,7 @@ dataRoute.run = () =>
 
 Deno.bench("viewEngine_data", async () => {
   await viewEngine({
-    _appPath: "./app",
+    _appPath: "./example/app",
     route: dataRoute,
     req: new Request("http://localhost/hello"),
     params: {},

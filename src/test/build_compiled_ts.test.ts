@@ -32,7 +32,7 @@ describe("Build Compiled TS E2E", () => {
     tempDir = await Deno.makeTempDir({ prefix: "tennet_build_test_" });
 
     const result = await build({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       output: tempDir,
       compile: false,

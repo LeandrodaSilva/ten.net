@@ -4,7 +4,7 @@ import { collectManifest } from "../../src/build/collector.ts";
 
 describe("collectManifest", () => {
   it("should collect all routes from app directory", async () => {
-    const manifest = await collectManifest("./app", "./public");
+    const manifest = await collectManifest("./example/app", "./public");
 
     const paths = manifest.routes.map((r) => r.path);
     assertStringIncludes(paths.join(","), "/hello");
@@ -13,7 +13,7 @@ describe("collectManifest", () => {
   });
 
   it("should include transpiledCode for all routes with route.ts", async () => {
-    const manifest = await collectManifest("./app", "./public");
+    const manifest = await collectManifest("./example/app", "./public");
 
     const routesWithHandler = [
       "/hello",
@@ -39,7 +39,7 @@ describe("collectManifest", () => {
   });
 
   it("should produce valid ESM in transpiledCode", async () => {
-    const manifest = await collectManifest("./app", "./public");
+    const manifest = await collectManifest("./example/app", "./public");
 
     const routesWithHandler = manifest.routes.filter(
       (r) => r.transpiledCode.length > 0,
@@ -55,7 +55,7 @@ describe("collectManifest", () => {
   });
 
   it("should set pageContent for routes with page.html", async () => {
-    const manifest = await collectManifest("./app", "./public");
+    const manifest = await collectManifest("./example/app", "./public");
 
     const helloRoute = manifest.routes.find((r) => r.path === "/hello");
     assertEquals(helloRoute !== undefined, true);
@@ -64,7 +64,7 @@ describe("collectManifest", () => {
   });
 
   it("should collect document.html", async () => {
-    const manifest = await collectManifest("./app", "./public");
+    const manifest = await collectManifest("./example/app", "./public");
     assertStringIncludes(manifest.documentHtml, "{{content}}");
   });
 });

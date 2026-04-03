@@ -42,6 +42,7 @@ describe("build command output", () => {
       const output = await runBuildCommand([
         "--no-compile",
         `--output=${outputDir}`,
+        "--app-path=./example/app",
       ]);
       const stdout = new TextDecoder().decode(output.stdout);
       const compiledPath = `${outputDir}/_compiled_app.ts`;
@@ -77,6 +78,7 @@ describe("build command output", () => {
         "--no-compile",
         `--output=${outputDir}`,
         `--secret=${secret}`,
+        "--app-path=./example/app",
       ]);
       const stdout = new TextDecoder().decode(output.stdout);
 

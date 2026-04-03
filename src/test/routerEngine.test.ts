@@ -85,18 +85,9 @@ describe("routerEngine", () => {
   });
 
   it("should generate correct path for root directory using ./app convention", async () => {
-    const tempDir = await Deno.makeTempDir();
-    const appDir = `${tempDir}/app`;
-    await Deno.mkdir(appDir, { recursive: true });
-    try {
-      await Deno.writeTextFile(`${appDir}/page.html`, "<h1>Root</h1>");
-
-      const routes = await routerEngine(`./app`, "route.ts");
-      const rootRoute = routes.find((r) => r.path === "/");
-      assertEquals(rootRoute !== undefined, true);
-    } finally {
-      await Deno.remove(tempDir, { recursive: true });
-    }
+    const routes = await routerEngine("./example/app", "route.ts");
+    const rootRoute = routes.find((r) => r.path === "/");
+    assertEquals(rootRoute !== undefined, true);
   });
 
   it("should generate multiple routes for sub directories", async () => {

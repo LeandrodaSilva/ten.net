@@ -28,7 +28,7 @@ describe("build reporter", () => {
     });
 
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",

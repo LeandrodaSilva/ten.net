@@ -59,9 +59,15 @@ export async function routerEngine(
 
     if (!hasRoute && !hasPage) continue;
 
-    const rel = entry.path
-      .replace(/^[.\/]*app/, "") // remove prefixos como './app' ou 'app'
-      .replaceAll("\\", "/");
+    const normalizedAppPath = appPath.replace(/\\/g, "/").replace(/^\.\//, "")
+      .replace(/\/$/, "");
+    const normalizedEntryPath = entry.path.replace(/\\/g, "/").replace(
+      /^\.\//,
+      "",
+    );
+    const rel = normalizedEntryPath.startsWith(normalizedAppPath)
+      ? normalizedEntryPath.slice(normalizedAppPath.length)
+      : normalizedEntryPath.replace(/^[.\/]*app/, "");
 
     const path = rel.length ? rel : "/";
 

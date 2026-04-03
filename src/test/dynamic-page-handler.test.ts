@@ -10,7 +10,7 @@ import type { StorageItem } from "../../src/models/Storage.ts";
  * The function reads filesystem files synchronously via Deno APIs.
  */
 describe("renderDynamicPage", () => {
-  const appPath = "./app";
+  const appPath = "./example/app";
 
   /** Helper: create a minimal page StorageItem. */
   function makePage(overrides?: Partial<StorageItem>): StorageItem {

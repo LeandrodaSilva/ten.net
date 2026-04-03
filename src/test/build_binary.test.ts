@@ -42,7 +42,7 @@ describe("Build Binary E2E", { ignore: true }, () => {
 
     // Build the actual binary (compile: true)
     const result = await build({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       output: tempDir,
       compile: true,

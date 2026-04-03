@@ -33,7 +33,7 @@ describe("BuildReporter — verbose mode", () => {
   it("start should print header", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -46,7 +46,7 @@ describe("BuildReporter — verbose mode", () => {
   it("startStep and finishStep should produce formatted output", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -61,7 +61,7 @@ describe("BuildReporter — verbose mode", () => {
   it("finishStep with failure status", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -76,7 +76,7 @@ describe("BuildReporter — verbose mode", () => {
   it("finishStep with warning status", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -91,7 +91,7 @@ describe("BuildReporter — verbose mode", () => {
   it("warningBlock should render title and lines", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -109,7 +109,7 @@ describe("BuildReporter — verbose mode", () => {
   it("warningBlock with empty lines should be no-op", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -123,7 +123,7 @@ describe("BuildReporter — verbose mode", () => {
   it("reportFailure should render error details", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -144,7 +144,7 @@ describe("BuildReporter — verbose mode", () => {
   it("reportFailure without details", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -161,7 +161,7 @@ describe("BuildReporter — verbose mode", () => {
   it("reportFailure with active step should finish it first", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -180,14 +180,14 @@ describe("BuildReporter — verbose mode", () => {
   it("finish should render full build summary with binary", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
       totalSteps: 5,
     });
     reporter.finish({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       compiledPath: "./dist/compiled.ts",
@@ -219,14 +219,14 @@ describe("BuildReporter — verbose mode", () => {
   it("finish without binaryPath should show externally provided", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "compiled TS only",
       totalSteps: 4,
     });
     reporter.finish({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       compiledPath: "./dist/compiled.ts",
@@ -252,14 +252,14 @@ describe("BuildReporter — verbose mode", () => {
   it("finish with zero manifestBytes should handle reduction", () => {
     const { reporter, lines } = createCapturingReporter();
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
       totalSteps: 3,
     });
     reporter.finish({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       compiledPath: "./dist/compiled.ts",
@@ -287,7 +287,7 @@ describe("BuildReporter — non-verbose mode", () => {
   it("all methods should be no-ops", () => {
     const { reporter, lines } = createCapturingReporter({ verbose: false });
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",
@@ -298,7 +298,7 @@ describe("BuildReporter — non-verbose mode", () => {
     reporter.warningBlock("Warn", ["line"]);
     reporter.reportFailure({ stage: "s", message: "m" });
     reporter.finish({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       compiledPath: "./dist/compiled.ts",
@@ -327,7 +327,7 @@ describe("BuildReporter — interactive spinner", () => {
   it("startStep should activate spinner in interactive mode", () => {
     const { reporter } = createCapturingReporter({ interactive: true });
     reporter.start({
-      appPath: "./app",
+      appPath: "./example/app",
       publicPath: "./public",
       outputDir: "./dist",
       mode: "binary",

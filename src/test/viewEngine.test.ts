@@ -37,7 +37,7 @@ describe("viewEngine", () => {
     });
 
     const result = await viewEngine({
-      _appPath: "./app",
+      _appPath: "./example/app",
       route,
       req: new Request("http://localhost/admin"),
       params: {},
@@ -115,7 +115,7 @@ describe("viewEngine", () => {
     });
 
     const result = await viewEngine({
-      _appPath: "./app",
+      _appPath: "./example/app",
       route,
       req: new Request("http://localhost/admin/test"),
       params: {},
@@ -132,7 +132,7 @@ describe("viewEngine", () => {
     });
 
     const result = await viewEngine({
-      _appPath: "./app",
+      _appPath: "./example/app",
       route,
       req: new Request("http://localhost/admin/static"),
       params: {},
@@ -154,7 +154,7 @@ describe("viewEngine", () => {
     console.error = () => {};
     try {
       const result = await viewEngine({
-        _appPath: "./app",
+        _appPath: "./example/app",
         route,
         req: new Request("http://localhost/admin/error"),
         params: {},
@@ -172,7 +172,7 @@ describe("viewEngine", () => {
     });
 
     const result = await viewEngine({
-      _appPath: "./app",
+      _appPath: "./example/app",
       route,
       req: new Request("http://localhost/admin"),
       params: {},
