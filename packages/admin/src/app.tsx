@@ -48,8 +48,8 @@ export const App = (
                 const btn = e.target.querySelector("[data-confirm]");
                 if (btn) {
                   // @ts-ignore: DOM API
-                  const msg =
-                    btn.getAttribute("data-confirm") || "Are you sure?";
+                  const msg = btn.getAttribute("data-confirm") ||
+                    "Are you sure?";
                   // @ts-ignore: DOM API
                   if (!confirm(msg)) e.preventDefault();
                 }
