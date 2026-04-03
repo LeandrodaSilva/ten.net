@@ -49,7 +49,7 @@ plugin system. Published to JSR.
 ## Commands
 
 ```bash
-deno run --allow-all --unstable-raw-imports example/main.ts  # Run example server
+deno run --allow-all --unstable-raw-imports example/http/main.ts  # Run example server
 deno task test       # Run all tests in parallel
 deno task coverage   # Run tests with coverage
 deno task fmt        # Format code
@@ -81,8 +81,10 @@ src/                          # Framework source
 _test_/                       # Core tests (~30 files, 61 tests)
 
 example/
-  main.ts                     # Example server entry point
-  app/                        # Example file-based routes (also test fixtures)
+  http/
+    main.ts                   # Example HTTP server entry point
+    app/                      # Example file-based routes (also test fixtures)
+  sw/                         # Example Service Worker app
 ```
 
 ## Architecture
@@ -139,7 +141,7 @@ AES-256-GCM encryption for code protection. Entry point:
 Tests are in `_test_/` (~30 test files, core only). Uses `Deno.test()` and
 `describe/it` from `@std/testing/bdd`. Assertions from `@std/assert` (preferred)
 and `@deno-assert` (legacy). Snapshots in `_test_/__snapshots__/`. Test fixtures
-in `example/app/`.
+in `example/http/app/`.
 
 ## Release Process
 
@@ -162,7 +164,7 @@ creates GitHub Release.
 - Most tasks require `--unstable-raw-imports` flag (already configured in
   `deno.json` tasks)
 - `deno task build` uses `src/build/buildCommand.ts` (not `build.ts`) as entry
-- `example/app/` is used as test fixtures — pass `appPath: "./example/app"` to
-  `Ten.net()` in tests
+- `example/http/app/` is used as test fixtures — pass
+  `appPath: "./example/http/app"` to `Ten.net()` in tests
 - `routerEngine` and `collector` dynamically strip the appPath prefix from entry
   paths (no hardcoded `./app` regex)

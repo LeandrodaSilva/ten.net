@@ -85,7 +85,7 @@ describe("routerEngine", () => {
   });
 
   it("should generate correct path for root directory using ./app convention", async () => {
-    const routes = await routerEngine("./example/app", "route.ts");
+    const routes = await routerEngine("./example/http/app", "route.ts");
     const rootRoute = routes.find((r) => r.path === "/");
     assertEquals(rootRoute !== undefined, true);
   });

@@ -8,7 +8,7 @@ import type { StorageItem } from "../src/models/Storage.ts";
 describe("Ten", () => {
   describe("Ten.net()", () => {
     it("should return a Ten instance", () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       assertEquals(app instanceof Ten, true);
     });
 
@@ -21,7 +21,7 @@ describe("Ten", () => {
 
   describe("_handleRequest (via integration)", () => {
     it("should return 404 for unknown routes", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const handler = (app as unknown as {
         _handleRequest: (req: Request) => Promise<Response>;
       })._handleRequest.bind(app);
@@ -33,7 +33,7 @@ describe("Ten", () => {
     });
 
     it("should execute non-view route handler", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const routes = (app as unknown as { _routes: Route[] })._routes;
       const route = new Route({
         path: "/api/test",
@@ -59,7 +59,7 @@ describe("Ten", () => {
     });
 
     it("should render view for route with page", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const routes = (app as unknown as { _routes: Route[] })._routes;
       const route = new Route({
         path: "/admin/test-page",
@@ -86,7 +86,7 @@ describe("Ten", () => {
     });
 
     it("should return 500 when non-view route handler throws", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const routes = (app as unknown as { _routes: Route[] })._routes;
       const route = new Route({
         path: "/api/error",
@@ -114,7 +114,7 @@ describe("Ten", () => {
     });
 
     it("should return 500 for route that throws", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const routes = (app as unknown as { _routes: Route[] })._routes;
       const route = new Route({
         path: "/error",
@@ -150,7 +150,7 @@ describe("Ten", () => {
     });
 
     it("should return 404 for route without run and not a view (fallthrough)", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const routes = (app as unknown as { _routes: Route[] })._routes;
       const route = new Route({
         path: "/no-handler",
@@ -178,7 +178,7 @@ describe("Ten", () => {
     });
 
     it("should return 404 when isView is true but viewEngine fails", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const routes = (app as unknown as { _routes: Route[] })._routes;
       const route = new Route({
         path: "/broken-page",
@@ -230,7 +230,7 @@ describe("Ten", () => {
     }
 
     it("should serve dynamic page when no file-based route matches", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const registry = new DynamicRouteRegistry();
       registry.register(makePage({ slug: "dynamic-test" }));
 
@@ -252,7 +252,7 @@ describe("Ten", () => {
     });
 
     it("should give file-based routes priority over dynamic routes", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
 
       // Add a file-based route at /about
       const routes = (app as unknown as { _routes: Route[] })._routes;
@@ -287,7 +287,7 @@ describe("Ten", () => {
     });
 
     it("should only match dynamic routes on GET requests", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const registry = new DynamicRouteRegistry();
       registry.register(makePage({ slug: "about" }));
       (app as unknown as { _dynamicRegistry: DynamicRouteRegistry })
@@ -304,7 +304,7 @@ describe("Ten", () => {
     });
 
     it("should render custom 404 page when slug '404' is registered", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const registry = new DynamicRouteRegistry();
       registry.register(
         makePage({
@@ -332,7 +332,7 @@ describe("Ten", () => {
     });
 
     it("should return plain 404 when no custom 404 page exists", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
       const registry = new DynamicRouteRegistry();
       (app as unknown as { _dynamicRegistry: DynamicRouteRegistry })
         ._dynamicRegistry = registry;
@@ -352,7 +352,7 @@ describe("Ten", () => {
 
   describe("start", () => {
     it("should load routes and call Deno.serve", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
 
       const originalServe = Deno.serve;
       let serveCalled = false;
@@ -381,7 +381,7 @@ describe("Ten", () => {
     });
 
     it("should start file watcher when DEBUG env is set", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
 
       const originalServe = Deno.serve;
       // deno-lint-ignore no-explicit-any
@@ -428,7 +428,7 @@ describe("Ten", () => {
     });
 
     it("should handle worker messages by reloading routes", async () => {
-      const app = Ten.net({ appPath: "./example/app" });
+      const app = Ten.net({ appPath: "./example/http/app" });
 
       const originalServe = Deno.serve;
       // deno-lint-ignore no-explicit-any
