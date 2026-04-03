@@ -25,7 +25,7 @@ export interface BuildReporterContext {
   appPath: string;
   publicPath: string;
   outputDir: string;
-  mode: "binary" | "compiled TS only";
+  mode: "binary" | "compiled TS only" | "browser (Service Worker)";
   totalSteps: number;
 }
 
@@ -49,7 +49,7 @@ export interface BuildReporterSummary {
   secretGenerated: boolean;
   secret: string;
   nextStep: string;
-  mode: "binary" | "compiled TS only";
+  mode: "binary" | "compiled TS only" | "browser (Service Worker)";
 }
 
 export interface BuildReporterFailure {

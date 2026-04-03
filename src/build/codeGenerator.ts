@@ -43,6 +43,83 @@ if (import.meta.main) {
 `;
 }
 
+export function generateServiceWorkerApp(
+  manifestJson: string,
+): string {
+  return `import { TenCore } from "@leproj/tennet/core";
+import { fire } from "@leproj/tennet/sw";
+
+const MANIFEST = ${manifestJson};
+
+const core = new TenCore({ embedded: MANIFEST });
+core.init();
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+fire(core);
+
+console.log("[Ten.net SW] Ready —", core.routes.length, "routes loaded");
+`;
+}
+
+export function generateServiceWorkerAppEncrypted(
+  encryptedBase64: string,
+  ivBase64: string,
+  keyRawBase64: string,
+): string {
+  return `import { TenCore } from "@leproj/tennet/core";
+import { fire } from "@leproj/tennet/sw";
+import { decrypt, importKeyRaw, decompressData } from "@leproj/tennet/build/crypto";
+
+const ENCRYPTED_DATA = "${encryptedBase64}";
+const IV = "${ivBase64}";
+const KEY_RAW = "${keyRawBase64}";
+
+function base64ToBytes(b64) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) {
+    bytes[i] = bin.charCodeAt(i);
+  }
+  return bytes;
+}
+
+async function boot() {
+  const key = await importKeyRaw(base64ToBytes(KEY_RAW));
+  const decrypted = await decrypt(
+    base64ToBytes(ENCRYPTED_DATA),
+    key,
+    base64ToBytes(IV),
+  );
+  const decompressed = await decompressData(decrypted);
+  const manifest = JSON.parse(new TextDecoder().decode(decompressed));
+
+  const core = new TenCore({ embedded: manifest });
+  core.init();
+
+  self.addEventListener("install", (event) => {
+    event.waitUntil(self.skipWaiting());
+  });
+
+  self.addEventListener("activate", (event) => {
+    event.waitUntil(self.clients.claim());
+  });
+
+  fire(core);
+
+  console.log("[Ten.net SW] Ready —", core.routes.length, "routes loaded");
+}
+
+boot();
+`;
+}
+
 export function generateCompiledAppStandalone(
   encryptedDataBase64: string,
   ivBase64: string,

@@ -4,7 +4,7 @@ import { build } from "./build.ts";
 
 export async function main() {
   const args = parseArgs(Deno.args, {
-    string: ["secret", "output", "app-path", "public-path"],
+    string: ["secret", "output", "app-path", "public-path", "target"],
     boolean: ["help", "version", "no-compile"],
     alias: { h: "help", v: "version" },
     default: {
@@ -12,6 +12,7 @@ export async function main() {
       "app-path": "./app",
       "public-path": "./public",
       "no-compile": false,
+      target: "deno",
     },
   });
 
@@ -32,6 +33,7 @@ export async function main() {
       output: args.output,
       secret: args.secret,
       compile: !args["no-compile"],
+      target: args.target as "deno" | "browser",
     });
   } catch {
     Deno.exit(1);
