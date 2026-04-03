@@ -23,9 +23,11 @@ jobs:
           deno-version: v2.x
 
       - name: Verify version matches tag
+        env:
+          TAG_REF: ${{ github.ref }}
         run: |
           PACKAGE_VERSION=$(deno eval 'import meta from "./deno.json" with { type: "json" }; console.log(meta.version)')
-          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          TAG_VERSION="${TAG_REF#refs/tags/v}"
           echo "Package version: ${PACKAGE_VERSION}"
           echo "Tag version: ${TAG_VERSION}"
           if [ "${PACKAGE_VERSION}" != "${TAG_VERSION}" ]; then
@@ -40,7 +42,7 @@ jobs:
         run: deno lint --unstable-raw-imports
 
       - name: Cache dependencies
-        run: deno cache --unstable-raw-imports packages/core/src/mod.ts
+        run: deno cache --unstable-raw-imports src/mod.ts
 
       - name: Run tests
         run: deno test --allow-all --unstable-raw-imports --unstable-kv
@@ -82,32 +84,28 @@ jobs:
 
       - name: Get version from tag
         id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        env:
+          TAG_REF: ${{ github.ref }}
+        run: echo "VERSION=${TAG_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
 
       - name: Generate changelog
         id: changelog
         run: |
           if [ $(git tag --list | wc -l) -eq 1 ]; then
-            # First release
-            echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
-            echo "## What's Changed" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "🎉 Initial release of ten.net" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "### Features" >> $GITHUB_OUTPUT
-            git log --pretty=format:"- %s" --no-merges >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            echo "CHANGELOG<<EOF" >> "$GITHUB_OUTPUT"
+            echo "## What's Changed" >> "$GITHUB_OUTPUT"
+            echo "" >> "$GITHUB_OUTPUT"
+            git log --pretty=format:"- %s" --no-merges >> "$GITHUB_OUTPUT"
+            echo "" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
           else
-            # Get previous tag
             PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1)
-            echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
-            echo "## What's Changed" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            git log --pretty=format:"- %s" --no-merges $PREVIOUS_TAG..HEAD >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/$PREVIOUS_TAG...${{ steps.get_version.outputs.VERSION }}" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            echo "CHANGELOG<<EOF" >> "$GITHUB_OUTPUT"
+            echo "## What's Changed" >> "$GITHUB_OUTPUT"
+            echo "" >> "$GITHUB_OUTPUT"
+            git log --pretty=format:"- %s" --no-merges "$PREVIOUS_TAG"..HEAD >> "$GITHUB_OUTPUT"
+            echo "" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Create Release
