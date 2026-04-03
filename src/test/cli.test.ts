@@ -9,7 +9,7 @@ describe("cli", () => {
         "run",
         "--allow-all",
 
-        "src/cli.ts",
+        "packages/core/src/cli.ts",
       ],
       stdout: "piped",
       stderr: "piped",
@@ -30,7 +30,7 @@ describe("cli", () => {
         "run",
         "--allow-all",
 
-        "src/cli.ts",
+        "packages/core/src/cli.ts",
         "--version",
       ],
       stdout: "piped",
@@ -50,7 +50,7 @@ describe("cli", () => {
         "run",
         "--allow-all",
 
-        "src/cli.ts",
+        "packages/core/src/cli.ts",
         "build",
         "--help",
       ],
@@ -73,7 +73,7 @@ describe("cli", () => {
         "run",
         "--allow-all",
 
-        "src/cli.ts",
+        "packages/core/src/cli.ts",
         "unknown-command",
       ],
       stdout: "piped",

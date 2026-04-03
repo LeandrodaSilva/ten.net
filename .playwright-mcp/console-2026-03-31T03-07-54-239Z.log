@@ -1,8 +1,0 @@
-[      88ms] Illegal return statement
-[      91ms] Illegal return statement
-[   13829ms] Illegal return statement
-[   13832ms] Illegal return statement
-[   30750ms] Illegal return statement
-[   30753ms] Illegal return statement
-[   48603ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:8000/admin/plugins/page-plugin/d75662ea-dc39-44d3-bcbc-da03e080b657:0
-[   68540ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost:8000/admin/plugins/page-plugin/d75662ea-dc39-44d3-bcbc-da03e080b657:0

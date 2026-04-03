@@ -13,7 +13,7 @@ function runBuildCommand(args: string[]) {
     args: [
       "run",
       "--allow-all",
-      "src/build/buildCommand.ts",
+      "packages/core/src/build/buildCommand.ts",
       ...args,
     ],
     stdout: "piped",
