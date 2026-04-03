@@ -40,4 +40,6 @@ export interface AppManifest {
   documentHtml: string;
   /** Map of URL paths to their embedded static assets. */
   assets: Record<string, EmbeddedAsset>;
+  /** Optional seed data for browser storage (store name → items). */
+  _seed?: Record<string, Array<{ id: string; [key: string]: unknown }>>;
 }

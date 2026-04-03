@@ -46,6 +46,16 @@ export interface BuildOptions {
   verbose?: boolean;
   /** Build target: "deno" (default) or "browser" (Service Worker) */
   target?: "deno" | "browser";
+  /** Seed data to embed in the manifest for browser storage pre-population. */
+  seed?: Record<string, Array<{ id: string; [key: string]: unknown }>>;
+  /** Sync configuration for the generated Service Worker. */
+  sync?: {
+    serverUrl: string;
+    endpoint: string;
+    storeName: string;
+    interval?: number;
+    headers?: Record<string, string>;
+  };
 }
 
 /** Result returned by {@linkcode Ten.build} after compilation. */
@@ -265,6 +275,10 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
       },
     );
 
+    if (options?.seed) {
+      manifest._seed = options.seed;
+    }
+
     const jsonBytes = await runBuildStep(
       reporter,
       "Compress manifest",
@@ -315,6 +329,7 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
       }
 
       const manifestJson = JSON.stringify(manifest);
+      const swGenOptions = options?.sync ? { sync: options.sync } : undefined;
       const swCode = await runBuildStep(
         reporter,
         "Generate SW app",
@@ -324,9 +339,10 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
               encodeBase64(encryptedPayload.ciphertext),
               encodeBase64(encryptedPayload.iv),
               encodeBase64(encryptedPayload.keyRaw),
+              swGenOptions,
             );
           }
-          return generateServiceWorkerApp(manifestJson);
+          return generateServiceWorkerApp(manifestJson, swGenOptions);
         },
         () => "Service Worker bootstrap created",
       );

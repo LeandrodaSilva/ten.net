@@ -31,7 +31,8 @@
     "jsr:@std/testing@^1.0.15": "1.0.15",
     "npm:@heroicons/react@*": "2.2.0_react@19.1.1",
     "npm:@types/node@*": "24.1.0",
-    "npm:esbuild@0.25": "0.25.12"
+    "npm:esbuild@0.25": "0.25.12",
+    "npm:fake-indexeddb@6": "6.2.5"
   },
   "jsr": {
     "@deno/cache-dir@0.13.2": {
@@ -311,6 +312,9 @@
       ],
       "scripts": true,
       "bin": true
+    },
+    "fake-indexeddb@6.2.5": {
+      "integrity": "sha512-CGnyrvbhPlWYMngksqrSSUT1BAVP49dZocrHuK0SvtR0D5TMs5wP0o3j7jexDJW01KSadjBp1M/71o/KR3nD1w=="
     },
     "react@19.1.1": {
       "integrity": "sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ=="
@@ -800,7 +804,8 @@
       "jsr:@std/fs@^1.0.19",
       "jsr:@std/path@^1.1.2",
       "jsr:@std/testing@^1.0.15",
-      "npm:esbuild@0.25"
+      "npm:esbuild@0.25",
+      "npm:fake-indexeddb@6"
     ]
   }
 }
