@@ -5,7 +5,7 @@ import type { Route } from "../src/models/Route.ts";
 
 describe("Ten without admin (no useAdmin)", () => {
   it("should start with only file-based routes", async () => {
-    const app = Ten.net({ appPath: "./example/app" });
+    const app = Ten.net({ appPath: "./example/http/app" });
 
     const originalServe = Deno.serve;
     // deno-lint-ignore no-explicit-any
@@ -35,7 +35,7 @@ describe("Ten without admin (no useAdmin)", () => {
   });
 
   it("should return 404 for /admin", async () => {
-    const app = Ten.net({ appPath: "./example/app" });
+    const app = Ten.net({ appPath: "./example/http/app" });
     const handler = (app as unknown as {
       _handleRequest: (req: Request) => Promise<Response>;
     })._handleRequest.bind(app);
@@ -47,7 +47,7 @@ describe("Ten without admin (no useAdmin)", () => {
   });
 
   it("should return 404 for /admin/login", async () => {
-    const app = Ten.net({ appPath: "./example/app" });
+    const app = Ten.net({ appPath: "./example/http/app" });
     const handler = (app as unknown as {
       _handleRequest: (req: Request) => Promise<Response>;
     })._handleRequest.bind(app);
@@ -59,7 +59,7 @@ describe("Ten without admin (no useAdmin)", () => {
   });
 
   it("should return 404 for /admin/favicon.ico", async () => {
-    const app = Ten.net({ appPath: "./example/app" });
+    const app = Ten.net({ appPath: "./example/http/app" });
     const handler = (app as unknown as {
       _handleRequest: (req: Request) => Promise<Response>;
     })._handleRequest.bind(app);
@@ -71,7 +71,7 @@ describe("Ten without admin (no useAdmin)", () => {
   });
 
   it("should have no middlewares without useAdmin", () => {
-    const app = Ten.net({ appPath: "./example/app" });
+    const app = Ten.net({ appPath: "./example/http/app" });
     const middlewares = (app as unknown as { _middlewares: unknown[] })
       ._middlewares;
     assertEquals(middlewares.length, 0);
