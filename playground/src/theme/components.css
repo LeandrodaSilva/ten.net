@@ -340,11 +340,6 @@
     display: flex;
   }
 
-  .sidebar-overlay,
-  .sidebar-panel {
-    display: block;
-  }
-
   .sidebar-panel {
     display: flex;
   }
