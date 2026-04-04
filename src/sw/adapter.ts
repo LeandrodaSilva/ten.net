@@ -12,6 +12,29 @@ export function handle(
   return (evt) => {
     evt.respondWith(
       (async () => {
+        const url = new URL(evt.request.url);
+
+        if (opts.pathPrefix) {
+          if (!url.pathname.startsWith(opts.pathPrefix)) {
+            if (opts.fallback) return opts.fallback(evt.request);
+            return fetch(evt.request);
+          }
+          const strippedPath = url.pathname.slice(opts.pathPrefix.length) || "/";
+          const strippedUrl = new URL(strippedPath, url.origin);
+          strippedUrl.search = url.search;
+          strippedUrl.hash = url.hash;
+          const strippedReq = new Request(strippedUrl.href, {
+            method: evt.request.method,
+            headers: evt.request.headers,
+            body: evt.request.body,
+          });
+          const res = await core.fetch(strippedReq);
+          if (res.status === 404 && opts.fallback) {
+            return opts.fallback(evt.request);
+          }
+          return res;
+        }
+
         const res = await core.fetch(evt.request);
         if (res.status === 404 && opts.fallback) {
           return opts.fallback(evt.request);

@@ -159,6 +159,80 @@ describe("SW Adapter — handle()", () => {
   });
 });
 
+describe("SW Adapter — pathPrefix", () => {
+  it("should intercept requests matching pathPrefix", async () => {
+    const route = makeRoute({
+      path: "/hello",
+      regex: /^\/hello$/,
+      method: "GET",
+      run: () => new Response("intercepted", { status: 200 }),
+    });
+    const core = new TenCore({ routes: [route] });
+
+    const { event, getRespondedWith } = makeFetchEvent(
+      "http://localhost/preview/hello",
+    );
+    const handler = handle(core, { pathPrefix: "/preview" });
+    handler(event);
+
+    const res = await getRespondedWith();
+    assertEquals((res as Response).status, 200);
+    assertEquals(await (res as Response).text(), "intercepted");
+  });
+
+  it("should passthrough requests NOT matching pathPrefix", async () => {
+    const core = new TenCore({
+      routes: [
+        makeRoute({
+          path: "/hello",
+          regex: /^\/hello$/,
+          method: "GET",
+          run: () => new Response("should not reach"),
+        }),
+      ],
+    });
+
+    let fallbackCalled = false;
+    const fallback: typeof fetch = () => {
+      fallbackCalled = true;
+      return Promise.resolve(new Response("passthrough", { status: 200 }));
+    };
+
+    const { event, getRespondedWith } = makeFetchEvent(
+      "http://localhost/other/path",
+    );
+    const handler = handle(core, { pathPrefix: "/preview", fallback });
+    handler(event);
+
+    const res = await getRespondedWith();
+    assertEquals(fallbackCalled, true);
+    assertEquals(await (res as Response).text(), "passthrough");
+  });
+
+  it("should strip pathPrefix before passing to TenCore", async () => {
+    let receivedUrl = "";
+    const route = makeRoute({
+      path: "/api/status",
+      regex: /^\/api\/status$/,
+      method: "GET",
+      run: (req) => {
+        receivedUrl = new URL(req.url).pathname;
+        return new Response("ok");
+      },
+    });
+    const core = new TenCore({ routes: [route] });
+
+    const { event, getRespondedWith } = makeFetchEvent(
+      "http://localhost/preview/api/status",
+    );
+    const handler = handle(core, { pathPrefix: "/preview" });
+    handler(event);
+
+    await getRespondedWith();
+    assertEquals(receivedUrl, "/api/status");
+  });
+});
+
 describe("SW Adapter — fire()", () => {
   it("should register addEventListener('fetch') on globalThis/self", () => {
     const route = makeRoute({
