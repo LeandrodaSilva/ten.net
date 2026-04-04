@@ -13,7 +13,7 @@
  *
  * @module
  */
-export { fire, handle } from "./adapter.ts";
+export { fire, handle, listenForManifestUpdates } from "./adapter.ts";
 export type {
   ExtendableEvent,
   FetchEvent,

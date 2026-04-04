@@ -1,3 +1,4 @@
+import type { AppManifest } from "../build/manifest.ts";
 import type { TenCore } from "../core/tenCore.ts";
 import type { FetchEvent, TenServiceWorkerOptions } from "./types.ts";
 
@@ -43,6 +44,21 @@ export function handle(
       })(),
     );
   };
+}
+
+/**
+ * Listen for postMessage events to hot-swap the TenCore manifest.
+ * Expected message format: { type: "UPDATE_MANIFEST", manifest: AppManifest }
+ */
+export function listenForManifestUpdates(core: TenCore): void {
+  (self as unknown as EventTarget).addEventListener(
+    "message",
+    ((evt: MessageEvent) => {
+      if (evt.data?.type === "UPDATE_MANIFEST" && evt.data.manifest) {
+        core.updateManifest(evt.data.manifest as AppManifest);
+      }
+    }) as EventListener,
+  );
 }
 
 /**

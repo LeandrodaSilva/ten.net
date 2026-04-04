@@ -2,8 +2,9 @@ import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
 import { TenCore } from "../src/core/tenCore.ts";
 import { Route } from "../src/models/Route.ts";
-import { fire, handle } from "../src/sw/adapter.ts";
+import { fire, handle, listenForManifestUpdates } from "../src/sw/adapter.ts";
 import type { FetchEvent } from "../src/sw/types.ts";
+import type { AppManifest } from "../src/build/manifest.ts";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -264,6 +265,69 @@ describe("SW Adapter — fire()", () => {
       assertEquals(typeof registeredHandler, "function");
     } finally {
       // Restore original
+      (self as unknown as Record<string, unknown>).addEventListener = original;
+    }
+  });
+});
+
+describe("SW Adapter — listenForManifestUpdates()", () => {
+  it("should update TenCore manifest when receiving UPDATE_MANIFEST message", async () => {
+    const oldManifest: AppManifest = {
+      routes: [], layouts: {}, documentHtml: "",
+      assets: { "/old.css": { mimeType: "text/css", dataBase64: btoa("old") } },
+    };
+    const core = new TenCore({ embedded: oldManifest });
+    await core.fetch(new Request("http://localhost/old.css"));
+    assertEquals(await (await core.fetch(new Request("http://localhost/old.css"))).text(), "old");
+
+    let messageHandler: ((evt: MessageEvent) => void) | null = null;
+    const original = (self as unknown as Record<string, unknown>).addEventListener as (...args: unknown[]) => void;
+    (self as unknown as Record<string, unknown>).addEventListener = (type: unknown, handler: unknown) => {
+      if (type === "message") messageHandler = handler as (evt: MessageEvent) => void;
+    };
+
+    try {
+      listenForManifestUpdates(core);
+      assertEquals(typeof messageHandler, "function");
+
+      const newManifest: AppManifest = {
+        routes: [], layouts: {}, documentHtml: "",
+        assets: { "/new.css": { mimeType: "text/css", dataBase64: btoa("new") } },
+      };
+      messageHandler!(new MessageEvent("message", {
+        data: { type: "UPDATE_MANIFEST", manifest: newManifest },
+      }));
+
+      const oldRes = await core.fetch(new Request("http://localhost/old.css"));
+      assertEquals(oldRes.status, 404);
+      const newRes = await core.fetch(new Request("http://localhost/new.css"));
+      assertEquals(newRes.status, 200);
+      assertEquals(await newRes.text(), "new");
+    } finally {
+      (self as unknown as Record<string, unknown>).addEventListener = original;
+    }
+  });
+
+  it("should ignore messages with unknown type", async () => {
+    const manifest: AppManifest = {
+      routes: [], layouts: {}, documentHtml: "",
+      assets: { "/keep.css": { mimeType: "text/css", dataBase64: btoa("keep") } },
+    };
+    const core = new TenCore({ embedded: manifest });
+    await core.fetch(new Request("http://localhost/keep.css"));
+
+    let messageHandler: ((evt: MessageEvent) => void) | null = null;
+    const original = (self as unknown as Record<string, unknown>).addEventListener as (...args: unknown[]) => void;
+    (self as unknown as Record<string, unknown>).addEventListener = (type: unknown, handler: unknown) => {
+      if (type === "message") messageHandler = handler as (evt: MessageEvent) => void;
+    };
+
+    try {
+      listenForManifestUpdates(core);
+      messageHandler!(new MessageEvent("message", { data: { type: "UNKNOWN", foo: "bar" } }));
+      const res = await core.fetch(new Request("http://localhost/keep.css"));
+      assertEquals(res.status, 200);
+    } finally {
       (self as unknown as Record<string, unknown>).addEventListener = original;
     }
   });
