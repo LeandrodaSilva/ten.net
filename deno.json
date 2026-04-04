@@ -54,7 +54,8 @@
     "dist",
     "build",
     "coverage",
-    "example/sw/dist"
+    "example/sw/dist",
+    "playground"
   ],
   "permissions": {
     "default": {

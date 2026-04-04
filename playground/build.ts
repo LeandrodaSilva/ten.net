@@ -4,8 +4,11 @@ import { denoPlugins } from "esbuild-deno-loader";
 async function build(): Promise<void> {
   await Deno.mkdir("playground/dist", { recursive: true });
 
+  // deno-lint-ignore no-explicit-any
+  const plugins = [...denoPlugins()] as any[];
+
   await esbuild.build({
-    plugins: [...denoPlugins()],
+    plugins,
     entryPoints: ["playground/sw.ts"],
     outfile: "playground/dist/sw.js",
     bundle: true,
@@ -15,7 +18,7 @@ async function build(): Promise<void> {
   });
 
   await esbuild.build({
-    plugins: [...denoPlugins()],
+    plugins,
     entryPoints: ["playground/src/app.ts"],
     outfile: "playground/dist/app.js",
     bundle: true,

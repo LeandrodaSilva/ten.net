@@ -13,24 +13,21 @@ const core = new TenCore({ embedded: emptyManifest });
 
 fire(core, {
   pathPrefix: "/preview",
-  fallback: (req: Request) => fetch(req),
+  fallback: (input: RequestInfo | URL, init?: RequestInit) =>
+    fetch(input, init),
 });
 
 listenForManifestUpdates(core);
 
-declare const self: ServiceWorkerGlobalScope & typeof globalThis;
+// deno-lint-ignore no-explicit-any
+const sw = self as any;
 
-interface ExtendableEvent extends Event {
-  waitUntil(f: Promise<unknown>): void;
-}
-
-self.addEventListener("install", () => {
-  (self as unknown as { skipWaiting(): Promise<void> }).skipWaiting();
+sw.addEventListener("install", () => {
+  sw.skipWaiting();
 });
 
-self.addEventListener("activate", (evt) => {
-  (evt as ExtendableEvent).waitUntil(
-    (self as unknown as { clients: { claim(): Promise<void> } }).clients
-      .claim(),
+sw.addEventListener("activate", (evt: Event) => {
+  (evt as Event & { waitUntil(f: Promise<unknown>): void }).waitUntil(
+    sw.clients.claim(),
   );
 });
