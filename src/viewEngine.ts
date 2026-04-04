@@ -59,12 +59,12 @@ export async function viewEngine(args: IViewEngine) {
 
           keys.forEach((key) => {
             // Triple-brace: raw output (unescaped)
-            pageModule = String(pageModule).replace(
+            pageModule = String(pageModule).replaceAll(
               `{{{${key}}}}`,
               String(body[key]),
             );
             // Double-brace: escaped output (XSS-safe)
-            pageModule = String(pageModule).replace(
+            pageModule = String(pageModule).replaceAll(
               `{{${key}}}`,
               escapeHtml(String(body[key])),
             );

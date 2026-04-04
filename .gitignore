@@ -7,3 +7,4 @@ dist
 coverage
 cov_profile
 .claude/worktrees/
+.superpowers/

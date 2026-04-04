@@ -109,6 +109,21 @@ export class TenCore {
     this._routes = [];
   }
 
+  /**
+   * Hot-swap the embedded AppManifest at runtime.
+   *
+   * Replaces the internal manifest, clears all existing routes (including any
+   * manually added ones), resets the initialized flag, and rebuilds routes from
+   * the new manifest. Intended for the playground feature where the Service
+   * Worker manifest needs to be updated without reinstalling the SW.
+   */
+  updateManifest(manifest: AppManifest): void {
+    this._embedded = manifest;
+    this._routes = [];
+    this._initialized = false;
+    this.init();
+  }
+
   // ---------------------------------------------------------------------------
   // Middleware & plugin registration
   // ---------------------------------------------------------------------------
