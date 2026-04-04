@@ -32,7 +32,7 @@ export async function POST(req) {
   }
   return new Response(null, {
     status: 302,
-    headers: { Location: "/" },
+    headers: { Location: "./" },
   });
 }`;
 
@@ -46,7 +46,7 @@ const todoPageHtml =
     </div>
   </div>
 
-  <form method="POST" action="/" style="display:flex;gap:.75rem;margin-bottom:1.5rem;">
+  <form method="POST" action="" style="display:flex;gap:.75rem;margin-bottom:1.5rem;">
     <input name="text" style="flex:1;padding:.5rem .75rem;border:1px solid #cbd5e1;border-radius:6px;" placeholder="Nova tarefa..." required />
     <button type="submit" style="background:#3178c6;color:#fff;border:none;border-radius:6px;padding:.5rem 1.25rem;cursor:pointer;font-weight:500;">Add</button>
   </form>
@@ -63,7 +63,7 @@ const todoPageHtml =
   window.addEventListener("offline", function() { document.getElementById("badge").textContent = "Offline"; document.getElementById("badge").style.background = "#f59e0b"; });
   if (!navigator.onLine) { document.getElementById("badge").textContent = "Offline"; document.getElementById("badge").style.background = "#f59e0b"; }
   function doSync() {
-    fetch("/api/sync").then(function(r) { return r.json(); }).then(function(d) {
+    fetch("api/sync").then(function(r) { return r.json(); }).then(function(d) {
       alert("Sync OK! " + d.items.length + " items no servidor.");
     }).catch(function() { alert("Sync falhou — offline?"); });
   }

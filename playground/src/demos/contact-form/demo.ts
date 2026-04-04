@@ -17,7 +17,7 @@ const routeTs = `export function GET(req) {
   }
 
   return Response.json({
-    section: '<form method="POST" action="/contact">' +
+    section: '<form method="POST" action="">' +
       '<label style="display:block;margin-bottom:.5rem;font-weight:500;">Nome</label>' +
       '<input name="name" style="width:100%;padding:.5rem;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:1rem;" placeholder="Seu nome" />' +
       '<label style="display:block;margin-bottom:.5rem;font-weight:500;">Email</label>' +
@@ -33,7 +33,7 @@ export async function POST(req) {
   const email = encodeURIComponent((data?.get("email") ?? "").toString());
   return new Response(null, {
     status: 302,
-    headers: { Location: "/contact?sent=1&name=" + name + "&email=" + email },
+    headers: { Location: "?sent=1&name=" + name + "&email=" + email },
   });
 }`;
 
