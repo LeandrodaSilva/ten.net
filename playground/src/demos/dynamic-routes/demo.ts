@@ -1,12 +1,12 @@
 import type { Demo } from "../../types.ts";
 import type { AppManifest } from "../../../../src/build/manifest.ts";
 
-const routeTs = `export function GET(ctx) {
+const routeTs = `export function GET(req, ctx) {
   const name = ctx.params.name ?? "stranger";
-  return {
+  return Response.json({
     title: "Dynamic Route",
     greeting: \`Hello, \${name}!\`,
-  };
+  });
 }`;
 
 const pageHtml = `<h1>{{title}}</h1>

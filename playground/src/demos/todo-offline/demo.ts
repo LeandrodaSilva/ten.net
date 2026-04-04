@@ -9,32 +9,31 @@ const todoRouteTs = `const items = [
 function renderItems(list) {
   if (list.length === 0) return "<li style='color:#94a3b8'>Nenhuma tarefa ainda.</li>";
   return list.map((item) =>
-    \`<li style="display:flex;align-items:center;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f1f5f9;">
-      <span style="font-size:1.1rem">\${item.done ? "✅" : "⬜"}</span>
-      <span style="\${item.done ? "text-decoration:line-through;color:#94a3b8" : ""}">\${item.text}</span>
-    </li>\`
+    '<li style="display:flex;align-items:center;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #f1f5f9;">' +
+      '<span style="font-size:1.1rem">' + (item.done ? "✅" : "⬜") + '</span>' +
+      '<span style="' + (item.done ? "text-decoration:line-through;color:#94a3b8" : "") + '">' + item.text + '</span>' +
+    '</li>'
   ).join("");
 }
 
 export function GET() {
-  return {
+  return Response.json({
     todo_list: renderItems(items),
-    count: items.length,
-    done_count: items.filter((i) => i.done).length,
-  };
+    count: String(items.length),
+    done_count: String(items.filter((i) => i.done).length),
+  });
 }
 
-export async function POST(ctx) {
-  const data = await ctx.req.formData().catch(() => null);
-  const text = (data?.get("text") ?? "").trim();
+export async function POST(req) {
+  const data = await req.formData().catch(() => null);
+  const text = (data?.get("text") ?? "").toString().trim();
   if (text) {
     items.push({ id: Date.now(), text, done: false });
   }
-  return {
-    todo_list: renderItems(items),
-    count: items.length,
-    done_count: items.filter((i) => i.done).length,
-  };
+  return new Response(null, {
+    status: 302,
+    headers: { Location: "/" },
+  });
 }`;
 
 const todoPageHtml =
@@ -53,22 +52,20 @@ const todoPageHtml =
   </form>
 
   <ul style="list-style:none;padding:0;margin-bottom:1rem;">
-    {{todo_list}}
+    {{{todo_list}}}
   </ul>
 
   <p style="color:#94a3b8;font-size:.8rem;">{{done_count}} de {{count}} concluidas</p>
 </div>
 
 <script>
-  window.addEventListener("online", () => { document.getElementById("badge").textContent = "Online"; document.getElementById("badge").style.background = "#22c55e"; });
-  window.addEventListener("offline", () => { document.getElementById("badge").textContent = "Offline"; document.getElementById("badge").style.background = "#f59e0b"; });
+  window.addEventListener("online", function() { document.getElementById("badge").textContent = "Online"; document.getElementById("badge").style.background = "#22c55e"; });
+  window.addEventListener("offline", function() { document.getElementById("badge").textContent = "Offline"; document.getElementById("badge").style.background = "#f59e0b"; });
   if (!navigator.onLine) { document.getElementById("badge").textContent = "Offline"; document.getElementById("badge").style.background = "#f59e0b"; }
-  async function doSync() {
-    try {
-      const r = await fetch("/api/sync");
-      const d = await r.json();
+  function doSync() {
+    fetch("/api/sync").then(function(r) { return r.json(); }).then(function(d) {
       alert("Sync OK! " + d.items.length + " items no servidor.");
-    } catch { alert("Sync falhou — offline?"); }
+    }).catch(function() { alert("Sync falhou — offline?"); });
   }
 </script>`;
 

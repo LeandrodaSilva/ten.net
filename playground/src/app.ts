@@ -386,7 +386,18 @@ function buildManifestFromEdits(): AppManifest {
     };
   });
 
-  return { ...base, routes };
+  // Reconstruct layouts if user edited layout.html
+  const layoutIdx = files.findIndex((f) => f.name === "layout.html");
+  const layouts = layoutIdx >= 0
+    ? Object.fromEntries(
+      Object.entries(base.layouts).map(([path, arr]) => [
+        path,
+        arr.map(() => state.editedFiles[layoutIdx]),
+      ]),
+    )
+    : base.layouts;
+
+  return { ...base, routes, layouts };
 }
 
 function bindEvents(): void {

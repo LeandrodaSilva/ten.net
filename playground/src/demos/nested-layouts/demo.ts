@@ -2,10 +2,10 @@ import type { Demo } from "../../types.ts";
 import type { AppManifest } from "../../../../src/build/manifest.ts";
 
 const routeTs = `export function GET() {
-  return {
+  return Response.json({
     title: "Nested Layouts",
     body: "O conteudo desta pagina e envolvido por dois layouts aninhados.",
-  };
+  });
 }`;
 
 const pageHtml = `<div style="padding:1.5rem;">

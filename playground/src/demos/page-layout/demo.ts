@@ -2,11 +2,11 @@ import type { Demo } from "../../types.ts";
 import type { AppManifest } from "../../../../src/build/manifest.ts";
 
 const routeTs = `export function GET() {
-  return {
+  return Response.json({
     title: "Page + Layout",
     content: "Este conteudo vem do handler e e injetado na pagina.",
     year: new Date().getFullYear(),
-  };
+  });
 }`;
 
 const pageHtml =

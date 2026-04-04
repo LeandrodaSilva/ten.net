@@ -2,10 +2,10 @@ import type { Demo } from "../../types.ts";
 import type { AppManifest } from "../../../../src/build/manifest.ts";
 
 const routeTs = `export function GET() {
-  return {
+  return Response.json({
     title: "Hello Ten.net",
     message: "Welcome to the playground!",
-  };
+  });
 }`;
 
 const pageHtml = `<h1>{{title}}</h1>

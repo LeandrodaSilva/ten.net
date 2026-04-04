@@ -2,7 +2,7 @@ import type { Demo } from "../../types.ts";
 import type { AppManifest } from "../../../../src/build/manifest.ts";
 
 const routeTs = `export function GET() {
-  return {
+  return Response.json({
     hero_title: "Build fast with Ten.net",
     hero_subtitle: "Minimalist TypeScript web framework — file-based routing, HTML templates, zero config.",
     feature1_icon: "⚡",
@@ -16,7 +16,7 @@ const routeTs = `export function GET() {
     feature3_desc: "Compile your entire app into one encrypted self-contained binary.",
     price: "Free & Open Source",
     price_note: "Published to JSR. MIT license.",
-  };
+  });
 }`;
 
 const pageHtml = `<!-- Hero -->
