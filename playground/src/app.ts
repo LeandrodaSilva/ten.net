@@ -488,13 +488,36 @@ function bindEvents(): void {
     if (demo) switchDemo(demo);
   });
 
-  // Search input
+  // Search input — filter in-place to keep focus
   const search = document.getElementById("sidebar-search") as
     | HTMLInputElement
     | null;
   search?.addEventListener("input", () => {
     state.searchQuery = search.value;
-    render();
+    const query = state.searchQuery.toLowerCase();
+    document.querySelectorAll("nav.sidebar .demo-item").forEach((el) => {
+      const title =
+        el.querySelector(".demo-title")?.textContent?.toLowerCase() ?? "";
+      const desc = el.querySelector(".demo-desc")?.textContent?.toLowerCase() ??
+        "";
+      const match = !query || title.includes(query) || desc.includes(query);
+      (el as HTMLElement).style.display = match ? "" : "none";
+    });
+    // Also hide category headers with no visible items
+    document.querySelectorAll("nav.sidebar .category-header").forEach((hdr) => {
+      let hasVisible = false;
+      let sibling = hdr.nextElementSibling;
+      while (sibling && !sibling.classList.contains("category-header")) {
+        if (
+          sibling.classList.contains("demo-item") &&
+          (sibling as HTMLElement).style.display !== "none"
+        ) {
+          hasVisible = true;
+        }
+        sibling = sibling.nextElementSibling;
+      }
+      (hdr as HTMLElement).style.display = hasVisible ? "" : "none";
+    });
   });
 
   // Tab clicks
