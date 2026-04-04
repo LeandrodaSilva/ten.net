@@ -41,7 +41,11 @@
     "@deno/emit": "jsr:@deno/emit@^0.46",
     "esbuild": "npm:esbuild@^0.25",
     "esbuild-deno-loader": "jsr:@luca/esbuild-deno-loader@^0.11",
-    "fake-indexeddb": "npm:fake-indexeddb@^6"
+    "fake-indexeddb": "npm:fake-indexeddb@^6",
+    "codemirror": "npm:codemirror@^6",
+    "@codemirror/lang-javascript": "npm:@codemirror/lang-javascript@^6",
+    "@codemirror/lang-html": "npm:@codemirror/lang-html@^6",
+    "@codemirror/theme-one-dark": "npm:@codemirror/theme-one-dark@^6"
   },
   "exclude": [
     ".git",

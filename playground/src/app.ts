@@ -1,6 +1,8 @@
 import type { AppManifest } from "../../src/build/manifest.ts";
 import { CATEGORIES, type Demo } from "./types.ts";
 import { getDemos } from "./demos/registry.ts";
+import { createEditor, destroyEditor } from "./components/editor.ts";
+import type { EditorView } from "codemirror";
 
 // ---------------------------------------------------------------------------
 // State
@@ -30,6 +32,7 @@ const state: State = {
 // ---------------------------------------------------------------------------
 
 let swReg: ServiceWorkerRegistration | null = null;
+let editorView: EditorView | null = null;
 
 async function registerSW(): Promise<void> {
   if (!("serviceWorker" in navigator)) return;
@@ -253,20 +256,24 @@ function renderEditorPanel(container: HTMLElement): void {
     "flex:1;display:flex;flex-direction:column;background:var(--md-surface-editor);overflow:hidden;";
 
   const currentFile = files[state.currentFileIndex];
-  const textarea = document.createElement("textarea");
-  textarea.id = "code-editor";
-  textarea.value = state.editedFiles[state.currentFileIndex];
-  textarea.spellcheck = false;
-  textarea.setAttribute("autocorrect", "off");
-  textarea.setAttribute("autocapitalize", "off");
-  textarea.style.cssText =
-    "background:var(--md-surface-editor);color:#e3e2e6;font-family:var(--md-font-mono);font-size:12px;line-height:2;border:none;resize:none;padding:20px;width:100%;height:100%;outline:none;";
-  if (!currentFile.editable) {
-    textarea.setAttribute("readonly", "true");
-    textarea.style.opacity = "0.6";
-  }
-  codeArea.appendChild(textarea);
+  const editorDiv = document.createElement("div");
+  editorDiv.id = "code-editor";
+  editorDiv.style.cssText = "flex:1;overflow:auto;height:100%;";
+  codeArea.appendChild(editorDiv);
   split.appendChild(codeArea);
+
+  // CodeMirror is initialised after the element is appended to the DOM tree.
+  // We store the view in the module-level variable so render() can destroy it
+  // on the next call.
+  requestAnimationFrame(() => {
+    const fileWithEdits: typeof currentFile = {
+      ...currentFile,
+      content: state.editedFiles[state.currentFileIndex],
+    };
+    editorView = createEditor(editorDiv, fileWithEdits, (content) => {
+      state.editedFiles[state.currentFileIndex] = content;
+    });
+  });
 
   // Preview pane
   const previewPane = document.createElement("div");
@@ -310,6 +317,12 @@ function renderEditorPanel(container: HTMLElement): void {
 function render(): void {
   const app = document.getElementById("app");
   if (!app) return;
+
+  // Destroy CodeMirror instance before clearing DOM
+  if (editorView) {
+    destroyEditor(editorView);
+    editorView = null;
+  }
 
   // Clear existing content via DOM API
   while (app.firstChild) {
@@ -396,12 +409,6 @@ function bindEvents(): void {
     const idx = parseInt(target.dataset.tabIndex ?? "0", 10);
     state.currentFileIndex = idx;
     render();
-  });
-
-  // Save textarea edits to state (live)
-  const editor = document.getElementById("code-editor") as HTMLTextAreaElement | null;
-  editor?.addEventListener("input", () => {
-    state.editedFiles[state.currentFileIndex] = editor.value;
   });
 
   // Run button
