@@ -30,6 +30,7 @@ self.addEventListener("install", () => {
 
 self.addEventListener("activate", (evt) => {
   (evt as ExtendableEvent).waitUntil(
-    (self as unknown as { clients: { claim(): Promise<void> } }).clients.claim(),
+    (self as unknown as { clients: { claim(): Promise<void> } }).clients
+      .claim(),
   );
 });

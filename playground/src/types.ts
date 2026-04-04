@@ -17,7 +17,12 @@ export interface Demo {
   previewPath: string;
 }
 
-export type DemoCategory = "routing" | "templates" | "forms" | "showcase" | "offline";
+export type DemoCategory =
+  | "routing"
+  | "templates"
+  | "forms"
+  | "showcase"
+  | "offline";
 
 export interface CategoryMeta {
   id: DemoCategory;

@@ -22,7 +22,8 @@ const manifest: AppManifest = {
     pageContent: pageHtml,
   }],
   layouts: {},
-  documentHtml: '<!DOCTYPE html><html><head><meta charset="utf-8"><title>{{title}}</title></head><body>{{content}}</body></html>',
+  documentHtml:
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>{{title}}</title></head><body>{{content}}</body></html>',
   assets: {},
 };
 
@@ -32,7 +33,12 @@ export const dynamicRoutes: Demo = {
   description: "Parametros de URL com [param] na rota",
   category: "routing",
   files: [
-    { name: "route.ts", content: routeTs, language: "typescript", editable: true },
+    {
+      name: "route.ts",
+      content: routeTs,
+      language: "typescript",
+      editable: true,
+    },
     { name: "page.html", content: pageHtml, language: "html", editable: true },
   ],
   manifest,

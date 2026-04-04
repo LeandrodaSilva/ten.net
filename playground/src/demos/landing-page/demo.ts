@@ -54,7 +54,8 @@ const pageHtml = `<!-- Hero -->
   <p style="color:#64748b;">{{price_note}}</p>
 </section>`;
 
-const layoutHtml = `<nav style="background:#1e3a5f;color:#fff;padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;">
+const layoutHtml =
+  `<nav style="background:#1e3a5f;color:#fff;padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;">
   <strong style="font-size:1.1rem;">Ten.net</strong>
   <div style="display:flex;gap:1.5rem;">
     <a href="#features" style="color:#93c5fd;text-decoration:none;font-size:.875rem;">Recursos</a>
@@ -76,7 +77,8 @@ const manifest: AppManifest = {
     pageContent: pageHtml,
   }],
   layouts: { "/": [layoutHtml] },
-  documentHtml: '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Ten.net</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}</style></head><body>{{content}}</body></html>',
+  documentHtml:
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Ten.net</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}</style></head><body>{{content}}</body></html>',
   assets: {},
 };
 
@@ -86,9 +88,19 @@ export const landingPage: Demo = {
   description: "Landing page promocional com hero, features e pricing",
   category: "showcase",
   files: [
-    { name: "route.ts", content: routeTs, language: "typescript", editable: true },
+    {
+      name: "route.ts",
+      content: routeTs,
+      language: "typescript",
+      editable: true,
+    },
     { name: "page.html", content: pageHtml, language: "html", editable: true },
-    { name: "layout.html", content: layoutHtml, language: "html", editable: true },
+    {
+      name: "layout.html",
+      content: layoutHtml,
+      language: "html",
+      editable: true,
+    },
   ],
   manifest,
   previewPath: "/",

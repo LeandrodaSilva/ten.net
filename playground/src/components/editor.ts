@@ -1,4 +1,4 @@
-import { EditorView, basicSetup } from "codemirror";
+import { basicSetup, EditorView } from "codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { html } from "@codemirror/lang-html";
 import { oneDark } from "@codemirror/theme-one-dark";

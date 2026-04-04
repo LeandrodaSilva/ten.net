@@ -13,7 +13,8 @@ const pageHtml = `<div style="padding:1.5rem;">
   <p>{{body}}</p>
 </div>`;
 
-const rootLayout = `<nav style="background:#3178c6;color:#fff;padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;">
+const rootLayout =
+  `<nav style="background:#3178c6;color:#fff;padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;">
   <strong>Ten.net</strong>
   <a href="/" style="color:#fff;text-decoration:none;font-size:.875rem;">Home</a>
   <a href="/section/page" style="color:#fff;text-decoration:none;font-size:.875rem;">Section</a>
@@ -44,7 +45,8 @@ const manifest: AppManifest = {
     "/": [rootLayout],
     "/section": [rootLayout, sectionLayout],
   },
-  documentHtml: '<!DOCTYPE html><html><head><meta charset="utf-8"><title>{{title}}</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}</style></head><body>{{content}}</body></html>',
+  documentHtml:
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>{{title}}</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}</style></head><body>{{content}}</body></html>',
   assets: {},
 };
 
@@ -54,9 +56,19 @@ export const nestedLayouts: Demo = {
   description: "Layouts aninhados do root ate a secao interna",
   category: "templates",
   files: [
-    { name: "route.ts", content: routeTs, language: "typescript", editable: false },
+    {
+      name: "route.ts",
+      content: routeTs,
+      language: "typescript",
+      editable: false,
+    },
     { name: "page.html", content: pageHtml, language: "html", editable: true },
-    { name: "layout.html", content: sectionLayout, language: "html", editable: true },
+    {
+      name: "layout.html",
+      content: sectionLayout,
+      language: "html",
+      editable: true,
+    },
   ],
   manifest,
   previewPath: "/section/page",

@@ -9,12 +9,14 @@ const routeTs = `export function GET() {
   };
 }`;
 
-const pageHtml = `<article style="padding:1.5rem;max-width:720px;margin:0 auto;">
+const pageHtml =
+  `<article style="padding:1.5rem;max-width:720px;margin:0 auto;">
   <h1>{{title}}</h1>
   <p>{{content}}</p>
 </article>`;
 
-const layoutHtml = `<header style="background:#3178c6;color:#fff;padding:1rem 1.5rem;">
+const layoutHtml =
+  `<header style="background:#3178c6;color:#fff;padding:1rem 1.5rem;">
   <strong>Ten.net</strong>
 </header>
 <main>
@@ -34,7 +36,8 @@ const manifest: AppManifest = {
     pageContent: pageHtml,
   }],
   layouts: { "/": [layoutHtml] },
-  documentHtml: '<!DOCTYPE html><html><head><meta charset="utf-8"><title>{{title}}</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}</style></head><body>{{content}}</body></html>',
+  documentHtml:
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>{{title}}</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}</style></head><body>{{content}}</body></html>',
   assets: {},
 };
 
@@ -44,9 +47,19 @@ export const pageLayout: Demo = {
   description: "Template com layout envolvendo o conteudo da pagina",
   category: "templates",
   files: [
-    { name: "route.ts", content: routeTs, language: "typescript", editable: true },
+    {
+      name: "route.ts",
+      content: routeTs,
+      language: "typescript",
+      editable: true,
+    },
     { name: "page.html", content: pageHtml, language: "html", editable: true },
-    { name: "layout.html", content: layoutHtml, language: "html", editable: true },
+    {
+      name: "layout.html",
+      content: layoutHtml,
+      language: "html",
+      editable: true,
+    },
   ],
   manifest,
   previewPath: "/",

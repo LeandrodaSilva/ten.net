@@ -62,7 +62,8 @@ const manifest: AppManifest = {
     pageContent: "",
   }],
   layouts: {},
-  documentHtml: '<!DOCTYPE html><html><head><meta charset="utf-8"><title>API</title></head><body>{{content}}</body></html>',
+  documentHtml:
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>API</title></head><body>{{content}}</body></html>',
   assets: {},
 };
 
@@ -72,7 +73,12 @@ export const apiRest: Demo = {
   description: "Endpoints GET/POST/PUT/DELETE retornando JSON",
   category: "routing",
   files: [
-    { name: "route.ts", content: routeTs, language: "typescript", editable: true },
+    {
+      name: "route.ts",
+      content: routeTs,
+      language: "typescript",
+      editable: true,
+    },
   ],
   manifest,
   previewPath: "/api/items",

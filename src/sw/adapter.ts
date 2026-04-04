@@ -20,7 +20,8 @@ export function handle(
             if (opts.fallback) return opts.fallback(evt.request);
             return fetch(evt.request);
           }
-          const strippedPath = url.pathname.slice(opts.pathPrefix.length) || "/";
+          const strippedPath = url.pathname.slice(opts.pathPrefix.length) ||
+            "/";
           const strippedUrl = new URL(strippedPath, url.origin);
           strippedUrl.search = url.search;
           strippedUrl.hash = url.hash;

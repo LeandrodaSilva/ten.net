@@ -21,7 +21,8 @@ const manifest: AppManifest = {
     pageContent: pageHtml,
   }],
   layouts: {},
-  documentHtml: "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>{{title}}</title></head><body>{{content}}</body></html>",
+  documentHtml:
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>{{title}}</title></head><body>{{content}}</body></html>',
   assets: {},
 };
 
@@ -31,7 +32,12 @@ export const helloWorld: Demo = {
   description: "Rota basica com GET handler",
   category: "routing",
   files: [
-    { name: "route.ts", content: routeTs, language: "typescript", editable: true },
+    {
+      name: "route.ts",
+      content: routeTs,
+      language: "typescript",
+      editable: true,
+    },
     { name: "page.html", content: pageHtml, language: "html", editable: true },
   ],
   manifest,

@@ -24,8 +24,14 @@ async function build(): Promise<void> {
     minify: true,
   });
 
-  await Deno.copyFile("playground/src/theme/tokens.css", "playground/dist/tokens.css");
-  await Deno.copyFile("playground/src/theme/components.css", "playground/dist/components.css");
+  await Deno.copyFile(
+    "playground/src/theme/tokens.css",
+    "playground/dist/tokens.css",
+  );
+  await Deno.copyFile(
+    "playground/src/theme/components.css",
+    "playground/dist/components.css",
+  );
 
   let html = await Deno.readTextFile("playground/index.html");
   html = html.replace("./src/app.ts", "./app.js");

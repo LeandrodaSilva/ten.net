@@ -37,7 +37,8 @@ export async function POST(ctx) {
   };
 }`;
 
-const todoPageHtml = `<div style="max-width:560px;margin:2rem auto;padding:1.5rem;font-family:system-ui,sans-serif;">
+const todoPageHtml =
+  `<div style="max-width:560px;margin:2rem auto;padding:1.5rem;font-family:system-ui,sans-serif;">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
     <h1 style="font-size:1.5rem;font-weight:700;">TODO Offline</h1>
     <div style="display:flex;align-items:center;gap:.5rem;">
@@ -101,7 +102,8 @@ const manifest: AppManifest = {
     },
   ],
   layouts: {},
-  documentHtml: '<!DOCTYPE html><html><head><meta charset="utf-8"><title>TODO Offline</title><style>*{box-sizing:border-box;margin:0;padding:0}</style></head><body>{{content}}</body></html>',
+  documentHtml:
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>TODO Offline</title><style>*{box-sizing:border-box;margin:0;padding:0}</style></head><body>{{content}}</body></html>',
   assets: {},
 };
 
@@ -111,8 +113,18 @@ export const todoOffline: Demo = {
   description: "App TODO com sync endpoint e indicador online/offline",
   category: "offline",
   files: [
-    { name: "route.ts", content: todoRouteTs, language: "typescript", editable: true },
-    { name: "page.html", content: todoPageHtml, language: "html", editable: true },
+    {
+      name: "route.ts",
+      content: todoRouteTs,
+      language: "typescript",
+      editable: true,
+    },
+    {
+      name: "page.html",
+      content: todoPageHtml,
+      language: "html",
+      editable: true,
+    },
   ],
   manifest,
   previewPath: "/",

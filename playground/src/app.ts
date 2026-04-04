@@ -236,7 +236,9 @@ function renderEditorPanel(container: HTMLElement): void {
     tab.dataset.tabIndex = String(idx);
     tab.id = "tab-" + idx;
 
-    const fileIcon = createIcon(file.language === "typescript" ? "code" : "html");
+    const fileIcon = createIcon(
+      file.language === "typescript" ? "code" : "html",
+    );
     tab.appendChild(fileIcon);
     const tabLabel = document.createElement("span");
     tabLabel.textContent = file.name;
@@ -248,7 +250,8 @@ function renderEditorPanel(container: HTMLElement): void {
 
   // Split: code area + preview
   const split = document.createElement("div");
-  split.style.cssText = "display:flex;flex-direction:row;flex:1;overflow:hidden;";
+  split.style.cssText =
+    "display:flex;flex-direction:row;flex:1;overflow:hidden;";
 
   // Code area
   const codeArea = document.createElement("div");
@@ -350,7 +353,9 @@ function render(): void {
 // ---------------------------------------------------------------------------
 
 function reloadPreviewIframe(): void {
-  const iframe = document.getElementById("preview-frame") as HTMLIFrameElement | null;
+  const iframe = document.getElementById("preview-frame") as
+    | HTMLIFrameElement
+    | null;
   if (iframe) {
     iframe.src = "/preview" + state.currentDemo.previewPath;
   }
@@ -374,7 +379,9 @@ function buildManifestFromEdits(): AppManifest {
     const pageIdx = files.findIndex((f) => f.name === "page.html");
     return {
       ...r,
-      transpiledCode: routeIdx >= 0 ? state.editedFiles[routeIdx] : r.transpiledCode,
+      transpiledCode: routeIdx >= 0
+        ? state.editedFiles[routeIdx]
+        : r.transpiledCode,
       pageContent: pageIdx >= 0 ? state.editedFiles[pageIdx] : r.pageContent,
     };
   });
@@ -386,7 +393,9 @@ function bindEvents(): void {
   // Demo items
   const sidebar = document.querySelector("nav.sidebar");
   sidebar?.addEventListener("click", (e) => {
-    const target = (e.target as HTMLElement).closest("[data-demo-id]") as HTMLElement | null;
+    const target = (e.target as HTMLElement).closest("[data-demo-id]") as
+      | HTMLElement
+      | null;
     if (!target) return;
     const demoId = target.dataset.demoId;
     if (!demoId) return;
@@ -395,7 +404,9 @@ function bindEvents(): void {
   });
 
   // Search input
-  const search = document.getElementById("sidebar-search") as HTMLInputElement | null;
+  const search = document.getElementById("sidebar-search") as
+    | HTMLInputElement
+    | null;
   search?.addEventListener("input", () => {
     state.searchQuery = search.value;
     render();
@@ -404,7 +415,9 @@ function bindEvents(): void {
   // Tab clicks
   const tabsRow = document.querySelector("[data-tab-index]")?.parentElement;
   tabsRow?.addEventListener("click", (e) => {
-    const target = (e.target as HTMLElement).closest("[data-tab-index]") as HTMLElement | null;
+    const target = (e.target as HTMLElement).closest("[data-tab-index]") as
+      | HTMLElement
+      | null;
     if (!target) return;
     const idx = parseInt(target.dataset.tabIndex ?? "0", 10);
     state.currentFileIndex = idx;

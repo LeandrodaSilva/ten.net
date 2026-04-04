@@ -38,7 +38,8 @@ export async function POST(ctx) {
   };
 }`;
 
-const pageHtml = `<div style="max-width:480px;margin:2rem auto;padding:1.5rem;font-family:system-ui,sans-serif;">
+const pageHtml =
+  `<div style="max-width:480px;margin:2rem auto;padding:1.5rem;font-family:system-ui,sans-serif;">
   <h1 style="margin-bottom:1rem;">Fale Conosco</h1>
 
   <div style="{{errorStyle}};background:#fee2e2;color:#991b1b;padding:.75rem 1rem;border-radius:6px;margin-bottom:1rem;">
@@ -73,7 +74,8 @@ const manifest: AppManifest = {
     pageContent: pageHtml,
   }],
   layouts: {},
-  documentHtml: '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Contato</title><style>*{box-sizing:border-box;margin:0;padding:0}</style></head><body>{{content}}</body></html>',
+  documentHtml:
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Contato</title><style>*{box-sizing:border-box;margin:0;padding:0}</style></head><body>{{content}}</body></html>',
   assets: {},
 };
 
@@ -83,7 +85,12 @@ export const contactForm: Demo = {
   description: "Formulario com validacao GET/POST e exibicao condicional",
   category: "forms",
   files: [
-    { name: "route.ts", content: routeTs, language: "typescript", editable: true },
+    {
+      name: "route.ts",
+      content: routeTs,
+      language: "typescript",
+      editable: true,
+    },
     { name: "page.html", content: pageHtml, language: "html", editable: true },
   ],
   manifest,

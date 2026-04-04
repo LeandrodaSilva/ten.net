@@ -1,8 +1,6 @@
 # Ten.net Online Playground — Design Spec
 
-**Data:** 2026-04-03
-**Status:** Aprovado
-**Versao base:** v0.16.0
+**Data:** 2026-04-03 **Status:** Aprovado **Versao base:** v0.16.0
 
 ## Objetivo
 
@@ -59,7 +57,8 @@ preview usa navegacao real dentro do mesmo SW scope.
 
 - O adapter filtra rotas: apenas `/preview/*` vai para o TenCore, o resto faz
   passthrough
-- Configuravel via opcao `pathPrefix` em `fire(core, { pathPrefix: "/preview" })`
+- Configuravel via opcao `pathPrefix` em
+  `fire(core, { pathPrefix: "/preview" })`
 
 ## UI Design
 
@@ -95,35 +94,35 @@ preview usa navegacao real dentro do mesmo SW scope.
 
 ### Routing
 
-| Demo | Descricao | Arquivos editaveis |
-|------|-----------|--------------------|
-| Hello World | Rota basica com GET handler | route.ts, page.html |
-| Rotas Dinamicas | Parametros com `[slug]` | route.ts, page.html |
-| API REST | GET, POST, PUT, DELETE | route.ts |
+| Demo            | Descricao                   | Arquivos editaveis  |
+| --------------- | --------------------------- | ------------------- |
+| Hello World     | Rota basica com GET handler | route.ts, page.html |
+| Rotas Dinamicas | Parametros com `[slug]`     | route.ts, page.html |
+| API REST        | GET, POST, PUT, DELETE      | route.ts            |
 
 ### Templates
 
-| Demo | Descricao | Arquivos editaveis |
-|------|-----------|--------------------|
-| Page + Layout | Templates com `{{variavel}}` | route.ts, page.html, layout.html |
+| Demo           | Descricao                          | Arquivos editaveis                |
+| -------------- | ---------------------------------- | --------------------------------- |
+| Page + Layout  | Templates com `{{variavel}}`       | route.ts, page.html, layout.html  |
 | Nested Layouts | Layouts hierarquicos `{{content}}` | page.html, layout.html (2 niveis) |
 
 ### Forms
 
-| Demo | Descricao | Arquivos editaveis |
-|------|-----------|--------------------|
+| Demo                  | Descricao                                | Arquivos editaveis  |
+| --------------------- | ---------------------------------------- | ------------------- |
 | Formulario de Contato | POST handler, validacao, feedback visual | route.ts, page.html |
 
 ### Showcase
 
-| Demo | Descricao | Arquivos editaveis |
-|------|-----------|--------------------|
+| Demo                     | Descricao                                                                   | Arquivos editaveis               |
+| ------------------------ | --------------------------------------------------------------------------- | -------------------------------- |
 | Landing Page Promocional | LP completa: hero, features, pricing, formulario de contato. Visual polido. | route.ts, page.html, layout.html |
 
 ### Offline / SW
 
-| Demo | Descricao | Arquivos editaveis |
-|------|-----------|--------------------|
+| Demo             | Descricao                                                                                                                                                                                 | Arquivos editaveis  |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | TODO App Offline | CRUD com IndexedDB, 100% offline, badge online/offline, sync simulado (mock endpoint interceptado pelo proprio SW) ao reconectar. Demonstra TenCore + IndexedDBStorage + StorageSync API. | route.ts, page.html |
 
 ## Componente Embed
@@ -191,11 +190,11 @@ playground/
 
 ## Decisoes Tecnicas
 
-| Decisao | Escolha | Motivo |
-|---------|---------|--------|
-| Arquitetura | SW Unico + Manifest Swap | Demonstra SW real, navegacao funciona, um unico SW simplifica |
-| Runtime | 100% browser, zero backend | Hosting estatico, escala infinita, custo zero |
-| Editor | CodeMirror 6 | Equilibrio peso/DX, bom para embeds |
-| Design | M3 + TS Blue | Minimalista, sombras, sem linhas, identidade TypeScript |
-| Embed | Web Component | Encapsulado, funciona em qualquer doc site |
-| Core change | updateManifest() | Feature util alem do playground |
+| Decisao     | Escolha                    | Motivo                                                        |
+| ----------- | -------------------------- | ------------------------------------------------------------- |
+| Arquitetura | SW Unico + Manifest Swap   | Demonstra SW real, navegacao funciona, um unico SW simplifica |
+| Runtime     | 100% browser, zero backend | Hosting estatico, escala infinita, custo zero                 |
+| Editor      | CodeMirror 6               | Equilibrio peso/DX, bom para embeds                           |
+| Design      | M3 + TS Blue               | Minimalista, sombras, sem linhas, identidade TypeScript       |
+| Embed       | Web Component              | Encapsulado, funciona em qualquer doc site                    |
+| Core change | updateManifest()           | Feature util alem do playground                               |

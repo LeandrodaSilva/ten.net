@@ -1,16 +1,28 @@
 # Ten.net Playground — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use
+> superpowers:subagent-driven-development (recommended) or
+> superpowers:executing-plans to implement this plan task-by-task. Steps use
+> checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Criar um playground online interativo onde iniciantes editam rotas, templates e layouts do Ten.net no browser e veem o resultado ao vivo via Service Worker — sem backend, sem instalar nada.
+**Goal:** Criar um playground online interativo onde iniciantes editam rotas,
+templates e layouts do Ten.net no browser e veem o resultado ao vivo via Service
+Worker — sem backend, sem instalar nada.
 
-**Architecture:** SPA estatica com um unico Service Worker controlando o preview. O playground envia manifests atualizados via `postMessage` ao SW, que faz hot-swap no TenCore. O preview roda em iframe apontando para `/preview/*`. CodeMirror 6 para edicao, Material Design 3 + TypeScript Blue para UI.
+**Architecture:** SPA estatica com um unico Service Worker controlando o
+preview. O playground envia manifests atualizados via `postMessage` ao SW, que
+faz hot-swap no TenCore. O preview roda em iframe apontando para `/preview/*`.
+CodeMirror 6 para edicao, Material Design 3 + TypeScript Blue para UI.
 
-**Tech Stack:** Deno 2.x, TypeScript, TenCore, Service Worker API, CodeMirror 6, esbuild, Material Design 3, Material Symbols Outlined.
+**Tech Stack:** Deno 2.x, TypeScript, TenCore, Service Worker API, CodeMirror 6,
+esbuild, Material Design 3, Material Symbols Outlined.
 
 **Spec:** `docs/superpowers/specs/2026-04-03-playground-design.md`
 
-**Security note:** The playground renders user-edited HTML templates in a sandboxed iframe via Service Worker. All demo content is pre-defined and trusted. The CodeMirror editor handles text content safely through its own DOM API. The embed web component uses Shadow DOM for encapsulation.
+**Security note:** The playground renders user-edited HTML templates in a
+sandboxed iframe via Service Worker. All demo content is pre-defined and
+trusted. The CodeMirror editor handles text content safely through its own DOM
+API. The embed web component uses Shadow DOM for encapsulation.
 
 ---
 
@@ -18,43 +30,43 @@
 
 ### Core changes (src/)
 
-| File | Action | Responsibility |
-|------|--------|----------------|
-| `src/core/tenCore.ts` | Modify | Add `updateManifest()` method |
-| `src/core/types.ts` | Modify | Add `pathPrefix` to `TenCoreOptions` |
-| `src/sw/adapter.ts` | Modify | Add `pathPrefix` filtering to `handle()`/`fire()` |
-| `src/sw/types.ts` | Modify | Add `pathPrefix` to `TenServiceWorkerOptions` |
-| `_test_/tenCore.test.ts` | Modify | Tests for `updateManifest()` |
-| `_test_/sw-adapter.test.ts` | Modify | Tests for `pathPrefix` filtering |
+| File                        | Action | Responsibility                                    |
+| --------------------------- | ------ | ------------------------------------------------- |
+| `src/core/tenCore.ts`       | Modify | Add `updateManifest()` method                     |
+| `src/core/types.ts`         | Modify | Add `pathPrefix` to `TenCoreOptions`              |
+| `src/sw/adapter.ts`         | Modify | Add `pathPrefix` filtering to `handle()`/`fire()` |
+| `src/sw/types.ts`           | Modify | Add `pathPrefix` to `TenServiceWorkerOptions`     |
+| `_test_/tenCore.test.ts`    | Modify | Tests for `updateManifest()`                      |
+| `_test_/sw-adapter.test.ts` | Modify | Tests for `pathPrefix` filtering                  |
 
 ### Playground (playground/)
 
-| File | Action | Responsibility |
-|------|--------|----------------|
-| `playground/index.html` | Create | SPA shell — loads app.ts |
-| `playground/sw.ts` | Create | SW bootstrap: TenCore + message listener |
-| `playground/src/app.ts` | Create | Bootstrap: register SW, mount UI via DOM API |
-| `playground/src/types.ts` | Create | Shared types: Demo, DemoFile, DemoCategory |
-| `playground/src/components/sidebar.ts` | Create | Category nav + demo cards + search |
-| `playground/src/components/editor.ts` | Create | CodeMirror 6 wrapper |
-| `playground/src/components/preview.ts` | Create | iframe + SW communication |
-| `playground/src/components/tabs.ts` | Create | File tabs (route.ts, page.html, layout.html) |
-| `playground/src/components/url-bar.ts` | Create | Simulated URL bar |
-| `playground/src/components/top-bar.ts` | Create | Logo, version, Reset/Run buttons |
-| `playground/src/demos/registry.ts` | Create | Demo index + manifest builder |
-| `playground/src/demos/hello-world/` | Create | Demo: Hello World |
-| `playground/src/demos/dynamic-routes/` | Create | Demo: Rotas Dinamicas |
-| `playground/src/demos/api-rest/` | Create | Demo: API REST |
-| `playground/src/demos/page-layout/` | Create | Demo: Page + Layout |
-| `playground/src/demos/nested-layouts/` | Create | Demo: Nested Layouts |
-| `playground/src/demos/contact-form/` | Create | Demo: Formulario de Contato |
-| `playground/src/demos/landing-page/` | Create | Demo: Landing Page Promocional |
-| `playground/src/demos/todo-offline/` | Create | Demo: TODO App Offline |
-| `playground/src/embed/tennet-playground.ts` | Create | Web component `<tennet-playground>` |
-| `playground/src/theme/tokens.css` | Create | M3 design tokens + TS Blue |
-| `playground/src/theme/components.css` | Create | Component styles |
-| `playground/build.ts` | Create | esbuild build script |
-| `playground/serve.ts` | Create | Dev server for dist/ |
+| File                                        | Action | Responsibility                               |
+| ------------------------------------------- | ------ | -------------------------------------------- |
+| `playground/index.html`                     | Create | SPA shell — loads app.ts                     |
+| `playground/sw.ts`                          | Create | SW bootstrap: TenCore + message listener     |
+| `playground/src/app.ts`                     | Create | Bootstrap: register SW, mount UI via DOM API |
+| `playground/src/types.ts`                   | Create | Shared types: Demo, DemoFile, DemoCategory   |
+| `playground/src/components/sidebar.ts`      | Create | Category nav + demo cards + search           |
+| `playground/src/components/editor.ts`       | Create | CodeMirror 6 wrapper                         |
+| `playground/src/components/preview.ts`      | Create | iframe + SW communication                    |
+| `playground/src/components/tabs.ts`         | Create | File tabs (route.ts, page.html, layout.html) |
+| `playground/src/components/url-bar.ts`      | Create | Simulated URL bar                            |
+| `playground/src/components/top-bar.ts`      | Create | Logo, version, Reset/Run buttons             |
+| `playground/src/demos/registry.ts`          | Create | Demo index + manifest builder                |
+| `playground/src/demos/hello-world/`         | Create | Demo: Hello World                            |
+| `playground/src/demos/dynamic-routes/`      | Create | Demo: Rotas Dinamicas                        |
+| `playground/src/demos/api-rest/`            | Create | Demo: API REST                               |
+| `playground/src/demos/page-layout/`         | Create | Demo: Page + Layout                          |
+| `playground/src/demos/nested-layouts/`      | Create | Demo: Nested Layouts                         |
+| `playground/src/demos/contact-form/`        | Create | Demo: Formulario de Contato                  |
+| `playground/src/demos/landing-page/`        | Create | Demo: Landing Page Promocional               |
+| `playground/src/demos/todo-offline/`        | Create | Demo: TODO App Offline                       |
+| `playground/src/embed/tennet-playground.ts` | Create | Web component `<tennet-playground>`          |
+| `playground/src/theme/tokens.css`           | Create | M3 design tokens + TS Blue                   |
+| `playground/src/theme/components.css`       | Create | Component styles                             |
+| `playground/build.ts`                       | Create | esbuild build script                         |
+| `playground/serve.ts`                       | Create | Dev server for dist/                         |
 
 ---
 
@@ -63,6 +75,7 @@
 ### Task 1: TenCore.updateManifest()
 
 **Files:**
+
 - Modify: `src/core/tenCore.ts:42-169`
 - Test: `_test_/tenCore.test.ts`
 
@@ -113,7 +126,10 @@ describe("updateManifest()", () => {
 
     // New route should work (route is matched even if dynamic import may fail)
     const newRes = await core.fetch(new Request("http://localhost/new"));
-    assertEquals(newRes.status !== 404 || (await newRes.clone().text()) !== "Not found", true);
+    assertEquals(
+      newRes.status !== 404 || (await newRes.clone().text()) !== "Not found",
+      true,
+    );
   });
 
   it("should update embedded assets after manifest swap", async () => {
@@ -159,7 +175,8 @@ describe("updateManifest()", () => {
           regexSource: "^\\/swapped$",
           regexFlags: "",
           hasPage: false,
-          transpiledCode: 'export function GET() { return new Response("swapped"); }',
+          transpiledCode:
+            'export function GET() { return new Response("swapped"); }',
           pageContent: "",
         },
       ],
@@ -174,7 +191,8 @@ describe("updateManifest()", () => {
 
 - [ ] **Step 2: Run test to verify it fails**
 
-Run: `deno test _test_/tenCore.test.ts --filter "updateManifest" --allow-all --unstable-raw-imports --unstable-kv`
+Run:
+`deno test _test_/tenCore.test.ts --filter "updateManifest" --allow-all --unstable-raw-imports --unstable-kv`
 Expected: FAIL with "core.updateManifest is not a function"
 
 - [ ] **Step 3: Implement updateManifest()**
@@ -197,13 +215,13 @@ updateManifest(manifest: AppManifest): void {
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `deno test _test_/tenCore.test.ts --filter "updateManifest" --allow-all --unstable-raw-imports --unstable-kv`
+Run:
+`deno test _test_/tenCore.test.ts --filter "updateManifest" --allow-all --unstable-raw-imports --unstable-kv`
 Expected: 3 tests PASS
 
 - [ ] **Step 5: Run full test suite**
 
-Run: `deno task test`
-Expected: All tests pass
+Run: `deno task test` Expected: All tests pass
 
 - [ ] **Step 6: Commit**
 
@@ -217,6 +235,7 @@ git commit -m "feat(core): add TenCore.updateManifest() for runtime manifest hot
 ### Task 2: SW adapter pathPrefix filtering
 
 **Files:**
+
 - Modify: `src/sw/types.ts:12-15`
 - Modify: `src/sw/adapter.ts`
 - Test: `_test_/sw-adapter.test.ts`
@@ -303,7 +322,8 @@ describe("SW Adapter — pathPrefix", () => {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `deno test _test_/sw-adapter.test.ts --filter "pathPrefix" --allow-all --unstable-raw-imports --unstable-kv`
+Run:
+`deno test _test_/sw-adapter.test.ts --filter "pathPrefix" --allow-all --unstable-raw-imports --unstable-kv`
 Expected: FAIL — pathPrefix option not recognized yet
 
 - [ ] **Step 3: Add pathPrefix to TenServiceWorkerOptions**
@@ -349,7 +369,8 @@ export function handle(
             return fetch(evt.request);
           }
           // Strip prefix and create new request with cleaned URL
-          const strippedPath = url.pathname.slice(opts.pathPrefix.length) || "/";
+          const strippedPath = url.pathname.slice(opts.pathPrefix.length) ||
+            "/";
           const strippedUrl = new URL(strippedPath, url.origin);
           strippedUrl.search = url.search;
           strippedUrl.hash = url.hash;
@@ -392,13 +413,14 @@ export function fire(
 
 - [ ] **Step 5: Run pathPrefix tests to verify they pass**
 
-Run: `deno test _test_/sw-adapter.test.ts --filter "pathPrefix" --allow-all --unstable-raw-imports --unstable-kv`
+Run:
+`deno test _test_/sw-adapter.test.ts --filter "pathPrefix" --allow-all --unstable-raw-imports --unstable-kv`
 Expected: 3 tests PASS
 
 - [ ] **Step 6: Run full test suite**
 
-Run: `deno task test`
-Expected: All tests pass (including existing adapter tests)
+Run: `deno task test` Expected: All tests pass (including existing adapter
+tests)
 
 - [ ] **Step 7: Commit**
 
@@ -412,6 +434,7 @@ git commit -m "feat(sw): add pathPrefix option for scoped route interception"
 ### Task 3: SW message listener for manifest swap
 
 **Files:**
+
 - Modify: `src/sw/adapter.ts`
 - Modify: `src/sw/mod.ts`
 - Test: `_test_/sw-adapter.test.ts`
@@ -437,7 +460,10 @@ describe("SW Adapter — listenForManifestUpdates()", () => {
 
     const core = new TenCore({ embedded: oldManifest });
     await core.fetch(new Request("http://localhost/old.css"));
-    assertEquals(await (await core.fetch(new Request("http://localhost/old.css"))).text(), "old");
+    assertEquals(
+      await (await core.fetch(new Request("http://localhost/old.css"))).text(),
+      "old",
+    );
 
     let messageHandler: ((evt: MessageEvent) => void) | null = null;
     const original = (self as unknown as Record<string, unknown>)
@@ -464,9 +490,11 @@ describe("SW Adapter — listenForManifestUpdates()", () => {
         },
       };
 
-      messageHandler!(new MessageEvent("message", {
-        data: { type: "UPDATE_MANIFEST", manifest: newManifest },
-      }));
+      messageHandler!(
+        new MessageEvent("message", {
+          data: { type: "UPDATE_MANIFEST", manifest: newManifest },
+        }),
+      );
 
       const oldRes = await core.fetch(new Request("http://localhost/old.css"));
       assertEquals(oldRes.status, 404);
@@ -499,14 +527,18 @@ describe("SW Adapter — listenForManifestUpdates()", () => {
       type: unknown,
       handler: unknown,
     ) => {
-      if (type === "message") messageHandler = handler as (evt: MessageEvent) => void;
+      if (type === "message") {
+        messageHandler = handler as (evt: MessageEvent) => void;
+      }
     };
 
     try {
       listenForManifestUpdates(core);
-      messageHandler!(new MessageEvent("message", {
-        data: { type: "UNKNOWN", foo: "bar" },
-      }));
+      messageHandler!(
+        new MessageEvent("message", {
+          data: { type: "UNKNOWN", foo: "bar" },
+        }),
+      );
 
       const res = await core.fetch(new Request("http://localhost/keep.css"));
       assertEquals(res.status, 200);
@@ -519,7 +551,8 @@ describe("SW Adapter — listenForManifestUpdates()", () => {
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `deno test _test_/sw-adapter.test.ts --filter "listenForManifestUpdates" --allow-all --unstable-raw-imports --unstable-kv`
+Run:
+`deno test _test_/sw-adapter.test.ts --filter "listenForManifestUpdates" --allow-all --unstable-raw-imports --unstable-kv`
 Expected: FAIL — `listenForManifestUpdates` not exported
 
 - [ ] **Step 3: Implement listenForManifestUpdates()**
@@ -553,13 +586,13 @@ export { fire, handle, listenForManifestUpdates } from "./adapter.ts";
 
 - [ ] **Step 5: Run tests to verify they pass**
 
-Run: `deno test _test_/sw-adapter.test.ts --filter "listenForManifestUpdates" --allow-all --unstable-raw-imports --unstable-kv`
+Run:
+`deno test _test_/sw-adapter.test.ts --filter "listenForManifestUpdates" --allow-all --unstable-raw-imports --unstable-kv`
 Expected: 2 tests PASS
 
 - [ ] **Step 6: Run full test suite**
 
-Run: `deno task test`
-Expected: All tests pass
+Run: `deno task test` Expected: All tests pass
 
 - [ ] **Step 7: Commit**
 
@@ -575,6 +608,7 @@ git commit -m "feat(sw): add listenForManifestUpdates() for runtime manifest hot
 ### Task 4: Design tokens and base CSS
 
 **Files:**
+
 - Create: `playground/src/theme/tokens.css`
 - Create: `playground/src/theme/components.css`
 
@@ -595,16 +629,24 @@ git commit -m "feat(sw): add listenForManifestUpdates() for runtime manifest hot
   --md-outline: #dadce0;
   --md-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.06);
   --md-elevation-2: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --md-elevation-active: 0 2px 8px var(--md-primary-shadow), 0 1px 3px rgba(49, 120, 198, 0.2);
-  --md-elevation-button: 0 1px 3px var(--md-primary-shadow), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --md-elevation-active:
+    0 2px 8px var(--md-primary-shadow),
+    0 1px 3px rgba(49, 120, 198, 0.2);
+  --md-elevation-button:
+    0 1px 3px var(--md-primary-shadow),
+    0 1px 2px rgba(0, 0, 0, 0.06);
   --md-radius-container: 16px;
   --md-radius-item: 12px;
   --md-radius-button: 20px;
-  --md-font-family: 'Google Sans', 'Roboto', system-ui, sans-serif;
-  --md-font-mono: 'Roboto Mono', 'Fira Code', monospace;
+  --md-font-family: "Google Sans", "Roboto", system-ui, sans-serif;
+  --md-font-mono: "Roboto Mono", "Fira Code", monospace;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-family: var(--md-font-family);
@@ -616,7 +658,11 @@ body {
 
 - [ ] **Step 2: Create components.css**
 
-See spec mockup v6 for the complete M3 component styles. Key classes: `.top-bar`, `.btn-text`, `.btn-filled`, `.sidebar`, `.sidebar-search`, `.category-header`, `.category-label`, `.demo-item`, `.demo-item.active`, `.demo-title`, `.demo-desc`, `.tab`, `.tab.active`, `.editor-panel`, `.url-bar`, `.chip`. All use CSS custom properties from tokens.css.
+See spec mockup v6 for the complete M3 component styles. Key classes:
+`.top-bar`, `.btn-text`, `.btn-filled`, `.sidebar`, `.sidebar-search`,
+`.category-header`, `.category-label`, `.demo-item`, `.demo-item.active`,
+`.demo-title`, `.demo-desc`, `.tab`, `.tab.active`, `.editor-panel`, `.url-bar`,
+`.chip`. All use CSS custom properties from tokens.css.
 
 - [ ] **Step 3: Commit**
 
@@ -630,6 +676,7 @@ git commit -m "feat(playground): add M3 + TS Blue design tokens and component CS
 ### Task 5: Shared types
 
 **Files:**
+
 - Create: `playground/src/types.ts`
 
 - [ ] **Step 1: Create shared types**
@@ -688,6 +735,7 @@ git commit -m "feat(playground): add shared types for demos and categories"
 ### Task 6: Demo registry + Hello World demo
 
 **Files:**
+
 - Create: `playground/src/demos/registry.ts`
 - Create: `playground/src/demos/hello-world/demo.ts`
 
@@ -719,7 +767,8 @@ const manifest: AppManifest = {
     },
   ],
   layouts: {},
-  documentHtml: "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>{{title}}</title></head><body>{{content}}</body></html>",
+  documentHtml:
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>{{title}}</title></head><body>{{content}}</body></html>',
   assets: {},
 };
 
@@ -729,7 +778,12 @@ export const helloWorld: Demo = {
   description: "Rota basica com GET handler",
   category: "routing",
   files: [
-    { name: "route.ts", content: routeTs, language: "typescript", editable: true },
+    {
+      name: "route.ts",
+      content: routeTs,
+      language: "typescript",
+      editable: true,
+    },
     { name: "page.html", content: pageHtml, language: "html", editable: true },
   ],
   manifest,
@@ -772,6 +826,7 @@ git commit -m "feat(playground): add demo registry and Hello World demo"
 ### Task 7: Service Worker for playground
 
 **Files:**
+
 - Create: `playground/sw.ts`
 
 - [ ] **Step 1: Create playground Service Worker**
@@ -821,6 +876,7 @@ git commit -m "feat(playground): add Service Worker with manifest swap and pathP
 ### Task 8: Playground SPA shell + app bootstrap
 
 **Files:**
+
 - Create: `playground/index.html`
 - Create: `playground/src/app.ts`
 
@@ -829,26 +885,36 @@ git commit -m "feat(playground): add Service Worker with manifest swap and pathP
 ```html
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ten.net Playground</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-  <link rel="stylesheet" href="./src/theme/tokens.css">
-  <link rel="stylesheet" href="./src/theme/components.css">
-</head>
-<body>
-  <div id="app"></div>
-  <script type="module" src="./src/app.ts"></script>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ten.net Playground</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="./src/theme/tokens.css">
+    <link rel="stylesheet" href="./src/theme/components.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="./src/app.ts"></script>
+  </body>
 </html>
 ```
 
 - [ ] **Step 2: Create app.ts bootstrap**
 
-The app.ts module manages state (`currentDemo`, `currentFileIndex`, `swReady`), registers the Service Worker, and renders the UI using safe DOM creation methods (createElement, textContent, setAttribute). It binds events for demo selection, tab switching, Run/Reset buttons, and search filtering. On demo change, it sends the new manifest to the SW via `postMessage` and refreshes the preview iframe `src`. All DOM rendering uses the programmatic DOM API — no raw HTML string injection.
+The app.ts module manages state (`currentDemo`, `currentFileIndex`, `swReady`),
+registers the Service Worker, and renders the UI using safe DOM creation methods
+(createElement, textContent, setAttribute). It binds events for demo selection,
+tab switching, Run/Reset buttons, and search filtering. On demo change, it sends
+the new manifest to the SW via `postMessage` and refreshes the preview iframe
+`src`. All DOM rendering uses the programmatic DOM API — no raw HTML string
+injection.
 
 Key functions:
+
 - `registerSW()` — registers `/sw.js`, waits for activation
 - `sendManifestToSW(manifest)` — posts `UPDATE_MANIFEST` message
 - `render()` — rebuilds the full UI from state using DOM API
@@ -868,12 +934,16 @@ git commit -m "feat(playground): add SPA shell and app bootstrap with SW registr
 ### Task 9: Build script + dev server
 
 **Files:**
+
 - Create: `playground/build.ts`
 - Create: `playground/serve.ts`
 
 - [ ] **Step 1: Create build script**
 
-Uses esbuild with `denoPlugins()` to bundle `playground/sw.ts` into `playground/dist/sw.js` and `playground/src/app.ts` into `playground/dist/app.js`. Copies `index.html` and CSS files to `dist/`, updating paths in the HTML.
+Uses esbuild with `denoPlugins()` to bundle `playground/sw.ts` into
+`playground/dist/sw.js` and `playground/src/app.ts` into
+`playground/dist/app.js`. Copies `index.html` and CSS files to `dist/`, updating
+paths in the HTML.
 
 ```typescript
 import * as esbuild from "esbuild";
@@ -900,13 +970,19 @@ async function build(): Promise<void> {
     minify: true,
   });
 
-  await Deno.copyFile("playground/src/theme/tokens.css", "playground/dist/tokens.css");
-  await Deno.copyFile("playground/src/theme/components.css", "playground/dist/components.css");
+  await Deno.copyFile(
+    "playground/src/theme/tokens.css",
+    "playground/dist/tokens.css",
+  );
+  await Deno.copyFile(
+    "playground/src/theme/components.css",
+    "playground/dist/components.css",
+  );
 
   let html = await Deno.readTextFile("playground/index.html");
-  html = html.replace('./src/app.ts', './app.js');
-  html = html.replace('./src/theme/tokens.css', './tokens.css');
-  html = html.replace('./src/theme/components.css', './components.css');
+  html = html.replace("./src/app.ts", "./app.js");
+  html = html.replace("./src/theme/tokens.css", "./tokens.css");
+  html = html.replace("./src/theme/components.css", "./components.css");
   await Deno.writeTextFile("playground/dist/index.html", html);
 
   console.log("Playground built to playground/dist/");
@@ -918,7 +994,8 @@ build();
 
 - [ ] **Step 2: Create dev server**
 
-Simple file server for `playground/dist/` with SPA fallback to `index.html`. Uses `Deno.serve` on port 3000.
+Simple file server for `playground/dist/` with SPA fallback to `index.html`.
+Uses `Deno.serve` on port 3000.
 
 - [ ] **Step 3: Add tasks to deno.json**
 
@@ -941,10 +1018,13 @@ git commit -m "feat(playground): add esbuild build script and dev server"
 ### Task 10: Dynamic Routes demo
 
 **Files:**
+
 - Create: `playground/src/demos/dynamic-routes/demo.ts`
 - Modify: `playground/src/demos/registry.ts`
 
-- [ ] **Step 1: Create demo** — Route with `[name]` param, page showing `Hello, {{name}}!`. Manifest has regex `^\\/hello\\/([^\\/]+)$`. Preview path: `/hello/world`.
+- [ ] **Step 1: Create demo** — Route with `[name]` param, page showing
+      `Hello, {{name}}!`. Manifest has regex `^\\/hello\\/([^\\/]+)$`. Preview
+      path: `/hello/world`.
 
 - [ ] **Step 2: Add to registry**
 
@@ -960,10 +1040,12 @@ git commit -m "feat(playground): add Dynamic Routes demo"
 ### Task 11: API REST demo
 
 **Files:**
+
 - Create: `playground/src/demos/api-rest/demo.ts`
 - Modify: `playground/src/demos/registry.ts`
 
-- [ ] **Step 1: Create demo** — Route with GET/POST/PUT/DELETE handlers returning JSON. No page template. Preview path: `/api/items`.
+- [ ] **Step 1: Create demo** — Route with GET/POST/PUT/DELETE handlers
+      returning JSON. No page template. Preview path: `/api/items`.
 
 - [ ] **Step 2: Add to registry**
 
@@ -979,10 +1061,14 @@ git commit -m "feat(playground): add API REST demo"
 ### Task 12: Page + Layout demo
 
 **Files:**
+
 - Create: `playground/src/demos/page-layout/demo.ts`
 - Modify: `playground/src/demos/registry.ts`
 
-- [ ] **Step 1: Create demo** — Route handler returns `{ title, content, year }`. Page has `<article>` with `{{title}}`, `{{content}}`. Layout wraps with header, main `{{content}}`, footer. 3 editable files.
+- [ ] **Step 1: Create demo** — Route handler returns
+      `{ title, content, year }`. Page has `<article>` with `{{title}}`,
+      `{{content}}`. Layout wraps with header, main `{{content}}`, footer. 3
+      editable files.
 
 - [ ] **Step 2: Add to registry**
 
@@ -998,10 +1084,14 @@ git commit -m "feat(playground): add Page + Layout demo"
 ### Task 13: Nested Layouts demo
 
 **Files:**
+
 - Create: `playground/src/demos/nested-layouts/demo.ts`
 - Modify: `playground/src/demos/registry.ts`
 
-- [ ] **Step 1: Create demo** — Root layout (nav bar + content) + section layout (border-left accent + content). Route at `/section/page`. Layouts map: `"/":[rootLayout]`, `"/section":[rootLayout, sectionLayout]`. 2 editable files (page.html, section layout.html).
+- [ ] **Step 1: Create demo** — Root layout (nav bar + content) + section layout
+      (border-left accent + content). Route at `/section/page`. Layouts map:
+      `"/":[rootLayout]`, `"/section":[rootLayout, sectionLayout]`. 2 editable
+      files (page.html, section layout.html).
 
 - [ ] **Step 2: Add to registry**
 
@@ -1017,10 +1107,13 @@ git commit -m "feat(playground): add Nested Layouts demo"
 ### Task 14: Contact Form demo
 
 **Files:**
+
 - Create: `playground/src/demos/contact-form/demo.ts`
 - Modify: `playground/src/demos/registry.ts`
 
-- [ ] **Step 1: Create demo** — GET returns form template, POST validates and returns thank-you message. Page has form with name, email, message fields. Conditional display via `{{formStyle}}`/`{{resultStyle}}` template vars.
+- [ ] **Step 1: Create demo** — GET returns form template, POST validates and
+      returns thank-you message. Page has form with name, email, message fields.
+      Conditional display via `{{formStyle}}`/`{{resultStyle}}` template vars.
 
 - [ ] **Step 2: Add to registry**
 
@@ -1036,10 +1129,14 @@ git commit -m "feat(playground): add Contact Form demo"
 ### Task 15: Landing Page Promocional demo
 
 **Files:**
+
 - Create: `playground/src/demos/landing-page/demo.ts`
 - Modify: `playground/src/demos/registry.ts`
 
-- [ ] **Step 1: Create demo** — Full LP with hero section, features grid (3 cards), pricing table, and contact form. Route handler returns all section data. Page.html has polished inline styles with TS Blue accent. Layout.html wraps with nav and footer. 3 editable files.
+- [ ] **Step 1: Create demo** — Full LP with hero section, features grid (3
+      cards), pricing table, and contact form. Route handler returns all section
+      data. Page.html has polished inline styles with TS Blue accent.
+      Layout.html wraps with nav and footer. 3 editable files.
 
 - [ ] **Step 2: Add to registry**
 
@@ -1055,10 +1152,16 @@ git commit -m "feat(playground): add Landing Page Promocional demo"
 ### Task 16: TODO App Offline demo
 
 **Files:**
+
 - Create: `playground/src/demos/todo-offline/demo.ts`
 - Modify: `playground/src/demos/registry.ts`
 
-- [ ] **Step 1: Create demo** — Two routes: `/` for the TODO UI (GET renders list, POST adds item) and `/api/sync` as mock endpoint (GET returns empty sync response). Page has TODO list with add form, delete buttons, online/offline status badge. Uses in-memory array for state. Manifest includes both routes. The mock sync endpoint demonstrates the StorageSync API pattern. 2 editable files.
+- [ ] **Step 1: Create demo** — Two routes: `/` for the TODO UI (GET renders
+      list, POST adds item) and `/api/sync` as mock endpoint (GET returns empty
+      sync response). Page has TODO list with add form, delete buttons,
+      online/offline status badge. Uses in-memory array for state. Manifest
+      includes both routes. The mock sync endpoint demonstrates the StorageSync
+      API pattern. 2 editable files.
 
 - [ ] **Step 2: Add to registry**
 
@@ -1076,6 +1179,7 @@ git commit -m "feat(playground): add TODO App Offline demo with mock sync"
 ### Task 17: CodeMirror 6 editor component
 
 **Files:**
+
 - Create: `playground/src/components/editor.ts`
 - Modify: `playground/src/app.ts`
 - Modify: `deno.json` (add CodeMirror imports)
@@ -1091,13 +1195,16 @@ git commit -m "feat(playground): add TODO App Offline demo with mock sync"
 
 - [ ] **Step 2: Create editor component**
 
-`playground/src/components/editor.ts` exports a `createEditor(container, file, onChange)` function. It creates an EditorView with:
+`playground/src/components/editor.ts` exports a
+`createEditor(container, file, onChange)` function. It creates an EditorView
+with:
+
 - `javascript()` extension for `.ts` files, `html()` for `.html` files
 - `oneDark` theme with custom background `#1b1b1f`
 - `onChange` callback that fires with the new content string
 
 ```typescript
-import { EditorView, basicSetup } from "codemirror";
+import { basicSetup, EditorView } from "codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { html } from "@codemirror/lang-html";
 import { oneDark } from "@codemirror/theme-one-dark";
@@ -1138,7 +1245,9 @@ export function createEditor(
 
 - [ ] **Step 3: Wire editor into app.ts**
 
-Replace the raw code display in `renderEditorPanel` with a call to `createEditor()`. On content change, update the current file's content and rebuild the manifest.
+Replace the raw code display in `renderEditorPanel` with a call to
+`createEditor()`. On content change, update the current file's content and
+rebuild the manifest.
 
 - [ ] **Step 4: Commit**
 
@@ -1154,11 +1263,16 @@ git commit -m "feat(playground): integrate CodeMirror 6 with TS/HTML modes"
 ### Task 18: `<tennet-playground>` web component
 
 **Files:**
+
 - Create: `playground/src/embed/tennet-playground.ts`
 
 - [ ] **Step 1: Create web component**
 
-Custom element `tennet-playground` with Shadow DOM. Accepts `demo` and `height` attributes. Renders a compact editor/preview split. Registers shared SW and sends demo manifest. Includes "Abrir no Playground" and "Copiar codigo" chip buttons. Responsive: stacks vertically below 600px. Uses safe DOM APIs within the Shadow DOM boundary.
+Custom element `tennet-playground` with Shadow DOM. Accepts `demo` and `height`
+attributes. Renders a compact editor/preview split. Registers shared SW and
+sends demo manifest. Includes "Abrir no Playground" and "Copiar codigo" chip
+buttons. Responsive: stacks vertically below 600px. Uses safe DOM APIs within
+the Shadow DOM boundary.
 
 - [ ] **Step 2: Commit**
 
@@ -1174,6 +1288,7 @@ git commit -m "feat(playground): add <tennet-playground> web component for embed
 ### Task 19: Build smoke test
 
 **Files:**
+
 - Create: `_test_/playground-smoke.test.ts`
 
 - [ ] **Step 1: Write smoke test**
@@ -1204,7 +1319,8 @@ describe("Playground build", () => {
 
 - [ ] **Step 2: Run test**
 
-Run: `deno test _test_/playground-smoke.test.ts --allow-all --unstable-raw-imports`
+Run:
+`deno test _test_/playground-smoke.test.ts --allow-all --unstable-raw-imports`
 Expected: PASS
 
 - [ ] **Step 3: Commit**
@@ -1227,7 +1343,8 @@ git commit -m "test: add playground build smoke test"
   - Edit code in CodeMirror → Run → preview shows changes
   - Reset restores original
   - Search filters demos
-- [ ] **Step 4: Run full CI** — `deno task fmt && deno task lint && deno task check && deno task test`
+- [ ] **Step 4: Run full CI** —
+      `deno task fmt && deno task lint && deno task check && deno task test`
 - [ ] **Step 5: Final commit**
 
 ```bash

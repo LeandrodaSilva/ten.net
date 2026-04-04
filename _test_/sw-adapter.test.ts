@@ -273,17 +273,28 @@ describe("SW Adapter — fire()", () => {
 describe("SW Adapter — listenForManifestUpdates()", () => {
   it("should update TenCore manifest when receiving UPDATE_MANIFEST message", async () => {
     const oldManifest: AppManifest = {
-      routes: [], layouts: {}, documentHtml: "",
+      routes: [],
+      layouts: {},
+      documentHtml: "",
       assets: { "/old.css": { mimeType: "text/css", dataBase64: btoa("old") } },
     };
     const core = new TenCore({ embedded: oldManifest });
     await core.fetch(new Request("http://localhost/old.css"));
-    assertEquals(await (await core.fetch(new Request("http://localhost/old.css"))).text(), "old");
+    assertEquals(
+      await (await core.fetch(new Request("http://localhost/old.css"))).text(),
+      "old",
+    );
 
     let messageHandler: ((evt: MessageEvent) => void) | null = null;
-    const original = (self as unknown as Record<string, unknown>).addEventListener as (...args: unknown[]) => void;
-    (self as unknown as Record<string, unknown>).addEventListener = (type: unknown, handler: unknown) => {
-      if (type === "message") messageHandler = handler as (evt: MessageEvent) => void;
+    const original = (self as unknown as Record<string, unknown>)
+      .addEventListener as (...args: unknown[]) => void;
+    (self as unknown as Record<string, unknown>).addEventListener = (
+      type: unknown,
+      handler: unknown,
+    ) => {
+      if (type === "message") {
+        messageHandler = handler as (evt: MessageEvent) => void;
+      }
     };
 
     try {
@@ -291,12 +302,18 @@ describe("SW Adapter — listenForManifestUpdates()", () => {
       assertEquals(typeof messageHandler, "function");
 
       const newManifest: AppManifest = {
-        routes: [], layouts: {}, documentHtml: "",
-        assets: { "/new.css": { mimeType: "text/css", dataBase64: btoa("new") } },
+        routes: [],
+        layouts: {},
+        documentHtml: "",
+        assets: {
+          "/new.css": { mimeType: "text/css", dataBase64: btoa("new") },
+        },
       };
-      messageHandler!(new MessageEvent("message", {
-        data: { type: "UPDATE_MANIFEST", manifest: newManifest },
-      }));
+      messageHandler!(
+        new MessageEvent("message", {
+          data: { type: "UPDATE_MANIFEST", manifest: newManifest },
+        }),
+      );
 
       const oldRes = await core.fetch(new Request("http://localhost/old.css"));
       assertEquals(oldRes.status, 404);
@@ -310,21 +327,33 @@ describe("SW Adapter — listenForManifestUpdates()", () => {
 
   it("should ignore messages with unknown type", async () => {
     const manifest: AppManifest = {
-      routes: [], layouts: {}, documentHtml: "",
-      assets: { "/keep.css": { mimeType: "text/css", dataBase64: btoa("keep") } },
+      routes: [],
+      layouts: {},
+      documentHtml: "",
+      assets: {
+        "/keep.css": { mimeType: "text/css", dataBase64: btoa("keep") },
+      },
     };
     const core = new TenCore({ embedded: manifest });
     await core.fetch(new Request("http://localhost/keep.css"));
 
     let messageHandler: ((evt: MessageEvent) => void) | null = null;
-    const original = (self as unknown as Record<string, unknown>).addEventListener as (...args: unknown[]) => void;
-    (self as unknown as Record<string, unknown>).addEventListener = (type: unknown, handler: unknown) => {
-      if (type === "message") messageHandler = handler as (evt: MessageEvent) => void;
+    const original = (self as unknown as Record<string, unknown>)
+      .addEventListener as (...args: unknown[]) => void;
+    (self as unknown as Record<string, unknown>).addEventListener = (
+      type: unknown,
+      handler: unknown,
+    ) => {
+      if (type === "message") {
+        messageHandler = handler as (evt: MessageEvent) => void;
+      }
     };
 
     try {
       listenForManifestUpdates(core);
-      messageHandler!(new MessageEvent("message", { data: { type: "UNKNOWN", foo: "bar" } }));
+      messageHandler!(
+        new MessageEvent("message", { data: { type: "UNKNOWN", foo: "bar" } }),
+      );
       const res = await core.fetch(new Request("http://localhost/keep.css"));
       assertEquals(res.status, 200);
     } finally {

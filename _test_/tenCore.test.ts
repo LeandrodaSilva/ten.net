@@ -480,7 +480,8 @@ describe("TenCore", () => {
             regexSource: "^\\/old$",
             regexFlags: "",
             hasPage: false,
-            transpiledCode: 'export function GET() { return new Response("old"); }',
+            transpiledCode:
+              'export function GET() { return new Response("old"); }',
             pageContent: "",
           },
         ],
@@ -496,7 +497,8 @@ describe("TenCore", () => {
             regexSource: "^\\/new$",
             regexFlags: "",
             hasPage: false,
-            transpiledCode: 'export function GET() { return new Response("new"); }',
+            transpiledCode:
+              'export function GET() { return new Response("new"); }',
             pageContent: "",
           },
         ],
@@ -508,7 +510,10 @@ describe("TenCore", () => {
       assertEquals(oldRes.status, 404);
 
       const newRes = await core.fetch(new Request("http://localhost/new"));
-      assertEquals(newRes.status !== 404 || (await newRes.clone().text()) !== "Not found", true);
+      assertEquals(
+        newRes.status !== 404 || (await newRes.clone().text()) !== "Not found",
+        true,
+      );
     });
 
     it("should update embedded assets after manifest swap", async () => {
@@ -554,13 +559,16 @@ describe("TenCore", () => {
             regexSource: "^\\/swapped$",
             regexFlags: "",
             hasPage: false,
-            transpiledCode: 'export function GET() { return new Response("swapped"); }',
+            transpiledCode:
+              'export function GET() { return new Response("swapped"); }',
             pageContent: "",
           },
         ],
       }));
 
-      const manualRes = await core.fetch(new Request("http://localhost/manual"));
+      const manualRes = await core.fetch(
+        new Request("http://localhost/manual"),
+      );
       assertEquals(manualRes.status, 404);
     });
   });
