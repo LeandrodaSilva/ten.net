@@ -1,0 +1,429 @@
+import type { AppManifest } from "../../src/build/manifest.ts";
+import { CATEGORIES, type Demo } from "./types.ts";
+import { getDemos } from "./demos/registry.ts";
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+
+interface State {
+  currentDemo: Demo;
+  currentFileIndex: number;
+  swReady: boolean;
+  searchQuery: string;
+  /** mutable copy of demo files (editable by the user) */
+  editedFiles: string[];
+}
+
+const allDemos = getDemos();
+
+const state: State = {
+  currentDemo: allDemos[0],
+  currentFileIndex: 0,
+  swReady: false,
+  searchQuery: "",
+  editedFiles: allDemos[0].files.map((f) => f.content),
+};
+
+// ---------------------------------------------------------------------------
+// Service Worker
+// ---------------------------------------------------------------------------
+
+let swReg: ServiceWorkerRegistration | null = null;
+
+async function registerSW(): Promise<void> {
+  if (!("serviceWorker" in navigator)) return;
+  try {
+    swReg = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+
+    const waitForActive = (): Promise<void> =>
+      new Promise((resolve) => {
+        const sw = swReg!.installing ?? swReg!.waiting ?? swReg!.active;
+        if (swReg!.active) {
+          resolve();
+          return;
+        }
+        const onStateChange = () => {
+          if (sw && sw.state === "activated") {
+            sw.removeEventListener("statechange", onStateChange);
+            resolve();
+          }
+        };
+        sw?.addEventListener("statechange", onStateChange);
+      });
+
+    await waitForActive();
+    state.swReady = true;
+    render();
+    sendManifestToSW(state.currentDemo.manifest);
+  } catch (_e) {
+    // SW registration failed — playground still works without preview
+  }
+}
+
+function sendManifestToSW(manifest: AppManifest): void {
+  if (!swReg?.active) return;
+  swReg.active.postMessage({ type: "UPDATE_MANIFEST", manifest });
+}
+
+// ---------------------------------------------------------------------------
+// Render helpers — DOM API only, no innerHTML
+// ---------------------------------------------------------------------------
+
+function createIcon(name: string): HTMLElement {
+  const span = document.createElement("span");
+  span.className = "material-symbols-outlined";
+  span.textContent = name;
+  span.style.fontSize = "18px";
+  span.style.lineHeight = "1";
+  return span;
+}
+
+function createLogoEl(): HTMLElement {
+  const logo = document.createElement("div");
+  logo.style.cssText =
+    "font-size:18px;font-weight:700;color:var(--md-primary);letter-spacing:-0.5px;margin-right:8px;";
+  logo.textContent = "⬡ Ten.net playground";
+  return logo;
+}
+
+function createDemoItem(demo: Demo, isActive: boolean): HTMLElement {
+  const div = document.createElement("div");
+  div.className = isActive ? "demo-item active" : "demo-item";
+  div.dataset.demoId = demo.id;
+
+  const title = document.createElement("div");
+  title.className = "demo-title";
+  title.textContent = demo.title;
+  div.appendChild(title);
+
+  const desc = document.createElement("div");
+  desc.className = "demo-desc";
+  desc.textContent = demo.description;
+  div.appendChild(desc);
+
+  return div;
+}
+
+// ---------------------------------------------------------------------------
+// Top bar
+// ---------------------------------------------------------------------------
+
+function renderTopBar(container: HTMLElement): void {
+  const bar = document.createElement("div");
+  bar.className = "top-bar";
+
+  bar.appendChild(createLogoEl());
+
+  // spacer
+  const spacer = document.createElement("div");
+  spacer.style.flex = "1";
+  bar.appendChild(spacer);
+
+  // SW status chip
+  const chip = document.createElement("div");
+  chip.className = "chip";
+  chip.id = "sw-chip";
+  chip.appendChild(createIcon(state.swReady ? "check_circle" : "sync"));
+  const chipLabel = document.createElement("span");
+  chipLabel.textContent = state.swReady ? "SW ready" : "SW loading…";
+  chip.appendChild(chipLabel);
+  bar.appendChild(chip);
+
+  // Reset button
+  const resetBtn = document.createElement("button");
+  resetBtn.className = "btn-text";
+  resetBtn.id = "btn-reset";
+  resetBtn.appendChild(createIcon("restart_alt"));
+  const resetLabel = document.createElement("span");
+  resetLabel.textContent = "Reset";
+  resetBtn.appendChild(resetLabel);
+  bar.appendChild(resetBtn);
+
+  // Run button
+  const runBtn = document.createElement("button");
+  runBtn.className = "btn-filled";
+  runBtn.id = "btn-run";
+  runBtn.appendChild(createIcon("play_arrow"));
+  const runLabel = document.createElement("span");
+  runLabel.textContent = "Run";
+  runBtn.appendChild(runLabel);
+  bar.appendChild(runBtn);
+
+  container.appendChild(bar);
+}
+
+// ---------------------------------------------------------------------------
+// Sidebar
+// ---------------------------------------------------------------------------
+
+function renderSidebar(container: HTMLElement): void {
+  const sidebar = document.createElement("nav");
+  sidebar.className = "sidebar";
+
+  // Search wrapper
+  const searchWrapper = document.createElement("div");
+  searchWrapper.style.cssText = "position:relative;margin-bottom:8px;";
+
+  const searchIcon = createIcon("search");
+  searchIcon.style.cssText =
+    "position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--md-on-surface-tertiary);pointer-events:none;font-size:16px;";
+  searchWrapper.appendChild(searchIcon);
+
+  const search = document.createElement("input");
+  search.type = "search";
+  search.className = "sidebar-search";
+  search.placeholder = "Search demos…";
+  search.id = "sidebar-search";
+  search.value = state.searchQuery;
+  searchWrapper.appendChild(search);
+  sidebar.appendChild(searchWrapper);
+
+  const demos = getDemos();
+  const query = state.searchQuery.toLowerCase();
+  const filtered = query
+    ? demos.filter(
+      (d) =>
+        d.title.toLowerCase().includes(query) ||
+        d.description.toLowerCase().includes(query),
+    )
+    : demos;
+
+  for (const cat of CATEGORIES) {
+    const catDemos = filtered.filter((d) => d.category === cat.id);
+    if (catDemos.length === 0) continue;
+
+    // Category header
+    const header = document.createElement("div");
+    header.className = "category-header";
+    header.appendChild(createIcon(cat.icon));
+    const label = document.createElement("span");
+    label.className = "category-label";
+    label.textContent = cat.label;
+    header.appendChild(label);
+    sidebar.appendChild(header);
+
+    for (const demo of catDemos) {
+      const item = createDemoItem(demo, demo.id === state.currentDemo.id);
+      item.id = "demo-" + demo.id;
+      sidebar.appendChild(item);
+    }
+  }
+
+  container.appendChild(sidebar);
+}
+
+// ---------------------------------------------------------------------------
+// Editor panel
+// ---------------------------------------------------------------------------
+
+function renderEditorPanel(container: HTMLElement): void {
+  const panel = document.createElement("div");
+  panel.className = "editor-panel";
+
+  // Tabs row
+  const tabsRow = document.createElement("div");
+  tabsRow.style.cssText =
+    "display:flex;flex-direction:row;gap:6px;padding:10px 12px;border-bottom:1px solid var(--md-outline);background:var(--md-surface-card);";
+
+  const files = state.currentDemo.files;
+  files.forEach((file, idx) => {
+    const tab = document.createElement("button");
+    tab.className = idx === state.currentFileIndex ? "tab active" : "tab";
+    tab.dataset.tabIndex = String(idx);
+    tab.id = "tab-" + idx;
+
+    const fileIcon = createIcon(file.language === "typescript" ? "code" : "html");
+    tab.appendChild(fileIcon);
+    const tabLabel = document.createElement("span");
+    tabLabel.textContent = file.name;
+    tab.appendChild(tabLabel);
+    tabsRow.appendChild(tab);
+  });
+
+  panel.appendChild(tabsRow);
+
+  // Split: code area + preview
+  const split = document.createElement("div");
+  split.style.cssText = "display:flex;flex-direction:row;flex:1;overflow:hidden;";
+
+  // Code area
+  const codeArea = document.createElement("div");
+  codeArea.style.cssText =
+    "flex:1;display:flex;flex-direction:column;background:var(--md-surface-editor);overflow:hidden;";
+
+  const currentFile = files[state.currentFileIndex];
+  const textarea = document.createElement("textarea");
+  textarea.id = "code-editor";
+  textarea.value = state.editedFiles[state.currentFileIndex];
+  textarea.spellcheck = false;
+  textarea.setAttribute("autocorrect", "off");
+  textarea.setAttribute("autocapitalize", "off");
+  textarea.style.cssText =
+    "background:var(--md-surface-editor);color:#e3e2e6;font-family:var(--md-font-mono);font-size:12px;line-height:2;border:none;resize:none;padding:20px;width:100%;height:100%;outline:none;";
+  if (!currentFile.editable) {
+    textarea.setAttribute("readonly", "true");
+    textarea.style.opacity = "0.6";
+  }
+  codeArea.appendChild(textarea);
+  split.appendChild(codeArea);
+
+  // Preview pane
+  const previewPane = document.createElement("div");
+  previewPane.style.cssText =
+    "flex:1;display:flex;flex-direction:column;background:#fff;border-left:1px solid var(--md-outline);overflow:hidden;";
+
+  // Preview top bar
+  const previewBar = document.createElement("div");
+  previewBar.style.cssText =
+    "display:flex;flex-direction:row;align-items:center;gap:8px;padding:8px 12px;background:var(--md-surface);border-bottom:1px solid var(--md-outline);";
+
+  const previewDot = document.createElement("div");
+  previewDot.style.cssText =
+    "width:8px;height:8px;border-radius:50%;background:var(--md-primary);";
+  previewBar.appendChild(previewDot);
+
+  const previewLabel = document.createElement("span");
+  previewLabel.style.cssText =
+    "font-size:12px;color:var(--md-on-surface-secondary);font-family:var(--md-font-mono);";
+  previewLabel.textContent = "/preview" + state.currentDemo.previewPath;
+  previewBar.appendChild(previewLabel);
+
+  previewPane.appendChild(previewBar);
+
+  const iframe = document.createElement("iframe");
+  iframe.id = "preview-frame";
+  iframe.src = "/preview" + state.currentDemo.previewPath;
+  iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms");
+  iframe.style.cssText = "flex:1;border:none;width:100%;";
+  previewPane.appendChild(iframe);
+
+  split.appendChild(previewPane);
+  panel.appendChild(split);
+  container.appendChild(panel);
+}
+
+// ---------------------------------------------------------------------------
+// Full render
+// ---------------------------------------------------------------------------
+
+function render(): void {
+  const app = document.getElementById("app");
+  if (!app) return;
+
+  // Clear existing content via DOM API
+  while (app.firstChild) {
+    app.removeChild(app.firstChild);
+  }
+
+  // Top bar
+  renderTopBar(app);
+
+  // Body row (sidebar + editor)
+  const body = document.createElement("div");
+  body.style.cssText =
+    "display:flex;flex-direction:row;flex:1;gap:12px;padding:12px;overflow:hidden;";
+
+  renderSidebar(body);
+  renderEditorPanel(body);
+
+  app.appendChild(body);
+
+  bindEvents();
+}
+
+// ---------------------------------------------------------------------------
+// Event binding
+// ---------------------------------------------------------------------------
+
+function reloadPreviewIframe(): void {
+  const iframe = document.getElementById("preview-frame") as HTMLIFrameElement | null;
+  if (iframe) {
+    iframe.src = "/preview" + state.currentDemo.previewPath;
+  }
+}
+
+function switchDemo(demo: Demo): void {
+  state.currentDemo = demo;
+  state.currentFileIndex = 0;
+  state.editedFiles = demo.files.map((f) => f.content);
+  sendManifestToSW(demo.manifest);
+  render();
+}
+
+function buildManifestFromEdits(): AppManifest {
+  const base = state.currentDemo.manifest;
+  const files = state.currentDemo.files;
+
+  // Reconstruct manifest applying user edits
+  const routes = base.routes.map((r) => {
+    const routeIdx = files.findIndex((f) => f.name === "route.ts");
+    const pageIdx = files.findIndex((f) => f.name === "page.html");
+    return {
+      ...r,
+      transpiledCode: routeIdx >= 0 ? state.editedFiles[routeIdx] : r.transpiledCode,
+      pageContent: pageIdx >= 0 ? state.editedFiles[pageIdx] : r.pageContent,
+    };
+  });
+
+  return { ...base, routes };
+}
+
+function bindEvents(): void {
+  // Demo items
+  const sidebar = document.querySelector("nav.sidebar");
+  sidebar?.addEventListener("click", (e) => {
+    const target = (e.target as HTMLElement).closest("[data-demo-id]") as HTMLElement | null;
+    if (!target) return;
+    const demoId = target.dataset.demoId;
+    if (!demoId) return;
+    const demo = getDemos().find((d) => d.id === demoId);
+    if (demo) switchDemo(demo);
+  });
+
+  // Search input
+  const search = document.getElementById("sidebar-search") as HTMLInputElement | null;
+  search?.addEventListener("input", () => {
+    state.searchQuery = search.value;
+    render();
+  });
+
+  // Tab clicks
+  const tabsRow = document.querySelector("[data-tab-index]")?.parentElement;
+  tabsRow?.addEventListener("click", (e) => {
+    const target = (e.target as HTMLElement).closest("[data-tab-index]") as HTMLElement | null;
+    if (!target) return;
+    const idx = parseInt(target.dataset.tabIndex ?? "0", 10);
+    state.currentFileIndex = idx;
+    render();
+  });
+
+  // Save textarea edits to state (live)
+  const editor = document.getElementById("code-editor") as HTMLTextAreaElement | null;
+  editor?.addEventListener("input", () => {
+    state.editedFiles[state.currentFileIndex] = editor.value;
+  });
+
+  // Run button
+  const runBtn = document.getElementById("btn-run");
+  runBtn?.addEventListener("click", () => {
+    sendManifestToSW(buildManifestFromEdits());
+    reloadPreviewIframe();
+  });
+
+  // Reset button
+  const resetBtn = document.getElementById("btn-reset");
+  resetBtn?.addEventListener("click", () => {
+    state.editedFiles = state.currentDemo.files.map((f) => f.content);
+    sendManifestToSW(state.currentDemo.manifest);
+    render();
+    reloadPreviewIframe();
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Bootstrap
+// ---------------------------------------------------------------------------
+
+render();
+registerSW();
