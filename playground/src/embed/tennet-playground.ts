@@ -1,5 +1,3 @@
-import type { Demo } from "../types.ts";
-
 class TennetPlayground extends HTMLElement {
   private shadow: ShadowRoot;
 
