@@ -471,6 +471,100 @@ describe("TenCore", () => {
     });
   });
 
+  describe("updateManifest()", () => {
+    it("should replace routes from old manifest with new manifest routes", async () => {
+      const oldManifest = makeManifest({
+        routes: [
+          {
+            path: "/old",
+            regexSource: "^\\/old$",
+            regexFlags: "",
+            hasPage: false,
+            transpiledCode: 'export function GET() { return new Response("old"); }',
+            pageContent: "",
+          },
+        ],
+      });
+
+      const core = new TenCore({ embedded: oldManifest });
+      await core.fetch(new Request("http://localhost/old"));
+
+      const newManifest = makeManifest({
+        routes: [
+          {
+            path: "/new",
+            regexSource: "^\\/new$",
+            regexFlags: "",
+            hasPage: false,
+            transpiledCode: 'export function GET() { return new Response("new"); }',
+            pageContent: "",
+          },
+        ],
+      });
+
+      core.updateManifest(newManifest);
+
+      const oldRes = await core.fetch(new Request("http://localhost/old"));
+      assertEquals(oldRes.status, 404);
+
+      const newRes = await core.fetch(new Request("http://localhost/new"));
+      assertEquals(newRes.status !== 404 || (await newRes.clone().text()) !== "Not found", true);
+    });
+
+    it("should update embedded assets after manifest swap", async () => {
+      const oldManifest = makeManifest({
+        routes: [],
+        assets: {
+          "/style.css": { mimeType: "text/css", dataBase64: btoa("old") },
+        },
+      });
+
+      const core = new TenCore({ embedded: oldManifest });
+      const res1 = await core.fetch(new Request("http://localhost/style.css"));
+      assertEquals(await res1.text(), "old");
+
+      const newManifest = makeManifest({
+        routes: [],
+        assets: {
+          "/style.css": { mimeType: "text/css", dataBase64: btoa("new") },
+        },
+      });
+
+      core.updateManifest(newManifest);
+      const res2 = await core.fetch(new Request("http://localhost/style.css"));
+      assertEquals(await res2.text(), "new");
+    });
+
+    it("should replace all routes including manual ones after manifest swap", async () => {
+      const core = new TenCore({ embedded: makeManifest() });
+      await core.fetch(new Request("http://localhost/init"));
+
+      const manualRoute = makeRoute({
+        path: "/manual",
+        regex: /^\/manual$/,
+        method: "GET",
+        run: () => new Response("manual"),
+      });
+      core.addRoutes([manualRoute]);
+
+      core.updateManifest(makeManifest({
+        routes: [
+          {
+            path: "/swapped",
+            regexSource: "^\\/swapped$",
+            regexFlags: "",
+            hasPage: false,
+            transpiledCode: 'export function GET() { return new Response("swapped"); }',
+            pageContent: "",
+          },
+        ],
+      }));
+
+      const manualRes = await core.fetch(new Request("http://localhost/manual"));
+      assertEquals(manualRes.status, 404);
+    });
+  });
+
   describe("error handling", () => {
     it("should return 500 when route handler throws", async () => {
       const route = makeRoute({
