@@ -1,6 +1,6 @@
 {
   "name": "@leproj/tennet",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "A minimalist Deno web microframework with file-based routing, HTML templating, nested layouts, and a plugin system",
   "license": "MIT",
   "exports": {
@@ -25,7 +25,9 @@
     "bench:check": "deno run --allow-all src/bench/_check_thresholds.ts",
     "build": "deno run --allow-read --allow-write --allow-env --allow-run src/build/buildCommand.ts",
     "playground:build": "deno run --allow-all playground/build.ts",
-    "playground:serve": "deno run --allow-all playground/serve.ts"
+    "playground:serve": "deno run --allow-all playground/serve.ts",
+    "embed-tailwind": "deno run --allow-read --allow-write --allow-env scripts/embedTailwindCss.ts",
+    "check:embed-fresh": "deno task embed-tailwind && git diff --exit-code src/tailwind/_tailwindIndexCss.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.14",
