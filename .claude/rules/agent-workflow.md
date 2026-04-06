@@ -91,25 +91,25 @@ novo para a correção.
 
 Modelos obrigatórios por papel do agente:
 
-- **Backend** → `model: "sonnet"` (implementação, rápido)
-- **Frontend** → `model: "sonnet"` (implementação, rápido)
+- **Backend** → `model: "opus"` (qualidade máxima na implementação)
+- **Frontend** → `model: "opus"` (qualidade máxima na implementação)
 - **Tester** → `model: "opus"` (qualidade, criterioso)
 - **Security** → `model: "opus"` (auditoria, profundo)
 - **DevOps** → `model: "haiku"` (CI/CD, tarefas operacionais leves)
 
-**Why:** Agentes de implementação (backend/frontend) usam Sonnet (mais rápido e
-econômico). Agentes de qualidade (tester/security) usam Opus (mais criterioso e
-profundo na análise). DevOps usa Haiku (tarefas operacionais que não exigem
-raciocínio complexo).
+**Why:** Leandro pediu explicitamente (2026-04-03) para usar opus em agentes de
+implementação (backend/frontend). Prefere qualidade máxima sobre velocidade.
+Agentes de qualidade (tester/security) já usavam Opus. DevOps usa Haiku (tarefas
+operacionais que não exigem raciocínio complexo).
 
 **How to apply:**
 
-- `Agent(name: "backend", model: "sonnet", ...)`
-- `Agent(name: "frontend", model: "sonnet", ...)`
+- `Agent(name: "backend", model: "opus", ...)`
+- `Agent(name: "frontend", model: "opus", ...)`
 - `Agent(name: "tester", model: "opus", ...)`
 - `Agent(name: "security", model: "opus", ...)`
 - `Agent(name: "devops", model: "haiku", ...)`
-- Outros agentes de implementação/código → sonnet
+- Outros agentes de implementação/código → opus
 - Outros agentes de revisão/auditoria/QA → opus
 - Outros agentes operacionais (CI, deploy, format) → haiku
 

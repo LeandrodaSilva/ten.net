@@ -36,6 +36,7 @@ export async function renderDynamicPage(
   kv?: Deno.Kv,
   seoOptions?: SeoOptions,
   widgetRenderer?: WidgetPageRenderer,
+  tailwindCss?: string,
 ): Promise<string> {
   let body = String(item.body ?? "");
   const seoTitle = String(item.seo_title ?? item.title ?? "");
@@ -137,6 +138,12 @@ export async function renderDynamicPage(
       "</head>",
       `  ${ogTags.join("\n  ")}\n  </head>`,
     );
+  }
+
+  // Inject Tailwind CSS inline if available
+  if (tailwindCss) {
+    const { injectTailwindCss } = await import("../tailwind/inject.ts");
+    document = injectTailwindCss(document, tailwindCss);
   }
 
   html = document.replace("{{content}}", html);

@@ -50,13 +50,15 @@ plugin system. Published to JSR.
 
 ```bash
 deno run --allow-all --unstable-raw-imports example/http/main.ts  # Run example server
-deno task test       # Run all tests in parallel
-deno task coverage   # Run tests with coverage
-deno task fmt        # Format code
-deno task lint       # Lint code
-deno task check      # Type check all TypeScript files
-deno task build      # Compile app into a single self-contained binary
-deno task bench      # Run benchmarks with history tracking
+deno task test              # Run all tests in parallel
+deno task coverage          # Run tests with coverage
+deno task fmt               # Format code
+deno task lint              # Lint code
+deno task check             # Type check all TypeScript files
+deno task build             # Compile app into a single self-contained binary
+deno task bench             # Run benchmarks with history tracking
+deno task playground:build  # Build the online playground
+deno task playground:serve  # Serve the playground locally
 ```
 
 ## Project Structure
@@ -64,8 +66,11 @@ deno task bench      # Run benchmarks with history tracking
 ```
 src/                          # Framework source
   mod.ts                      # Public entry point, exports { Ten }
-  ten.ts                      # Core class (server, routing, plugin registration)
+  ten.ts                      # Deno adapter, delegates to TenCore
   cli.ts                      # CLI entry point
+  core/                       # Runtime-agnostic core (zero Deno APIs)
+    tenCore.ts                # TenCore class — fetch(), use(), useAdmin()
+    types.ts                  # Core interfaces
   routerEngine.ts             # File-system route scanner and transpiler
   viewEngine.ts               # HTML template renderer with nested layouts
   paramsEngine.ts             # URL parameter extraction
@@ -74,11 +79,15 @@ src/                          # Framework source
   utils/                      # Utility functions
   build/                      # Build system: collector, code generator, crypto, CLI
   embedded/                   # Embedded router engine for compiled binaries
+  sw/                         # Service Worker adapter (handle, fire)
+  storage/                    # IndexedDB storage + KV emulation for browsers
   middleware/                 # Middleware type definition
   assets/                     # faviconData.ts, documentHtml.ts
   bench/                      # Benchmarks with history tracking
 
-_test_/                       # Core tests (~30 files, 61 tests)
+_test_/                       # Core tests (38 test files + 1 helper)
+
+playground/                   # Online interactive playground (8 demos)
 
 example/
   http/
@@ -98,7 +107,12 @@ can have:
 - `document.html` — root HTML wrapper (app root only)
 - `[param]/` — dynamic route segments
 
-**Ten.net() accepts configurable appPath**:
+**TenCore** (`src/core/tenCore.ts`): Runtime-agnostic request handler. Exposes
+`fetch(req)` as the universal entry point. Can be used standalone without `Ten`
+for Service Workers, Node.js, and edge runtimes.
+
+**Ten** (`src/ten.ts`): Thin Deno adapter that delegates to `TenCore`. Creates
+the Deno HTTP server, scans filesystem routes, and passes them to the core.
 
 ```ts
 const app = Ten.net(); // default: ./app
@@ -117,7 +131,15 @@ single binary. The collector scans `app/`, transpiles routes, and gathers assets
 into an `AppManifest`. The code generator produces a self-contained TypeScript
 file that uses `embeddedRouterEngine` instead of filesystem scanning. Optional
 AES-256-GCM encryption for code protection. Entry point:
-`src/build/buildCommand.ts`.
+`src/build/buildCommand.ts`. Supports `--target=browser` for Service Worker
+bundles via esbuild.
+
+**Service Worker adapter** (`src/sw/`): Provides `handle()` and `fire()`
+functions for running Ten.net apps in browser Service Workers.
+
+**Browser storage** (`src/storage/`): `IndexedDBStorage` implements the Storage
+interface with IndexedDB. `IndexedDBKv` emulates minimal Deno.Kv for browser
+widgets. `StorageSync` provides pull-based sync with a remote server.
 
 **Plugin system**: Extend abstract `Plugin` class with `name`, `description`,
 `model`. The `AdminPluginLike` interface allows external admin plugins (like
@@ -138,10 +160,10 @@ AES-256-GCM encryption for code protection. Entry point:
 
 ## Testing
 
-Tests are in `_test_/` (~30 test files, core only). Uses `Deno.test()` and
-`describe/it` from `@std/testing/bdd`. Assertions from `@std/assert` (preferred)
-and `@deno-assert` (legacy). Snapshots in `_test_/__snapshots__/`. Test fixtures
-in `example/http/app/`.
+Tests are in `_test_/` (38 test files + 1 helper, core only). Uses `Deno.test()`
+and `describe/it` from `@std/testing/bdd`. Assertions from `@std/assert`
+(preferred) and `@deno-assert` (legacy). Snapshots in `_test_/__snapshots__/`.
+Test fixtures in `example/http/app/`.
 
 ## Release Process
 
@@ -151,10 +173,13 @@ creates GitHub Release.
 ## JSR Entrypoints
 
 - `.` → `src/mod.ts` — Main entry, exports `{ Ten }`
+- `./core` → `src/core/mod.ts` — Runtime-agnostic core (`TenCore`)
 - `./cli` → `src/cli.ts` — CLI entry point
 - `./build` → `src/build/build.ts` — Build system
 - `./build/manifest` → `src/build/manifest.ts` — Build manifest types
 - `./build/crypto` → `src/build/crypto.ts` — AES-256-GCM encryption utilities
+- `./sw` → `src/sw/mod.ts` — Service Worker adapter
+- `./storage/indexeddb` → `src/storage/mod.ts` — IndexedDB storage for browsers
 - `./assets/favicon` → `src/assets/faviconData.ts` — Favicon data
 
 ## Gotchas

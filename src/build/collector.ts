@@ -14,8 +14,29 @@ export async function collectManifest(
 ): Promise<AppManifest> {
   const routes = await collectRoutes(appPath, routeFileName);
   const layouts = collectLayouts(appPath, routes);
-  const documentHtml = findDocumentLayoutRootSync(appPath);
+  let documentHtml = findDocumentLayoutRootSync(appPath);
   const assets = await collectAssets(publicPath);
+
+  // Generate inline Tailwind CSS at build time
+  const { hasTailwindCdn, injectTailwindCss } = await import(
+    "../tailwind/inject.ts"
+  );
+  if (hasTailwindCdn(documentHtml)) {
+    const { extractCandidates } = await import("../tailwind/scanner.ts");
+    const { generateTailwindCss } = await import("../tailwind/generator.ts");
+
+    const allHtml: string[] = [documentHtml];
+    for (const route of routes) {
+      if (route.pageContent) allHtml.push(route.pageContent);
+    }
+    for (const contents of Object.values(layouts)) {
+      allHtml.push(...contents);
+    }
+
+    const candidates = extractCandidates(allHtml);
+    const css = await generateTailwindCss(candidates);
+    documentHtml = injectTailwindCss(documentHtml, css);
+  }
 
   return { routes, layouts, documentHtml, assets };
 }

@@ -8,6 +8,7 @@ interface IViewEngine {
   req: Request;
   params: Record<string, string>;
   embedded?: AppManifest;
+  tailwindCss?: string;
 }
 
 export async function viewEngine(args: IViewEngine) {
@@ -73,6 +74,12 @@ export async function viewEngine(args: IViewEngine) {
       } catch (e) {
         console.error(e);
       }
+    }
+
+    // Inject Tailwind CSS inline (dev mode only — embedded already has it baked in)
+    if (args.tailwindCss && !embedded) {
+      const { injectTailwindCss } = await import("./tailwind/inject.ts");
+      pageModule = injectTailwindCss(pageModule, args.tailwindCss);
     }
 
     return pageModule;

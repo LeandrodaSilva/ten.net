@@ -39,6 +39,7 @@
     "@std/cli": "jsr:@std/cli@^1.0.0",
     "@deno-walk": "jsr:@std/fs@1/walk",
     "@deno/emit": "jsr:@deno/emit@^0.46",
+    "tailwindcss": "npm:tailwindcss@^4",
     "esbuild": "npm:esbuild@^0.25",
     "esbuild-deno-loader": "jsr:@luca/esbuild-deno-loader@^0.11",
     "fake-indexeddb": "npm:fake-indexeddb@^6",

@@ -48,6 +48,7 @@ export class TenCore {
   private _widgetRenderer?: WidgetPageRendererCore;
   private _dynamicPageRenderer?: DynamicPageRenderer;
   private _decodeBase64: Base64Decoder;
+  private _tailwindCss?: string;
   private _initialized = false;
 
   constructor(options: TenCoreOptions = {}) {
@@ -89,6 +90,14 @@ export class TenCore {
   /** Override the dynamic registry (used by tests and the Deno adapter). */
   set dynamicRegistryOverride(r: DynamicRouteRegistryLike | undefined) {
     this._dynamicRegistry = r;
+  }
+
+  get tailwindCss(): string | undefined {
+    return this._tailwindCss;
+  }
+
+  set tailwindCss(value: string | undefined) {
+    this._tailwindCss = value;
   }
 
   get middlewares(): readonly Middleware[] {
@@ -276,6 +285,7 @@ export class TenCore {
             req,
             params,
             embedded: this._embedded,
+            tailwindCss: this._tailwindCss,
           });
           return new Response(page, {
             status: 200,

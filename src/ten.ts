@@ -65,6 +65,7 @@ export class Ten {
           ? (pageId, body, kv) =>
             this._core.widgetRenderer!(pageId, body, kv as Deno.Kv)
           : undefined,
+        this._core.tailwindCss,
       );
     });
   }
@@ -198,6 +199,7 @@ export class Ten {
       this._core.addRoutes(
         await routerEngine(this._appPath, this._routeFileName),
       );
+      await this._generateTailwindCss();
     };
 
     worker.postMessage({
@@ -224,6 +226,7 @@ export class Ten {
       this._core.addRoutes(
         await routerEngine(this._appPath, this._routeFileName),
       );
+      await this._generateTailwindCss();
     }
     // Embedded routes are loaded lazily inside TenCore.init() on first fetch.
 
@@ -237,6 +240,40 @@ export class Ten {
     }
 
     return Deno.serve(options ?? {}, this._core.fetch);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Tailwind CSS generation (dev mode)
+  // ---------------------------------------------------------------------------
+
+  /** Scan routes for Tailwind classes and generate inline CSS. */
+  private async _generateTailwindCss(): Promise<void> {
+    const { findDocumentLayoutRoot } = await import(
+      "./utils/findDocumentLayoutRoot.ts"
+    );
+    const { hasTailwindCdn } = await import("./tailwind/inject.ts");
+
+    const documentHtml = await findDocumentLayoutRoot(this._appPath);
+    if (!hasTailwindCdn(documentHtml)) return;
+
+    const { findOrderedLayouts } = await import(
+      "./utils/findOrderedLayouts.ts"
+    );
+    const { extractCandidates } = await import("./tailwind/scanner.ts");
+    const { generateTailwindCss } = await import("./tailwind/generator.ts");
+
+    const allHtml: string[] = [documentHtml];
+
+    for (const route of this._core.routes) {
+      if (route.page) allHtml.push(route.page);
+      const layouts = await findOrderedLayouts(this._appPath, route.path);
+      for (const layoutPath of layouts) {
+        allHtml.push(await Deno.readTextFile(layoutPath));
+      }
+    }
+
+    const candidates = extractCandidates(allHtml);
+    this._core.tailwindCss = await generateTailwindCss(candidates);
   }
 
   // ---------------------------------------------------------------------------
