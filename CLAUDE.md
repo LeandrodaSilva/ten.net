@@ -193,3 +193,6 @@ creates GitHub Release.
   `appPath: "./example/http/app"` to `Ten.net()` in tests
 - `routerEngine` and `collector` dynamically strip the appPath prefix from entry
   paths (no hardcoded `./app` regex)
+- When bumping `tailwindcss` version in deno.json, run
+  `deno task embed-tailwind` to refresh `src/tailwind/_tailwindIndexCss.ts`
+  (embedded CSS fallback for JSR runtime).
