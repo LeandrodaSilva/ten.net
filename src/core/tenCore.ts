@@ -50,10 +50,12 @@ export class TenCore {
   private _decodeBase64: Base64Decoder;
   private _tailwindCss?: string;
   private _initialized = false;
+  private _appPath: string = "";
 
   constructor(options: TenCoreOptions = {}) {
     this._embedded = options.embedded;
     this._decodeBase64 = options.decodeBase64 ?? decodeBase64Universal;
+    this._appPath = options.appPath ?? "";
     if (options.routes?.length) {
       this._routes.push(...options.routes);
     }
@@ -280,7 +282,7 @@ export class TenCore {
       if (route.isViewForMethod(requestMethod)) {
         try {
           const page = await viewEngine({
-            _appPath: "",
+            _appPath: this._appPath,
             route,
             req,
             params,

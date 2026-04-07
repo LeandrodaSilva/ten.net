@@ -63,7 +63,7 @@ export interface TenCoreOptions {
   embedded?: AppManifest;
   /** Pre-loaded routes to seed the core with. */
   routes?: Route[];
-  /** App directory path — informational only in core (not used for FS access). */
+  /** App directory path — required for filesystem-based template loading (document.html, layout.html) in non-embedded mode. */
   appPath?: string;
   /** Custom base-64 decoder. Defaults to the `atob`-based universal decoder. */
   decodeBase64?: Base64Decoder;
