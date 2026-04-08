@@ -1,0 +1,27 @@
+<div class="max-w-5xl mx-auto">
+  <div class="text-xs font-semibold uppercase tracking-widest text-[#5f6368]">
+    Performance · {{date}}
+  </div>
+  <h1 class="mt-2 text-4xl font-bold text-[#1a1c1e]">Benchmarks</h1>
+  <p class="mt-2 text-sm text-[#5f6368]">
+    commit <code
+      class="font-mono-m3 text-[#3178c6] bg-[#f5f7fa] rounded px-1.5 py-0.5"
+    >{{commit}}</code> · Deno {{denoVersion}} · {{os}}
+  </p>
+  <div class="mt-8 bg-white rounded-2xl shadow-md3-1 overflow-hidden">
+    <table class="w-full">
+      <thead
+        class="bg-[#f5f7fa] text-xs uppercase tracking-wider text-[#5f6368]"
+      >
+        <tr>
+          <th class="text-left px-4 py-3">Benchmark</th>
+          <th class="text-right px-4 py-3">Avg</th>
+          <th class="text-right px-4 py-3">P75</th>
+          <th class="text-right px-4 py-3">P99</th>
+          <th class="text-right px-4 py-3">n</th>
+        </tr>
+      </thead>
+      <tbody>{{{rowsHtml}}}</tbody>
+    </table>
+  </div>
+</div>

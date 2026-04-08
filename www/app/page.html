@@ -1,0 +1,130 @@
+<section class="py-24 text-center">
+  <span
+    class="inline-flex items-center bg-white shadow-md3-1 rounded-full px-4 py-1 text-xs text-[#5f6368]"
+  >
+    v{{version}} · Published on JSR
+  </span>
+  <h1 class="mt-6 text-5xl md:text-6xl font-bold tracking-tight text-[#1a1c1e]">
+    Build the web, <span class="text-[#3178c6]">minimally</span>.
+  </h1>
+  <p class="mt-6 max-w-2xl mx-auto text-lg text-[#5f6368]">
+    A Deno microframework with file-based routing, HTML templating, and a plugin
+    system. Zero config, maximum clarity.
+  </p>
+  <div class="mt-10 flex items-center justify-center gap-4 flex-wrap">
+    <a
+      href="/docs"
+      class="inline-flex items-center gap-2 bg-[#3178c6] text-white rounded-[20px] shadow-md3-btn hover:shadow-md3-active px-6 py-2.5 text-sm font-medium transition-shadow"
+    >
+      <span class="material-symbols-outlined">rocket_launch</span>
+      Get started
+    </a>
+    <a
+      href="https://play.tennet.run"
+      target="_blank"
+      rel="noopener"
+      class="inline-flex items-center gap-2 bg-white shadow-md3-1 hover:shadow-md3-active text-[#3178c6] rounded-[20px] px-6 py-2.5 text-sm font-medium transition-shadow"
+    >
+      <span class="material-symbols-outlined">play_arrow</span>
+      Try the playground
+    </a>
+  </div>
+</section>
+
+<section class="py-20">
+  <div class="text-xs font-semibold uppercase tracking-widest text-[#5f6368]">
+    Why Ten.net
+  </div>
+  <h2 class="mt-2 text-3xl font-bold tracking-tight text-[#1a1c1e]">
+    Everything you need, nothing you don't
+  </h2>
+  <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {{{featuresHtml}}}
+  </div>
+</section>
+
+<section class="py-20">
+  <div class="text-xs font-semibold uppercase tracking-widest text-[#5f6368]">
+    Example
+  </div>
+  <h2 class="mt-2 text-3xl font-bold tracking-tight text-[#1a1c1e]">
+    See the magic
+  </h2>
+  <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white rounded-2xl shadow-md3-1 overflow-hidden">
+      <div class="bg-[#f5f7fa] px-4 py-2 text-xs font-mono-m3 text-[#5f6368]">
+        app/hello/route.ts
+      </div>
+      <pre
+        class="p-4 bg-[#1b1b1f] overflow-auto"
+      ><code class="language-typescript">{{{codeRouteTs}}}</code></pre>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md3-1 overflow-hidden">
+      <div class="bg-[#f5f7fa] px-4 py-2 text-xs font-mono-m3 text-[#5f6368]">
+        app/hello/page.html
+      </div>
+      <pre
+        class="p-4 bg-[#1b1b1f] overflow-auto"
+      ><code class="language-html">{{{codePageHtml}}}</code></pre>
+    </div>
+  </div>
+  <div class="mt-8 text-center">
+    <a
+      href="https://play.tennet.run/?demo=hello-world"
+      target="_blank"
+      rel="noopener"
+      class="inline-flex items-center gap-2 bg-white shadow-md3-1 hover:shadow-md3-active text-[#3178c6] rounded-[20px] px-6 py-2.5 text-sm font-medium transition-shadow"
+    >
+      <span class="material-symbols-outlined">arrow_forward</span>
+      Open in Playground
+    </a>
+  </div>
+</section>
+
+<section class="py-16">
+  <div class="text-xs font-semibold uppercase tracking-widest text-[#5f6368]">
+    Performance
+  </div>
+  <h2 class="mt-2 text-3xl font-bold tracking-tight text-[#1a1c1e]">
+    Fast by default
+  </h2>
+  <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white rounded-2xl shadow-md3-1 p-6">
+      <span class="material-symbols-outlined text-[#3178c6] text-3xl"
+      >speed</span>
+      <div class="mt-3 text-3xl font-bold text-[#1a1c1e]">{{routerAvg}}</div>
+      <div class="mt-1 text-sm text-[#5f6368]">Router avg latency</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md3-1 p-6">
+      <span class="material-symbols-outlined text-[#3178c6] text-3xl"
+      >timer</span>
+      <div class="mt-3 text-3xl font-bold text-[#1a1c1e]">{{viewP75}}</div>
+      <div class="mt-1 text-sm text-[#5f6368]">View p75 (static)</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md3-1 p-6">
+      <span class="material-symbols-outlined text-[#3178c6] text-3xl"
+      >package_2</span>
+      <div class="mt-3 text-3xl font-bold text-[#1a1c1e]">v{{version}}</div>
+      <div class="mt-1 text-sm text-[#5f6368]">Latest on JSR</div>
+    </div>
+  </div>
+</section>
+
+<section class="py-24">
+  <div class="bg-white rounded-2xl shadow-md3-2 p-12 text-center">
+    <h2 class="text-3xl font-bold tracking-tight text-[#1a1c1e]">
+      Try it in one command
+    </h2>
+    <div class="mt-8 flex justify-center">
+      <pre
+        class="bg-[#1b1b1f] text-[#e6edf3] rounded-xl p-4 font-mono-m3 text-sm inline-flex gap-2 items-center"
+      ><span class="text-[#3178c6]">$</span><code>{{installCmd}}</code></pre>
+    </div>
+    <div class="mt-6">
+      <a
+        href="/docs"
+        class="text-[#3178c6] hover:underline text-sm font-semibold"
+      >Read the docs →</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ten.net — Minimalist web microframework for Deno</title>
+    <meta
+      name="description"
+      content="Ten.net is a minimalist, extensible web microframework for TypeScript runtimes. File-based routing, HTML templating, nested layouts, plugin system."
+    >
+    <meta property="og:title" content="Ten.net">
+    <meta
+      property="og:description"
+      content="Minimalist web microframework for Deno. File-based routing, HTML templating, plugin system."
+    >
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%AC%A1%3C/text%3E%3C/svg%3E"
+    >
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css"
+    >
+    <script
+      src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"
+    ></script>
+    <script>
+      addEventListener("DOMContentLoaded", () => hljs.highlightAll());
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Material+Symbols+Outlined&display=swap"
+      rel="stylesheet"
+    >
+    <style>
+      :root {
+        --md-primary: #3178c6;
+        --md-on-primary: #ffffff;
+        --md-primary-shadow: rgba(49, 120, 198, 0.3);
+        --md-surface: #eef1f6;
+        --md-surface-card: #ffffff;
+        --md-surface-inactive: #f5f7fa;
+        --md-surface-editor: #1b1b1f;
+        --md-on-surface: #1a1c1e;
+        --md-on-surface-secondary: #5f6368;
+        --md-on-surface-tertiary: #80868b;
+        --md-outline: #dadce0;
+        --md-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.06);
+        --md-elevation-2: 0 1px 3px rgba(0, 0, 0, 0.08);
+        --md-elevation-active:
+          0 2px 8px var(--md-primary-shadow),
+          0 1px 3px rgba(49, 120, 198, 0.2);
+        --md-elevation-button:
+          0 1px 3px var(--md-primary-shadow),
+          0 1px 2px rgba(0, 0, 0, 0.06);
+        --md-radius-container: 16px;
+        --md-radius-item: 12px;
+        --md-radius-button: 20px;
+        --md-font-family: "Google Sans", "Roboto", system-ui, sans-serif;
+        --md-font-mono: "Roboto Mono", "Fira Code", monospace;
+      }
+      .font-mono-m3 {
+        font-family: var(--md-font-mono);
+      }
+      .shadow-md3-1 {
+        box-shadow: var(--md-elevation-1);
+      }
+      .shadow-md3-2 {
+        box-shadow: var(--md-elevation-2);
+      }
+      .shadow-md3-btn {
+        box-shadow: var(--md-elevation-button);
+      }
+      .shadow-md3-active {
+        box-shadow: var(--md-elevation-active);
+      }
+      body {
+        background: var(--md-surface);
+        color: var(--md-on-surface);
+        font-family: var(--md-font-family);
+        -webkit-font-smoothing: antialiased;
+      }
+      pre, code {
+        font-family: var(--md-font-mono);
+      }
+      .material-symbols-outlined {
+        font-size: 20px;
+        vertical-align: middle;
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+      .hover-tint:hover {
+        background: rgba(49, 120, 198, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    {{content}}
+  </body>
+</html>

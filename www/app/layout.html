@@ -1,0 +1,118 @@
+<header class="bg-white shadow-md3-2 sticky top-0 z-10">
+  <div class="mx-auto max-w-6xl px-6 h-16 flex items-center gap-4">
+    <a href="/" class="flex items-center gap-2 text-[#1a1c1e] font-semibold">
+      <span class="material-symbols-outlined text-[#3178c6]">hub</span>
+      <span>Ten.net</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-1 ml-6">
+      <a
+        href="/"
+        class="hover-tint rounded-[20px] px-4 py-2 text-sm font-medium text-[#3178c6]"
+      >Home</a>
+      <a
+        href="/docs"
+        class="hover-tint rounded-[20px] px-4 py-2 text-sm font-medium text-[#3178c6]"
+      >Docs</a>
+      <a
+        href="/benchmarks"
+        class="hover-tint rounded-[20px] px-4 py-2 text-sm font-medium text-[#3178c6]"
+      >Benchmarks</a>
+    </nav>
+    <div class="ml-auto flex items-center gap-2">
+      <a
+        href="https://play.tennet.run"
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center gap-2 bg-[#3178c6] text-white rounded-[20px] shadow-md3-btn hover:shadow-md3-active px-5 py-2 text-sm font-medium transition-shadow"
+      >
+        <span class="material-symbols-outlined">play_arrow</span>
+        Playground
+      </a>
+      <a
+        href="https://github.com/LeandrodaSilva/ten.net"
+        target="_blank"
+        rel="noopener"
+        aria-label="GitHub"
+        class="inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#f5f7fa] transition-colors"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 16 16"
+          fill="#1a1c1e"
+          aria-hidden="true"
+        >
+          <path
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+</header>
+<main class="mx-auto max-w-6xl px-6 py-12">{{content}}</main>
+<footer class="mt-24">
+  <div class="mx-auto max-w-6xl px-6 pb-12">
+    <div
+      class="bg-white rounded-2xl shadow-md3-1 p-8 grid md:grid-cols-3 gap-6"
+    >
+      <div>
+        <div class="flex items-center gap-2 text-[#1a1c1e] font-semibold">
+          <span class="material-symbols-outlined text-[#3178c6]">hub</span>
+          Ten.net
+        </div>
+        <p class="mt-2 text-sm text-[#5f6368]">
+          A minimalist Deno web microframework. File-based routing, HTML
+          templating, plugin system.
+        </p>
+      </div>
+      <div class="text-sm">
+        <div
+          class="text-xs font-semibold uppercase tracking-wider text-[#5f6368] mb-2"
+        >
+          Project
+        </div>
+        <ul class="space-y-1.5 text-[#1a1c1e]">
+          <li>
+            <a href="/docs" class="hover:text-[#3178c6]">Documentation</a>
+          </li>
+          <li>
+            <a href="/benchmarks" class="hover:text-[#3178c6]">Benchmarks</a>
+          </li>
+          <li>
+            <a href="https://play.tennet.run" class="hover:text-[#3178c6]"
+            >Playground</a>
+          </li>
+        </ul>
+      </div>
+      <div class="text-sm">
+        <div
+          class="text-xs font-semibold uppercase tracking-wider text-[#5f6368] mb-2"
+        >
+          Community
+        </div>
+        <ul class="space-y-1.5 text-[#1a1c1e]">
+          <li>
+            <a
+              href="https://github.com/LeandrodaSilva/ten.net"
+              class="hover:text-[#3178c6]"
+            >GitHub</a>
+          </li>
+          <li>
+            <a href="https://jsr.io/@leproj/tennet" class="hover:text-[#3178c6]"
+            >JSR</a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/LeandrodaSilva/ten.net/issues"
+              class="hover:text-[#3178c6]"
+            >Issues</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p class="mt-6 text-center text-xs text-[#80868b]">
+      MIT License · © 2026 · Built with Ten.net itself
+    </p>
+  </div>
+</footer>
