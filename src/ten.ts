@@ -259,10 +259,13 @@ export class Ten {
     const { findOrderedLayouts } = await import(
       "./utils/findOrderedLayouts.ts"
     );
-    const { extractCandidates } = await import("./tailwind/scanner.ts");
+    const { extractCandidates, extractCandidatesFromTs } = await import(
+      "./tailwind/scanner.ts"
+    );
     const { generateTailwindCss } = await import("./tailwind/generator.ts");
 
     const allHtml: string[] = [documentHtml];
+    const allTs: string[] = [];
 
     for (const route of this._core.routes) {
       if (route.page) allHtml.push(route.page);
@@ -272,7 +275,26 @@ export class Ten {
       }
     }
 
-    const candidates = extractCandidates(allHtml);
+    // Scan .ts files in appPath to capture classes emitted dynamically from
+    // route handlers (e.g. template literals in buildNavHtml()).
+    const { walk } = await import("@deno-walk");
+    for await (
+      const entry of walk(this._appPath, {
+        exts: [".ts"],
+        includeDirs: false,
+      })
+    ) {
+      try {
+        allTs.push(await Deno.readTextFile(entry.path));
+      } catch { /* ignore */ }
+    }
+
+    const candidates = [
+      ...new Set([
+        ...extractCandidates(allHtml),
+        ...extractCandidatesFromTs(allTs),
+      ]),
+    ];
     this._core.tailwindCss = await generateTailwindCss(candidates);
   }
 

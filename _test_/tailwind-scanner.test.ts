@@ -1,6 +1,9 @@
 import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { extractCandidates } from "../src/tailwind/scanner.ts";
+import {
+  extractCandidates,
+  extractCandidatesFromTs,
+} from "../src/tailwind/scanner.ts";
 
 describe("extractCandidates", () => {
   it("should extract classes from simple HTML", () => {
@@ -66,5 +69,68 @@ describe("extractCandidates", () => {
       '<div class="flex"><span class="p-4 text-sm">test</span></div>',
     ]);
     assertEquals(result, ["flex", "p-4", "text-sm"]);
+  });
+
+  it("should extract classes from TS template literal strings", () => {
+    const result = extractCandidates([
+      'const html = `<a class="block rounded-xl px-3">X</a>`;',
+    ]);
+    assertEquals(result, ["block", "rounded-xl", "px-3"]);
+  });
+
+  it("should skip tokens with ${} interpolation", () => {
+    const result = extractCandidates([
+      '<div class="block ${foo} rounded">X</div>',
+    ]);
+    assertEquals(result, ["block", "rounded"]);
+  });
+});
+
+describe("extractCandidatesFromTs", () => {
+  it("should extract classes from a string literal variable", () => {
+    const ts = 'const cls = "block rounded-xl px-3 py-2";';
+    const result = extractCandidatesFromTs([ts]);
+    assertEquals(result, ["block", "rounded-xl", "px-3", "py-2"]);
+  });
+
+  it("should extract classes referenced via interpolation in a template literal (buildNavHtml pattern)", () => {
+    const ts = [
+      "function build() {",
+      '  const cls = "block rounded-xl px-3 py-2";',
+      '  return `<a class="${cls}">X</a>`;',
+      "}",
+    ].join("\n");
+    const result = extractCandidatesFromTs([ts]);
+    for (const expected of ["block", "rounded-xl", "px-3", "py-2"]) {
+      if (!result.includes(expected)) {
+        throw new Error(
+          `expected result to contain ${expected}, got ${
+            JSON.stringify(result)
+          }`,
+        );
+      }
+    }
+  });
+
+  it("should skip tokens that contain ${} interpolation", () => {
+    const ts = "const cls = `block ${foo} rounded`;";
+    const result = extractCandidatesFromTs([ts]);
+    assertEquals(result.includes("block"), true);
+    assertEquals(result.includes("rounded"), true);
+    for (const tok of result) {
+      assertEquals(tok.includes("${"), false);
+    }
+  });
+
+  it("should deduplicate across multiple sources", () => {
+    const result = extractCandidatesFromTs([
+      'const a = "flex p-4";',
+      'const b = "p-4 text-center";',
+    ]);
+    assertEquals(result, ["flex", "p-4", "text-center"]);
+  });
+
+  it("should return empty array for sources without string literals", () => {
+    assertEquals(extractCandidatesFromTs(["const x = 42;"]), []);
   });
 });
