@@ -291,7 +291,7 @@ export class TenCore {
           });
           return new Response(page, {
             status: 200,
-            headers: { "Content-Type": "text/html" },
+            headers: { "Content-Type": "text/html; charset=utf-8" },
           });
         } catch {
           console.error(`Error rendering page for route: ${route.path}`); // NOSONAR
@@ -313,7 +313,7 @@ export class TenCore {
       const html = await this._dynamicPageRenderer(dynamicRoute, req);
       return new Response(html, {
         status: 200,
-        headers: { "Content-Type": "text/html" },
+        headers: { "Content-Type": "text/html; charset=utf-8" },
       });
     }
     // Fallback: no renderer injected
@@ -327,7 +327,7 @@ export class TenCore {
         const html = await this._dynamicPageRenderer(notFound);
         return new Response(html, {
           status: 404,
-          headers: { "Content-Type": "text/html" },
+          headers: { "Content-Type": "text/html; charset=utf-8" },
         });
       }
     }
