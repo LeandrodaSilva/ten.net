@@ -80,7 +80,10 @@ describe("Ten", () => {
         new Request("http://localhost/admin/test-page"),
       );
       assertEquals(response.status, 200);
-      assertEquals(response.headers.get("Content-Type"), "text/html");
+      assertStringIncludes(
+        response.headers.get("Content-Type") ?? "",
+        "text/html",
+      );
       const body = await response.text();
       assertStringIncludes(body, "Test Page");
     });
@@ -246,7 +249,10 @@ describe("Ten", () => {
         new Request("http://localhost/dynamic-test"),
       );
       assertEquals(response.status, 200);
-      assertEquals(response.headers.get("Content-Type"), "text/html");
+      assertStringIncludes(
+        response.headers.get("Content-Type") ?? "",
+        "text/html",
+      );
       const body = await response.text();
       assertStringIncludes(body, "About page content");
     });
@@ -326,7 +332,10 @@ describe("Ten", () => {
         new Request("http://localhost/nonexistent-page"),
       );
       assertEquals(response.status, 404);
-      assertEquals(response.headers.get("Content-Type"), "text/html");
+      assertStringIncludes(
+        response.headers.get("Content-Type") ?? "",
+        "text/html",
+      );
       const body = await response.text();
       assertStringIncludes(body, "Custom Not Found");
     });

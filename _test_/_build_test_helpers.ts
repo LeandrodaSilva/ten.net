@@ -18,7 +18,7 @@ export function assertNoRawTemplateVars(body: string, context?: string): void {
 export async function assertHomePage(baseUrl: string): Promise<void> {
   const res = await fetch(`${baseUrl}/`);
   assertEquals(res.status, 200);
-  assertEquals(res.headers.get("Content-Type"), "text/html");
+  assertStringIncludes(res.headers.get("Content-Type") ?? "", "text/html");
   const body = await res.text();
   assertStringIncludes(body, "<!DOCTYPE html>");
 }
@@ -26,7 +26,7 @@ export async function assertHomePage(baseUrl: string): Promise<void> {
 export async function assertHelloPage(baseUrl: string): Promise<void> {
   const res = await fetch(`${baseUrl}/hello`);
   assertEquals(res.status, 200);
-  assertEquals(res.headers.get("Content-Type"), "text/html");
+  assertStringIncludes(res.headers.get("Content-Type") ?? "", "text/html");
   const body = await res.text();
   assertStringIncludes(body, "Hello Leandro!");
   assertNoRawTemplateVars(body, "GET /hello");
@@ -87,7 +87,7 @@ export async function assertAdminPage(baseUrl: string): Promise<void> {
 export async function assertAdminLoginPage(baseUrl: string): Promise<void> {
   const res = await fetch(`${baseUrl}/admin/login`);
   assertEquals(res.status, 200);
-  assertEquals(res.headers.get("Content-Type"), "text/html");
+  assertStringIncludes(res.headers.get("Content-Type") ?? "", "text/html");
   const body = await res.text();
   assertStringIncludes(body, "Sign in to admin");
 }

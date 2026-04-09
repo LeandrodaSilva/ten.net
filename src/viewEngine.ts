@@ -21,11 +21,11 @@ export async function viewEngine(args: IViewEngine) {
   } = args;
   let pageModule = route.page;
   let layoutContents: string[] = [];
+  let documentLayout: string | undefined;
 
   if (false === route.isAdmin) {
     if (embedded) {
-      const documentLayout = embedded.documentHtml;
-      pageModule = documentLayout.replace("{{content}}", pageModule);
+      documentLayout = embedded.documentHtml;
       layoutContents = embedded.layouts[route.path] ?? [];
     } else {
       const { findOrderedLayouts } = await import(
@@ -35,8 +35,7 @@ export async function viewEngine(args: IViewEngine) {
         "./utils/findDocumentLayoutRoot.ts"
       );
       const layouts = await findOrderedLayouts(_appPath, route.path);
-      const documentLayout = await findDocumentLayoutRoot(_appPath);
-      pageModule = documentLayout.replace("{{content}}", pageModule);
+      documentLayout = await findDocumentLayoutRoot(_appPath);
       for (const layoutPath of layouts) {
         layoutContents.push(await Deno.readTextFile(layoutPath));
       }
@@ -44,8 +43,13 @@ export async function viewEngine(args: IViewEngine) {
   }
 
   if (layoutContents) {
+    // Wrap with layouts (leaf → root)
     for (let i = layoutContents.length - 1; i >= 0; i--) {
       pageModule = layoutContents[i].replace("{{content}}", pageModule);
+    }
+    // Document is the OUTERMOST layer
+    if (documentLayout) {
+      pageModule = documentLayout.replace("{{content}}", pageModule);
     }
 
     if (route.run) {

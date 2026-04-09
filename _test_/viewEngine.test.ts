@@ -165,6 +165,111 @@ describe("viewEngine", () => {
     }
   });
 
+  it("should place document.html as the outermost wrapper around root layout", async () => {
+    const tempDir = await Deno.makeTempDir();
+    const appDir = `${tempDir}/app`;
+    await Deno.mkdir(appDir, { recursive: true });
+
+    try {
+      await Deno.writeTextFile(
+        `${appDir}/document.html`,
+        `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>{{content}}</body></html>`,
+      );
+      await Deno.writeTextFile(
+        `${appDir}/layout.html`,
+        "<header>H</header><main>{{content}}</main>",
+      );
+
+      const route = createRoute({
+        path: "/",
+        page: "<p>X</p>",
+      });
+
+      const result = await viewEngine({
+        _appPath: appDir,
+        route,
+        req: new Request("http://localhost/"),
+        params: {},
+      });
+
+      const html = result!;
+      assertEquals(html.startsWith("<!DOCTYPE"), true);
+
+      const doctypeIdx = html.indexOf("<!DOCTYPE");
+      const headerIdx = html.indexOf("<header>");
+      const pageIdx = html.indexOf("<p>X</p>");
+      const htmlEndIdx = html.indexOf("</html>");
+
+      assertEquals(doctypeIdx < headerIdx, true);
+      assertEquals(headerIdx < pageIdx, true);
+      assertEquals(pageIdx < htmlEndIdx, true);
+    } finally {
+      await Deno.remove(tempDir, { recursive: true });
+    }
+  });
+
+  it("should nest multiple layouts between document body and page", async () => {
+    const tempDir = await Deno.makeTempDir();
+    const appDir = `${tempDir}/app`;
+    const subDir = `${appDir}/sub`;
+    await Deno.mkdir(subDir, { recursive: true });
+
+    try {
+      await Deno.writeTextFile(
+        `${appDir}/document.html`,
+        `<!DOCTYPE html><html><body>{{content}}</body></html>`,
+      );
+      await Deno.writeTextFile(
+        `${appDir}/layout.html`,
+        "<root>{{content}}</root>",
+      );
+      await Deno.writeTextFile(
+        `${subDir}/layout.html`,
+        "<sub>{{content}}</sub>",
+      );
+
+      const route = createRoute({
+        path: "/sub",
+        page: "<p>X</p>",
+      });
+
+      const result = await viewEngine({
+        _appPath: appDir,
+        route,
+        req: new Request("http://localhost/sub"),
+        params: {},
+      });
+
+      const html = result!;
+      assertEquals(html.startsWith("<!DOCTYPE"), true);
+
+      const order = [
+        "<!DOCTYPE",
+        "<body>",
+        "<root>",
+        "<sub>",
+        "<p>X</p>",
+        "</sub>",
+        "</root>",
+        "</body>",
+      ];
+
+      for (let i = 0; i < order.length - 1; i++) {
+        const a = html.indexOf(order[i]);
+        const b = html.indexOf(order[i + 1]);
+        assertEquals(
+          a < b && a !== -1 && b !== -1,
+          true,
+          `Expected "${order[i]}" (at ${a}) to appear before "${
+            order[i + 1]
+          }" (at ${b})`,
+        );
+      }
+    } finally {
+      await Deno.remove(tempDir, { recursive: true });
+    }
+  });
+
   it("should return page content as string", async () => {
     const route = createRoute({
       path: "/admin",

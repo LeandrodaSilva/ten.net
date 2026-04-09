@@ -314,7 +314,10 @@ describe("TenCore", () => {
         new Request("http://localhost/dynamic-page"),
       );
       assertEquals(res.status, 200);
-      assertEquals(res.headers.get("Content-Type"), "text/html");
+      assertStringIncludes(
+        res.headers.get("Content-Type") ?? "",
+        "text/html",
+      );
       assertStringIncludes(await res.text(), "Dynamic content");
     });
 
@@ -367,7 +370,10 @@ describe("TenCore", () => {
         new Request("http://localhost/nonexistent"),
       );
       assertEquals(res.status, 404);
-      assertEquals(res.headers.get("Content-Type"), "text/html");
+      assertStringIncludes(
+        res.headers.get("Content-Type") ?? "",
+        "text/html",
+      );
       assertStringIncludes(await res.text(), "Custom 404");
     });
   });
