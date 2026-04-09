@@ -1,3 +1,3 @@
-export { extractCandidates } from "./scanner.ts";
+export { extractCandidates, extractCandidatesFromTs } from "./scanner.ts";
 export { generateTailwindCss } from "./generator.ts";
 export { hasTailwindCdn, injectTailwindCss } from "./inject.ts";

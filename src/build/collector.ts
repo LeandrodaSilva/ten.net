@@ -22,10 +22,13 @@ export async function collectManifest(
     "../tailwind/inject.ts"
   );
   if (hasTailwindCdn(documentHtml)) {
-    const { extractCandidates } = await import("../tailwind/scanner.ts");
+    const { extractCandidates, extractCandidatesFromTs } = await import(
+      "../tailwind/scanner.ts"
+    );
     const { generateTailwindCss } = await import("../tailwind/generator.ts");
 
     const allHtml: string[] = [documentHtml];
+    const allTs: string[] = [];
     for (const route of routes) {
       if (route.pageContent) allHtml.push(route.pageContent);
     }
@@ -33,7 +36,25 @@ export async function collectManifest(
       allHtml.push(...contents);
     }
 
-    const candidates = extractCandidates(allHtml);
+    // Scan .ts files in appPath to capture classes emitted dynamically from
+    // route handlers (e.g. template literals in buildNavHtml()).
+    for await (
+      const entry of walk(appPath, {
+        exts: [".ts"],
+        includeDirs: false,
+      })
+    ) {
+      try {
+        allTs.push(await Deno.readTextFile(entry.path));
+      } catch { /* ignore */ }
+    }
+
+    const candidates = [
+      ...new Set([
+        ...extractCandidates(allHtml),
+        ...extractCandidatesFromTs(allTs),
+      ]),
+    ];
     const css = await generateTailwindCss(candidates);
     documentHtml = injectTailwindCss(documentHtml, css);
   }
