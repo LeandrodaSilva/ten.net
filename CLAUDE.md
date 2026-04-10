@@ -50,6 +50,7 @@ plugin system. Published to JSR.
 
 ```bash
 deno run --allow-all --unstable-raw-imports example/http/main.ts  # Run example server
+deno run --allow-all --unstable-raw-imports www/main.ts           # Run marketing site (dogfood)
 deno task test              # Run all tests in parallel
 deno task coverage          # Run tests with coverage
 deno task fmt               # Format code
@@ -84,10 +85,15 @@ src/                          # Framework source
   middleware/                 # Middleware type definition
   assets/                     # faviconData.ts, documentHtml.ts
   bench/                      # Benchmarks with history tracking
+  tailwind/                   # Tailwind CSS pipeline: scanner, generator, inject
 
-_test_/                       # Core tests (38 test files + 1 helper)
+_test_/                       # Core tests (42 test files + 1 helper)
 
 playground/                   # Online interactive playground (8 demos)
+
+www/                          # Marketing site (dogfoods the framework)
+  main.ts                     # Entry point
+  app/                        # File-based routes for tennet.run
 
 example/
   http/
@@ -104,7 +110,8 @@ can have:
 - `route.ts` — exports HTTP method handlers (`GET`, `POST`, etc.)
 - `page.html` — HTML template with `{{variable}}` mustache-style placeholders
 - `layout.html` — wrapping layout (nests via `{{content}}`)
-- `document.html` — root HTML wrapper (app root only)
+- `document.html` — root HTML wrapper (app root only, outermost layer wrapping
+  all layouts)
 - `[param]/` — dynamic route segments
 
 **TenCore** (`src/core/tenCore.ts`): Runtime-agnostic request handler. Exposes
@@ -120,8 +127,10 @@ const app = Ten.net({ appPath: "./src/app" }); // custom path
 ```
 
 **Template engine**: Route handler JSON responses populate `{{key}}`
-placeholders in page templates. Layouts nest hierarchically from root to leaf
-using `{{content}}`.
+(HTML-escaped) and `{{{key}}}` (raw) placeholders in page templates. There are
+no loops, conditionals, or partials — route handlers must pre-render lists as
+HTML strings (e.g. `{{{rowsHtml}}}`). Layouts nest hierarchically from root to
+leaf using `{{content}}`.
 
 **Route transpilation**: TypeScript route files are transpiled at startup via
 `@deno/emit` and loaded as dynamic data URI imports.
@@ -160,7 +169,7 @@ widgets. `StorageSync` provides pull-based sync with a remote server.
 
 ## Testing
 
-Tests are in `_test_/` (38 test files + 1 helper, core only). Uses `Deno.test()`
+Tests are in `_test_/` (42 test files + 1 helper, core only). Uses `Deno.test()`
 and `describe/it` from `@std/testing/bdd`. Assertions from `@std/assert`
 (preferred) and `@deno-assert` (legacy). Snapshots in `_test_/__snapshots__/`.
 Test fixtures in `example/http/app/`.
@@ -196,3 +205,10 @@ creates GitHub Release.
 - When bumping `tailwindcss` version in deno.json, run
   `deno task embed-tailwind` to refresh `src/tailwind/_tailwindIndexCss.ts`
   (embedded CSS fallback for JSR runtime).
+- Tailwind scanner extracts candidates from both HTML templates
+  (`extractCandidates`) and `.ts` route files (`extractCandidatesFromTs` in
+  `src/tailwind/scanner.ts`). Classes defined in TS variables/helpers are picked
+  up automatically.
+- `document.html` is applied as the **outermost** wrapper in `viewEngine`, after
+  all layouts. If using both `document.html` and `layout.html`, the nesting
+  order is: page → leaf layout → root layout → document.
