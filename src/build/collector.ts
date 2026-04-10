@@ -5,7 +5,10 @@ import { transpileRoute } from "../utils/transpileRoute.ts";
 import { findOrderedLayoutsSync } from "../utils/findOrderedLayouts.ts";
 import { findDocumentLayoutRootSync } from "../utils/findDocumentLayoutRoot.ts";
 import { getMimeType } from "./mimeTypes.ts";
-import { scanTranslationsSync } from "../i18nEngine.ts";
+import {
+  findSelectorTemplateSync,
+  scanTranslationsSync,
+} from "../i18nEngine.ts";
 import type { AppManifest, EmbeddedRoute } from "./manifest.ts";
 
 export async function collectManifest(
@@ -65,6 +68,18 @@ export async function collectManifest(
   if (Object.keys(i18nMap).length > 0) {
     manifest.i18n = i18nMap;
   }
+
+  // Collect custom i18n selector templates
+  const selectorTemplates: Record<string, string> = {};
+  for (const route of routes) {
+    if (!route.hasPage) continue;
+    const template = findSelectorTemplateSync(appPath, route.path);
+    if (template) selectorTemplates[route.path] = template;
+  }
+  if (Object.keys(selectorTemplates).length > 0) {
+    manifest.selectorTemplates = selectorTemplates;
+  }
+
   return manifest;
 }
 

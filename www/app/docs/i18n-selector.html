@@ -1,0 +1,17 @@
+<style>
+  .i18n-selector-docs .active {
+    font-weight: bold;
+    background-color: #e8f0fe;
+  }
+</style>
+<div class="i18n-selector-docs flex items-center gap-1">
+  {{i18n:item}}
+  <a
+    href="{{href}}"
+    hreflang="{{locale}}"
+    lang="{{locale}}"
+    class="rounded-[20px] px-3 py-1.5 text-xs font-medium text-[#3178c6] hover:bg-[#f5f7fa] transition-colors {{activeClass}}"
+    {{ariaCurrent}}
+  >{{flag}} {{name}}</a>
+  {{/i18n:item}}
+</div>

@@ -91,6 +91,8 @@ export async function viewEngine(args: IViewEngine) {
         resolveEscapeHatches,
         applyTranslations,
         renderSelector,
+        renderSelectorFromTemplate,
+        findSelectorTemplate,
         renderHreflang,
         setHtmlLang,
         injectHreflangLinks,
@@ -114,10 +116,29 @@ export async function viewEngine(args: IViewEngine) {
           Object.values(args.i18n).flatMap((dir) => Object.keys(dir)),
         ),
       ].sort();
-      pageModule = pageModule.replaceAll(
-        "{{i18n:selector}}",
-        renderSelector(route.path, args.locale, availableLocales),
-      );
+
+      // Try custom selector template (hierarchical lookup)
+      let selectorHtml: string;
+      const customTemplate = embedded?.selectorTemplates?.[route.path] ??
+        (_appPath
+          ? await findSelectorTemplate(_appPath, route.path)
+          : undefined);
+
+      if (customTemplate) {
+        selectorHtml = renderSelectorFromTemplate(
+          customTemplate,
+          route.path,
+          args.locale,
+          availableLocales,
+        );
+      } else {
+        selectorHtml = renderSelector(
+          route.path,
+          args.locale,
+          availableLocales,
+        );
+      }
+      pageModule = pageModule.replaceAll("{{i18n:selector}}", selectorHtml);
 
       // Set HTML lang attribute
       pageModule = setHtmlLang(pageModule, args.locale);

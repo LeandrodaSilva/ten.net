@@ -46,4 +46,6 @@ export interface AppManifest {
   _seed?: Record<string, Array<{ id: string; [key: string]: unknown }>>;
   /** Optional i18n translations map (route dir → locale → translations). */
   i18n?: I18nMap;
+  /** Pre-resolved i18n selector templates per route path. */
+  selectorTemplates?: Record<string, string>;
 }
