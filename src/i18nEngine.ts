@@ -370,15 +370,17 @@ export function renderSelector(
 export function renderHreflang(
   routePath: string,
   availableLocales: string[],
+  origin?: string,
 ): string {
   const sorted = [...availableLocales].sort();
+  const base = origin ?? "";
   const links = sorted.map((locale) => {
-    const href = `/${locale}${routePath === "/" ? "" : routePath}`;
+    const href = `${base}/${locale}${routePath === "/" ? "" : routePath}`;
     return `<link rel="alternate" hreflang="${locale}" href="${href}" />`;
   });
 
   links.push(
-    `<link rel="alternate" hreflang="x-default" href="${routePath}" />`,
+    `<link rel="alternate" hreflang="x-default" href="${base}${routePath}" />`,
   );
 
   return links.join("\n");

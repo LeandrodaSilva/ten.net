@@ -146,7 +146,11 @@ export async function viewEngine(args: IViewEngine) {
       // Inject hreflang links
       pageModule = injectHreflangLinks(
         pageModule,
-        renderHreflang(route.path, availableLocales),
+        renderHreflang(
+          route.path,
+          availableLocales,
+          new URL(req.url).origin,
+        ),
       );
     }
 
