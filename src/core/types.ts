@@ -57,6 +57,9 @@ export interface AdminPluginLikeCore {
   }>;
 }
 
+/** Map of route directories to locales to translations (original text to translated text). */
+export type I18nMap = Record<string, Record<string, Record<string, string>>>;
+
 /** Options accepted by the {@link TenCore} constructor. */
 export interface TenCoreOptions {
   /** Pre-built application manifest (embedded / compiled mode). */
@@ -67,4 +70,6 @@ export interface TenCoreOptions {
   appPath?: string;
   /** Custom base-64 decoder. Defaults to the `atob`-based universal decoder. */
   decodeBase64?: Base64Decoder;
+  /** Pre-scanned i18n translations map. */
+  i18n?: I18nMap;
 }

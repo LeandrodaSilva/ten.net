@@ -5,6 +5,7 @@ import { transpileRoute } from "../utils/transpileRoute.ts";
 import { findOrderedLayoutsSync } from "../utils/findOrderedLayouts.ts";
 import { findDocumentLayoutRootSync } from "../utils/findDocumentLayoutRoot.ts";
 import { getMimeType } from "./mimeTypes.ts";
+import { scanTranslationsSync } from "../i18nEngine.ts";
 import type { AppManifest, EmbeddedRoute } from "./manifest.ts";
 
 export async function collectManifest(
@@ -16,6 +17,7 @@ export async function collectManifest(
   const layouts = collectLayouts(appPath, routes);
   let documentHtml = findDocumentLayoutRootSync(appPath);
   const assets = await collectAssets(publicPath);
+  const i18nMap = scanTranslationsSync(appPath);
 
   // Generate inline Tailwind CSS at build time
   const { hasTailwindCdn, injectTailwindCss } = await import(
@@ -59,7 +61,11 @@ export async function collectManifest(
     documentHtml = injectTailwindCss(documentHtml, css);
   }
 
-  return { routes, layouts, documentHtml, assets };
+  const manifest: AppManifest = { routes, layouts, documentHtml, assets };
+  if (Object.keys(i18nMap).length > 0) {
+    manifest.i18n = i18nMap;
+  }
+  return manifest;
 }
 
 async function collectRoutes(

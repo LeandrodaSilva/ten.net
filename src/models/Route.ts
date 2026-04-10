@@ -25,7 +25,7 @@ export class Route {
   private _run:
     | ((
       req: Request,
-      ctx?: { params: Record<string, string> },
+      ctx?: { params: Record<string, string>; locale?: string },
     ) => Response | Promise<Response>)
     | undefined;
 
@@ -78,7 +78,7 @@ export class Route {
   get run():
     | ((
       req: Request,
-      ctx?: { params: Record<string, string> },
+      ctx?: { params: Record<string, string>; locale?: string },
     ) => Response | Promise<Response>)
     | undefined {
     return this._run;
@@ -89,7 +89,7 @@ export class Route {
     fn:
       | ((
         req: Request,
-        ctx?: { params: Record<string, string> },
+        ctx?: { params: Record<string, string>; locale?: string },
       ) => Response | Promise<Response>)
       | undefined,
   ) {
