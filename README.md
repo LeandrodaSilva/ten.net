@@ -341,18 +341,18 @@ Benchmarks run with `deno task bench`.
 
 | Benchmark              | Avg     | Min     | Max     | p75     | p99     | Iterations |
 | ---------------------- | ------- | ------- | ------- | ------- | ------- | ---------- |
-| findDocumentLayoutRoot | 9.0us   | 7.9us   | 9.5us   | 9.4us   | 9.5us   | 16         |
-| findOrderedLayouts     | 9.8us   | 2.5us   | 12.79ms | 9.3us   | 24.4us  | 52050      |
-| getRegexRoute_dynamic  | 934ns   | 912ns   | 994ns   | 943ns   | 994ns   | 64         |
-| getRegexRoute_static   | 819ns   | 791ns   | 1.0us   | 813ns   | 1.0us   | 71         |
-| paramsEngine           | 472ns   | 438ns   | 838ns   | 463ns   | 810ns   | 116        |
-| pathNamedParams        | 250ns   | 234ns   | 594ns   | 244ns   | 444ns   | 210        |
-| regex_test_match       | 23ns    | 22ns    | 36ns    | 23ns    | 26ns    | 2217       |
-| regex_test_nomatch     | 17ns    | 17ns    | 30ns    | 17ns    | 19ns    | 2902       |
-| routerEngine_full      | 8.01ms  | 5.46ms  | 15.26ms | 8.87ms  | 15.26ms | 7          |
-| toSlug                 | 661ns   | 643ns   | 950ns   | 659ns   | 950ns   | 86         |
-| viewEngine_data        | 265.3us | 205.2us | 965.7us | 281.1us | 466.4us | 1895       |
-| viewEngine_static      | 185.4us | 151.2us | 8.80ms  | 189.5us | 273.6us | 2708       |
+| findDocumentLayoutRoot | 10.4us  | 8.6us   | 11.5us  | 11.0us  | 11.5us  | 15         |
+| findOrderedLayouts     | 11.4us  | 2.6us   | 18.18ms | 11.0us  | 33.7us  | 45124      |
+| getRegexRoute_dynamic  | 943ns   | 912ns   | 1.2us   | 954ns   | 1.2us   | 64         |
+| getRegexRoute_static   | 828ns   | 803ns   | 1.1us   | 831ns   | 1.1us   | 71         |
+| paramsEngine           | 560ns   | 535ns   | 893ns   | 564ns   | 697ns   | 100        |
+| pathNamedParams        | 284ns   | 261ns   | 622ns   | 284ns   | 501ns   | 186        |
+| regex_test_match       | 23ns    | 22ns    | 38ns    | 24ns    | 31ns    | 2174       |
+| regex_test_nomatch     | 18ns    | 16ns    | 56ns    | 18ns    | 26ns    | 2823       |
+| routerEngine_full      | 7.77ms  | 4.73ms  | 14.50ms | 8.26ms  | 14.50ms | 7          |
+| toSlug                 | 749ns   | 717ns   | 826ns   | 767ns   | 826ns   | 77         |
+| viewEngine_data        | 316.3us | 225.3us | 628.2us | 362.0us | 415.9us | 1590       |
+| viewEngine_static      | 253.5us | 170.0us | 7.88ms  | 261.1us | 316.4us | 1984       |
 
 <!-- BENCH:END -->
 
