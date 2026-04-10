@@ -1,5 +1,5 @@
 /**
- * AES-256-GCM encryption utilities for Ten.net code obfuscation builds.
+ * AES-256-GCM utilities for Ten.net code obfuscation builds.
  * Provides key derivation (PBKDF2), encrypt/decrypt, gzip
  * compression, and helpers for protecting compiled application bundles.
  *

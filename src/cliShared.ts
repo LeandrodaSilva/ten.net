@@ -20,7 +20,7 @@ export function printCliHelp(): void {
     "",
     ui.section("Commands"),
     ...formatTable(ui, [
-      ["build", "Compile the application into an encrypted binary"],
+      ["build", "Compile the application into an obfuscated binary"],
     ]),
     "",
     ui.section("Examples"),
@@ -43,7 +43,7 @@ export function printBuildHelp(): void {
     "",
     ui.section("Options"),
     ...formatTable(ui, [
-      ["--secret <string>", "Encryption secret (auto-generated if omitted)"],
+      ["--secret <string>", "Obfuscation secret (auto-generated if omitted)"],
       ["--output <string>", "Output directory (default: ./dist)"],
       ["--app-path <string>", "Application root directory (default: ./app)"],
       [

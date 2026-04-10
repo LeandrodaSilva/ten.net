@@ -2,6 +2,7 @@ import { walk } from "@deno-walk";
 import { encodeBase64 } from "@std/encoding";
 import { getRegexRoute } from "../utils/getRegexRoute.ts";
 import { transpileRoute } from "../utils/transpileRoute.ts";
+import { compareRoutePaths } from "../utils/compareRoutePaths.ts";
 import { findOrderedLayoutsSync } from "../utils/findOrderedLayouts.ts";
 import { findDocumentLayoutRootSync } from "../utils/findDocumentLayoutRoot.ts";
 import { getMimeType } from "./mimeTypes.ts";
@@ -159,7 +160,7 @@ async function collectRoutes(
     }),
   );
 
-  return routes;
+  return routes.sort((a, b) => compareRoutePaths(a.path, b.path));
 }
 
 function collectLayouts(

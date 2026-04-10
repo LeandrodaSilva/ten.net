@@ -22,14 +22,15 @@ function makeRoute(overrides: {
   page?: string;
   run?: (
     req: Request,
-    ctx?: { params: Record<string, string> },
+    ctx?: { params: Record<string, string>; locale?: string },
   ) => Response | Promise<Response>;
+  transpiledCode?: string;
 }): Route {
   const route = new Route({
     path: overrides.path,
     regex: overrides.regex,
     hasPage: overrides.hasPage ?? false,
-    transpiledCode: "",
+    transpiledCode: overrides.transpiledCode ?? "",
     sourcePath: "",
   });
   if (overrides.method) route.method = overrides.method;
@@ -100,6 +101,43 @@ describe("TenCore", () => {
         new Request("http://localhost/api/only-get", { method: "POST" }),
       );
       assertEquals(res.status, 404);
+    });
+
+    it("should use the correct handler for mixed view and POST routes", async () => {
+      const route = makeRoute({
+        path: "/admin/contact",
+        regex: /^\/admin\/contact$/,
+        hasPage: true,
+        page: "<h1>{{title}}</h1>",
+        transpiledCode: [
+          "export function GET() {",
+          '  return new Response(JSON.stringify({ title: "Contact" }), {',
+          '    headers: { "Content-Type": "application/json" },',
+          "  });",
+          "}",
+          'export function POST() { return new Response("posted"); }',
+        ].join("\n"),
+      });
+
+      const core = new TenCore({ routes: [route] });
+
+      const getRes = await core.fetch(
+        new Request("http://localhost/admin/contact"),
+      );
+      assertEquals(getRes.status, 200);
+      assertStringIncludes(await getRes.text(), "<h1>Contact</h1>");
+
+      const postRes = await core.fetch(
+        new Request("http://localhost/admin/contact", { method: "POST" }),
+      );
+      assertEquals(postRes.status, 200);
+      assertEquals(await postRes.text(), "posted");
+
+      const getResAgain = await core.fetch(
+        new Request("http://localhost/admin/contact"),
+      );
+      assertEquals(getResAgain.status, 200);
+      assertStringIncludes(await getResAgain.text(), "<h1>Contact</h1>");
     });
   });
 

@@ -104,7 +104,7 @@ export class Ten {
   }
 
   /**
-   * Compiles the application into an encrypted binary.
+   * Compiles the application into an obfuscated binary.
    * Collects routes, templates, and assets, encrypts them with AES-256-GCM,
    * and optionally compiles to a standalone Deno binary.
    *
@@ -194,7 +194,11 @@ export class Ten {
     );
 
     worker.onmessage = async (event) => {
-      console.info("Worker message: ", event);
+      if (event.data?.kind === "error") {
+        console.error("File watcher error:", event.data.error);
+        return;
+      }
+      console.info("Worker message: ", event.data);
       this._core.clearRoutes();
       this._core.addRoutes(
         await routerEngine(this._appPath, this._routeFileName),
@@ -206,6 +210,7 @@ export class Ten {
 
     worker.postMessage({
       action: "start",
+      appPath: this._appPath,
     });
   }
 

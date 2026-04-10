@@ -1,5 +1,5 @@
 import { describe, it } from "@std/testing/bdd";
-import { assertEquals, assertStringIncludes } from "@std/assert";
+import { assertEquals, assertRejects, assertStringIncludes } from "@std/assert";
 import { viewEngine } from "../src/viewEngine.ts";
 import { Route } from "../src/models/Route.ts";
 
@@ -12,7 +12,7 @@ function createRoute(
     method: string;
     run: (
       req: Request,
-      ctx?: { params: Record<string, string> },
+      ctx?: { params: Record<string, string>; locale?: string },
     ) => Response | Promise<Response>;
   }>,
 ): Route {
@@ -141,7 +141,7 @@ describe("viewEngine", () => {
     assertStringIncludes(result!, "<p>Static content</p>");
   });
 
-  it("should handle error in route handler gracefully", async () => {
+  it("should reject when route handler throws", async () => {
     const route = createRoute({
       path: "/admin/error",
       page: "<p>{{title}}</p>",
@@ -150,19 +150,37 @@ describe("viewEngine", () => {
       },
     });
 
-    const consoleSpy = console.error;
-    console.error = () => {};
-    try {
-      const result = await viewEngine({
-        _appPath: "./example/http/app",
-        route,
-        req: new Request("http://localhost/admin/error"),
-        params: {},
-      });
-      assertStringIncludes(result!, "<p>{{title}}</p>");
-    } finally {
-      console.error = consoleSpy;
-    }
+    await assertRejects(
+      () =>
+        viewEngine({
+          _appPath: "./example/http/app",
+          route,
+          req: new Request("http://localhost/admin/error"),
+          params: {},
+        }),
+      Error,
+      "Handler error",
+    );
+  });
+
+  it("should reject when route handler returns non-JSON data", async () => {
+    const route = createRoute({
+      path: "/admin/error",
+      page: "<p>{{title}}</p>",
+      run: () => new Response("not json"),
+    });
+
+    await assertRejects(
+      () =>
+        viewEngine({
+          _appPath: "./example/http/app",
+          route,
+          req: new Request("http://localhost/admin/error"),
+          params: {},
+        }),
+      Error,
+      "must return application/json",
+    );
   });
 
   it("should place document.html as the outermost wrapper around root layout", async () => {

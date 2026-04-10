@@ -1,6 +1,7 @@
 import { walk } from "@deno-walk";
 import { getRegexRoute } from "./utils/getRegexRoute.ts";
 import { transpileRoute } from "./utils/transpileRoute.ts";
+import { compareRoutePaths } from "./utils/compareRoutePaths.ts";
 import { Route } from "./models/Route.ts";
 
 /**
@@ -71,7 +72,7 @@ export async function routerEngine(
 
     const path = rel.length ? rel : "/";
 
-    const sourcePath = `${entry.path}/route.ts`;
+    const sourcePath = `${entry.path}/${routeFileName}`;
 
     const route = new Route({
       path,
@@ -102,5 +103,5 @@ export async function routerEngine(
     }
   }
 
-  return routes;
+  return routes.sort((a, b) => compareRoutePaths(a.path, b.path));
 }

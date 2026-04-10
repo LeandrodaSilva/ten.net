@@ -180,7 +180,7 @@ describe("Ten", () => {
       }
     });
 
-    it("should return 404 when isView is true but viewEngine fails", async () => {
+    it("should return 500 when isView is true but viewEngine fails", async () => {
       const app = Ten.net({ appPath: "./example/http/app" });
       const routes = (app as unknown as { _routes: Route[] })._routes;
       const route = new Route({
@@ -207,7 +207,8 @@ describe("Ten", () => {
         const response = await handler(
           new Request("http://localhost/broken-page"),
         );
-        assertEquals(response.status === 200 || response.status === 404, true);
+        assertEquals(response.status, 500);
+        assertStringIncludes(await response.text(), "Internal Server Error");
       } finally {
         console.error = consoleSpy;
       }
@@ -405,11 +406,13 @@ describe("Ten", () => {
       const OriginalWorker = globalThis.Worker;
       let workerCreated = false;
       let postMessageCalled = false;
+      let postedMessage: unknown;
       // deno-lint-ignore no-explicit-any
       (globalThis as any).Worker = class MockWorker {
         onmessage: ((event: MessageEvent) => void) | null = null;
-        postMessage() {
+        postMessage(message: unknown) {
           postMessageCalled = true;
+          postedMessage = message;
         }
         terminate() {}
         constructor() {
@@ -426,6 +429,10 @@ describe("Ten", () => {
         await app.start();
         assertEquals(workerCreated, true);
         assertEquals(postMessageCalled, true);
+        assertEquals(postedMessage, {
+          action: "start",
+          appPath: "./example/http/app",
+        });
       } finally {
         // deno-lint-ignore no-explicit-any
         (Deno as any).serve = originalServe;
@@ -473,7 +480,7 @@ describe("Ten", () => {
 
         if (capturedOnmessage) {
           await capturedOnmessage(
-            new MessageEvent("message", { data: "change" }),
+            new MessageEvent("message", { data: { kind: "modify" } }),
           );
         }
 

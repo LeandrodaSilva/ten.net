@@ -67,4 +67,39 @@ describe("collectManifest", () => {
     const manifest = await collectManifest("./example/http/app", "./public");
     assertStringIncludes(manifest.documentHtml, "{{content}}");
   });
+
+  it("should order static routes before dynamic routes in the manifest", async () => {
+    const tempDir = await Deno.makeTempDir();
+    const appDir = `${tempDir}/app`;
+    const publicDir = `${tempDir}/public`;
+    try {
+      const aboutDir = `${appDir}/about`;
+      const slugDir = `${appDir}/[slug]`;
+      const blogArchiveDir = `${appDir}/blog/archive`;
+      const blogSlugDir = `${appDir}/blog/[slug]`;
+      await Deno.mkdir(aboutDir, { recursive: true });
+      await Deno.mkdir(slugDir, { recursive: true });
+      await Deno.mkdir(blogArchiveDir, { recursive: true });
+      await Deno.mkdir(blogSlugDir, { recursive: true });
+      await Deno.mkdir(publicDir, { recursive: true });
+      await Deno.writeTextFile(`${aboutDir}/page.html`, "<p>about</p>");
+      await Deno.writeTextFile(`${slugDir}/page.html`, "<p>slug</p>");
+      await Deno.writeTextFile(
+        `${blogArchiveDir}/page.html`,
+        "<p>archive</p>",
+      );
+      await Deno.writeTextFile(`${blogSlugDir}/page.html`, "<p>blog slug</p>");
+
+      const manifest = await collectManifest(appDir, publicDir);
+      const paths = manifest.routes.map((route) => route.path);
+
+      assertEquals(paths.indexOf("/about") < paths.indexOf("/[slug]"), true);
+      assertEquals(
+        paths.indexOf("/blog/archive") < paths.indexOf("/blog/[slug]"),
+        true,
+      );
+    } finally {
+      await Deno.remove(tempDir, { recursive: true });
+    }
+  });
 });

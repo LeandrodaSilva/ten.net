@@ -1,5 +1,20 @@
 import { evaluateModuleCode } from "../utils/evaluateModuleCode.ts";
 
+type HttpMethod =
+  | "GET"
+  | "POST"
+  | "PUT"
+  | "DELETE"
+  | "PATCH"
+  | "OPTIONS"
+  | "HEAD"
+  | "ALL";
+
+type RouteHandler = (
+  req: Request,
+  ctx?: { params: Record<string, string>; locale?: string },
+) => Response | Promise<Response>;
+
 /** Represents a single route in the Ten.net application. */
 export class Route {
   /** URL path pattern (e.g. `/hello/[name]`). */
@@ -13,21 +28,9 @@ export class Route {
   /** Filesystem path to the original TypeScript source file. */
   public sourcePath: string;
   private _pageContent: string = "";
-  private _method:
-    | "GET"
-    | "POST"
-    | "PUT"
-    | "DELETE"
-    | "PATCH"
-    | "OPTIONS"
-    | "HEAD"
-    | "ALL" = "ALL";
-  private _run:
-    | ((
-      req: Request,
-      ctx?: { params: Record<string, string>; locale?: string },
-    ) => Response | Promise<Response>)
-    | undefined;
+  private _method: HttpMethod = "ALL";
+  private _run: RouteHandler | undefined;
+  private _handlerCache = new Map<HttpMethod, RouteHandler | undefined>();
 
   /** Create a new Route. */
   constructor(args: {
@@ -51,15 +54,7 @@ export class Route {
       ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD", "ALL"]
         .includes(m)
     ) {
-      this._method = m as
-        | "GET"
-        | "POST"
-        | "PUT"
-        | "DELETE"
-        | "PATCH"
-        | "OPTIONS"
-        | "HEAD"
-        | "ALL";
+      this._method = m as HttpMethod;
     }
   }
 
@@ -76,10 +71,7 @@ export class Route {
 
   /** The route handler function, if any. */
   get run():
-    | ((
-      req: Request,
-      ctx?: { params: Record<string, string>; locale?: string },
-    ) => Response | Promise<Response>)
+    | RouteHandler
     | undefined {
     return this._run;
   }
@@ -87,13 +79,11 @@ export class Route {
   /** Assign a handler function to this route. */
   set run(
     fn:
-      | ((
-        req: Request,
-        ctx?: { params: Record<string, string>; locale?: string },
-      ) => Response | Promise<Response>)
+      | RouteHandler
       | undefined,
   ) {
     this._run = fn;
+    this._handlerCache.clear();
   }
 
   /** Set the HTML page template content. */
@@ -146,26 +136,27 @@ export class Route {
   public async import(
     requestMethod?: string,
   ): Promise<
-    | ((
-      req: Request,
-      ctx?: { params: Record<string, string> },
-    ) => Response | Promise<Response>)
+    | RouteHandler
     | undefined
   > {
-    if (this.run) return this.run;
+    const method = (requestMethod
+      ? requestMethod.toUpperCase()
+      : this._method) as HttpMethod;
+
+    if (this._run) return this._run;
+    if (this._handlerCache.has(method)) {
+      return this._handlerCache.get(method);
+    }
+
     try {
       const module = await evaluateModuleCode(this.transpiledCode);
-      const method = requestMethod ? requestMethod.toUpperCase() : this._method;
-      const fn = module[method] as
-        | ((
-          req: Request,
-          ctx?: { params: Record<string, string> },
-        ) => Response | Promise<Response>)
-        | undefined;
+      const fn = typeof module[method] === "function"
+        ? module[method] as RouteHandler
+        : undefined;
       if (Object.keys(module).length === 0 && !this.hasPage) {
         throw new Error("Module is empty");
       }
-      this._run = fn;
+      this._handlerCache.set(method, fn);
       return fn;
     } catch (e) {
       console.error(e);

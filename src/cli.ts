@@ -1,7 +1,7 @@
 /**
  * Command-line interface for the Ten.net build tool.
  * Run with `deno run -A jsr:@leproj/tennet/cli build` to compile
- * an application into an encrypted standalone binary.
+ * an application into an obfuscated standalone binary.
  *
  * @module
  */

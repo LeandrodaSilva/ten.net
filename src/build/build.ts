@@ -1,7 +1,7 @@
 /**
- * Build API for compiling a Ten.net application into an encrypted,
+ * Build API for compiling a Ten.net application into an obfuscated,
  * standalone binary. Handles manifest collection, gzip compression,
- * AES-256-GCM encryption, and optional `deno compile`.
+ * AES-256-GCM packaging, and optional `deno compile`.
  *
  * @module
  */
@@ -34,7 +34,7 @@ export interface BuildOptions {
   publicPath?: string;
   /** Output directory for compiled artifacts (default: "./dist") */
   output?: string;
-  /** Encryption secret. If omitted, one is auto-generated. */
+  /** Obfuscation secret. If omitted, one is auto-generated. */
   secret?: string;
   /** Whether to compile to binary after generating TS (default: true) */
   compile?: boolean;
@@ -201,7 +201,7 @@ async function runBuildStep<T>(
   }
 }
 
-/** Compile a Ten.net application into an encrypted standalone binary. */
+/** Compile a Ten.net application into an obfuscated standalone binary. */
 export async function build(options?: BuildOptions): Promise<BuildResult> {
   const appPath = options?.appPath ?? "./app";
   const publicPath = options?.publicPath ?? "./public";
@@ -302,7 +302,7 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
 
     const encryptedPayload = await runBuildStep(
       reporter,
-      "Encrypt manifest",
+      "Obfuscate manifest",
       async () => {
         const salt = generateSalt();
         const key = await deriveKey(secret, salt);
@@ -310,7 +310,7 @@ export async function build(options?: BuildOptions): Promise<BuildResult> {
         const keyRaw = await exportKeyRaw(key);
         return { iv, ciphertext, keyRaw };
       },
-      () => "Encrypted manifest payload ready",
+      () => "Obfuscated manifest payload ready",
     );
 
     const manifestSummary = summarizeManifest(

@@ -227,7 +227,7 @@ export function generateCompiledAppStandalone(
   frameworkSource: string,
 ): string {
   return `// Ten.net Compiled Application — Self-contained binary
-// All routes, templates, and assets are embedded and encrypted.
+// All routes, templates, and assets are embedded and obfuscated.
 
 ${frameworkSource}
 

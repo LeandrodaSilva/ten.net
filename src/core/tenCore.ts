@@ -320,12 +320,12 @@ export class TenCore {
     const requestMethod = req.method;
 
     try {
-      await route.import(requestMethod);
+      const handler = await route.import(requestMethod);
 
       const params = paramsEngine(strippedPath, route);
 
-      if (!route.isViewForMethod(requestMethod) && route.run) {
-        return route.run(req, { params, locale });
+      if (!route.isViewForMethod(requestMethod) && handler) {
+        return handler(req, { params, locale });
       }
 
       if (route.isViewForMethod(requestMethod)) {
@@ -335,6 +335,7 @@ export class TenCore {
             route,
             req,
             params,
+            handler,
             embedded: this._embedded,
             tailwindCss: this._tailwindCss,
             locale,
@@ -353,8 +354,12 @@ export class TenCore {
             }
           }
           return new Response(page, { status: 200, headers });
-        } catch {
-          console.error(`Error rendering page for route: ${route.path}`); // NOSONAR
+        } catch (error) {
+          console.error(
+            `Error rendering page for route: ${route.path}`,
+            error,
+          ); // NOSONAR
+          return new Response("Internal Server Error", { status: 500 });
         }
       }
 

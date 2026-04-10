@@ -57,7 +57,7 @@ The admin panel and CMS features are separate packages:
   interceptors
 - **Extensibility** — lifecycle hooks, event system, plugin communication
 - **Node.js runtime support** — run the same app on Node.js in addition to Deno
-- **Code protection** — AES-256-GCM encryption for compiled binaries (available)
+- **Code obfuscation** — AES-256-GCM packaging for compiled binaries (available)
 
 ## Installation
 
@@ -274,14 +274,16 @@ await app.start();
 ## Building for Production
 
 Compile your entire application — routes, templates, and static assets — into a
-single encrypted binary:
+single packaged binary:
 
 1. Collects all routes, layouts, and assets from `app/`
 2. Compresses with gzip
-3. Encrypts with AES-256-GCM (PBKDF2-derived key)
+3. Obfuscates the manifest with AES-256-GCM packaging
 4. Compiles into a standalone Deno binary via `deno compile`
 
-The resulting binary has **zero runtime dependencies**.
+The resulting binary has **zero runtime dependencies**. The generated artifact
+embeds the key needed to decrypt the manifest at runtime, so this is
+obfuscation and packaging rather than strong secret protection.
 
 ### CLI
 
@@ -303,7 +305,7 @@ Add as a task:
 
 | Option          | Default    | Description                                   |
 | --------------- | ---------- | --------------------------------------------- |
-| `--secret`      | (auto)     | Encryption secret (auto-generated if omitted) |
+| `--secret`      | (auto)     | Obfuscation secret (auto-generated if omitted) |
 | `--output`      | `./dist`   | Output directory                              |
 | `--app-path`    | `./app`    | Application root directory                    |
 | `--public-path` | `./public` | Public/static assets directory                |

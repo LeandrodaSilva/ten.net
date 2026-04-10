@@ -15,7 +15,7 @@ plugin system. Published to JSR.
 - **Multi-runtime (roadmap)**: Deno (current), Node.js (planned)
 - **Extensible**: Abstract `Plugin` class and `AdminPluginLike` interface
 - **Self-contained binary**: Compile app into a single deployable binary with
-  AES-256-GCM encryption
+  AES-256-GCM obfuscation packaging
 
 ## Plugin Ecosystem (separate repos)
 
@@ -44,22 +44,23 @@ deno task bench      # Run benchmarks with history tracking
 
 ## Project Structure
 
-- `packages/core/src/mod.ts` — Public entry point, exports `{ Ten }`
-- `packages/core/src/ten.ts` — Core framework class (server, routing, plugins)
-- `packages/core/src/routerEngine.ts` — File-system route scanner and transpiler
-- `packages/core/src/viewEngine.ts` — HTML template renderer with nested layouts
-- `packages/core/src/paramsEngine.ts` — URL parameter extraction
-- `packages/core/src/models/` — Route, Plugin, Storage, Permission,
+- `src/mod.ts` — Public entry point, exports `{ Ten }`
+- `src/ten.ts` — Deno adapter class (server, routing, plugins)
+- `src/core/` — Runtime-agnostic core (`TenCore`, interfaces)
+- `src/routerEngine.ts` — File-system route scanner and transpiler
+- `src/viewEngine.ts` — HTML template renderer with nested layouts
+- `src/paramsEngine.ts` — URL parameter extraction
+- `src/models/` — Route, Plugin, Storage, Permission,
   WidgetResolver
-- `packages/core/src/routing/` — Dynamic route registry, dynamic page handler
-- `packages/core/src/utils/` — Utility functions
-- `packages/core/src/build/` — Build system: collector, code generator, crypto
-- `packages/core/src/embedded/` — Embedded router engine for compiled binaries
-- `packages/core/src/middleware/` — Middleware type definition
-- `packages/core/src/assets/` — Static assets (favicon, document.html)
+- `src/routing/` — Dynamic route registry, dynamic page handler
+- `src/utils/` — Utility functions
+- `src/build/` — Build system: collector, code generator, crypto
+- `src/embedded/` — Embedded router engine for compiled binaries
+- `src/middleware/` — Middleware type definition
+- `src/assets/` — Static assets (favicon, document.html)
 - `src/bench/` — Benchmarks with history tracking
-- `src/test/` — Core tests (~30 test files)
-- `app/` — Test fixtures for build/router tests
+- `_test_/` — Core tests
+- `example/http/app/` — Test fixtures for build/router tests
 
 ## Architecture
 
@@ -67,7 +68,7 @@ deno task bench      # Run benchmarks with history tracking
 
 **Template engine**: `{{key}}` placeholders populated from route handler JSON.
 
-**Build system**: Compiles app into encrypted binary via `deno compile`.
+**Build system**: Compiles app into an obfuscated binary via `deno compile`.
 
 **Plugin system**: Extend `Plugin` class. External plugins register via
 `AdminPluginLike` interface and `useAdmin()`.
@@ -80,14 +81,17 @@ deno task bench      # Run benchmarks with history tracking
 
 ## Testing
 
-Tests are in `src/test/` (~30 test files). Uses `describe/it` from
-`@std/testing/bdd`. Assertions from `@std/assert`.
+Tests are in `_test_/`. Uses `describe/it` from `@std/testing/bdd`.
+Assertions from `@std/assert`.
 
 ## JSR Entrypoints
 
-- `.` → `packages/core/src/mod.ts`
-- `./cli` → `packages/core/src/cli.ts`
-- `./build` → `packages/core/src/build/build.ts`
-- `./build/manifest` → `packages/core/src/build/manifest.ts`
-- `./build/crypto` → `packages/core/src/build/crypto.ts`
-- `./assets/favicon` → `packages/core/src/assets/faviconData.ts`
+- `.` → `src/mod.ts`
+- `./core` → `src/core/mod.ts`
+- `./cli` → `src/cli.ts`
+- `./build` → `src/build/build.ts`
+- `./build/manifest` → `src/build/manifest.ts`
+- `./build/crypto` → `src/build/crypto.ts`
+- `./sw` → `src/sw/mod.ts`
+- `./storage/indexeddb` → `src/storage/mod.ts`
+- `./assets/favicon` → `src/assets/faviconData.ts`

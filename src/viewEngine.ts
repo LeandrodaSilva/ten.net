@@ -3,11 +3,17 @@ import type { AppManifest } from "./build/manifest.ts";
 import type { I18nMap } from "./core/types.ts";
 import { escapeHtml } from "./utils/htmlEscape.ts";
 
+type ViewDataHandler = (
+  req: Request,
+  ctx?: { params: Record<string, string>; locale?: string },
+) => Response | Promise<Response>;
+
 interface IViewEngine {
   _appPath: string;
   route: Route;
   req: Request;
   params: Record<string, string>;
+  handler?: ViewDataHandler;
   embedded?: AppManifest;
   tailwindCss?: string;
   locale?: string;
@@ -55,32 +61,50 @@ export async function viewEngine(args: IViewEngine) {
       pageModule = documentLayout.replace("{{content}}", pageModule);
     }
 
-    if (route.run) {
-      try {
-        const routeResponse = await route.run(req, {
-          params,
-          locale: args.locale,
-        }) as Response;
+    const handler = args.handler ?? route.run;
+    if (handler) {
+      const routeResponse = await handler(req, {
+        params,
+        locale: args.locale,
+      }) as Response;
 
-        if (routeResponse) {
-          const body = await routeResponse.json();
-          const keys = Object.keys(body);
-
-          keys.forEach((key) => {
-            // Triple-brace: raw output (unescaped)
-            pageModule = String(pageModule).replaceAll(
-              `{{{${key}}}}`,
-              String(body[key]),
-            );
-            // Double-brace: escaped output (XSS-safe)
-            pageModule = String(pageModule).replaceAll(
-              `{{${key}}}`,
-              escapeHtml(String(body[key])),
-            );
-          });
+      if (routeResponse) {
+        const contentType = routeResponse.headers.get("Content-Type") ?? "";
+        if (!contentType.toLowerCase().includes("application/json")) {
+          throw new Error(
+            `View route ${route.path} must return application/json data.`,
+          );
         }
-      } catch (e) {
-        console.error(e);
+
+        let body: Record<string, unknown>;
+        try {
+          body = await routeResponse.json();
+        } catch (error) {
+          throw new Error(
+            `View route ${route.path} returned invalid JSON data.`,
+            { cause: error },
+          );
+        }
+        if (!body || typeof body !== "object" || Array.isArray(body)) {
+          throw new Error(
+            `View route ${route.path} must return a JSON object.`,
+          );
+        }
+
+        const keys = Object.keys(body);
+
+        keys.forEach((key) => {
+          // Triple-brace: raw output (unescaped)
+          pageModule = String(pageModule).replaceAll(
+            `{{{${key}}}}`,
+            String(body[key]),
+          );
+          // Double-brace: escaped output (XSS-safe)
+          pageModule = String(pageModule).replaceAll(
+            `{{${key}}}`,
+            escapeHtml(String(body[key])),
+          );
+        });
       }
     }
 

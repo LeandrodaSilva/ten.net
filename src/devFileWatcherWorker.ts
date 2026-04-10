@@ -6,29 +6,40 @@ interface WorkerGlobalScope {
 
 interface DedicatedWorkerGlobalScope extends WorkerGlobalScope {
   onmessage: (this: DedicatedWorkerGlobalScope, ev: MessageEvent) => void;
-  postMessage: (message: string) => void;
+  postMessage: (
+    message: { kind: string; path?: string; error?: string },
+  ) => void;
 }
 
-//define types globally of onmessage and postMessage
+interface WatcherMessage {
+  action?: "start";
+  appPath?: string;
+}
+
 declare const self: {
   onmessage: (this: DedicatedWorkerGlobalScope, ev: MessageEvent) => void;
-  postMessage: (message: string) => void;
+  postMessage: (
+    message: { kind: string; path?: string; error?: string },
+  ) => void;
 };
 
-self.onmessage = async () => {
-  let watcher = Deno.watchFs("./app");
-  for await (const event of watcher) {
-    console.log(">>>> event", event);
-    watcher.close();
-  }
+self.onmessage = async (message) => {
+  const data = message.data as WatcherMessage;
+  const appPath = data.appPath ?? "./app";
+
   const call = debounce((event: Deno.FsEvent) => {
-    console.log("[%s] %s", event.kind, event.paths[0]);
-    self.postMessage(String(event.kind));
+    self.postMessage({ kind: event.kind, path: event.paths[0] });
   }, 200);
 
-  watcher = Deno.watchFs("./app");
-
-  for await (const event of watcher) {
-    call(event);
+  try {
+    const watcher = Deno.watchFs(appPath);
+    for await (const event of watcher) {
+      call(event);
+    }
+  } catch (error) {
+    self.postMessage({
+      kind: "error",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 };

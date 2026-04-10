@@ -156,4 +156,36 @@ describe("routerEngine", () => {
       await Deno.remove(tempDir, { recursive: true });
     }
   });
+
+  it("should order static routes before dynamic routes", async () => {
+    const tempDir = await Deno.makeTempDir();
+    try {
+      const aboutDir = `${tempDir}/about`;
+      const slugDir = `${tempDir}/[slug]`;
+      const blogArchiveDir = `${tempDir}/blog/archive`;
+      const blogSlugDir = `${tempDir}/blog/[slug]`;
+      await Deno.mkdir(aboutDir, { recursive: true });
+      await Deno.mkdir(slugDir, { recursive: true });
+      await Deno.mkdir(blogArchiveDir, { recursive: true });
+      await Deno.mkdir(blogSlugDir, { recursive: true });
+      await Deno.writeTextFile(`${aboutDir}/page.html`, "<p>about</p>");
+      await Deno.writeTextFile(`${slugDir}/page.html`, "<p>slug</p>");
+      await Deno.writeTextFile(
+        `${blogArchiveDir}/page.html`,
+        "<p>archive</p>",
+      );
+      await Deno.writeTextFile(`${blogSlugDir}/page.html`, "<p>blog slug</p>");
+
+      const routes = await routerEngine(tempDir, "route.ts");
+      const paths = routes.map((route) => route.path);
+
+      assertEquals(paths.indexOf("/about") < paths.indexOf("/[slug]"), true);
+      assertEquals(
+        paths.indexOf("/blog/archive") < paths.indexOf("/blog/[slug]"),
+        true,
+      );
+    } finally {
+      await Deno.remove(tempDir, { recursive: true });
+    }
+  });
 });

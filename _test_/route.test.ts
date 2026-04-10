@@ -242,7 +242,6 @@ describe("Route", () => {
       try {
         const fn = await route.import();
         assertEquals(typeof fn, "function");
-        assertEquals(route.run !== undefined, true);
 
         const res = await fn!(new Request("http://localhost/hello"));
         const body = await res.json();
@@ -252,7 +251,7 @@ describe("Route", () => {
       }
     });
 
-    it("should set route.run after successful import", async () => {
+    it("should return the imported handler without mutating route.run", async () => {
       const route = createRoute({
         transpiledCode: 'export function GET() { return new Response("ok"); }',
       });
@@ -262,11 +261,37 @@ describe("Route", () => {
       const infoSpy = console.info;
       console.info = () => {};
       try {
-        await route.import();
-        assertEquals(route.run !== undefined, true);
+        const fn = await route.import();
+        assertEquals(typeof fn, "function");
+        assertEquals(route.run, undefined);
       } finally {
         console.info = infoSpy;
       }
+    });
+
+    it("should cache handlers by HTTP method", async () => {
+      const route = createRoute({
+        transpiledCode: [
+          'export function GET() { return new Response("get"); }',
+          'export function POST() { return new Response("post"); }',
+        ].join("\n"),
+      });
+
+      const getFn = await route.import("GET");
+      const postFn = await route.import("POST");
+      const getFnAgain = await route.import("GET");
+
+      assertEquals(getFn, getFnAgain);
+      assertEquals(
+        await (await getFn!(new Request("http://localhost/"))).text(),
+        "get",
+      );
+      assertEquals(
+        await (await postFn!(
+          new Request("http://localhost/", { method: "POST" }),
+        )).text(),
+        "post",
+      );
     });
   });
 });

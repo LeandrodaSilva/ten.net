@@ -19,7 +19,7 @@ plugin system. Published to JSR.
 - **Extensible**: Abstract `Plugin` class and `AdminPluginLike` interface for
   external plugins
 - **Self-contained binary**: Compile entire app into a single deployable binary
-  with AES-256-GCM encryption
+  with AES-256-GCM obfuscation packaging
 - **Maximum simplicity**: Directory-based routing, HTML templates, `.ts` route
   files. No decorators, no configuration ceremony
 
@@ -139,7 +139,7 @@ leaf using `{{content}}`.
 single binary. The collector scans `app/`, transpiles routes, and gathers assets
 into an `AppManifest`. The code generator produces a self-contained TypeScript
 file that uses `embeddedRouterEngine` instead of filesystem scanning. Optional
-AES-256-GCM encryption for code protection. Entry point:
+AES-256-GCM obfuscation packaging. Entry point:
 `src/build/buildCommand.ts`. Supports `--target=browser` for Service Worker
 bundles via esbuild.
 
@@ -186,7 +186,7 @@ creates GitHub Release.
 - `./cli` → `src/cli.ts` — CLI entry point
 - `./build` → `src/build/build.ts` — Build system
 - `./build/manifest` → `src/build/manifest.ts` — Build manifest types
-- `./build/crypto` → `src/build/crypto.ts` — AES-256-GCM encryption utilities
+- `./build/crypto` → `src/build/crypto.ts` — AES-256-GCM utilities
 - `./sw` → `src/sw/mod.ts` — Service Worker adapter
 - `./storage/indexeddb` → `src/storage/mod.ts` — IndexedDB storage for browsers
 - `./assets/favicon` → `src/assets/faviconData.ts` — Favicon data
