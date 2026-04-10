@@ -11,6 +11,7 @@ import type {
   DynamicPageRenderer,
   DynamicRouteLike,
   DynamicRouteRegistryLike,
+  I18nMap,
   TenCoreOptions,
   WidgetPageRendererCore,
 } from "./types.ts";
@@ -49,6 +50,7 @@ export class TenCore {
   private _dynamicPageRenderer?: DynamicPageRenderer;
   private _decodeBase64: Base64Decoder;
   private _tailwindCss?: string;
+  private _i18n: I18nMap = {};
   private _initialized = false;
   private _appPath: string = "";
 
@@ -56,6 +58,9 @@ export class TenCore {
     this._embedded = options.embedded;
     this._decodeBase64 = options.decodeBase64 ?? decodeBase64Universal;
     this._appPath = options.appPath ?? "";
+    if (options.i18n) {
+      this._i18n = options.i18n;
+    }
     if (options.routes?.length) {
       this._routes.push(...options.routes);
     }
@@ -102,6 +107,14 @@ export class TenCore {
     this._tailwindCss = value;
   }
 
+  get i18n(): I18nMap {
+    return this._i18n;
+  }
+
+  set i18n(value: I18nMap) {
+    this._i18n = value;
+  }
+
   get middlewares(): readonly Middleware[] {
     return this._middlewares;
   }
@@ -132,6 +145,9 @@ export class TenCore {
     this._embedded = manifest;
     this._routes = [];
     this._initialized = false;
+    if (manifest.i18n) {
+      this._i18n = manifest.i18n;
+    }
     this.init();
   }
 
@@ -191,6 +207,9 @@ export class TenCore {
 
     if (this._embedded) {
       this._routes.push(...embeddedRouterEngine(this._embedded));
+      if (this._embedded.i18n) {
+        this._i18n = this._embedded.i18n;
+      }
     }
   }
 
@@ -208,6 +227,20 @@ export class TenCore {
     if (!this._initialized) this.init();
     return this._handleRequest(req);
   };
+
+  // ---------------------------------------------------------------------------
+  // i18n helpers
+  // ---------------------------------------------------------------------------
+
+  private get _availableLocales(): string[] {
+    const locales = new Set<string>();
+    for (const dir of Object.values(this._i18n)) {
+      for (const locale of Object.keys(dir)) {
+        locales.add(locale);
+      }
+    }
+    return [...locales].sort();
+  }
 
   // ---------------------------------------------------------------------------
   // Private pipeline
@@ -237,7 +270,23 @@ export class TenCore {
     const url = new URL(req.url);
     const path = url.pathname;
 
-    // 1. Embedded static assets
+    // Resolve i18n locale (no-op when no translations are configured)
+    let locale: string | undefined;
+    let strippedPath = path;
+    if (this._availableLocales.length > 0) {
+      const { resolveLocale: resolveLocaleFromReq } = await import(
+        "../i18nEngine.ts"
+      );
+      const resolved = resolveLocaleFromReq(
+        req,
+        path,
+        this._availableLocales,
+      );
+      locale = resolved.locale;
+      strippedPath = resolved.strippedPath;
+    }
+
+    // 1. Embedded static assets (match against original path for assets)
     if (this._embedded?.assets[path]) {
       const asset = this._embedded.assets[path];
       return new Response(this._decodeBase64(asset.dataBase64) as BodyInit, {
@@ -248,9 +297,9 @@ export class TenCore {
       });
     }
 
-    // 2. File-based + admin routes
+    // 2. File-based + admin routes (use strippedPath for route matching)
     const route = this._routes.find((r) => {
-      if (!r.regex.test(path)) return false;
+      if (!r.regex.test(strippedPath)) return false;
       if (r.method !== "ALL" && r.method !== req.method.toUpperCase()) {
         return false;
       }
@@ -260,7 +309,7 @@ export class TenCore {
     if (!route) {
       // 3. Dynamic pages (GET only)
       if (req.method === "GET" && this._dynamicRegistry) {
-        const dynamicRoute = this._dynamicRegistry.match(path);
+        const dynamicRoute = this._dynamicRegistry.match(strippedPath);
         if (dynamicRoute) {
           return await this._handleDynamicPage(dynamicRoute, req);
         }
@@ -273,10 +322,10 @@ export class TenCore {
     try {
       await route.import(requestMethod);
 
-      const params = paramsEngine(path, route);
+      const params = paramsEngine(strippedPath, route);
 
       if (!route.isViewForMethod(requestMethod) && route.run) {
-        return route.run(req, { params });
+        return route.run(req, { params, locale });
       }
 
       if (route.isViewForMethod(requestMethod)) {
@@ -288,11 +337,22 @@ export class TenCore {
             params,
             embedded: this._embedded,
             tailwindCss: this._tailwindCss,
+            locale,
+            i18n: this._i18n,
           });
-          return new Response(page, {
-            status: 200,
-            headers: { "Content-Type": "text/html; charset=utf-8" },
-          });
+          const headers: Record<string, string> = {
+            "Content-Type": "text/html; charset=utf-8",
+          };
+          if (locale) {
+            headers["Content-Language"] = locale;
+            if (path !== strippedPath) {
+              headers["Set-Cookie"] =
+                `ten_lang=${locale}; Path=/; SameSite=Lax; Max-Age=31536000`;
+            } else {
+              headers["Vary"] = "Accept-Language";
+            }
+          }
+          return new Response(page, { status: 200, headers });
         } catch {
           console.error(`Error rendering page for route: ${route.path}`); // NOSONAR
         }

@@ -6,6 +6,8 @@
  * @module
  */
 
+import type { I18nMap } from "../core/types.ts";
+
 /** A route entry embedded in the compiled application binary. */
 export interface EmbeddedRoute {
   /** URL path pattern (e.g. `/hello/[name]`). */
@@ -42,4 +44,6 @@ export interface AppManifest {
   assets: Record<string, EmbeddedAsset>;
   /** Optional seed data for browser storage (store name → items). */
   _seed?: Record<string, Array<{ id: string; [key: string]: unknown }>>;
+  /** Optional i18n translations map (route dir → locale → translations). */
+  i18n?: I18nMap;
 }

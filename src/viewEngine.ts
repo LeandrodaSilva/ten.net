@@ -1,5 +1,6 @@
 import type { Route } from "./models/Route.ts";
 import type { AppManifest } from "./build/manifest.ts";
+import type { I18nMap } from "./core/types.ts";
 import { escapeHtml } from "./utils/htmlEscape.ts";
 
 interface IViewEngine {
@@ -9,6 +10,8 @@ interface IViewEngine {
   params: Record<string, string>;
   embedded?: AppManifest;
   tailwindCss?: string;
+  locale?: string;
+  i18n?: I18nMap;
 }
 
 export async function viewEngine(args: IViewEngine) {
@@ -56,6 +59,7 @@ export async function viewEngine(args: IViewEngine) {
       try {
         const routeResponse = await route.run(req, {
           params,
+          locale: args.locale,
         }) as Response;
 
         if (routeResponse) {
@@ -78,6 +82,51 @@ export async function viewEngine(args: IViewEngine) {
       } catch (e) {
         console.error(e);
       }
+    }
+
+    // i18n translation (after variable replacement)
+    if (args.locale && args.i18n) {
+      const {
+        mergeTranslations,
+        resolveEscapeHatches,
+        applyTranslations,
+        renderSelector,
+        renderHreflang,
+        setHtmlLang,
+        injectHreflangLinks,
+      } = await import("./i18nEngine.ts");
+
+      const translations = mergeTranslations(
+        args.i18n,
+        route.path,
+        args.locale,
+      );
+
+      // Resolve escape hatches first
+      pageModule = resolveEscapeHatches(pageModule, translations);
+
+      // Apply automatic text translations
+      pageModule = applyTranslations(pageModule, translations);
+
+      // Render language selector
+      const availableLocales = [
+        ...new Set(
+          Object.values(args.i18n).flatMap((dir) => Object.keys(dir)),
+        ),
+      ].sort();
+      pageModule = pageModule.replaceAll(
+        "{{i18n:selector}}",
+        renderSelector(route.path, args.locale, availableLocales),
+      );
+
+      // Set HTML lang attribute
+      pageModule = setHtmlLang(pageModule, args.locale);
+
+      // Inject hreflang links
+      pageModule = injectHreflangLinks(
+        pageModule,
+        renderHreflang(route.path, availableLocales),
+      );
     }
 
     // Inject Tailwind CSS inline (dev mode only — embedded already has it baked in)

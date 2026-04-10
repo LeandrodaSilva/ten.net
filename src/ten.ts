@@ -199,6 +199,8 @@ export class Ten {
       this._core.addRoutes(
         await routerEngine(this._appPath, this._routeFileName),
       );
+      const { scanTranslations } = await import("./i18nEngine.ts");
+      this._core.i18n = await scanTranslations(this._appPath);
       await this._generateTailwindCss();
     };
 
@@ -226,6 +228,21 @@ export class Ten {
       this._core.addRoutes(
         await routerEngine(this._appPath, this._routeFileName),
       );
+      const { scanTranslations } = await import("./i18nEngine.ts");
+      this._core.i18n = await scanTranslations(this._appPath);
+
+      // Validate translations (dev mode only)
+      if (Object.keys(this._core.i18n).length > 0) {
+        const { validateTranslations } = await import("./i18nEngine.ts");
+        const templates: Record<string, string> = {};
+        for (const route of this._core.routes) {
+          if (route.hasPage && route.page) {
+            templates[route.path] = route.page;
+          }
+        }
+        validateTranslations(this._core.i18n, templates);
+      }
+
       await this._generateTailwindCss();
     }
     // Embedded routes are loaded lazily inside TenCore.init() on first fetch.
