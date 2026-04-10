@@ -266,13 +266,11 @@ describe("renderSelector", () => {
   it("active locale has selected attribute", () => {
     const html = renderSelector("/about", "en-US", locales);
     // en-US option should have selected
-    const enOption =
-      html.match(/<option[^>]*value="\/en-US\/about"[^>]*>/)?.[0] ?? "";
+    const enOption = html.match(/<option[^>]*value="\/en-US\/about"[^>]*>/)?.[0] ?? "";
     assertStringIncludes(enOption, "selected");
 
     // pt-BR option should NOT have selected
-    const ptOption =
-      html.match(/<option[^>]*value="\/pt-BR\/about"[^>]*>/)?.[0] ?? "";
+    const ptOption = html.match(/<option[^>]*value="\/pt-BR\/about"[^>]*>/)?.[0] ?? "";
     assertEquals(ptOption.includes("selected"), false);
   });
 
@@ -427,13 +425,11 @@ describe("renderSelector (improved)", () => {
   it("active locale option has selected attribute", () => {
     const html = renderSelector("/about", "en-US", locales);
     // Find the option for en-US and check it has selected
-    const enOption =
-      html.match(/<option[^>]*value="\/en-US\/about"[^>]*>/)?.[0] ?? "";
+    const enOption = html.match(/<option[^>]*value="\/en-US\/about"[^>]*>/)?.[0] ?? "";
     assertStringIncludes(enOption, "selected");
 
     // pt-BR option should NOT have selected
-    const ptOption =
-      html.match(/<option[^>]*value="\/pt-BR\/about"[^>]*>/)?.[0] ?? "";
+    const ptOption = html.match(/<option[^>]*value="\/pt-BR\/about"[^>]*>/)?.[0] ?? "";
     assertEquals(ptOption.includes("selected"), false);
   });
 
@@ -505,13 +501,11 @@ describe("renderSelectorFromTemplate", () => {
     );
 
     // es-ES should have class="active"
-    const esSpan = result.match(/<span[^>]*data-locale="es-ES"[^>]*>/)?.[0] ??
-      "";
+    const esSpan = result.match(/<span[^>]*data-locale="es-ES"[^>]*>/)?.[0] ?? "";
     assertStringIncludes(esSpan, 'class="active"');
 
     // en-US should have class=""
-    const enSpan = result.match(/<span[^>]*data-locale="en-US"[^>]*>/)?.[0] ??
-      "";
+    const enSpan = result.match(/<span[^>]*data-locale="en-US"[^>]*>/)?.[0] ?? "";
     assertStringIncludes(enSpan, 'class=""');
   });
 
