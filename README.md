@@ -282,8 +282,8 @@ single packaged binary:
 4. Compiles into a standalone Deno binary via `deno compile`
 
 The resulting binary has **zero runtime dependencies**. The generated artifact
-embeds the key needed to decrypt the manifest at runtime, so this is
-obfuscation and packaging rather than strong secret protection.
+embeds the key needed to decrypt the manifest at runtime, so this is obfuscation
+and packaging rather than strong secret protection.
 
 ### CLI
 
@@ -303,13 +303,13 @@ Add as a task:
 
 #### CLI options
 
-| Option          | Default    | Description                                   |
-| --------------- | ---------- | --------------------------------------------- |
+| Option          | Default    | Description                                    |
+| --------------- | ---------- | ---------------------------------------------- |
 | `--secret`      | (auto)     | Obfuscation secret (auto-generated if omitted) |
-| `--output`      | `./dist`   | Output directory                              |
-| `--app-path`    | `./app`    | Application root directory                    |
-| `--public-path` | `./public` | Public/static assets directory                |
-| `--no-compile`  | `false`    | Generate compiled TS only, skip binary        |
+| `--output`      | `./dist`   | Output directory                               |
+| `--app-path`    | `./app`    | Application root directory                     |
+| `--public-path` | `./public` | Public/static assets directory                 |
+| `--no-compile`  | `false`    | Generate compiled TS only, skip binary         |
 
 ### Programmatic API
 

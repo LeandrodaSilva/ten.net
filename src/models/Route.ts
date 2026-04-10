@@ -139,9 +139,10 @@ export class Route {
     | RouteHandler
     | undefined
   > {
-    const method = (requestMethod
-      ? requestMethod.toUpperCase()
-      : this._method) as HttpMethod;
+    const method =
+      (requestMethod
+        ? requestMethod.toUpperCase()
+        : this._method) as HttpMethod;
 
     if (this._run) return this._run;
     if (this._handlerCache.has(method)) {

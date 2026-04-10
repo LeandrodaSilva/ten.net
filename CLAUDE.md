@@ -139,9 +139,8 @@ leaf using `{{content}}`.
 single binary. The collector scans `app/`, transpiles routes, and gathers assets
 into an `AppManifest`. The code generator produces a self-contained TypeScript
 file that uses `embeddedRouterEngine` instead of filesystem scanning. Optional
-AES-256-GCM obfuscation packaging. Entry point:
-`src/build/buildCommand.ts`. Supports `--target=browser` for Service Worker
-bundles via esbuild.
+AES-256-GCM obfuscation packaging. Entry point: `src/build/buildCommand.ts`.
+Supports `--target=browser` for Service Worker bundles via esbuild.
 
 **Service Worker adapter** (`src/sw/`): Provides `handle()` and `fire()`
 functions for running Ten.net apps in browser Service Workers.

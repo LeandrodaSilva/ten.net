@@ -50,8 +50,7 @@ deno task bench      # Run benchmarks with history tracking
 - `src/routerEngine.ts` — File-system route scanner and transpiler
 - `src/viewEngine.ts` — HTML template renderer with nested layouts
 - `src/paramsEngine.ts` — URL parameter extraction
-- `src/models/` — Route, Plugin, Storage, Permission,
-  WidgetResolver
+- `src/models/` — Route, Plugin, Storage, Permission, WidgetResolver
 - `src/routing/` — Dynamic route registry, dynamic page handler
 - `src/utils/` — Utility functions
 - `src/build/` — Build system: collector, code generator, crypto
@@ -81,8 +80,8 @@ deno task bench      # Run benchmarks with history tracking
 
 ## Testing
 
-Tests are in `_test_/`. Uses `describe/it` from `@std/testing/bdd`.
-Assertions from `@std/assert`.
+Tests are in `_test_/`. Uses `describe/it` from `@std/testing/bdd`. Assertions
+from `@std/assert`.
 
 ## JSR Entrypoints
 
