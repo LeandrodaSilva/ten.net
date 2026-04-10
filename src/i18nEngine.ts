@@ -304,8 +304,26 @@ export function resolveEscapeHatches(
 }
 
 /**
- * Renders an HTML language selector navigation element.
- * Each locale gets a link with `hreflang` and `lang` attributes.
+ * Converts a locale string to its corresponding flag emoji using
+ * Regional Indicator Symbols. Extracts the country code from the locale
+ * (e.g. `en-US` -> `US`) or uses the uppercased language code if no
+ * country is present (e.g. `es` -> `ES`).
+ *
+ * @param locale - Locale string (e.g. `pt-BR`, `en-US`, `es`)
+ * @returns Flag emoji string (e.g. `🇧🇷`)
+ */
+export function localeToFlag(locale: string): string {
+  const parts = locale.split("-");
+  const code = parts.length > 1 ? parts[parts.length - 1] : parts[0];
+  const upper = code.toUpperCase();
+  return [...upper].map((c) =>
+    String.fromCodePoint(0x1F1E6 + (c.charCodeAt(0) - 65))
+  ).join("");
+}
+
+/**
+ * Renders an HTML language selector as a `<select>` dropdown.
+ * Each locale gets an `<option>` with its flag emoji and endonym.
  * Uses `Intl.DisplayNames` for endonyms (language names in their own script).
  *
  * @param routePath - Current route path (without locale prefix)
@@ -320,7 +338,7 @@ export function renderSelector(
 ): string {
   const sorted = [...availableLocales].sort();
 
-  const links = sorted.map((locale) => {
+  const options = sorted.map((locale) => {
     let displayName: string;
     try {
       const dn = new Intl.DisplayNames([locale], { type: "language" });
@@ -330,14 +348,15 @@ export function renderSelector(
     }
 
     const href = `/${locale}${routePath === "/" ? "" : routePath}`;
-    const ariaCurrent = locale === currentLocale ? ' aria-current="true"' : "";
+    const selected = locale === currentLocale ? " selected" : "";
+    const flag = localeToFlag(locale);
 
-    return `<a href="${href}" hreflang="${locale}" lang="${locale}"${ariaCurrent}>${displayName}</a>`;
+    return `<option value="${href}"${selected}>${flag} ${displayName}</option>`;
   });
 
-  return `<nav class="i18n-selector" aria-label="Language">${
-    links.join("")
-  }</nav>`;
+  return `<select class="i18n-selector appearance-none bg-white border border-[#dadce0] rounded-[20px] px-3 py-1.5 text-sm text-[#1a1c1e] cursor-pointer" onchange="location.href=this.value" aria-label="Language">${
+    options.join("")
+  }</select>`;
 }
 
 /**
@@ -447,4 +466,138 @@ export function validateTranslations(
       }
     }
   }
+}
+
+/**
+ * Renders a language selector from a custom HTML template.
+ * Extracts the block between `{{i18n:item}}` and `{{/i18n:item}}`,
+ * repeats it for each available locale, and replaces placeholders.
+ *
+ * Supported placeholders inside the item block:
+ * - `{{href}}` — locale-prefixed URL
+ * - `{{locale}}` — locale code (e.g. `pt-BR`)
+ * - `{{name}}` — endonym via `Intl.DisplayNames`
+ * - `{{active}}` — `"true"` for the current locale, `""` otherwise
+ * - `{{activeClass}}` — `"active"` for the current locale, `""` otherwise
+ * - `{{ariaCurrent}}` — `aria-current="true"` for the current locale, `""` otherwise
+ * - `{{flag}}` — flag emoji via {@link localeToFlag}
+ *
+ * @param template - HTML template with `{{i18n:item}}...{{/i18n:item}}` block
+ * @param routePath - Current route path (without locale prefix)
+ * @param currentLocale - Currently active locale
+ * @param availableLocales - All available locales
+ * @returns Rendered HTML with items expanded for each locale
+ */
+export function renderSelectorFromTemplate(
+  template: string,
+  routePath: string,
+  currentLocale: string,
+  availableLocales: string[],
+): string {
+  const blockMatch = template.match(
+    /\{\{i18n:item\}\}([\s\S]*?)\{\{\/i18n:item\}\}/,
+  );
+  if (!blockMatch) return template;
+
+  const itemTemplate = blockMatch[1];
+  const sorted = [...availableLocales].sort();
+
+  const items = sorted.map((locale) => {
+    let displayName: string;
+    try {
+      const dn = new Intl.DisplayNames([locale], { type: "language" });
+      displayName = dn.of(locale) ?? locale;
+    } catch {
+      displayName = locale;
+    }
+
+    const href = `/${locale}${routePath === "/" ? "" : routePath}`;
+    const isActive = locale === currentLocale;
+
+    return itemTemplate
+      .replaceAll("{{href}}", href)
+      .replaceAll("{{locale}}", locale)
+      .replaceAll("{{name}}", displayName)
+      .replaceAll("{{active}}", isActive ? "true" : "")
+      .replaceAll("{{activeClass}}", isActive ? "active" : "")
+      .replaceAll("{{ariaCurrent}}", isActive ? 'aria-current="true"' : "")
+      .replaceAll("{{flag}}", localeToFlag(locale));
+  });
+
+  return template.replace(
+    /\{\{i18n:item\}\}[\s\S]*?\{\{\/i18n:item\}\}/,
+    items.join(""),
+  );
+}
+
+/**
+ * Searches for an `i18n-selector.html` template file walking from the
+ * deepest route segment up to the app root. The most specific (deepest)
+ * template wins.
+ *
+ * @param appPath - Root application directory
+ * @param routePath - Current route path (e.g. `/docs/installation`)
+ * @returns Template contents if found, `undefined` otherwise
+ */
+export async function findSelectorTemplate(
+  appPath: string,
+  routePath: string,
+): Promise<string | undefined> {
+  const segments = routePath.split("/").filter(Boolean);
+  const paths: string[] = [];
+
+  // Build paths from leaf to root
+  let current = appPath;
+  paths.push(current);
+  for (const segment of segments) {
+    current = `${current}/${segment}`;
+    paths.push(current);
+  }
+
+  // Walk from leaf (deepest) to root
+  for (let i = paths.length - 1; i >= 0; i--) {
+    const filePath = `${paths[i]}/i18n-selector.html`;
+    try {
+      return await Deno.readTextFile(filePath);
+    } catch {
+      // File not found, try parent
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * Synchronous version of {@link findSelectorTemplate}.
+ * Searches for an `i18n-selector.html` template file walking from the
+ * deepest route segment up to the app root.
+ *
+ * @param appPath - Root application directory
+ * @param routePath - Current route path (e.g. `/docs/installation`)
+ * @returns Template contents if found, `undefined` otherwise
+ */
+export function findSelectorTemplateSync(
+  appPath: string,
+  routePath: string,
+): string | undefined {
+  const segments = routePath.split("/").filter(Boolean);
+  const paths: string[] = [];
+
+  let current = appPath;
+  paths.push(current);
+  for (const segment of segments) {
+    current = `${current}/${segment}`;
+    paths.push(current);
+  }
+
+  for (let i = paths.length - 1; i >= 0; i--) {
+    const filePath = `${paths[i]}/i18n-selector.html`;
+    try {
+      return Deno.readTextFileSync(filePath);
+    } catch {
+      // File not found, try parent
+    }
+  }
+
+  return undefined;
 }

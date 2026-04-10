@@ -4,9 +4,11 @@ import type { I18nMap } from "../src/core/types.ts";
 import {
   applyTranslations,
   injectHreflangLinks,
+  localeToFlag,
   mergeTranslations,
   renderHreflang,
   renderSelector,
+  renderSelectorFromTemplate,
   resolveEscapeHatches,
   resolveLocale,
   setHtmlLang,
@@ -251,43 +253,38 @@ describe("resolveEscapeHatches", () => {
 describe("renderSelector", () => {
   const locales = ["pt-BR", "en-US", "es-ES"];
 
-  it("generates nav with links for each locale", () => {
+  it("generates select with options for each locale", () => {
     const html = renderSelector("/about", "en-US", locales);
-    assertStringIncludes(html, "<nav");
-    assertStringIncludes(html, 'class="i18n-selector"');
+    assertStringIncludes(html, "<select");
+    assertStringIncludes(html, 'class="i18n-selector');
     assertStringIncludes(html, 'aria-label="Language"');
-    // 3 links
-    const linkCount = (html.match(/<a /g) || []).length;
-    assertEquals(linkCount, 3);
+    // 3 options
+    const optionCount = (html.match(/<option /g) || []).length;
+    assertEquals(optionCount, 3);
   });
 
-  it("active locale has aria-current='true'", () => {
+  it("active locale has selected attribute", () => {
     const html = renderSelector("/about", "en-US", locales);
-    // en-US link should have aria-current
-    assertStringIncludes(html, 'hreflang="en-US"');
-    const enLink = html.match(/<a[^>]*hreflang="en-US"[^>]*>/)?.[0] ?? "";
-    assertStringIncludes(enLink, 'aria-current="true"');
+    // en-US option should have selected
+    const enOption = html.match(/<option[^>]*value="\/en-US\/about"[^>]*>/)?.[0] ?? "";
+    assertStringIncludes(enOption, "selected");
 
-    // pt-BR link should NOT have aria-current
-    const ptLink = html.match(/<a[^>]*hreflang="pt-BR"[^>]*>/)?.[0] ?? "";
-    assertEquals(ptLink.includes("aria-current"), false);
+    // pt-BR option should NOT have selected
+    const ptOption = html.match(/<option[^>]*value="\/pt-BR\/about"[^>]*>/)?.[0] ?? "";
+    assertEquals(ptOption.includes("selected"), false);
   });
 
   it("locales are sorted alphabetically", () => {
     const html = renderSelector("/", "en-US", locales);
-    const hreflangs = [...html.matchAll(/hreflang="([^"]+)"/g)].map((m) =>
-      m[1]
-    );
-    assertEquals(hreflangs, ["en-US", "es-ES", "pt-BR"]);
+    const values = [...html.matchAll(/value="([^"]+)"/g)].map((m) => m[1]);
+    assertEquals(values, ["/en-US", "/es-ES", "/pt-BR"]);
   });
 
   it("uses Intl.DisplayNames for display names", () => {
     const html = renderSelector("/", "pt-BR", ["pt-BR"]);
-    // Intl.DisplayNames for pt-BR in its own locale should produce something
-    // like "portugues (Brasil)" — at minimum should not just show "pt-BR"
     const dn = new Intl.DisplayNames(["pt-BR"], { type: "language" });
     const expected = dn.of("pt-BR") ?? "pt-BR";
-    assertStringIncludes(html, `>${expected}</a>`);
+    assertStringIncludes(html, `${expected}</option>`);
   });
 });
 
@@ -367,5 +364,193 @@ describe("injectHreflangLinks", () => {
     const hreflang = '<link rel="alternate" hreflang="en" href="/en/" />';
     const result = injectHreflangLinks(html, hreflang);
     assertEquals(result, html); // no </head> to replace, no change
+  });
+});
+
+// ---------------------------------------------------------------------------
+// localeToFlag
+// ---------------------------------------------------------------------------
+
+describe("localeToFlag", () => {
+  it("converts en-US to US flag emoji", () => {
+    const flag = localeToFlag("en-US");
+    assertEquals(flag, "\u{1F1FA}\u{1F1F8}");
+  });
+
+  it("converts pt-BR to BR flag emoji", () => {
+    const flag = localeToFlag("pt-BR");
+    assertEquals(flag, "\u{1F1E7}\u{1F1F7}");
+  });
+
+  it("converts language-only locale (es) to ES flag emoji", () => {
+    const flag = localeToFlag("es");
+    assertEquals(flag, "\u{1F1EA}\u{1F1F8}");
+  });
+
+  it("returns string composed of 2 regional indicator characters", () => {
+    const flag = localeToFlag("fr-FR");
+    // Each regional indicator is a surrogate pair (2 code units), so 2 indicators = 4 code units
+    assertEquals([...flag].length, 2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// renderSelector (improved — <select> with flags)
+// ---------------------------------------------------------------------------
+
+describe("renderSelector (improved)", () => {
+  const locales = ["pt-BR", "en-US", "es-ES"];
+
+  it("generates <select> instead of <nav>", () => {
+    const html = renderSelector("/about", "en-US", locales);
+    assertStringIncludes(html, "<select");
+    assertEquals(html.includes("<nav"), false);
+  });
+
+  it("contains onchange handler for navigation", () => {
+    const html = renderSelector("/about", "en-US", locales);
+    assertStringIncludes(html, 'onchange="location.href=this.value"');
+  });
+
+  it("options contain flag emoji", () => {
+    const html = renderSelector("/about", "en-US", locales);
+    // en-US flag
+    assertStringIncludes(html, localeToFlag("en-US"));
+    // pt-BR flag
+    assertStringIncludes(html, localeToFlag("pt-BR"));
+    // es-ES flag
+    assertStringIncludes(html, localeToFlag("es-ES"));
+  });
+
+  it("active locale option has selected attribute", () => {
+    const html = renderSelector("/about", "en-US", locales);
+    // Find the option for en-US and check it has selected
+    const enOption = html.match(/<option[^>]*value="\/en-US\/about"[^>]*>/)?.[0] ?? "";
+    assertStringIncludes(enOption, "selected");
+
+    // pt-BR option should NOT have selected
+    const ptOption = html.match(/<option[^>]*value="\/pt-BR\/about"[^>]*>/)?.[0] ?? "";
+    assertEquals(ptOption.includes("selected"), false);
+  });
+
+  it("locales are sorted alphabetically", () => {
+    const html = renderSelector("/", "en-US", locales);
+    const values = [...html.matchAll(/value="([^"]+)"/g)].map((m) => m[1]);
+    assertEquals(values, ["/en-US", "/es-ES", "/pt-BR"]);
+  });
+
+  it("has aria-label for accessibility", () => {
+    const html = renderSelector("/", "en-US", locales);
+    assertStringIncludes(html, 'aria-label="Language"');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// renderSelectorFromTemplate
+// ---------------------------------------------------------------------------
+
+describe("renderSelectorFromTemplate", () => {
+  const locales = ["pt-BR", "en-US", "es-ES"];
+
+  it("renders template with wrapper and items", () => {
+    const template =
+      '<div class="lang-picker">{{i18n:item}}<a href="{{href}}">{{name}}</a>{{/i18n:item}}</div>';
+    const result = renderSelectorFromTemplate(
+      template,
+      "/about",
+      "en-US",
+      locales,
+    );
+    assertStringIncludes(result, '<div class="lang-picker">');
+    assertStringIncludes(result, "</div>");
+    // Should have 3 links (sorted: en-US, es-ES, pt-BR)
+    const linkCount = (result.match(/<a /g) || []).length;
+    assertEquals(linkCount, 3);
+  });
+
+  it("resolves all placeholders", () => {
+    const template =
+      '{{i18n:item}}<a href="{{href}}" class="{{activeClass}}" {{ariaCurrent}} lang="{{locale}}">{{flag}} {{name}}</a>{{/i18n:item}}';
+    const result = renderSelectorFromTemplate(
+      template,
+      "/docs",
+      "pt-BR",
+      locales,
+    );
+
+    // Check en-US item (not active)
+    assertStringIncludes(result, 'href="/en-US/docs"');
+    assertStringIncludes(result, 'lang="en-US"');
+    assertStringIncludes(result, localeToFlag("en-US"));
+
+    // Check pt-BR item (active)
+    assertStringIncludes(result, 'href="/pt-BR/docs"');
+    assertStringIncludes(result, 'class="active"');
+    assertStringIncludes(result, 'aria-current="true"');
+    assertStringIncludes(result, localeToFlag("pt-BR"));
+  });
+
+  it("activeClass is 'active' for current locale, '' for others", () => {
+    const template =
+      '{{i18n:item}}<span class="{{activeClass}}" data-locale="{{locale}}"></span>{{/i18n:item}}';
+    const result = renderSelectorFromTemplate(
+      template,
+      "/",
+      "es-ES",
+      locales,
+    );
+
+    // es-ES should have class="active"
+    const esSpan = result.match(/<span[^>]*data-locale="es-ES"[^>]*>/)?.[0] ?? "";
+    assertStringIncludes(esSpan, 'class="active"');
+
+    // en-US should have class=""
+    const enSpan = result.match(/<span[^>]*data-locale="en-US"[^>]*>/)?.[0] ?? "";
+    assertStringIncludes(enSpan, 'class=""');
+  });
+
+  it("ariaCurrent is aria-current=\"true\" for active, '' for others", () => {
+    const template =
+      '{{i18n:item}}<li {{ariaCurrent}} data-locale="{{locale}}"></li>{{/i18n:item}}';
+    const result = renderSelectorFromTemplate(
+      template,
+      "/",
+      "pt-BR",
+      locales,
+    );
+
+    // pt-BR should have aria-current="true"
+    const ptLi = result.match(/<li[^>]*data-locale="pt-BR"[^>]*>/)?.[0] ?? "";
+    assertStringIncludes(ptLi, 'aria-current="true"');
+
+    // en-US should NOT have aria-current
+    const enLi = result.match(/<li[^>]*data-locale="en-US"[^>]*>/)?.[0] ?? "";
+    assertEquals(enLi.includes("aria-current"), false);
+  });
+
+  it("returns template as-is when no {{i18n:item}} block", () => {
+    const template = '<div class="static">No items here</div>';
+    const result = renderSelectorFromTemplate(
+      template,
+      "/",
+      "en-US",
+      locales,
+    );
+    assertEquals(result, template);
+  });
+
+  it("renders locales in sorted order", () => {
+    const template =
+      '{{i18n:item}}<span data-locale="{{locale}}"></span>{{/i18n:item}}';
+    const result = renderSelectorFromTemplate(
+      template,
+      "/",
+      "en-US",
+      ["pt-BR", "en-US", "es-ES"],
+    );
+    const renderedLocales = [...result.matchAll(/data-locale="([^"]+)"/g)].map(
+      (m) => m[1],
+    );
+    assertEquals(renderedLocales, ["en-US", "es-ES", "pt-BR"]);
   });
 });
