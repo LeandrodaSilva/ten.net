@@ -23,19 +23,37 @@
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css"
+      media="print"
+      onload='this.media = "all"'
     >
     <script
+      defer
       src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"
     ></script>
     <script>
-      addEventListener("DOMContentLoaded", () => hljs.highlightAll());
+      addEventListener("load", () => {
+        if (window.hljs) hljs.highlightAll();
+      });
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Material+Symbols+Outlined&display=swap"
+      as="style"
+    >
+    <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Material+Symbols+Outlined&display=swap"
       rel="stylesheet"
+      media="print"
+      onload='this.media = "all"'
     >
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Material+Symbols+Outlined&display=swap"
+        rel="stylesheet"
+      >
+    </noscript>
     <style>
       :root {
         --md-primary: #3178c6;
@@ -94,6 +112,9 @@
       }
       .hover-tint:hover {
         background: rgba(49, 120, 198, 0.08);
+      }
+      .hljs-symbol {
+        color: #9a5000;
       }
     </style>
   </head>
