@@ -11,6 +11,7 @@ import type {
   AdminPluginLikeCore,
   DynamicRouteRegistryLike,
 } from "./core/types.ts";
+import type { SitemapContext, SitemapEntry } from "./models/Sitemap.ts";
 
 /** Interface for an admin plugin that can be registered via useAdmin(). */
 export interface AdminPluginLike {
@@ -21,6 +22,7 @@ export interface AdminPluginLike {
     kv?: Deno.Kv;
     widgetRenderer?: WidgetPageRenderer;
   }>;
+  getSitemapEntries?(context: SitemapContext): Promise<SitemapEntry[]>;
 }
 
 /**
@@ -43,6 +45,28 @@ export class Ten {
     this._appPath = appPath;
     this._core = new TenCore({ appPath });
     this._setDefaultDynamicPageRenderer();
+    this._applyRuntimeSeoDefaults();
+  }
+
+  private _readEnv(name: string): string | undefined {
+    try {
+      return Deno.env.get(name) ?? undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  private _applyRuntimeSeoDefaults(): void {
+    const siteUrl = this._readEnv("TEN_SITE_URL") ?? this._readEnv("SITE_URL");
+    if (siteUrl) {
+      this.setCanonicalBaseUrl(siteUrl);
+    }
+
+    const environment = this._readEnv("TEN_ENV") ?? this._readEnv("APP_ENV") ??
+      this._readEnv("DENO_ENV") ?? this._readEnv("NODE_ENV");
+    if (environment) {
+      this.setEnvironment(environment);
+    }
   }
 
   /** Install the Deno-aware dynamic-page renderer on the core. */
@@ -99,6 +123,7 @@ export class Ten {
       });
       // Re-install the renderer on the new core instance.
       instance._setDefaultDynamicPageRenderer();
+      instance._applyRuntimeSeoDefaults();
     }
     return instance;
   }
@@ -169,12 +194,31 @@ export class Ten {
             : undefined,
         };
       },
+      getSitemapEntries: admin.getSitemapEntries
+        ? (context) => admin.getSitemapEntries!(context)
+        : undefined,
     };
 
     // The default dynamic-page renderer (set in the constructor) reads
     // this._core.kv and this._core.widgetRenderer lazily, so it automatically
     // picks up the values set by useAdmin — no re-injection needed.
     await this._core.useAdmin(coreAdmin);
+  }
+
+  public setCanonicalBaseUrl(url?: string): void {
+    this._core.canonicalBaseUrl = url;
+  }
+
+  public setEnvironment(environment?: string): void {
+    this._core.environment = environment;
+  }
+
+  public setSitemapEnabled(enabled: boolean): void {
+    this._core.sitemapEnabled = enabled;
+  }
+
+  public setRobotsEnabled(enabled: boolean): void {
+    this._core.robotsEnabled = enabled;
   }
 
   /**

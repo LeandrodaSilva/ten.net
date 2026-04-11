@@ -1,6 +1,7 @@
 import { toSlug } from "../utils/toSlug.ts";
 import { InMemoryStorage } from "./Storage.ts";
 import type { Storage } from "./Storage.ts";
+import type { SitemapContext, SitemapEntry } from "./Sitemap.ts";
 
 /** Schema map describing a plugin's data model fields and their types. */
 export type PluginModel = Record<
@@ -60,5 +61,18 @@ export abstract class Plugin {
       }
     }
     return { valid: Object.keys(errors).length === 0, errors };
+  }
+
+  /**
+   * Optional hook for plugins that can enumerate concrete, public sitemap URLs.
+   *
+   * Static plugin routes are discovered automatically via the framework route
+   * registry. Override this when the plugin also manages dynamic public URLs
+   * such as published pages or posts.
+   */
+  public getSitemapEntries(
+    _context: SitemapContext,
+  ): Promise<SitemapEntry[]> {
+    return Promise.resolve([]);
   }
 }

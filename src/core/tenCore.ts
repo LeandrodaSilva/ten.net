@@ -12,9 +12,11 @@ import type {
   DynamicRouteLike,
   DynamicRouteRegistryLike,
   I18nMap,
+  SitemapEntriesProvider,
   TenCoreOptions,
   WidgetPageRendererCore,
 } from "./types.ts";
+import type { SitemapContext, SitemapEntry } from "../models/Sitemap.ts";
 
 /**
  * Runtime-agnostic HTTP request handler for Ten.net.
@@ -53,6 +55,11 @@ export class TenCore {
   private _i18n: I18nMap = {};
   private _initialized = false;
   private _appPath: string = "";
+  private _canonicalBaseUrl?: string;
+  private _environment = "development";
+  private _sitemapEnabled = true;
+  private _robotsEnabled = true;
+  private _sitemapEntriesProviders: SitemapEntriesProvider[] = [];
 
   constructor(options: TenCoreOptions = {}) {
     this._embedded = options.embedded;
@@ -64,6 +71,16 @@ export class TenCore {
     if (options.routes?.length) {
       this._routes.push(...options.routes);
     }
+    this._canonicalBaseUrl = options.canonicalBaseUrl
+      ? this._normalizeBaseUrl(options.canonicalBaseUrl)
+      : undefined;
+    this._environment = (options.environment ?? "development").trim()
+      .toLowerCase();
+    this._sitemapEnabled = options.sitemapEnabled ?? true;
+    this._robotsEnabled = options.robotsEnabled ?? true;
+    this._sitemapEntriesProviders = options.sitemapEntriesProviders
+      ? [...options.sitemapEntriesProviders]
+      : [];
   }
 
   // ---------------------------------------------------------------------------
@@ -117,6 +134,38 @@ export class TenCore {
 
   get middlewares(): readonly Middleware[] {
     return this._middlewares;
+  }
+
+  get canonicalBaseUrl(): string | undefined {
+    return this._canonicalBaseUrl;
+  }
+
+  set canonicalBaseUrl(value: string | undefined) {
+    this._canonicalBaseUrl = value ? this._normalizeBaseUrl(value) : undefined;
+  }
+
+  get environment(): string {
+    return this._environment;
+  }
+
+  set environment(value: string | undefined) {
+    this._environment = (value ?? "development").trim().toLowerCase();
+  }
+
+  get sitemapEnabled(): boolean {
+    return this._sitemapEnabled;
+  }
+
+  set sitemapEnabled(value: boolean) {
+    this._sitemapEnabled = value;
+  }
+
+  get robotsEnabled(): boolean {
+    return this._robotsEnabled;
+  }
+
+  set robotsEnabled(value: boolean) {
+    this._robotsEnabled = value;
   }
 
   // ---------------------------------------------------------------------------
@@ -180,6 +229,16 @@ export class TenCore {
     if (widgetRenderer) {
       this._widgetRenderer = widgetRenderer;
     }
+    if (admin.getSitemapEntries) {
+      this.addSitemapEntriesProvider((context) =>
+        admin.getSitemapEntries!(context)
+      );
+    }
+  }
+
+  /** Register an additional provider for concrete sitemap entries. */
+  addSitemapEntriesProvider(provider: SitemapEntriesProvider): void {
+    this._sitemapEntriesProviders.push(provider);
   }
 
   /**
@@ -242,6 +301,266 @@ export class TenCore {
     return [...locales].sort();
   }
 
+  private _normalizeBaseUrl(url: string): string {
+    return url.endsWith("/") ? url.slice(0, -1) : url;
+  }
+
+  private _getSeoBaseUrl(request: Request): string {
+    return this._normalizeBaseUrl(
+      this._canonicalBaseUrl ?? new URL(request.url).origin,
+    );
+  }
+
+  private _isProductionEnvironment(): boolean {
+    return this._environment === "production" || this._environment === "prod";
+  }
+
+  private _matchRoute(pathname: string, method: string): Route | undefined {
+    return this._routes.find((r) => {
+      if (!r.regex.test(pathname)) return false;
+      if (r.method !== "ALL" && r.method !== method.toUpperCase()) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  private _isPrivatePath(path: string): boolean {
+    return path
+      .split("/")
+      .filter(Boolean)
+      .some((segment) => segment.startsWith("_") || segment.startsWith("."));
+  }
+
+  private _isSensitivePath(path: string): boolean {
+    const prefixes = [
+      "/admin",
+      "/auth",
+      "/account",
+      "/preview",
+      "/draft",
+      "/_",
+    ];
+    return prefixes.some((prefix) =>
+      path === prefix || path.startsWith(`${prefix}/`)
+    );
+  }
+
+  private _isDynamicPath(path: string): boolean {
+    return path.includes("[") || path.includes("]") || path.includes(":");
+  }
+
+  private _isPrivateRoute(route: Route): boolean {
+    if (this._isPrivatePath(route.path)) return true;
+    return route.sourcePath
+      .split(/[/\\]+/)
+      .filter(Boolean)
+      .some((segment) => segment.startsWith("_") || segment.startsWith("."));
+  }
+
+  private _toAbsoluteUrl(baseUrl: string, path: string): string {
+    const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+    return new URL(normalizedPath, `${baseUrl}/`).toString();
+  }
+
+  private _normalizeLastmod(value?: string | Date): string | undefined {
+    if (!value) return undefined;
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) return undefined;
+    return date.toISOString();
+  }
+
+  private _normalizePriority(value?: number): string | undefined {
+    if (typeof value !== "number" || Number.isNaN(value)) return undefined;
+    const clamped = Math.max(0, Math.min(1, value));
+    return clamped.toFixed(1);
+  }
+
+  private _escapeXml(value: string): string {
+    return value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&apos;");
+  }
+
+  private _shouldIncludeRouteInSitemap(route: Route): boolean {
+    if (route.method !== "GET") return false;
+    if (route.isAdmin || route.isView) return false;
+    if (route.path === "/sitemap.xml" || route.path === "/robots.txt") {
+      return false;
+    }
+    if (this._isPrivateRoute(route) || this._isDynamicPath(route.path)) {
+      return false;
+    }
+    if (this._isSensitivePath(route.path)) return false;
+    return true;
+  }
+
+  private async _collectSitemapEntries(
+    request: Request,
+  ): Promise<SitemapEntry[]> {
+    const baseUrl = this._getSeoBaseUrl(request);
+
+    const staticEntries: SitemapEntry[] = this._routes
+      .filter((route) => this._shouldIncludeRouteInSitemap(route))
+      .map((route) => ({ path: route.path }));
+
+    const dynamicEntries = (this._dynamicRegistry?.all?.() ?? []).reduce<
+      SitemapEntry[]
+    >((entries, route) => {
+      const path = route.route?.path ??
+        (route.slug ? `/${route.slug}` : undefined);
+      if (!path || path === "/404") {
+        return entries;
+      }
+      entries.push({
+        path,
+        lastmod: route.updated_at ?? route.published_at,
+      });
+      return entries;
+    }, []);
+
+    const context: SitemapContext = {
+      request,
+      baseUrl,
+    };
+    const providerResults = await Promise.all(
+      this._sitemapEntriesProviders.map(async (provider) => {
+        try {
+          return await provider(context);
+        } catch (error) {
+          console.error("Error collecting sitemap entries", error);
+          return [];
+        }
+      }),
+    );
+    const providerEntries = providerResults.flat();
+
+    const deduped = new Map<string, SitemapEntry>();
+    const seoOrigin = new URL(`${baseUrl}/`).origin;
+
+    for (
+      const entry of [...staticEntries, ...dynamicEntries, ...providerEntries]
+    ) {
+      const loc = entry.loc
+        ? new URL(entry.loc, `${baseUrl}/`).toString()
+        : entry.path
+        ? this._toAbsoluteUrl(baseUrl, entry.path)
+        : undefined;
+
+      if (!loc) continue;
+
+      const parsed = new URL(loc);
+      if (parsed.origin !== seoOrigin) continue;
+      if (
+        parsed.pathname === "/sitemap.xml" || parsed.pathname === "/robots.txt"
+      ) {
+        continue;
+      }
+      if (
+        this._isSensitivePath(parsed.pathname) ||
+        this._isPrivatePath(parsed.pathname)
+      ) {
+        continue;
+      }
+      if (this._isDynamicPath(parsed.pathname)) continue;
+
+      deduped.set(loc, { ...entry, loc });
+    }
+
+    return [...deduped.values()].sort((a, b) =>
+      (a.loc ?? "").localeCompare(b.loc ?? "")
+    );
+  }
+
+  private _renderSitemapXml(entries: SitemapEntry[]): string {
+    const body = entries.map((entry) => {
+      const lastmod = this._normalizeLastmod(entry.lastmod);
+      const priority = this._normalizePriority(entry.priority);
+      const lines = [
+        "  <url>",
+        `    <loc>${this._escapeXml(entry.loc ?? "")}</loc>`,
+        lastmod ? `    <lastmod>${this._escapeXml(lastmod)}</lastmod>` : "",
+        entry.changefreq
+          ? `    <changefreq>${this._escapeXml(entry.changefreq)}</changefreq>`
+          : "",
+        priority ? `    <priority>${priority}</priority>` : "",
+        "  </url>",
+      ].filter(Boolean);
+      return lines.join("\n");
+    }).join("\n");
+
+    return [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+      body,
+      "</urlset>",
+      "",
+    ].join("\n");
+  }
+
+  private async _handleSitemapRequest(request: Request): Promise<Response> {
+    if (!this._sitemapEnabled) {
+      return new Response("Not found", { status: 404 });
+    }
+
+    const xml = this._renderSitemapXml(
+      await this._collectSitemapEntries(request),
+    );
+    return new Response(xml, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "public, max-age=300",
+      },
+    });
+  }
+
+  private _renderRobotsTxt(request: Request): string {
+    const lines = ["User-agent: *"];
+
+    if (!this._isProductionEnvironment()) {
+      lines.push("Disallow: /");
+    } else {
+      lines.push(
+        "Disallow: /admin",
+        "Disallow: /admin/",
+        "Disallow: /auth/",
+        "Disallow: /account/",
+        "Disallow: /preview/",
+        "Disallow: /draft/",
+        "Disallow: /_/",
+      );
+    }
+
+    if (this._sitemapEnabled) {
+      lines.push(
+        `Sitemap: ${
+          this._toAbsoluteUrl(this._getSeoBaseUrl(request), "/sitemap.xml")
+        }`,
+      );
+    }
+
+    lines.push("");
+    return lines.join("\n");
+  }
+
+  private _handleRobotsRequest(request: Request): Response {
+    if (!this._robotsEnabled) {
+      return new Response("Not found", { status: 404 });
+    }
+
+    return new Response(this._renderRobotsTxt(request), {
+      status: 200,
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "public, max-age=300",
+      },
+    });
+  }
+
   // ---------------------------------------------------------------------------
   // Private pipeline
   // ---------------------------------------------------------------------------
@@ -297,14 +616,24 @@ export class TenCore {
       });
     }
 
+    if (
+      req.method === "GET" &&
+      path === "/robots.txt" &&
+      !this._matchRoute(path, req.method)
+    ) {
+      return this._handleRobotsRequest(req);
+    }
+
+    if (
+      req.method === "GET" &&
+      path === "/sitemap.xml" &&
+      !this._matchRoute(path, req.method)
+    ) {
+      return await this._handleSitemapRequest(req);
+    }
+
     // 2. File-based + admin routes (use strippedPath for route matching)
-    const route = this._routes.find((r) => {
-      if (!r.regex.test(strippedPath)) return false;
-      if (r.method !== "ALL" && r.method !== req.method.toUpperCase()) {
-        return false;
-      }
-      return true;
-    });
+    const route = this._matchRoute(strippedPath, req.method);
 
     if (!route) {
       // 3. Dynamic pages (GET only)

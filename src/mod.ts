@@ -23,6 +23,11 @@ export type { BuildOptions, BuildResult } from "./build/build.ts";
 export { decompressData, decrypt, importKeyRaw } from "./build/crypto.ts";
 export { Plugin } from "./models/Plugin.ts";
 export type { PluginModel } from "./models/Plugin.ts";
+export type {
+  SitemapChangeFrequency,
+  SitemapContext,
+  SitemapEntry,
+} from "./models/Sitemap.ts";
 export { Route } from "./models/Route.ts";
 export type { Middleware } from "./middleware/middleware.ts";
 export { buildPermissionKey } from "./models/Permission.ts";
@@ -43,6 +48,8 @@ export type {
   DynamicPageRenderer,
   DynamicRouteLike,
   DynamicRouteRegistryLike,
+  DynamicRouteSitemapLike,
+  SitemapEntriesProvider,
   TenCoreOptions,
   WidgetPageRendererCore,
 } from "./core/types.ts";
