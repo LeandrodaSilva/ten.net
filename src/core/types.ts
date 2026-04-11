@@ -1,6 +1,7 @@
 import type { Route } from "../models/Route.ts";
 import type { Middleware } from "../middleware/middleware.ts";
 import type { AppManifest } from "../build/manifest.ts";
+import type { SitemapContext, SitemapEntry } from "../models/Sitemap.ts";
 
 /**
  * Runtime-agnostic widget page renderer — same contract as {@link WidgetPageRenderer}
@@ -23,10 +24,24 @@ export interface DynamicRouteLike {
   widgets_enabled?: boolean;
 }
 
+/** Dynamic route shape used when enumerating sitemap entries. */
+export interface DynamicRouteSitemapLike extends DynamicRouteLike {
+  slug?: string;
+  route?: { path: string };
+  updated_at?: string;
+  published_at?: string;
+}
+
+/** Runtime-agnostic sitemap entries provider. */
+export type SitemapEntriesProvider = (
+  context: SitemapContext,
+) => Promise<SitemapEntry[]> | SitemapEntry[];
+
 /** Structural interface for a dynamic route registry. */
 export interface DynamicRouteRegistryLike {
   match(pathname: string): DynamicRouteLike | null;
   readonly notFoundPage: DynamicRouteLike | null;
+  all?(): DynamicRouteSitemapLike[];
 }
 
 /**
@@ -55,6 +70,7 @@ export interface AdminPluginLikeCore {
     kv?: unknown;
     widgetRenderer?: WidgetPageRendererCore;
   }>;
+  getSitemapEntries?(context: SitemapContext): Promise<SitemapEntry[]>;
 }
 
 /** Map of route directories to locales to translations (original text to translated text). */
@@ -72,4 +88,14 @@ export interface TenCoreOptions {
   decodeBase64?: Base64Decoder;
   /** Pre-scanned i18n translations map. */
   i18n?: I18nMap;
+  /** Canonical public base URL used for sitemap and robots generation. */
+  canonicalBaseUrl?: string;
+  /** Current runtime environment. Non-production disallows all crawling. */
+  environment?: string;
+  /** Enable or disable the built-in /sitemap.xml endpoint. */
+  sitemapEnabled?: boolean;
+  /** Enable or disable the built-in /robots.txt endpoint. */
+  robotsEnabled?: boolean;
+  /** Additional providers for concrete sitemap entries. */
+  sitemapEntriesProviders?: SitemapEntriesProvider[];
 }

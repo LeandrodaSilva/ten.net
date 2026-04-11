@@ -30,6 +30,8 @@ export type {
   DynamicPageRenderer,
   DynamicRouteLike,
   DynamicRouteRegistryLike,
+  DynamicRouteSitemapLike,
+  SitemapEntriesProvider,
   TenCoreOptions,
   WidgetPageRendererCore,
 } from "./types.ts";
