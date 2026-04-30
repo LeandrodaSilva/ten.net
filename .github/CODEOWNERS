@@ -1,0 +1,6 @@
+# Replace with real GitHub usernames/team before enabling branch protection.
+* @cto
+
+# Operational docs require engineering leadership review.
+docs/runbooks/ @cto
+.github/workflows/ @cto
