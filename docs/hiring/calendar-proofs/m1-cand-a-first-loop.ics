@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//LEP//M1 Hiring//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:m1-cand-a-first-loop@lep
+DTSTAMP:20260430T100000Z
+DTSTART:20260505T160000Z
+DTEND:20260505T170000Z
+SUMMARY:LEP First-Loop Interview - Candidate A
+DESCRIPTION:60-min first-loop interview: technical depth, execution walkthrough, candidate Q&A.
+LOCATION:https://meet.example.com/lep-first-loop-a
+ATTENDEE;CN=Candidate A:mailto:candidate.a@example.com
+ATTENDEE;CN=Priya Iyer:mailto:priya.iyer@lep.example
+ATTENDEE;CN=Mateo Cruz:mailto:mateo.cruz@lep.example
+END:VEVENT
+END:VCALENDAR
