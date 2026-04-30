@@ -1,0 +1,11 @@
+candidate_id,role,source_channel,sourced_at,outreach_sent_at,followup1_sent_at,followup2_sent_at,reply_status,reply_at,intro_call_scheduled,intro_call_scheduled_at,owner,notes
+out-001,Founding Product Engineer,github,2026-04-22,2026-04-22,2026-04-26,,positive,2026-04-24,yes,2026-04-27,Ana,"Open-source maintainer in adjacent stack"
+out-002,Founding Product Engineer,linkedin,2026-04-23,2026-04-23,,,,none,,no,,Ana,"Boolean search batch A"
+out-003,Senior Backend Engineer,warm_intro,2026-04-23,2026-04-23,2026-04-27,,positive,2026-04-28,no,,Jay,"Awaiting scheduling confirmation"
+out-004,Founding Product Engineer,github,2026-04-24,2026-04-24,2026-04-28,2026-05-04,negative,2026-05-05,no,,Ana,"Closed after final follow-up"
+out-005,Founding Product Engineer,linkedin,2026-04-24,,,,,none,,no,,Ana,"Queued for personalization"
+out-006,Senior Backend Engineer,github,2026-04-25,2026-04-25,,,positive,2026-04-26,yes,2026-04-29,Jay,"Confirmed first loop"
+out-007,Founding Product Engineer,warm_intro,2026-04-26,2026-04-26,2026-04-30,,positive,2026-05-01,yes,2026-05-03,Ana,"Intro via founder network"
+out-008,Founding Product Engineer,linkedin,2026-04-26,2026-04-26,,,none,,no,,Ana,"No response yet"
+out-009,Founding Product Engineer,github,2026-04-27,2026-04-27,,,none,,no,,Ana,"Follow-up due Day 4"
+out-010,Senior Backend Engineer,linkedin,2026-04-27,2026-04-27,,,none,,no,,Jay,"No response yet"
