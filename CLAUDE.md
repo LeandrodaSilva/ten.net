@@ -192,8 +192,7 @@ creates GitHub Release.
 
 ## Gotchas
 
-- `@deno-assert` in deno.json imports is legacy — prefer `@std/assert` in new
-  code
+- `@std/assert` is the supported assertion import for tests and runtime checks
 - Most tasks require `--unstable-raw-imports` flag (already configured in
   `deno.json` tasks)
 - `deno task build` uses `src/build/buildCommand.ts` (not `build.ts`) as entry
