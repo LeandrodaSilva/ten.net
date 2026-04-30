@@ -15,12 +15,14 @@ Passos:
 5. Execute todos os checks locais na sequência:
    - `deno fmt --check`
    - `deno lint --unstable-raw-imports`
-   - `deno test --parallel --allow-all --unstable-raw-imports --unstable-bundle`
+   - `deno test --parallel --allow-all --unstable-raw-imports --unstable-kv`
    - `deno check **/*.ts --unstable-raw-imports`
    - `deno publish --dry-run --allow-dirty`
 6. Se algum check falhar, corrija o problema e repita
-7. Faça commit de todas as alterações com mensagem no formato:
+7. Faça commit das alterações de release com mensagem exatamente no formato:
    `release: v{nova_versão}`
-8. Crie a tag `v{nova_versão}`
-9. Faça push do branch e da tag para origin
-10. Monitore a pipeline do GitHub Actions até concluir com sucesso
+8. Abra um PR com o mesmo título `release: v{nova_versão}`
+9. Aguarde review + CI verde e faça merge do PR em `main`
+10. Monitore a workflow `Release` do GitHub Actions no commit mergeado; ela
+    publica no JSR e cria a tag `v{nova_versão}` + GitHub Release
+11. Não crie/pushe tag manualmente e não faça push direto em `main`

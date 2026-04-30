@@ -125,19 +125,22 @@ O processo de release do Ten.net:
    - `minor` (0.X.0) — new features (backward-compatible)
    - `major` (X.0.0) — breaking changes
 2. Atualize a versao em `deno.json` (campo `version`)
-3. Crie commit: `release: vX.Y.Z`
-4. Push: `git push` (SEM tag ainda)
-5. **AGUARDE CI do GitHub passar**:
-   `gh run list --branch main --limit 1 --json status`
+3. Crie commit **e PR** com o titulo exato: `release: vX.Y.Z`
+4. Faça push apenas no branch da release e abra PR para `main`
+5. **AGUARDE CI do GitHub passar no PR**
 6. Se CI falhar, delegue correcao e AGUARDE. NAO prossiga.
-7. Somente apos CI verde, crie a tag: `git tag vX.Y.Z && git push --tags`
-8. O CI automaticamente:
-   - Roda checks na tag
+7. Somente apos CI verde + review, faça merge do PR em `main`
+8. A workflow `Release` no commit mergeado automaticamente:
+   - Verifica que o merge veio de um PR de release
+   - Roda checks
    - Publica no JSR via `deno publish`
+   - Cria a tag `vX.Y.Z`
    - Cria GitHub Release
-9. **MONITORE o CI da tag**: `gh run list --limit 1 --json status,conclusion`
-10. Se CI da tag falhar, reporte IMEDIATAMENTE ao team-lead com o link do run
-11. Verifique que o JSR score esta OK (use o skill `/jsr-score` se disponivel)
+9. **MONITORE o run de release em `main`**:
+   `gh run list --workflow Release --limit 1 --json status,conclusion,url`
+10. Se o release falhar, reporte IMEDIATAMENTE ao team-lead com o link do run
+11. Nao crie/pushe tags manualmente
+12. Verifique que o JSR score esta OK (use o skill `/jsr-score` se disponivel)
 
 ### 7. Seguranca (DevSecOps)
 
