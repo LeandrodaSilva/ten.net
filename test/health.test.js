@@ -86,6 +86,7 @@ test('degraded dependencies produce 503 and dependency failure metric', async ()
 
 test('disabled feature flag returns stable not_found envelope', async () => {
   process.env.health_endpoint_v1_enabled = 'false';
+  process.env.HEALTH_ENDPOINT_V1_ENABLED = 'false';
   const { server } = createApp();
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 
@@ -95,12 +96,26 @@ test('disabled feature flag returns stable not_found envelope', async () => {
     const payload = JSON.parse(health.body);
     assert.deepEqual(payload, {
       error: {
-        code: 'feature_disabled',
-        message: 'health endpoint disabled'
+        code: 'not_found',
+        message: 'resource not found'
       }
     });
   } finally {
     process.env.health_endpoint_v1_enabled = 'true';
+    process.env.HEALTH_ENDPOINT_V1_ENABLED = 'true';
+    server.close();
+  }
+});
+
+test('bootstrap health endpoint returns ok', async () => {
+  const { server } = createApp();
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+
+  try {
+    const health = await request(server, '/health');
+    assert.equal(health.statusCode, 200);
+    assert.deepEqual(JSON.parse(health.body), { status: 'ok' });
+  } finally {
     server.close();
   }
 });

@@ -59,6 +59,7 @@ test('contract: /v1/health healthy response shape is stable', async () => {
   await withEnv(
     {
       HEALTH_ENDPOINT_V1_ENABLED: 'true',
+      health_endpoint_v1_enabled: 'true',
       DEPENDENCY_DATABASE_OK: 'true',
       DEPENDENCY_QUEUE_OK: 'true',
       APP_VERSION: '2.0.0',
@@ -79,6 +80,11 @@ test('contract: /v1/health healthy response shape is stable', async () => {
           version: '2.0.0',
           commit: 'def456',
           deployedAt: '2026-04-30T00:00:00.000Z',
+          build: {
+            version: '2.0.0',
+            commit: 'def456',
+            deployedAt: '2026-04-30T00:00:00.000Z'
+          },
           dependencies: {
             database: 'ok',
             queue: 'ok'
@@ -95,6 +101,7 @@ test('contract: /v1/health degraded maps to 503 and stable payload', async () =>
   await withEnv(
     {
       HEALTH_ENDPOINT_V1_ENABLED: 'true',
+      health_endpoint_v1_enabled: 'true',
       DEPENDENCY_DATABASE_OK: 'false',
       DEPENDENCY_QUEUE_OK: 'true'
     },
@@ -115,8 +122,8 @@ test('contract: /v1/health degraded maps to 503 and stable payload', async () =>
   );
 });
 
-test('contract: disabled endpoint returns stable feature_disabled envelope', async () => {
-  await withEnv({ HEALTH_ENDPOINT_V1_ENABLED: 'false' }, async () => {
+test('contract: disabled endpoint returns stable not_found envelope', async () => {
+  await withEnv({ HEALTH_ENDPOINT_V1_ENABLED: 'false', health_endpoint_v1_enabled: 'false' }, async () => {
     const { server } = createApp();
     await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
     try {
@@ -125,8 +132,8 @@ test('contract: disabled endpoint returns stable feature_disabled envelope', asy
       const body = JSON.parse(res.body);
       assert.deepEqual(body, {
         error: {
-          code: 'feature_disabled',
-          message: 'health endpoint disabled'
+          code: 'not_found',
+          message: 'resource not found'
         }
       });
     } finally {
@@ -136,7 +143,7 @@ test('contract: disabled endpoint returns stable feature_disabled envelope', asy
 });
 
 test('contract: unknown route returns stable not_found envelope', async () => {
-  await withEnv({ HEALTH_ENDPOINT_V1_ENABLED: 'true' }, async () => {
+  await withEnv({ HEALTH_ENDPOINT_V1_ENABLED: 'true', health_endpoint_v1_enabled: 'true' }, async () => {
     const { server } = createApp();
     await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
     try {
@@ -156,7 +163,7 @@ test('contract: unknown route returns stable not_found envelope', async () => {
 });
 
 test('contract: /metrics exposes expected metric families', async () => {
-  await withEnv({ HEALTH_ENDPOINT_V1_ENABLED: 'true' }, async () => {
+  await withEnv({ HEALTH_ENDPOINT_V1_ENABLED: 'true', health_endpoint_v1_enabled: 'true' }, async () => {
     const { server } = createApp();
     await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 
@@ -174,6 +181,21 @@ test('contract: /metrics exposes expected metric families', async () => {
       assert.match(metricsRes.body, /health_endpoint_p50_latency_ms/);
       assert.match(metricsRes.body, /health_endpoint_p95_latency_ms/);
       assert.match(metricsRes.body, /health_dependency_failure_total/);
+    } finally {
+      server.close();
+    }
+  });
+});
+
+test('contract: /health bootstrap endpoint returns 200 and status ok', async () => {
+  await withEnv({}, async () => {
+    const { server } = createApp();
+    await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+    try {
+      const res = await request(server, '/health');
+      assert.equal(res.statusCode, 200);
+      assert.equal(res.headers['content-type'], 'application/json');
+      assert.deepEqual(JSON.parse(res.body), { status: 'ok' });
     } finally {
       server.close();
     }
