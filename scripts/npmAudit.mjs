@@ -5,7 +5,9 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 
-const denoConfig = JSON.parse(readFileSync(new URL("../deno.json", import.meta.url), "utf8"));
+const denoConfig = JSON.parse(
+  readFileSync(new URL("../deno.json", import.meta.url), "utf8"),
+);
 const imports = Object.values(denoConfig.imports ?? {});
 
 const dependencies = Object.fromEntries(
@@ -43,11 +45,21 @@ try {
     ),
   );
 
-  console.log(`Auditing ${Object.keys(dependencies).length} npm dependencies from deno.json...`);
+  console.log(
+    `Auditing ${
+      Object.keys(dependencies).length
+    } npm dependencies from deno.json...`,
+  );
 
   const install = spawnSync(
     "npm",
-    ["install", "--package-lock-only", "--ignore-scripts", "--fund=false", "--audit=false"],
+    [
+      "install",
+      "--package-lock-only",
+      "--ignore-scripts",
+      "--fund=false",
+      "--audit=false",
+    ],
     { cwd: workspace, stdio: "inherit" },
   );
   if (install.status !== 0) {
