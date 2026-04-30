@@ -176,8 +176,8 @@ Test fixtures in `example/http/app/`.
 ## Release Process
 
 Open a PR titled `release: vX.Y.Z` that bumps `deno.json`. After that PR is
-merged into `main`, the release workflow verifies the merge came from a PR,
-runs the release checks, publishes to JSR via `deno publish`, then creates the
+merged into `main`, the release workflow verifies the merge came from a PR, runs
+the release checks, publishes to JSR via `deno publish`, then creates the
 `vX.Y.Z` tag and GitHub Release. Direct pushes to `main` do not publish.
 
 ## JSR Entrypoints

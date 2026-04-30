@@ -136,7 +136,8 @@ O processo de release do Ten.net:
    - Publica no JSR via `deno publish`
    - Cria a tag `vX.Y.Z`
    - Cria GitHub Release
-9. **MONITORE o run de release em `main`**: `gh run list --workflow Release --limit 1 --json status,conclusion,url`
+9. **MONITORE o run de release em `main`**:
+   `gh run list --workflow Release --limit 1 --json status,conclusion,url`
 10. Se o release falhar, reporte IMEDIATAMENTE ao team-lead com o link do run
 11. Nao crie/pushe tags manualmente
 12. Verifique que o JSR score esta OK (use o skill `/jsr-score` se disponivel)
