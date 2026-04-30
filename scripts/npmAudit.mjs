@@ -4,6 +4,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
+import process from "node:process";
 
 const denoConfig = JSON.parse(readFileSync(new URL("../deno.json", import.meta.url), "utf8"));
 const imports = Object.values(denoConfig.imports ?? {});

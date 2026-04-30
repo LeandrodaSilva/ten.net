@@ -2,16 +2,105 @@ name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
+    paths:
+      - deno.json
 
 permissions:
   contents: write
+  id-token: write
+  pull-requests: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  test:
-    name: Test
+  guard:
+    name: Guard release flow
     runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.version.outputs.current }}
+      previous_version: ${{ steps.version.outputs.previous }}
+      pr_number: ${{ steps.associated_pr.outputs.number }}
+      pr_title: ${{ steps.associated_pr.outputs.title }}
+      pr_url: ${{ steps.associated_pr.outputs.url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Resolve merged PR for commit
+        id: associated_pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner,
+              repo,
+              commit_sha: context.sha,
+            });
+
+            const mergedPull = pulls.find((pull) => pull.merged_at && pull.base.ref === "main");
+            if (!mergedPull) {
+              core.setFailed(
+                `Release flow requires a merged PR into main for ${context.sha}; direct pushes to main cannot publish.`,
+              );
+              return;
+            }
+
+            core.setOutput("number", String(mergedPull.number));
+            core.setOutput("title", mergedPull.title);
+            core.setOutput("url", mergedPull.html_url);
+
+      - name: Validate version bump and release PR title
+        id: version
+        env:
+          PR_TITLE: ${{ steps.associated_pr.outputs.title }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          CURRENT_VERSION=$(deno eval 'const meta = JSON.parse(Deno.readTextFileSync("deno.json")); console.log(meta.version)')
+          git show "$BEFORE_SHA:deno.json" > /tmp/previous-deno.json
+          PREVIOUS_VERSION=$(node -e 'const fs = require("node:fs"); const meta = JSON.parse(fs.readFileSync("/tmp/previous-deno.json", "utf8")); console.log(meta.version)')
+
+          echo "current=${CURRENT_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "previous=${PREVIOUS_VERSION}" >> "$GITHUB_OUTPUT"
+
+          if [ "$CURRENT_VERSION" = "$PREVIOUS_VERSION" ]; then
+            echo "::error::deno.json version must change on a release PR"
+            exit 1
+          fi
+
+          node -e '
+            const prev = process.argv[1].split(".").map(Number);
+            const curr = process.argv[2].split(".").map(Number);
+            const valid = prev.length === 3 && curr.length === 3 && curr.some((part, index) => part > prev[index] && curr.slice(0, index).every((value, idx) => value === prev[idx])) && curr.every(Number.isInteger);
+            if (!valid) {
+              console.error(`::error::Version must be a SemVer increment: ${process.argv[1]} -> ${process.argv[2]}`);
+              process.exit(1);
+            }
+          ' "$PREVIOUS_VERSION" "$CURRENT_VERSION"
+
+          EXPECTED_TITLE="release: v${CURRENT_VERSION}"
+          if [ "$PR_TITLE" != "$EXPECTED_TITLE" ]; then
+            echo "::error::Release PR title must be '$EXPECTED_TITLE'"
+            exit 1
+          fi
+
+  verify:
+    name: Verify release
+    runs-on: ubuntu-latest
+    needs: guard
+    timeout-minutes: 10
 
     steps:
       - name: Checkout code
@@ -22,42 +111,25 @@ jobs:
         with:
           deno-version: v2.x
 
-      - name: Verify version matches tag
-        env:
-          TAG_REF: ${{ github.ref }}
-        run: |
-          PACKAGE_VERSION=$(deno eval 'import meta from "./deno.json" with { type: "json" }; console.log(meta.version)')
-          TAG_VERSION="${TAG_REF#refs/tags/v}"
-          echo "Package version: ${PACKAGE_VERSION}"
-          echo "Tag version: ${TAG_VERSION}"
-          if [ "${PACKAGE_VERSION}" != "${TAG_VERSION}" ]; then
-            echo "::error::deno.json version (${PACKAGE_VERSION}) does not match tag (${TAG_VERSION})"
-            exit 1
-          fi
-
       - name: Verify formatting
         run: deno fmt --check
 
       - name: Run linter
-        run: deno lint --unstable-raw-imports
+        run: deno task lint
 
       - name: Cache dependencies
         run: deno cache --unstable-raw-imports src/mod.ts
 
       - name: Run tests
-        run: deno test --allow-all --unstable-raw-imports --unstable-kv
+        run: deno task test
 
       - name: Type check
-        run: deno check **/*.ts --unstable-raw-imports
+        run: deno task check
 
   publish:
     name: Publish to JSR
     runs-on: ubuntu-latest
-    needs: test
-
-    permissions:
-      contents: read
-      id-token: write
+    needs: [guard, verify]
 
     steps:
       - name: Checkout code
@@ -72,9 +144,9 @@ jobs:
         run: deno publish --unstable-raw-imports
 
   release:
-    name: Create Release
+    name: Create tag and GitHub release
     runs-on: ubuntu-latest
-    needs: [test, publish]
+    needs: [guard, publish]
 
     steps:
       - name: Checkout code
@@ -82,36 +154,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get version from tag
-        id: get_version
+      - name: Fetch tags
+        run: git fetch --tags --force
+
+      - name: Create and push tag
         env:
-          TAG_REF: ${{ github.ref }}
-        run: echo "VERSION=${TAG_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
-
-      - name: Generate changelog
-        id: changelog
+          VERSION: ${{ needs.guard.outputs.version }}
         run: |
-          if [ $(git tag --list | wc -l) -eq 1 ]; then
-            echo "CHANGELOG<<EOF" >> "$GITHUB_OUTPUT"
-            echo "## What's Changed" >> "$GITHUB_OUTPUT"
-            echo "" >> "$GITHUB_OUTPUT"
-            git log --pretty=format:"- %s" --no-merges >> "$GITHUB_OUTPUT"
-            echo "" >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
-          else
-            PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1)
-            echo "CHANGELOG<<EOF" >> "$GITHUB_OUTPUT"
-            echo "## What's Changed" >> "$GITHUB_OUTPUT"
-            echo "" >> "$GITHUB_OUTPUT"
-            git log --pretty=format:"- %s" --no-merges "$PREVIOUS_TAG"..HEAD >> "$GITHUB_OUTPUT"
-            echo "" >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
+          TAG="v${VERSION}"
+          if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "::error::Tag $TAG already exists"
+            exit 1
           fi
+          git tag "$TAG" "$GITHUB_SHA"
+          git push origin "$TAG"
 
-      - name: Create Release
+      - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          name: Release ${{ steps.get_version.outputs.VERSION }}
-          body: ${{ steps.changelog.outputs.CHANGELOG }}
-          draft: false
-          prerelease: false
+          tag_name: v${{ needs.guard.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: Release v${{ needs.guard.outputs.version }}
+          generate_release_notes: true
