@@ -1,12 +1,13 @@
 'use strict';
 
 const http = require('node:http');
+const {
+  buildHealthPayload,
+  createRequestHandler,
+  HEALTH_FLAG_NAME
+} = require('./server');
 
 const DEFAULT_PORT = Number(process.env.PORT || 3000);
-
-function nowIso() {
-  return new Date().toISOString();
-}
 
 function createMetricsStore() {
   return {
@@ -72,22 +73,18 @@ function buildPrometheusMetrics(metrics) {
 }
 
 function buildHealthResponse() {
-  const dependencies = {
-    database: process.env.DEPENDENCY_DATABASE_OK !== 'false' ? 'ok' : 'error',
-    queue: process.env.DEPENDENCY_QUEUE_OK !== 'false' ? 'ok' : 'error'
-  };
-
-  const hasFailure = Object.values(dependencies).some((state) => state !== 'ok');
+  const payload = buildHealthPayload({
+    APP_VERSION: process.env.APP_VERSION,
+    APP_COMMIT_SHA: process.env.APP_COMMIT || process.env.APP_COMMIT_SHA,
+    APP_DEPLOYED_AT: process.env.APP_DEPLOYED_AT,
+    DATABASE_HEALTH_STATUS: process.env.DEPENDENCY_DATABASE_OK === 'false' ? 'error' : 'ok',
+    QUEUE_HEALTH_STATUS: process.env.DEPENDENCY_QUEUE_OK === 'false' ? 'error' : 'ok'
+  });
+  const hasFailure = payload.status !== 'ok';
 
   return {
     httpStatus: hasFailure ? 503 : 200,
-    body: {
-      status: hasFailure ? 'degraded' : 'ok',
-      version: process.env.APP_VERSION || '0.1.0',
-      commit: process.env.APP_COMMIT || 'unknown',
-      deployedAt: process.env.APP_DEPLOYED_AT || nowIso(),
-      dependencies
-    }
+    body: payload
   };
 }
 
@@ -102,6 +99,15 @@ function stableErrorEnvelope(code, message) {
 
 function createApp() {
   const metrics = createMetricsStore();
+  const healthEnv = {
+    ...process.env,
+    APP_COMMIT_SHA: process.env.APP_COMMIT || process.env.APP_COMMIT_SHA,
+    DATABASE_HEALTH_STATUS: process.env.DEPENDENCY_DATABASE_OK === 'false' ? 'error' : 'ok',
+    QUEUE_HEALTH_STATUS: process.env.DEPENDENCY_QUEUE_OK === 'false' ? 'error' : 'ok'
+  };
+  const baseRequestHandler = createRequestHandler({
+    ...healthEnv
+  });
 
   const server = http.createServer((req, res) => {
     if (req.url === '/metrics') {
@@ -110,27 +116,16 @@ function createApp() {
       return;
     }
 
-    if (req.url !== '/v1/health' || req.method !== 'GET') {
-      res.writeHead(404, { 'content-type': 'application/json' });
-      res.end(JSON.stringify(stableErrorEnvelope('not_found', 'resource not found')));
-      return;
+    if (req.url === '/v1/health' && req.method === 'GET') {
+      const start = process.hrtime.bigint();
+      const health = buildHealthResponse();
+      const elapsedMs = Number((process.hrtime.bigint() - start) / 1000000n);
+
+      recordRequestMetrics(metrics, health.httpStatus, elapsedMs);
+      recordDependencyFailures(metrics, health.body.dependencies);
     }
 
-    if (process.env.HEALTH_ENDPOINT_V1_ENABLED === 'false') {
-      res.writeHead(404, { 'content-type': 'application/json' });
-      res.end(JSON.stringify(stableErrorEnvelope('feature_disabled', 'health endpoint disabled')));
-      return;
-    }
-
-    const start = process.hrtime.bigint();
-    const health = buildHealthResponse();
-    const elapsedMs = Number((process.hrtime.bigint() - start) / 1000000n);
-
-    recordRequestMetrics(metrics, health.httpStatus, elapsedMs);
-    recordDependencyFailures(metrics, health.body.dependencies);
-
-    res.writeHead(health.httpStatus, { 'content-type': 'application/json' });
-    res.end(JSON.stringify(health.body));
+    baseRequestHandler(req, res);
   });
 
   return { server, metrics };

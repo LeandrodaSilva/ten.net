@@ -10,6 +10,7 @@ process.env.DEPENDENCY_QUEUE_OK = 'true';
 process.env.APP_VERSION = '1.2.3';
 process.env.APP_COMMIT = 'abc123';
 process.env.APP_DEPLOYED_AT = '2026-04-30T00:00:00.000Z';
+process.env.health_endpoint_v1_enabled = 'true';
 
 const { createApp, percentile } = require('../src/index');
 
@@ -71,6 +72,7 @@ test('degraded dependencies produce 503 and dependency failure metric', async ()
     assert.equal(health.statusCode, 503);
     const payload = JSON.parse(health.body);
     assert.equal(payload.status, 'degraded');
+    assert.equal(payload.version, '1.2.3');
     assert.deepEqual(payload.dependencies, { database: 'ok', queue: 'error' });
 
     const metrics = await request(server, '/metrics');
@@ -78,6 +80,27 @@ test('degraded dependencies produce 503 and dependency failure metric', async ()
     assert.match(metrics.body, /health_dependency_failure_total\{dependency="queue"\} 1/);
   } finally {
     process.env.DEPENDENCY_QUEUE_OK = 'true';
+    server.close();
+  }
+});
+
+test('disabled feature flag returns stable not_found envelope', async () => {
+  process.env.health_endpoint_v1_enabled = 'false';
+  const { server } = createApp();
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+
+  try {
+    const health = await request(server, '/v1/health');
+    assert.equal(health.statusCode, 404);
+    const payload = JSON.parse(health.body);
+    assert.deepEqual(payload, {
+      error: {
+        code: 'feature_disabled',
+        message: 'health endpoint disabled'
+      }
+    });
+  } finally {
+    process.env.health_endpoint_v1_enabled = 'true';
     server.close();
   }
 });
