@@ -97,6 +97,34 @@ test('contract: /v1/health healthy response shape is stable', async () => {
   );
 });
 
+test('contract: /api/v1/health aliases the stable v1 contract', async () => {
+  await withEnv(
+    {
+      HEALTH_ENDPOINT_V1_ENABLED: 'true',
+      health_endpoint_v1_enabled: 'true',
+      DEPENDENCY_DATABASE_OK: 'true',
+      DEPENDENCY_QUEUE_OK: 'true',
+      APP_VERSION: '2.0.0',
+      APP_COMMIT: 'def456',
+      APP_DEPLOYED_AT: '2026-04-30T00:00:00.000Z'
+    },
+    async () => {
+      const { server } = createApp();
+      await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+      try {
+        const [rootRes, apiRes] = await Promise.all([
+          request(server, '/v1/health'),
+          request(server, '/api/v1/health')
+        ]);
+        assert.equal(apiRes.statusCode, rootRes.statusCode);
+        assert.deepEqual(JSON.parse(apiRes.body), JSON.parse(rootRes.body));
+      } finally {
+        server.close();
+      }
+    }
+  );
+});
+
 test('contract: /v1/health degraded maps to 503 and stable payload', async () => {
   await withEnv(
     {
@@ -181,6 +209,30 @@ test('contract: /metrics exposes expected metric families', async () => {
       assert.match(metricsRes.body, /health_endpoint_p50_latency_ms/);
       assert.match(metricsRes.body, /health_endpoint_p95_latency_ms/);
       assert.match(metricsRes.body, /health_dependency_failure_total/);
+    } finally {
+      server.close();
+    }
+  });
+});
+
+test('contract: /api/metrics aliases the stable metrics export', async () => {
+  await withEnv({ HEALTH_ENDPOINT_V1_ENABLED: 'true', health_endpoint_v1_enabled: 'true' }, async () => {
+    const { server } = createApp();
+    await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+
+    try {
+      await request(server, '/api/v1/health');
+      const [rootMetricsRes, apiMetricsRes] = await Promise.all([
+        request(server, '/metrics'),
+        request(server, '/api/metrics')
+      ]);
+
+      assert.equal(apiMetricsRes.statusCode, 200);
+      assert.equal(
+        apiMetricsRes.headers['content-type'],
+        'text/plain; version=0.0.4; charset=utf-8'
+      );
+      assert.equal(apiMetricsRes.body, rootMetricsRes.body);
     } finally {
       server.close();
     }

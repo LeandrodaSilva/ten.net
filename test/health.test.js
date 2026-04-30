@@ -44,16 +44,21 @@ test('health endpoint returns v1 response and metrics reflect status', async () 
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 
   try {
-    const health = await request(server, '/v1/health');
+    const health = await request(server, '/api/v1/health');
     assert.equal(health.statusCode, 200);
     const payload = JSON.parse(health.body);
     assert.equal(payload.status, 'ok');
     assert.equal(payload.version, '1.2.3');
     assert.equal(payload.commit, 'abc123');
     assert.equal(payload.deployedAt, '2026-04-30T00:00:00.000Z');
+    assert.deepEqual(payload.build, {
+      version: '1.2.3',
+      commit: 'abc123',
+      deployedAt: '2026-04-30T00:00:00.000Z'
+    });
     assert.deepEqual(payload.dependencies, { database: 'ok', queue: 'ok' });
 
-    const metrics = await request(server, '/metrics');
+    const metrics = await request(server, '/api/metrics');
     assert.equal(metrics.statusCode, 200);
     assert.match(metrics.body, /health_endpoint_requests_total 1/);
     assert.match(metrics.body, /health_endpoint_request_status_total\{status_code="200"\} 1/);
@@ -68,14 +73,15 @@ test('degraded dependencies produce 503 and dependency failure metric', async ()
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 
   try {
-    const health = await request(server, '/v1/health');
+    const health = await request(server, '/api/v1/health');
     assert.equal(health.statusCode, 503);
     const payload = JSON.parse(health.body);
     assert.equal(payload.status, 'degraded');
     assert.equal(payload.version, '1.2.3');
+    assert.equal(payload.build.version, '1.2.3');
     assert.deepEqual(payload.dependencies, { database: 'ok', queue: 'error' });
 
-    const metrics = await request(server, '/metrics');
+    const metrics = await request(server, '/api/metrics');
     assert.match(metrics.body, /health_endpoint_request_status_total\{status_code="503"\} 1/);
     assert.match(metrics.body, /health_dependency_failure_total\{dependency="queue"\} 1/);
   } finally {
@@ -91,7 +97,7 @@ test('disabled feature flag returns stable not_found envelope', async () => {
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 
   try {
-    const health = await request(server, '/v1/health');
+    const health = await request(server, '/api/v1/health');
     assert.equal(health.statusCode, 404);
     const payload = JSON.parse(health.body);
     assert.deepEqual(payload, {
@@ -103,6 +109,29 @@ test('disabled feature flag returns stable not_found envelope', async () => {
   } finally {
     process.env.health_endpoint_v1_enabled = 'true';
     process.env.HEALTH_ENDPOINT_V1_ENABLED = 'true';
+    server.close();
+  }
+});
+
+test('root and /api telemetry routes stay equivalent', async () => {
+  const { server } = createApp();
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+
+  try {
+    const [rootHealth, apiHealth] = await Promise.all([
+      request(server, '/v1/health'),
+      request(server, '/api/v1/health')
+    ]);
+    assert.equal(apiHealth.statusCode, rootHealth.statusCode);
+    assert.deepEqual(JSON.parse(apiHealth.body), JSON.parse(rootHealth.body));
+
+    const [rootMetrics, apiMetrics] = await Promise.all([
+      request(server, '/metrics'),
+      request(server, '/api/metrics')
+    ]);
+    assert.equal(apiMetrics.statusCode, rootMetrics.statusCode);
+    assert.equal(apiMetrics.body, rootMetrics.body);
+  } finally {
     server.close();
   }
 });

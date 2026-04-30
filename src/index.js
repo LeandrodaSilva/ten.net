@@ -4,10 +4,11 @@ const http = require('node:http');
 const {
   buildHealthPayload,
   createRequestHandler,
-  HEALTH_FLAG_NAME
+  isVersionedHealthRoute
 } = require('./server');
 
 const DEFAULT_PORT = Number(process.env.PORT || 3000);
+const METRICS_ROUTE_PATHS = new Set(['/metrics', '/api/metrics']);
 
 function createMetricsStore() {
   return {
@@ -72,14 +73,17 @@ function buildPrometheusMetrics(metrics) {
   return `${lines.join('\n')}\n`;
 }
 
+function getHealthEnv(env = process.env) {
+  return {
+    ...env,
+    APP_COMMIT_SHA: env.APP_COMMIT || env.APP_COMMIT_SHA,
+    DATABASE_HEALTH_STATUS: env.DEPENDENCY_DATABASE_OK === 'false' ? 'error' : 'ok',
+    QUEUE_HEALTH_STATUS: env.DEPENDENCY_QUEUE_OK === 'false' ? 'error' : 'ok'
+  };
+}
+
 function buildHealthResponse() {
-  const payload = buildHealthPayload({
-    APP_VERSION: process.env.APP_VERSION,
-    APP_COMMIT_SHA: process.env.APP_COMMIT || process.env.APP_COMMIT_SHA,
-    APP_DEPLOYED_AT: process.env.APP_DEPLOYED_AT,
-    DATABASE_HEALTH_STATUS: process.env.DEPENDENCY_DATABASE_OK === 'false' ? 'error' : 'ok',
-    QUEUE_HEALTH_STATUS: process.env.DEPENDENCY_QUEUE_OK === 'false' ? 'error' : 'ok'
-  });
+  const payload = buildHealthPayload(getHealthEnv());
   const hasFailure = payload.status !== 'ok';
 
   return {
@@ -88,35 +92,18 @@ function buildHealthResponse() {
   };
 }
 
-function stableErrorEnvelope(code, message) {
-  return {
-    error: {
-      code,
-      message
-    }
-  };
-}
-
 function createApp() {
   const metrics = createMetricsStore();
-  const healthEnv = {
-    ...process.env,
-    APP_COMMIT_SHA: process.env.APP_COMMIT || process.env.APP_COMMIT_SHA,
-    DATABASE_HEALTH_STATUS: process.env.DEPENDENCY_DATABASE_OK === 'false' ? 'error' : 'ok',
-    QUEUE_HEALTH_STATUS: process.env.DEPENDENCY_QUEUE_OK === 'false' ? 'error' : 'ok'
-  };
-  const baseRequestHandler = createRequestHandler({
-    ...healthEnv
-  });
+  const baseRequestHandler = createRequestHandler(getHealthEnv());
 
   const server = http.createServer((req, res) => {
-    if (req.url === '/metrics') {
+    if (req.method === 'GET' && METRICS_ROUTE_PATHS.has(req.url)) {
       res.writeHead(200, { 'content-type': 'text/plain; version=0.0.4; charset=utf-8' });
       res.end(buildPrometheusMetrics(metrics));
       return;
     }
 
-    if (req.url === '/v1/health' && req.method === 'GET') {
+    if (isVersionedHealthRoute(req)) {
       const start = process.hrtime.bigint();
       const health = buildHealthResponse();
       const elapsedMs = Number((process.hrtime.bigint() - start) / 1000000n);
@@ -148,6 +135,5 @@ module.exports = {
   buildPrometheusMetrics,
   createApp,
   percentile,
-  stableErrorEnvelope,
   startServer
 };

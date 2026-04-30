@@ -6,6 +6,10 @@ This contract defines the stable API surface for Deliverable 2 core endpoints.
 ## Endpoint: `GET /v1/health`
 Purpose: publish service health for platform readiness checks.
 
+Production routing note:
+- The runtime MUST serve this contract on both `/v1/health` and `/api/v1/health`.
+- `/api/v1/health` is the canonical public production path when the app is mounted behind the site-wide `/api` backend route.
+
 ### Feature Flag
 - Flags: `health_endpoint_v1_enabled` (runtime) and `HEALTH_ENDPOINT_V1_ENABLED` (compatibility)
 - If flag is set to `false`, this endpoint is disabled.
@@ -60,7 +64,7 @@ Purpose: export health endpoint runtime metrics in Prometheus text format.
 
 ### Request
 - Method: `GET`
-- Path: `/metrics`
+- Paths: `/metrics` and `/api/metrics`
 
 ### Response
 - Status: `200 OK`
