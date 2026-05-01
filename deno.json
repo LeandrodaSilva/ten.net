@@ -27,6 +27,7 @@
     "playground:build": "deno run --allow-all playground/build.ts",
     "playground:serve": "deno run --allow-all playground/serve.ts",
     "site:serve": "deno run --allow-all --unstable-raw-imports www/main.ts",
+    "run-example-todo": "deno run --allow-all --unstable-raw-imports example/todo-app/index.ts",
     "embed-tailwind": "deno run --allow-read --allow-write --allow-env scripts/embedTailwindCss.ts",
     "check:embed-fresh": "deno task embed-tailwind && git diff --exit-code src/tailwind/_tailwindIndexCss.ts"
   },
