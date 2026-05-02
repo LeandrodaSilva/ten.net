@@ -1,4 +1,15 @@
-const todoStore = (globalThis as any).__tennetTodoStore ??= {
+type TodoItem = {
+  id: number;
+  text: string;
+  done: boolean;
+};
+
+const todoStore = ((globalThis as unknown) as {
+  __tennetTodoStore: {
+    todos: Array<TodoItem>;
+    nextId: number;
+  };
+}).__tennetTodoStore ??= {
   todos: [
     { id: 1, text: "Review Ten.net routing", done: true },
     { id: 2, text: "Build a small TODO example", done: false },
@@ -8,7 +19,7 @@ const todoStore = (globalThis as any).__tennetTodoStore ??= {
 };
 
 function deleteTodo(id: number) {
-  const index = todoStore.todos.findIndex((item: { id: number }) =>
+  const index = todoStore.todos.findIndex((item: TodoItem) =>
     item.id === id
   );
   if (index !== -1) {
@@ -16,10 +27,10 @@ function deleteTodo(id: number) {
   }
 }
 
-export async function POST(
+export function POST(
   _req: Request,
   ctx: { params: Record<string, string> },
-): Promise<Response> {
+): Response {
   const id = Number(ctx.params.id);
   deleteTodo(id);
 

@@ -1,16 +1,21 @@
-const todoStore = (globalThis as any).__tennetTodoStore ??= {
+type TodoItem = {
+  id: number;
+  text: string;
+  done: boolean;
+};
+
+const todoStore = ((globalThis as unknown) as {
+  __tennetTodoStore: {
+    todos: Array<TodoItem>;
+    nextId: number;
+  };
+}).__tennetTodoStore ??= {
   todos: [
     { id: 1, text: "Review Ten.net routing", done: true },
     { id: 2, text: "Build a small TODO example", done: false },
     { id: 3, text: "Share the package on JSR", done: false },
   ],
   nextId: 4,
-};
-
-type TodoItem = {
-  id: number;
-  text: string;
-  done: boolean;
 };
 
 function addTodo(text: string) {

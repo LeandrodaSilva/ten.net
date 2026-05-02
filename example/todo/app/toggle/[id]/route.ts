@@ -1,4 +1,15 @@
-const todoStore = (globalThis as any).__tennetTodoStore ??= {
+type TodoItem = {
+  id: number;
+  text: string;
+  done: boolean;
+};
+
+const todoStore = ((globalThis as unknown) as {
+  __tennetTodoStore: {
+    todos: Array<TodoItem>;
+    nextId: number;
+  };
+}).__tennetTodoStore ??= {
   todos: [
     { id: 1, text: "Review Ten.net routing", done: true },
     { id: 2, text: "Build a small TODO example", done: false },
@@ -8,16 +19,16 @@ const todoStore = (globalThis as any).__tennetTodoStore ??= {
 };
 
 function toggleTodo(id: number) {
-  const todo = todoStore.todos.find((item: { id: number }) => item.id === id);
+  const todo = todoStore.todos.find((item: TodoItem) => item.id === id);
   if (todo) {
     todo.done = !todo.done;
   }
 }
 
-export async function POST(
+export function POST(
   _req: Request,
   ctx: { params: Record<string, string> },
-): Promise<Response> {
+): Response {
   const id = Number(ctx.params.id);
   toggleTodo(id);
 
