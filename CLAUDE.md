@@ -100,6 +100,9 @@ example/
     main.ts                   # Example HTTP server entry point
     app/                      # Example file-based routes (also test fixtures)
   sw/                         # Example Service Worker app
+  todo/                       # Example TODO application
+    main.ts                   # Entry point
+    app/                      # TODO app routes
 ```
 
 ## Architecture
