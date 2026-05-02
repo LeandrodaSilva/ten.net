@@ -6,7 +6,7 @@ bootstrap:
 	./scripts/bootstrap.sh
 
 check: shellcheck
-	@echo "All checks passed."
+	@./scripts/check.sh
 
 hiring-metrics:
 	@scripts/weekly-hiring-metrics.sh data/hiring/candidate-funnel.csv

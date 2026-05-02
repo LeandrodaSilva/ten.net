@@ -12,7 +12,7 @@ Provide a consistent starting point for new contributors with:
 ## Quick Start
 ```bash
 ./scripts/bootstrap.sh
-make check
+./scripts/check.sh
 npm start
 make hiring-metrics
 make outbound-metrics
@@ -21,11 +21,13 @@ make outbound-metrics
 ## Structure
 - `.github/workflows/ci.yml`: baseline CI workflow
 - `docs/onboarding/checklist.md`: onboarding execution checklist
+- `docs/onboarding/first-week-agenda.md`: first-week onboarding agenda
 - `docs/hiring/candidate-funnel-tracker.md`: hiring funnel tracker and weekly rollup process
 - `docs/hiring/outbound-wave1-tracker.md`: sourcing + outbound wave tracker and rollup process
 - `CONTRIBUTING.md`: contribution workflow and quality gates
 - `Makefile`: common local commands
 - `scripts/bootstrap.sh`: local setup script
+- `scripts/check.sh`: direct local validation entrypoint
 - `scripts/weekly-hiring-metrics.sh`: weekly hiring metrics rollup
 - `scripts/weekly-outbound-metrics.sh`: weekly outbound wave metrics rollup
 - `package.json`: runtime manifest for local app execution
@@ -33,5 +35,5 @@ make outbound-metrics
 
 ## Acceptance Criteria
 - Scaffold files exist and are internally consistent.
-- Bootstrap and check commands are documented and executable.
+- Bootstrap and check commands are documented and executable without requiring `make`.
 - CI workflow can run basic linting and shell checks.
