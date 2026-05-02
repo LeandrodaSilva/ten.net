@@ -1,0 +1,13 @@
+{
+  "name": "lep7-onboarding-scaffold",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Baseline onboarding scaffold runtime",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test --test-concurrency=1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

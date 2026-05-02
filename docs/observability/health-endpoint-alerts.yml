@@ -1,0 +1,27 @@
+groups:
+  - name: health-endpoint-v1
+    rules:
+      - alert: HealthEndpointHigh5xxRate
+        expr: |
+          (
+            sum(rate(health_endpoint_request_status_total{status_code=~"5.."}[10m]))
+            /
+            clamp_min(sum(rate(health_endpoint_requests_total[10m])), 1)
+          ) > 0.01
+        for: 10m
+        labels:
+          severity: page
+          service: lep-api
+        annotations:
+          summary: "Health endpoint 5xx rate above 1% for 10 minutes"
+          description: "GET /v1/health is returning elevated 5xx responses. Investigate dependencies and rollback via health_endpoint_v1_enabled if needed."
+
+      - alert: HealthEndpointHighP95Latency
+        expr: health_endpoint_p95_latency_ms > 250
+        for: 10m
+        labels:
+          severity: ticket
+          service: lep-api
+        annotations:
+          summary: "Health endpoint p95 latency above 250ms for 10 minutes"
+          description: "GET /v1/health latency is above target. Check downstream dependency checks and runtime saturation."
