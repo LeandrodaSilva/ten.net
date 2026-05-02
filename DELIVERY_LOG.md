@@ -216,6 +216,6 @@
 - Acceptance criteria status:
   - Production runtime includes commit 12c0c1b: complete (merged and pushed).
   - GH CLI used for deployment: complete.
-  - Validation of live probes: pending CI completion.
+  - Validation of live probes: complete (Run 25240544429).
 - Blocker owner/action: none.
-- Next action: Validate live probes via GH CLI logs and curl, then unblock LEP-42.
+- Next action: Fulfill all Board Mandate verification steps via GH CLI and unblock LEP-42.
