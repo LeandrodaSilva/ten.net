@@ -1,0 +1,13 @@
+metric,value
+funnel_rows,10
+unique_candidates,4
+hired_candidates,1
+rejected_candidates,3
+entered_stage_applied,4
+entered_stage_screen,3
+entered_stage_offer,1
+entered_stage_onsite,2
+exited_stage_applied,4
+exited_stage_screen,3
+exited_stage_offer,1
+exited_stage_onsite,2

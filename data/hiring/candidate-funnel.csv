@@ -1,0 +1,11 @@
+candidate_id,role,recruiter,stage,status,stage_entered_at,stage_exited_at,source
+cand-001,Founding Product Engineer,Ana,applied,active,2026-04-01,2026-04-03,referral
+cand-001,Founding Product Engineer,Ana,screen,active,2026-04-03,2026-04-08,referral
+cand-001,Founding Product Engineer,Ana,onsite,rejected,2026-04-08,2026-04-10,referral
+cand-002,Senior Backend Engineer,Jay,applied,active,2026-04-02,2026-04-04,inbound
+cand-002,Senior Backend Engineer,Jay,screen,active,2026-04-04,2026-04-12,inbound
+cand-002,Senior Backend Engineer,Jay,onsite,active,2026-04-12,2026-04-19,inbound
+cand-002,Senior Backend Engineer,Jay,offer,hired,2026-04-19,2026-04-23,inbound
+cand-003,Founding Product Engineer,Ana,applied,rejected,2026-04-05,2026-04-07,outbound
+cand-004,Designer,Rio,applied,active,2026-04-09,2026-04-11,referral
+cand-004,Designer,Rio,screen,rejected,2026-04-11,2026-04-13,referral

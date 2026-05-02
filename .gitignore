@@ -1,10 +1,6 @@
-.idea
 .DS_Store
-.vscode
-.playwright-mcp
-.run
-dist
-coverage
-cov_profile
-.claude/worktrees/
-.superpowers/
+*.log
+node_modules/
+.env
+.env.*
+.vscode/settings.local.json
