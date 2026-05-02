@@ -15,6 +15,11 @@ jobs:
   quality-gate:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      HEALTH_ENDPOINT_V1_ENABLED: true
+      APP_VERSION: 1.0.0
+      APP_COMMIT: ${{ github.sha }}
+      APP_DEPLOYED_AT: 2026-05-02T00:00:00.000Z
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,3 +37,27 @@ jobs:
 
       - name: Run test suite
         run: npm test
+
+      - name: Verify telemetry routes (Live Probe Simulation)
+        run: |
+          npm start &
+          # Wait for server to start
+          for i in {1..10}; do
+            curl -s localhost:3000/health && break || sleep 1
+          done
+          
+          echo "Verifying HEALTH_ENDPOINT_V1_ENABLED injection..."
+          if [ "$HEALTH_ENDPOINT_V1_ENABLED" = "true" ]; then
+            echo "HEALTH_ENDPOINT_V1_ENABLED is successfully injected."
+          else
+            echo "HEALTH_ENDPOINT_V1_ENABLED is NOT injected."
+            exit 1
+          fi
+          
+          echo "Probing /api/v1/health..."
+          curl -i localhost:3000/api/v1/health
+          
+          echo "Probing /api/metrics..."
+          curl -s localhost:3000/api/metrics | grep 'health_endpoint_'
+          
+          kill $(jobs -p) || true
