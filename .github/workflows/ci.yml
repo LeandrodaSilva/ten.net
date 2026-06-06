@@ -2,62 +2,83 @@ name: CI
 
 on:
   pull_request:
+    branches: [main]
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [main, develop]
+
+permissions:
+  contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  quality-gate:
+  fmt:
+    name: Format
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      HEALTH_ENDPOINT_V1_ENABLED: true
-      APP_VERSION: 1.0.0
-      APP_COMMIT: ${{ github.sha }}
-      APP_DEPLOYED_AT: 2026-05-02T00:00:00.000Z
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
         with:
-          node-version: 20
+          deno-version: v2.x
 
-      - name: Validate shell scripts and lint checks
+      - name: Verify formatting
+        run: deno fmt --check
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Run linter
+        run: deno task lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: [fmt, lint]
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Cache dependencies
+        run: deno cache --unstable-raw-imports src/mod.ts
+
+      - name: Run tests with coverage
+        run: deno task coverage
+
+      - name: Generate coverage report
+        run: deno coverage coverage --lcov --output=coverage/lcov.info
+
+      - name: Check coverage threshold (90%)
         run: |
-          chmod +x scripts/*.sh
-          ./scripts/bootstrap.sh
-          make check
-
-      - name: Run test suite
-        run: npm test
-
-      - name: Verify telemetry routes (Live Probe Simulation)
-        run: |
-          npm start &
-          # Wait for server to start
-          for i in {1..10}; do
-            curl -s localhost:3000/health && break || sleep 1
-          done
-          
-          echo "Verifying HEALTH_ENDPOINT_V1_ENABLED injection..."
-          if [ "$HEALTH_ENDPOINT_V1_ENABLED" = "true" ]; then
-            echo "HEALTH_ENDPOINT_V1_ENABLED is successfully injected."
-          else
-            echo "HEALTH_ENDPOINT_V1_ENABLED is NOT injected."
+          LINE_COV=$(deno coverage coverage 2>&1 | grep "All files" | awk '{print $NF}' | tr -d '%')
+          echo "Line coverage: ${LINE_COV}%"
+          if [ "$(echo "$LINE_COV" | awk '{print ($1 < 90)}')" -eq 1 ]; then
+            echo "::error::Line coverage ${LINE_COV}% is below 90% threshold"
             exit 1
           fi
-          
-          echo "Probing /api/v1/health..."
-          curl -i localhost:3000/api/v1/health
-          
-          echo "Probing /api/metrics..."
-          curl -s localhost:3000/api/metrics | grep 'health_endpoint_'
-          
-          kill $(jobs -p) || true
+          echo "Coverage check passed"
+
+      - name: Type check
+        run: deno task check
