@@ -1,13 +1,18 @@
 # Coverage Plan
 
-The CI coverage gate enforces a **line-coverage floor** (currently `77%`, set
-via `MIN_COVERAGE` in `.github/workflows/ci.yml`). The long-term **goal is
-90%**. This document tracks the gap and the path there.
+The CI coverage gate enforces a **line-coverage floor** (currently `90%`, set
+via `MIN_COVERAGE` in `.github/workflows/ci.yml`). The **90% goal has been
+reached** (line coverage ≈ 90.7%); this document records how it was done and the
+policy for keeping it there.
 
 > **Background:** the gate previously parsed `deno coverage` output incorrectly
 > (it read the trailing `|` of the table instead of the Line % column), so the
-> threshold check always passed regardless of real coverage. The parser is now
-> fixed and the floor reflects the real, enforced number.
+> threshold check always passed regardless of real coverage. The parser was
+> fixed (the floor now reflects the real number), and coverage was then raised
+> from ~77% to ≥90% by adding focused unit tests for the previously
+> under-covered modules (Permission, Plugin, BlogRouteRegistry, the i18n engine,
+> sitemap/SEO, the view-shell + i18n branches, dynamic-page rendering, the build
+> code generators, the CLI, the Node adapter, and the collector).
 
 ## How to measure locally
 
@@ -19,10 +24,9 @@ deno coverage coverage --lcov --output=coverage/lcov.info  # for tooling
 
 ## Ratchet policy
 
-`MIN_COVERAGE` is a one-way ratchet: it may only ever increase. When a change
-raises overall line coverage, bump the floor in the same PR. Suggested steps:
-
-`77 → 80 → 85 → 90`
+`MIN_COVERAGE` is a one-way ratchet: it may only ever increase, never decrease.
+The floor is now `90`. New code must ship with tests that keep line coverage at
+or above the floor; raise the floor further only when coverage durably climbs.
 
 ## Current gaps (lowest line coverage first)
 

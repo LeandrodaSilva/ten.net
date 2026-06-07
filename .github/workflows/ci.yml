@@ -71,11 +71,10 @@ jobs:
         run: deno coverage coverage --lcov --output=coverage/lcov.info
 
       - name: Check coverage threshold
-        # Enforced floor (ratchet). The long-term goal is 90% — see
-        # docs/coverage-plan.md for the path there. Raise MIN_COVERAGE as
-        # coverage improves; it must never go down.
+        # Enforced floor (ratchet). Raise MIN_COVERAGE as coverage improves;
+        # it must never go down. See docs/coverage-plan.md.
         env:
-          MIN_COVERAGE: "77"
+          MIN_COVERAGE: "90"
         run: |
           LINE_COV=$(deno coverage coverage 2>&1 \
             | sed -E 's/\x1b\[[0-9;]*m//g' \
