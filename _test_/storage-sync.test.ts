@@ -195,4 +195,51 @@ describe("StorageSync", () => {
     const item = await storage.get("1");
     assertEquals(item!.name, "still works");
   });
+
+  it("pull() lança erro quando a resposta não é ok", async () => {
+    mockFetch({}, false);
+    const sync = new StorageSync(storage, {
+      serverUrl: "https://example.com",
+      endpoint: "/api/sync",
+    });
+    let message = "";
+    try {
+      await sync.pull();
+    } catch (e) {
+      message = e instanceof Error ? e.message : String(e);
+    }
+    assertEquals(message.includes("Sync failed: 500"), true);
+  });
+
+  it("start() é idempotente e lastSync reflete o último pull", async () => {
+    let pullCount = 0;
+    globalThis.fetch = (() => {
+      pullCount++;
+      return Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve({ items: [], deleted: [], timestamp: 4242 }),
+      });
+    }) as unknown as typeof fetch;
+
+    const time = new FakeTime();
+    try {
+      const sync = new StorageSync(storage, {
+        serverUrl: "https://example.com",
+        endpoint: "/api/sync",
+        interval: 1000,
+      });
+      assertEquals(sync.lastSync, 0);
+
+      sync.start();
+      // A second start() must be a no-op (timer already running).
+      sync.start();
+      await time.runMicrotasks();
+
+      assertEquals(sync.lastSync, 4242);
+      sync.stop();
+    } finally {
+      time.restore();
+    }
+  });
 });

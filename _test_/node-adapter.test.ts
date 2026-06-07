@@ -97,6 +97,20 @@ describe("Node adapter — toWebRequest", () => {
     assertEquals(web.method, "POST");
     assertEquals(await web.text(), "payload");
   });
+
+  it("skips undefined header values and appends array-valued headers", () => {
+    const req = mockReq("GET", "/h", {
+      host: "h",
+      "x-undef": undefined,
+      "x-arr": ["a", "b"],
+      "x-str": "s",
+    });
+    const web = toWebRequest(req);
+    assertEquals(web.headers.get("x-undef"), null);
+    assertEquals(web.headers.get("x-str"), "s");
+    // Array values are appended into a combined header.
+    assertEquals(web.headers.get("x-arr"), "a, b");
+  });
 });
 
 describe("Node adapter — sendWebResponse", () => {

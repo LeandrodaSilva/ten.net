@@ -74,7 +74,7 @@ jobs:
         # Enforced floor (ratchet). Raise MIN_COVERAGE as coverage improves;
         # it must never go down. See docs/coverage-plan.md.
         env:
-          MIN_COVERAGE: "90"
+          MIN_COVERAGE: "95"
         run: |
           LINE_COV=$(deno coverage coverage 2>&1 \
             | sed -E 's/\x1b\[[0-9;]*m//g' \

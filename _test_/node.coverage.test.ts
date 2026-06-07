@@ -111,6 +111,8 @@ describe("Node serve — graceful shutdown", () => {
 
       // Fire SIGINT → server.close() → runShutdownHooks().
       handlers.get("SIGINT")!();
+      // A second signal must be ignored (already shutting down).
+      handlers.get("SIGINT")!();
       await new Promise((r) => setTimeout(r, 80));
       assertEquals(hookRan, true);
     } finally {
