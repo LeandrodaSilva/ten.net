@@ -1,9 +1,18 @@
 # Coverage Plan
 
-The CI coverage gate enforces a **line-coverage floor** (currently `90%`, set
-via `MIN_COVERAGE` in `.github/workflows/ci.yml`). The **90% goal has been
-reached** (line coverage ≈ 90.7%); this document records how it was done and the
+The CI coverage gate enforces a **line-coverage floor** (currently `95%`, set
+via `MIN_COVERAGE` in `.github/workflows/ci.yml`). The **95% goal has been
+reached** (line coverage ≈ 95.1%); this document records how it was done and the
 policy for keeping it there.
+
+> **Update:** the floor was ratcheted from 90% to **95%**. The remaining
+> uncovered code is concentrated in the binary/Service-Worker build pipeline
+> (`src/build/build.ts`) and the Tailwind generator's environment-specific
+> fallbacks (`src/tailwind/generator.ts`), which require `deno compile` /
+> esbuild self-bundling that cannot run in the test sandbox, plus a handful of
+> defensive `catch` clauses. Everything else is exercised, including the
+> live-server start path, the Node adapter, i18n selectors, custom renderers,
+> and the build bundle-warning path.
 
 > **Background:** the gate previously parsed `deno coverage` output incorrectly
 > (it read the trailing `|` of the table instead of the Line % column), so the

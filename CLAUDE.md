@@ -35,7 +35,7 @@ Delivered:
 - ✅ **Extensibility** — lifecycle hooks
   (`onRequest`/`onResponse`/`onShutdown`), event bus for plugin communication
 - ✅ **Node.js support** — run the same app on Node.js via `@leproj/tennet/node`
-- ✅ **Coverage** — enforced line-coverage floor at 90% (see
+- ✅ **Coverage** — enforced line-coverage floor at 95% (see
   `docs/coverage-plan.md`)
 
 Remaining:
