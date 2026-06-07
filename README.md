@@ -3,7 +3,7 @@
 [![CI](https://github.com/LeandrodaSilva/ten.net/actions/workflows/ci.yml/badge.svg)](https://github.com/LeandrodaSilva/ten.net/actions/workflows/ci.yml)
 [![JSR](https://jsr.io/badges/@leproj/tennet)](https://jsr.io/@leproj/tennet)
 [![JSR Score](https://jsr.io/badges/@leproj/tennet/score)](https://jsr.io/@leproj/tennet)
-[![Coverage](https://img.shields.io/badge/coverage-%E2%89%A577%25-yellow)](docs/coverage-plan.md)
+[![Coverage](https://img.shields.io/badge/coverage-%E2%89%A590%25-brightgreen)](docs/coverage-plan.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A minimalist, extensible web microframework for TypeScript runtimes.
