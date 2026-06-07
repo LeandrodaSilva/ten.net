@@ -63,7 +63,7 @@ type StepStatus = "success" | "warning" | "failure";
 interface ActiveStep {
   index: number;
   name: string;
-  timer?: number;
+  timer?: ReturnType<typeof setInterval>;
   frameIndex: number;
 }
 

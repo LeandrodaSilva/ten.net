@@ -11,6 +11,7 @@ import type {
   DynamicPageRenderer,
   DynamicRouteLike,
   DynamicRouteRegistryLike,
+  ErrorHandler,
   I18nMap,
   SitemapEntriesProvider,
   TenCoreOptions,
@@ -60,6 +61,7 @@ export class TenCore {
   private _sitemapEnabled = true;
   private _robotsEnabled = true;
   private _sitemapEntriesProviders: SitemapEntriesProvider[] = [];
+  private _errorHandler?: ErrorHandler;
 
   constructor(options: TenCoreOptions = {}) {
     this._embedded = options.embedded;
@@ -81,6 +83,7 @@ export class TenCore {
     this._sitemapEntriesProviders = options.sitemapEntriesProviders
       ? [...options.sitemapEntriesProviders]
       : [];
+    this._errorHandler = options.errorHandler;
   }
 
   // ---------------------------------------------------------------------------
@@ -207,6 +210,22 @@ export class TenCore {
   /** Register a middleware in the request pipeline (in order). */
   use(middleware: Middleware): void {
     this._middlewares.push(middleware);
+  }
+
+  /**
+   * Register a custom error handler invoked when the request pipeline throws.
+   *
+   * The handler receives the request and the thrown error and returns a
+   * `Response`. Only one handler is active at a time — registering again
+   * replaces the previous one. If the handler itself throws, the core falls
+   * back to a plain `500 Internal Server Error`.
+   */
+  onError(handler: ErrorHandler): void {
+    this._errorHandler = handler;
+  }
+
+  get errorHandler(): ErrorHandler | undefined {
+    return this._errorHandler;
   }
 
   /**
@@ -566,19 +585,45 @@ export class TenCore {
   // ---------------------------------------------------------------------------
 
   private async _handleRequest(req: Request): Promise<Response> {
-    let index = 0;
-    const chain = this._middlewares;
-    const routeRequest = this._routeRequest.bind(this);
+    try {
+      let index = 0;
+      const chain = this._middlewares;
+      const routeRequest = this._routeRequest.bind(this);
 
-    const next = async (): Promise<Response> => {
-      if (index < chain.length) {
-        const mw = chain[index++];
-        return await mw(req, next);
+      const next = async (): Promise<Response> => {
+        if (index < chain.length) {
+          const mw = chain[index++];
+          return await mw(req, next);
+        }
+        return await routeRequest(req);
+      };
+
+      return await next();
+    } catch (error) {
+      console.error("Unhandled error in request pipeline", error); // NOSONAR
+      return await this._renderError(req, error);
+    }
+  }
+
+  /**
+   * Render an error response, delegating to the custom {@link onError} handler
+   * when one is registered. Guarantees a `Response` even if the handler throws.
+   */
+  private async _renderError(
+    req: Request,
+    error: unknown,
+  ): Promise<Response> {
+    if (this._errorHandler) {
+      try {
+        return await this._errorHandler(req, error);
+      } catch (handlerError) {
+        console.error(
+          "Error handler threw; falling back to default 500", // NOSONAR
+          handlerError,
+        );
       }
-      return await routeRequest(req);
-    };
-
-    return await next();
+    }
+    return new Response("Internal Server Error", { status: 500 });
   }
 
   /**
@@ -688,14 +733,14 @@ export class TenCore {
             `Error rendering page for route: ${route.path}`,
             error,
           ); // NOSONAR
-          return new Response("Internal Server Error", { status: 500 });
+          return await this._renderError(req, error);
         }
       }
 
       return this._handle404();
     } catch (e) {
-      console.error(`Error handling route: ${route?.path}`, e);
-      return new Response("Internal Server Error", { status: 500 });
+      console.error(`Error handling route: ${route?.path}`, e); // NOSONAR
+      return await this._renderError(req, e);
     }
   }
 

@@ -58,6 +58,19 @@ export type DynamicPageRenderer = (
 export type Base64Decoder = (base64: string) => Uint8Array;
 
 /**
+ * Error handler invoked when the request pipeline throws.
+ *
+ * Receives the originating request and the thrown error, and must produce a
+ * `Response`. Registered via {@link TenCore.onError} (or the Deno adapter's
+ * `Ten.onError`). If the handler itself throws, the core falls back to a plain
+ * `500 Internal Server Error`.
+ */
+export type ErrorHandler = (
+  req: Request,
+  error: unknown,
+) => Response | Promise<Response>;
+
+/**
  * Runtime-agnostic admin plugin interface.
  * Uses `unknown` for `kv` and {@link WidgetPageRendererCore} instead of
  * Deno-specific types so external plugins can target the core.
@@ -98,4 +111,6 @@ export interface TenCoreOptions {
   robotsEnabled?: boolean;
   /** Additional providers for concrete sitemap entries. */
   sitemapEntriesProviders?: SitemapEntriesProvider[];
+  /** Custom handler invoked when the request pipeline throws. */
+  errorHandler?: ErrorHandler;
 }

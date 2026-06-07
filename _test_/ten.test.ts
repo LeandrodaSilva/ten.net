@@ -3,6 +3,7 @@ import { assertEquals, assertStringIncludes } from "@std/assert";
 import { Ten } from "../src/ten.ts";
 import { Route } from "../src/models/Route.ts";
 import { DynamicRouteRegistry } from "../src/routing/dynamicRouteRegistry.ts";
+import { stubDeno } from "./_deno_stub.ts";
 import type { StorageItem } from "../src/models/Storage.ts";
 
 describe("Ten", () => {
@@ -364,13 +365,11 @@ describe("Ten", () => {
     it("should load routes and call Deno.serve", async () => {
       const app = Ten.net({ appPath: "./example/http/app" });
 
-      const originalServe = Deno.serve;
       let serveCalled = false;
-      // deno-lint-ignore no-explicit-any
-      (Deno as any).serve = (_options: unknown, _handler: unknown) => {
+      const restoreServe = stubDeno("serve", () => {
         serveCalled = true;
         return { finished: Promise.resolve(), ref: () => {}, unref: () => {} };
-      };
+      });
 
       const logSpy = console.log;
       const infoSpy = console.info;
@@ -378,13 +377,12 @@ describe("Ten", () => {
       console.info = () => {};
 
       try {
-        await app.start();
+        await app.start({ gracefulShutdown: false });
         assertEquals(serveCalled, true);
         const routes = (app as unknown as { _routes: Route[] })._routes;
         assertEquals(routes.length > 0, true);
       } finally {
-        // deno-lint-ignore no-explicit-any
-        (Deno as any).serve = originalServe;
+        restoreServe();
         console.log = logSpy;
         console.info = infoSpy;
       }
@@ -393,13 +391,11 @@ describe("Ten", () => {
     it("should start file watcher when DEBUG env is set", async () => {
       const app = Ten.net({ appPath: "./example/http/app" });
 
-      const originalServe = Deno.serve;
-      // deno-lint-ignore no-explicit-any
-      (Deno as any).serve = (_options: unknown, _handler: unknown) => ({
+      const restoreServe = stubDeno("serve", () => ({
         finished: Promise.resolve(),
         ref: () => {},
         unref: () => {},
-      });
+      }));
 
       Deno.env.set("DEBUG", "true");
 
@@ -426,7 +422,7 @@ describe("Ten", () => {
       console.info = () => {};
 
       try {
-        await app.start();
+        await app.start({ gracefulShutdown: false });
         assertEquals(workerCreated, true);
         assertEquals(postMessageCalled, true);
         assertEquals(postedMessage, {
@@ -434,8 +430,7 @@ describe("Ten", () => {
           appPath: "./example/http/app",
         });
       } finally {
-        // deno-lint-ignore no-explicit-any
-        (Deno as any).serve = originalServe;
+        restoreServe();
         Deno.env.delete("DEBUG");
         globalThis.Worker = OriginalWorker;
         console.log = logSpy;
@@ -446,13 +441,11 @@ describe("Ten", () => {
     it("should handle worker messages by reloading routes", async () => {
       const app = Ten.net({ appPath: "./example/http/app" });
 
-      const originalServe = Deno.serve;
-      // deno-lint-ignore no-explicit-any
-      (Deno as any).serve = (_options: unknown, _handler: unknown) => ({
+      const restoreServe = stubDeno("serve", () => ({
         finished: Promise.resolve(),
         ref: () => {},
         unref: () => {},
-      });
+      }));
 
       Deno.env.set("DEBUG", "true");
 
@@ -476,7 +469,7 @@ describe("Ten", () => {
       console.info = () => {};
 
       try {
-        await app.start();
+        await app.start({ gracefulShutdown: false });
 
         if (capturedOnmessage) {
           await capturedOnmessage(
@@ -487,8 +480,7 @@ describe("Ten", () => {
         const routes = (app as unknown as { _routes: Route[] })._routes;
         assertEquals(Array.isArray(routes), true);
       } finally {
-        // deno-lint-ignore no-explicit-any
-        (Deno as any).serve = originalServe;
+        restoreServe();
         Deno.env.delete("DEBUG");
         globalThis.Worker = OriginalWorker;
         console.log = logSpy;

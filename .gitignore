@@ -4,3 +4,8 @@ node_modules/
 .env
 .env.*
 .vscode/settings.local.json
+
+# Build & coverage artifacts
+coverage/
+dist/
+playground/dist/

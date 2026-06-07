@@ -10,6 +10,7 @@ import { TenCore } from "./core/tenCore.ts";
 import type {
   AdminPluginLikeCore,
   DynamicRouteRegistryLike,
+  ErrorHandler,
 } from "./core/types.ts";
 import type { SitemapContext, SitemapEntry } from "./models/Sitemap.ts";
 
@@ -40,6 +41,9 @@ export class Ten {
   private readonly _appPath: string;
   private readonly _routeFileName = "route.ts";
   private _core: TenCore;
+  private _watcherWorker?: Worker;
+  private _shuttingDown = false;
+  private _signalHandlers: { signal: Deno.Signal; handler: () => void }[] = [];
 
   private constructor(appPath = "./app") {
     this._appPath = appPath;
@@ -160,6 +164,24 @@ export class Ten {
   }
 
   /**
+   * Registers a custom error handler invoked when the request pipeline throws.
+   * The handler receives the request and the thrown error and returns a
+   * `Response`. Falls back to a plain `500` if the handler itself throws.
+   *
+   * @example
+   * ```typescript
+   * const app = Ten.net();
+   * app.onError((_req, error) => {
+   *   console.error(error);
+   *   return new Response("Oops", { status: 500 });
+   * });
+   * ```
+   */
+  public onError(handler: ErrorHandler): void {
+    this._core.onError(handler);
+  }
+
+  /**
    * Registers an admin plugin, initializing its routes and middlewares.
    * If the admin plugin returns a DynamicRouteRegistry, it is stored
    * for dynamic page matching in the request pipeline.
@@ -256,12 +278,74 @@ export class Ten {
       action: "start",
       appPath: this._appPath,
     });
+
+    this._watcherWorker = worker;
+  }
+
+  /**
+   * Wire OS termination signals to a graceful shutdown: stop accepting new
+   * connections, drain in-flight requests via `server.shutdown()`, and
+   * terminate the dev file watcher. Handlers are removed automatically once
+   * the server has fully finished.
+   */
+  private _registerGracefulShutdown(
+    server: Deno.HttpServer<Deno.NetAddr>,
+  ): void {
+    const shutdown = async (signal: Deno.Signal): Promise<void> => {
+      if (this._shuttingDown) return;
+      this._shuttingDown = true;
+      console.info(`Received ${signal}, shutting down gracefully...`);
+      try {
+        this._watcherWorker?.terminate();
+      } catch { /* ignore */ }
+      try {
+        // Stops accepting new connections and awaits in-flight requests.
+        await server.shutdown();
+      } catch (error) {
+        console.error("Error during graceful shutdown", error);
+      }
+    };
+
+    // Deno supports SIGTERM only on POSIX; Windows uses SIGBREAK.
+    const signals: Deno.Signal[] = Deno.build.os === "windows"
+      ? ["SIGINT", "SIGBREAK"]
+      : ["SIGINT", "SIGTERM"];
+
+    for (const signal of signals) {
+      const handler = () => {
+        void shutdown(signal);
+      };
+      try {
+        Deno.addSignalListener(signal, handler);
+        this._signalHandlers.push({ signal, handler });
+      } catch (error) {
+        console.error(`Could not register ${signal} handler`, error);
+      }
+    }
+
+    // Clean up listeners once the server is fully done (also keeps unit tests
+    // that mock Deno.serve free of leaked signal ops).
+    server.finished.finally(() => this._removeSignalHandlers());
+  }
+
+  private _removeSignalHandlers(): void {
+    for (const { signal, handler } of this._signalHandlers) {
+      try {
+        Deno.removeSignalListener(signal, handler);
+      } catch { /* ignore */ }
+    }
+    this._signalHandlers = [];
   }
 
   /**
    * Starts the server by loading routes and beginning to serve HTTP requests.
    *
-   * @param options - Optional Deno.ServeTcpOptions (e.g. `{ port: 3000 }`)
+   * By default, SIGINT/SIGTERM are wired to a graceful shutdown that stops
+   * accepting new connections and drains in-flight requests. Pass
+   * `{ gracefulShutdown: false }` to manage the server lifecycle yourself.
+   *
+   * @param options - Deno.ServeTcpOptions plus an optional `gracefulShutdown`
+   *   flag (default `true`).
    * @returns The Deno.HttpServer instance for lifecycle control (e.g. shutdown)
    *
    * @example
@@ -271,8 +355,9 @@ export class Ten {
    * ```
    */
   public async start(
-    options?: Deno.ServeTcpOptions,
+    options?: Deno.ServeTcpOptions & { gracefulShutdown?: boolean },
   ): Promise<Deno.HttpServer<Deno.NetAddr>> {
+    const { gracefulShutdown = true, ...serveOptions } = options ?? {};
     if (!this._core.embedded) {
       this._core.addRoutes(
         await routerEngine(this._appPath, this._routeFileName),
@@ -305,7 +390,11 @@ export class Ten {
       this._startFileWatcher();
     }
 
-    return Deno.serve(options ?? {}, this._core.fetch);
+    const server = Deno.serve(serveOptions, this._core.fetch);
+    if (gracefulShutdown) {
+      this._registerGracefulShutdown(server);
+    }
+    return server;
   }
 
   // ---------------------------------------------------------------------------

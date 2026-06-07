@@ -2,18 +2,17 @@ import { describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
 import { Ten } from "../src/ten.ts";
 import type { Route } from "../src/models/Route.ts";
+import { stubDeno } from "./_deno_stub.ts";
 
 describe("Ten without admin (no useAdmin)", () => {
   it("should start with only file-based routes", async () => {
     const app = Ten.net({ appPath: "./example/http/app" });
 
-    const originalServe = Deno.serve;
-    // deno-lint-ignore no-explicit-any
-    (Deno as any).serve = (_options: unknown, _handler: unknown) => ({
+    const restoreServe = stubDeno("serve", () => ({
       finished: Promise.resolve(),
       ref: () => {},
       unref: () => {},
-    });
+    }));
 
     const logSpy = console.log;
     const infoSpy = console.info;
@@ -21,14 +20,13 @@ describe("Ten without admin (no useAdmin)", () => {
     console.info = () => {};
 
     try {
-      await app.start();
+      await app.start({ gracefulShutdown: false });
       const routes = (app as unknown as { _routes: Route[] })._routes;
       // Only file-based routes from app/, no admin routes
       const adminRoutes = routes.filter((r) => r.path.startsWith("/admin"));
       assertEquals(adminRoutes.length, 0);
     } finally {
-      // deno-lint-ignore no-explicit-any
-      (Deno as any).serve = originalServe;
+      restoreServe();
       console.log = logSpy;
       console.info = infoSpy;
     }

@@ -19,9 +19,7 @@ const todoStore = ((globalThis as unknown) as {
 };
 
 function deleteTodo(id: number) {
-  const index = todoStore.todos.findIndex((item: TodoItem) =>
-    item.id === id
-  );
+  const index = todoStore.todos.findIndex((item: TodoItem) => item.id === id);
   if (index !== -1) {
     todoStore.todos.splice(index, 1);
   }
