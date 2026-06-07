@@ -354,7 +354,7 @@ export function renderSelector(
     return `<option value="${href}"${selected}>${flag} ${displayName}</option>`;
   });
 
-  return `<select class="i18n-selector appearance-none bg-white border border-[#dadce0] rounded-[20px] px-3 py-1.5 text-sm text-[#1a1c1e] cursor-pointer" onchange="location.href=this.value" aria-label="Language">${
+  return `<select class="i18n-selector appearance-none bg-white border border-[#dadce0] rounded-[20px] px-3 py-1.5 text-sm text-[#1a1c1e] cursor-pointer max-w-[32vw] sm:max-w-none truncate" onchange="location.href=this.value" aria-label="Language">${
     options.join("")
   }</select>`;
 }
