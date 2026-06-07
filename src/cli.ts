@@ -11,6 +11,7 @@ import { build } from "./build/build.ts";
 import { printBuildHelp, printCliHelp, printVersion } from "./cliShared.ts";
 import { TerminalUi } from "./terminalUi.ts";
 
+/** CLI entry point: parses `Deno.args` and runs the requested command. */
 export async function main() {
   const args = parseArgs(Deno.args, {
     string: ["secret", "output", "app-path", "public-path"],

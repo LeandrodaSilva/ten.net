@@ -37,6 +37,7 @@ export class StorageSync {
   private _timer: number | null = null;
   private _lastSync: number = 0;
 
+  /** Create a sync controller for the given storage and remote options. */
   constructor(storage: IndexedDBStorage, options: SyncOptions) {
     this._storage = storage;
     this._options = options;
