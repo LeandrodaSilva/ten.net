@@ -108,19 +108,31 @@ export async function assert404(baseUrl: string): Promise<void> {
 
 export async function waitForServer(
   baseUrl: string,
-  maxRetries = 30,
-  delay = 500,
+  maxRetries = 40,
+  delay = 300,
 ): Promise<void> {
+  // Poll the dynamic route as the readiness sentinel: it confirms the server
+  // is up, that routes (including the lazily-imported dynamic handler) serve
+  // correctly, AND that this is our server (guards against a foreign process
+  // that grabbed the port during the spawn race under `--parallel`).
   for (let i = 0; i < maxRetries; i++) {
     try {
-      const res = await fetch(baseUrl);
-      await res.body?.cancel();
-      return;
+      const res = await fetch(`${baseUrl}/api/hello/John`);
+      const isJson = (res.headers.get("content-type") ?? "").includes(
+        "application/json",
+      );
+      if (res.status === 200 && isJson) {
+        const json = await res.json();
+        if (json?.message === "Hello John") return;
+      } else {
+        await res.body?.cancel();
+      }
     } catch {
-      await new Promise((r) => setTimeout(r, delay));
+      // Server not accepting connections yet.
     }
+    await new Promise((r) => setTimeout(r, delay));
   }
   throw new Error(
-    `Server at ${baseUrl} did not start after ${maxRetries} retries`,
+    `Server at ${baseUrl} did not become ready after ${maxRetries} retries`,
   );
 }
