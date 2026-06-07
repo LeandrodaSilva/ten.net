@@ -58,6 +58,46 @@ export type DynamicPageRenderer = (
 export type Base64Decoder = (base64: string) => Uint8Array;
 
 /**
+ * Error handler invoked when the request pipeline throws.
+ *
+ * Receives the originating request and the thrown error, and must produce a
+ * `Response`. Registered via {@link TenCore.onError} (or the Deno adapter's
+ * `Ten.onError`). If the handler itself throws, the core falls back to a plain
+ * `500 Internal Server Error`.
+ */
+export type ErrorHandler = (
+  req: Request,
+  error: unknown,
+) => Response | Promise<Response>;
+
+/**
+ * Lifecycle hook invoked at the start of the request pipeline, before
+ * middleware and routing. Returning a `Response` short-circuits the pipeline
+ * (the response still passes through any {@link ResponseHook}s). Returning
+ * `undefined` continues normally.
+ */
+export type RequestHook = (
+  req: Request,
+) => void | Response | Promise<void | Response>;
+
+/**
+ * Lifecycle hook invoked after a response is produced. Returning a `Response`
+ * replaces the current one (response interceptor); returning `undefined` keeps
+ * it. Applied to success, 404, and error responses alike.
+ */
+export type ResponseHook = (
+  req: Request,
+  res: Response,
+) => void | Response | Promise<void | Response>;
+
+/**
+ * Lifecycle hook invoked once during graceful shutdown, after in-flight
+ * requests have drained. Use it to release resources (close DB handles, flush
+ * buffers, etc.).
+ */
+export type ShutdownHook = () => void | Promise<void>;
+
+/**
  * Runtime-agnostic admin plugin interface.
  * Uses `unknown` for `kv` and {@link WidgetPageRendererCore} instead of
  * Deno-specific types so external plugins can target the core.
@@ -98,4 +138,6 @@ export interface TenCoreOptions {
   robotsEnabled?: boolean;
   /** Additional providers for concrete sitemap entries. */
   sitemapEntriesProviders?: SitemapEntriesProvider[];
+  /** Custom handler invoked when the request pipeline throws. */
+  errorHandler?: ErrorHandler;
 }

@@ -14,8 +14,8 @@ plugin system. Published to JSR.
 - **Production-ready**: Reliable, performant, battle-tested microframework
 - **Minimal core**: Routing, templating, and plugin infrastructure only — no
   admin, CMS, or UI bundled in core
-- **Multi-runtime (roadmap)**: Designed to support Deno (current) and Node.js
-  (planned)
+- **Multi-runtime**: Runtime-agnostic core runs on Deno, Node.js
+  (`@leproj/tennet/node`), and Service Workers
 - **Extensible**: Abstract `Plugin` class and `AdminPluginLike` interface for
   external plugins
 - **Self-contained binary**: Compile entire app into a single deployable binary
@@ -25,13 +25,23 @@ plugin system. Published to JSR.
 
 ## Roadmap
 
-- **Reliability** — error handling, graceful shutdown, connection draining
-- **Performance** — route caching, template precompilation, zero-allocation hot
-  paths
-- **Flexibility** — middleware composition, custom renderers, response
-  interceptors
-- **Extensibility** — lifecycle hooks, event system, plugin communication
-- **Node.js support** — run the same app on Node.js in addition to Deno
+Delivered:
+
+- ✅ **Reliability** — custom error handler (`onError`), graceful shutdown,
+  connection draining
+- ✅ **Performance** — route-match caching, template-shell precompilation
+- ✅ **Flexibility** — middleware composition, response interceptors
+  (`onResponse`)
+- ✅ **Extensibility** — lifecycle hooks
+  (`onRequest`/`onResponse`/`onShutdown`), event bus for plugin communication
+- ✅ **Node.js support** — run the same app on Node.js via `@leproj/tennet/node`
+
+Remaining:
+
+- **Performance** — zero-allocation hot paths
+- **Flexibility** — pluggable custom renderers
+- **Coverage** — raise the enforced line-coverage floor toward 90% (see
+  `docs/coverage-plan.md`)
 
 ## Related Packages
 
@@ -70,7 +80,8 @@ src/                          # Framework source
   ten.ts                      # Deno adapter, delegates to TenCore
   cli.ts                      # CLI entry point
   core/                       # Runtime-agnostic core (zero Deno APIs)
-    tenCore.ts                # TenCore class — fetch(), use(), useAdmin()
+    tenCore.ts                # TenCore — fetch(), use(), useAdmin(), hooks, caches
+    eventEmitter.ts           # EventEmitter — plugin communication bus
     types.ts                  # Core interfaces
   routerEngine.ts             # File-system route scanner and transpiler
   viewEngine.ts               # HTML template renderer with nested layouts
@@ -81,13 +92,14 @@ src/                          # Framework source
   build/                      # Build system: collector, code generator, crypto, CLI
   embedded/                   # Embedded router engine for compiled binaries
   sw/                         # Service Worker adapter (handle, fire)
+  node/                       # Node.js adapter (serve, request/response bridge)
   storage/                    # IndexedDB storage + KV emulation for browsers
   middleware/                 # Middleware type definition
   assets/                     # faviconData.ts, documentHtml.ts
   bench/                      # Benchmarks with history tracking
   tailwind/                   # Tailwind CSS pipeline: scanner, generator, inject
 
-_test_/                       # Core tests (42 test files + 1 helper)
+_test_/                       # Core tests (51 test files + 2 helpers)
 
 playground/                   # Online interactive playground (8 demos)
 
@@ -119,7 +131,23 @@ can have:
 
 **TenCore** (`src/core/tenCore.ts`): Runtime-agnostic request handler. Exposes
 `fetch(req)` as the universal entry point. Can be used standalone without `Ten`
-for Service Workers, Node.js, and edge runtimes.
+for Service Workers, Node.js, and edge runtimes. Also owns the lifecycle hooks
+(`onRequest`/`onResponse`/`onError`/`onShutdown` + `runShutdownHooks()`), the
+event bus (`events`, an `EventEmitter`), the route-match cache, and the view
+shell cache (the last two are invalidated whenever the route set changes).
+
+**Lifecycle hooks & events**: `onRequest` runs before middleware/routing and may
+short-circuit by returning a `Response`; `onResponse` runs after a response is
+produced and may replace it (response interceptor), applied to success, 404, and
+error responses; `onError` customizes the error response (falls back to a plain
+500 if it throws); `onShutdown` runs during graceful shutdown after in-flight
+requests drain. `core.events` / `app.events` is a small resilient `EventEmitter`
+(`on`/`once`/`off`/`emit`) for decoupled plugin communication.
+
+**Node.js adapter** (`src/node/`): `serve(core, opts)` runs `TenCore` on a Node
+`http` server; `createRequestListener`, `toWebRequest`, and `sendWebResponse`
+are the lower-level building blocks. Exposed via the `@leproj/tennet/node`
+entrypoint. Build on Deno, run the manifest on Node.
 
 **Ten** (`src/ten.ts`): Thin Deno adapter that delegates to `TenCore`. Creates
 the Deno HTTP server, scans filesystem routes, and passes them to the core.
@@ -171,10 +199,10 @@ widgets. `StorageSync` provides pull-based sync with a remote server.
 
 ## Testing
 
-Tests are in `_test_/` (42 test files + 1 helper, core only). Uses `Deno.test()`
-and `describe/it` from `@std/testing/bdd`. Assertions from `@std/assert`
-(preferred) and `@deno-assert` (legacy). Snapshots in `_test_/__snapshots__/`.
-Test fixtures in `example/http/app/`.
+Tests are in `_test_/` (51 test files + 2 helpers, core only). Uses
+`Deno.test()` and `describe/it` from `@std/testing/bdd`. Assertions from
+`@std/assert` (preferred) and `@deno-assert` (legacy). Snapshots in
+`_test_/__snapshots__/`. Test fixtures in `example/http/app/`.
 
 ## Release Process
 
@@ -192,6 +220,8 @@ the release checks, publishes to JSR via `deno publish`, then creates the
 - `./build/manifest` → `src/build/manifest.ts` — Build manifest types
 - `./build/crypto` → `src/build/crypto.ts` — AES-256-GCM utilities
 - `./sw` → `src/sw/mod.ts` — Service Worker adapter
+- `./node` → `src/node/mod.ts` — Node.js adapter (`serve`, request/response
+  conversion)
 - `./storage/indexeddb` → `src/storage/mod.ts` — IndexedDB storage for browsers
 - `./assets/favicon` → `src/assets/faviconData.ts` — Favicon data
 

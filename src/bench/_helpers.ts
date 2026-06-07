@@ -27,8 +27,12 @@ export function restoreConsole(): void {
 
 export async function startServer(): Promise<ServerContext> {
   suppressConsole();
-  const app = Ten.net();
-  const server = await app.start({ port: 0, onListen: () => {} });
+  const app = Ten.net({ appPath: "./example/http/app" });
+  const server = await app.start({
+    port: 0,
+    onListen: () => {},
+    gracefulShutdown: false,
+  });
   const addr = server.addr as Deno.NetAddr;
   return { server, baseUrl: `http://localhost:${addr.port}` };
 }

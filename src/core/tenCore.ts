@@ -5,13 +5,18 @@ import type { Route } from "../models/Route.ts";
 import type { AppManifest } from "../build/manifest.ts";
 import type { Middleware } from "../middleware/middleware.ts";
 import { decodeBase64Universal } from "./base64.ts";
+import { EventEmitter } from "./eventEmitter.ts";
 import type {
   AdminPluginLikeCore,
   Base64Decoder,
   DynamicPageRenderer,
   DynamicRouteLike,
   DynamicRouteRegistryLike,
+  ErrorHandler,
   I18nMap,
+  RequestHook,
+  ResponseHook,
+  ShutdownHook,
   SitemapEntriesProvider,
   TenCoreOptions,
   WidgetPageRendererCore,
@@ -60,6 +65,17 @@ export class TenCore {
   private _sitemapEnabled = true;
   private _robotsEnabled = true;
   private _sitemapEntriesProviders: SitemapEntriesProvider[] = [];
+  private _errorHandler?: ErrorHandler;
+  private _requestHooks: RequestHook[] = [];
+  private _responseHooks: ResponseHook[] = [];
+  private _shutdownHooks: ShutdownHook[] = [];
+  private readonly _events = new EventEmitter();
+  /** Cache of `${METHOD} ${pathname}` → matched route (null = cached miss). */
+  private readonly _routeMatchCache = new Map<string, Route | null>();
+  /** Cache of assembled, layout-wrapped template shells, keyed by route path. */
+  private readonly _viewShellCache = new Map<string, string>();
+  /** Upper bound on the route-match cache to keep memory bounded. */
+  private static readonly ROUTE_CACHE_MAX = 1024;
 
   constructor(options: TenCoreOptions = {}) {
     this._embedded = options.embedded;
@@ -81,6 +97,7 @@ export class TenCore {
     this._sitemapEntriesProviders = options.sitemapEntriesProviders
       ? [...options.sitemapEntriesProviders]
       : [];
+    this._errorHandler = options.errorHandler;
   }
 
   // ---------------------------------------------------------------------------
@@ -175,11 +192,19 @@ export class TenCore {
   /** Append routes to the registry. */
   addRoutes(routes: Route[]): void {
     this._routes.push(...routes);
+    this._invalidateRouteCaches();
   }
 
   /** Remove all routes (used by the file watcher before rescanning). */
   clearRoutes(): void {
     this._routes = [];
+    this._invalidateRouteCaches();
+  }
+
+  /** Drop cached route matches and template shells after the route set changes. */
+  private _invalidateRouteCaches(): void {
+    this._routeMatchCache.clear();
+    this._viewShellCache.clear();
   }
 
   /**
@@ -194,6 +219,7 @@ export class TenCore {
     this._embedded = manifest;
     this._routes = [];
     this._initialized = false;
+    this._invalidateRouteCaches();
     if (manifest.i18n) {
       this._i18n = manifest.i18n;
     }
@@ -210,6 +236,74 @@ export class TenCore {
   }
 
   /**
+   * Register a custom error handler invoked when the request pipeline throws.
+   *
+   * The handler receives the request and the thrown error and returns a
+   * `Response`. Only one handler is active at a time — registering again
+   * replaces the previous one. If the handler itself throws, the core falls
+   * back to a plain `500 Internal Server Error`.
+   */
+  onError(handler: ErrorHandler): void {
+    this._errorHandler = handler;
+  }
+
+  get errorHandler(): ErrorHandler | undefined {
+    return this._errorHandler;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Lifecycle hooks & event bus
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Register a hook that runs before middleware and routing. Returning a
+   * `Response` short-circuits the pipeline. Hooks run in registration order.
+   */
+  onRequest(hook: RequestHook): void {
+    this._requestHooks.push(hook);
+  }
+
+  /**
+   * Register a hook that runs after a response is produced and may replace it
+   * (response interceptor). Applies to success, 404, and error responses.
+   * Hooks run in registration order.
+   */
+  onResponse(hook: ResponseHook): void {
+    this._responseHooks.push(hook);
+  }
+
+  /**
+   * Register a hook that runs once during graceful shutdown (after in-flight
+   * requests have drained). Invoke via {@link runShutdownHooks}.
+   */
+  onShutdown(hook: ShutdownHook): void {
+    this._shutdownHooks.push(hook);
+  }
+
+  /**
+   * The shared event bus for decoupled plugin communication. Plugins and app
+   * code can `on`/`once`/`off`/`emit` named events through it.
+   */
+  get events(): EventEmitter {
+    return this._events;
+  }
+
+  /**
+   * Run all registered shutdown hooks sequentially. Errors are logged and do
+   * not abort the remaining hooks. Called by the Deno adapter during graceful
+   * shutdown; other runtimes can call it from their own shutdown flow.
+   */
+  async runShutdownHooks(): Promise<void> {
+    for (const hook of this._shutdownHooks) {
+      try {
+        await hook();
+      } catch (error) {
+        console.error("onShutdown hook threw; ignoring", error); // NOSONAR
+      }
+    }
+  }
+
+  /**
    * Register a runtime-agnostic admin plugin.
    * Loads its routes, middlewares, dynamic registry, kv, and widget renderer.
    */
@@ -217,6 +311,7 @@ export class TenCore {
     const { routes, middlewares, dynamicRegistry, kv, widgetRenderer } =
       await admin.init();
     this._routes.push(...routes);
+    this._invalidateRouteCaches();
     for (const mw of middlewares) {
       this.use(mw);
     }
@@ -266,6 +361,7 @@ export class TenCore {
 
     if (this._embedded) {
       this._routes.push(...embeddedRouterEngine(this._embedded));
+      this._invalidateRouteCaches();
       if (this._embedded.i18n) {
         this._i18n = this._embedded.i18n;
       }
@@ -316,13 +412,27 @@ export class TenCore {
   }
 
   private _matchRoute(pathname: string, method: string): Route | undefined {
-    return this._routes.find((r) => {
+    const upperMethod = method.toUpperCase();
+    const key = `${upperMethod} ${pathname}`;
+    const cached = this._routeMatchCache.get(key);
+    if (cached !== undefined) return cached ?? undefined;
+
+    const match = this._routes.find((r) => {
       if (!r.regex.test(pathname)) return false;
-      if (r.method !== "ALL" && r.method !== method.toUpperCase()) {
+      if (r.method !== "ALL" && r.method !== upperMethod) {
         return false;
       }
       return true;
-    });
+    }) ?? null;
+
+    // Bound the cache: evict the oldest entry once the cap is reached. This
+    // keeps memory in check even under floods of distinct (e.g. 404) paths.
+    if (this._routeMatchCache.size >= TenCore.ROUTE_CACHE_MAX) {
+      const oldest = this._routeMatchCache.keys().next().value;
+      if (oldest !== undefined) this._routeMatchCache.delete(oldest);
+    }
+    this._routeMatchCache.set(key, match);
+    return match ?? undefined;
   }
 
   private _isPrivatePath(path: string): boolean {
@@ -566,19 +676,81 @@ export class TenCore {
   // ---------------------------------------------------------------------------
 
   private async _handleRequest(req: Request): Promise<Response> {
-    let index = 0;
-    const chain = this._middlewares;
-    const routeRequest = this._routeRequest.bind(this);
-
-    const next = async (): Promise<Response> => {
-      if (index < chain.length) {
-        const mw = chain[index++];
-        return await mw(req, next);
+    try {
+      // Lifecycle: onRequest hooks may short-circuit the pipeline.
+      let response: Response | undefined;
+      for (const hook of this._requestHooks) {
+        const early = await hook(req);
+        if (early instanceof Response) {
+          response = early;
+          break;
+        }
       }
-      return await routeRequest(req);
-    };
 
-    return await next();
+      if (!response) {
+        let index = 0;
+        const chain = this._middlewares;
+        const routeRequest = this._routeRequest.bind(this);
+
+        const next = async (): Promise<Response> => {
+          if (index < chain.length) {
+            const mw = chain[index++];
+            return await mw(req, next);
+          }
+          return await routeRequest(req);
+        };
+
+        response = await next();
+      }
+
+      // Lifecycle: onResponse hooks may replace the response.
+      return await this._applyResponseHooks(req, response);
+    } catch (error) {
+      console.error("Unhandled error in request pipeline", error); // NOSONAR
+      const errorResponse = await this._renderError(req, error);
+      return await this._applyResponseHooks(req, errorResponse);
+    }
+  }
+
+  /**
+   * Run response hooks in order, letting each optionally replace the response.
+   * Resilient: a hook that throws is logged and skipped.
+   */
+  private async _applyResponseHooks(
+    req: Request,
+    res: Response,
+  ): Promise<Response> {
+    let current = res;
+    for (const hook of this._responseHooks) {
+      try {
+        const result = await hook(req, current);
+        if (result instanceof Response) current = result;
+      } catch (error) {
+        console.error("onResponse hook threw; ignoring", error); // NOSONAR
+      }
+    }
+    return current;
+  }
+
+  /**
+   * Render an error response, delegating to the custom {@link onError} handler
+   * when one is registered. Guarantees a `Response` even if the handler throws.
+   */
+  private async _renderError(
+    req: Request,
+    error: unknown,
+  ): Promise<Response> {
+    if (this._errorHandler) {
+      try {
+        return await this._errorHandler(req, error);
+      } catch (handlerError) {
+        console.error(
+          "Error handler threw; falling back to default 500", // NOSONAR
+          handlerError,
+        );
+      }
+    }
+    return new Response("Internal Server Error", { status: 500 });
   }
 
   /**
@@ -669,6 +841,7 @@ export class TenCore {
             tailwindCss: this._tailwindCss,
             locale,
             i18n: this._i18n,
+            shellCache: this._viewShellCache,
           });
           const headers: Record<string, string> = {
             "Content-Type": "text/html; charset=utf-8",
@@ -688,14 +861,14 @@ export class TenCore {
             `Error rendering page for route: ${route.path}`,
             error,
           ); // NOSONAR
-          return new Response("Internal Server Error", { status: 500 });
+          return await this._renderError(req, error);
         }
       }
 
       return this._handle404();
     } catch (e) {
-      console.error(`Error handling route: ${route?.path}`, e);
-      return new Response("Internal Server Error", { status: 500 });
+      console.error(`Error handling route: ${route?.path}`, e); // NOSONAR
+      return await this._renderError(req, e);
     }
   }
 

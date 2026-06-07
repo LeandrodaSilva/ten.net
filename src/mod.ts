@@ -42,6 +42,8 @@ export { BlogRouteRegistry } from "./routing/blogRouteRegistry.ts";
 export type { WidgetPageRenderer } from "./models/WidgetResolver.ts";
 export { TenCore } from "./core/tenCore.ts";
 export { decodeBase64Universal } from "./core/base64.ts";
+export { EventEmitter } from "./core/eventEmitter.ts";
+export type { EventListener } from "./core/eventEmitter.ts";
 export type {
   AdminPluginLikeCore,
   Base64Decoder,
@@ -49,6 +51,10 @@ export type {
   DynamicRouteLike,
   DynamicRouteRegistryLike,
   DynamicRouteSitemapLike,
+  ErrorHandler,
+  RequestHook,
+  ResponseHook,
+  ShutdownHook,
   SitemapEntriesProvider,
   TenCoreOptions,
   WidgetPageRendererCore,

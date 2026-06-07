@@ -11,6 +11,7 @@
     "./build/manifest": "./src/build/manifest.ts",
     "./build/crypto": "./src/build/crypto.ts",
     "./sw": "./src/sw/mod.ts",
+    "./node": "./src/node/mod.ts",
     "./storage/indexeddb": "./src/storage/mod.ts",
     "./assets/favicon": "./src/assets/faviconData.ts"
   },

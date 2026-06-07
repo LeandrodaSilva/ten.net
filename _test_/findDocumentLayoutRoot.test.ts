@@ -47,6 +47,18 @@ Deno.test("findDocumentLayoutRoot - returns default template when file exists bu
     return;
   }
 
+  // chmod 0o000 does not restrict the root user, so the read would still
+  // succeed and the unreadable-file branch would never be exercised. Skip
+  // when permissions are ineffective (e.g. running as root in a container).
+  try {
+    Deno.readTextFileSync(DOCUMENT_HTML_PATH);
+    Deno.chmodSync(DOCUMENT_HTML_PATH, 0o644);
+    Deno.removeSync(TEST_DIR, { recursive: true });
+    return;
+  } catch {
+    // Good — the file is genuinely unreadable; proceed with the assertion.
+  }
+
   try {
     // Act
     const result = await findDocumentLayoutRoot(TEST_APP_PATH);
