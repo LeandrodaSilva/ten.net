@@ -41,45 +41,55 @@ describe("Build Compiled TS E2E", () => {
 
     assertEquals(typeof result.compiledPath, "string");
 
-    // Find a free port
-    const listener = Deno.listen({ port: 0 });
-    const port = (listener.addr as Deno.NetAddr).port;
-    listener.close();
-
-    baseUrl = `http://localhost:${port}`;
-
     // Resolve project deno.json for import map resolution
     const denoJsonPath = new URL("../deno.json", import.meta.url).pathname;
 
-    const cmd = new Deno.Command("deno", {
-      args: [
-        "run",
-        "--allow-net",
-        "--allow-env",
-        "--unstable-raw-imports",
-        `--config=${denoJsonPath}`,
-        result.compiledPath,
-      ],
-      env: { PORT: String(port) },
-      stdout: "piped",
-      stderr: "piped",
-    });
+    // Spawn the compiled app, retrying on a fresh port if it doesn't become
+    // ready. This guards against the port-handoff race (pick free port → close
+    // → respawn) and CPU contention seen under `deno test --parallel`.
+    let ready = false;
+    for (let attempt = 0; attempt < 3 && !ready; attempt++) {
+      const listener = Deno.listen({ port: 0 });
+      const port = (listener.addr as Deno.NetAddr).port;
+      listener.close();
+      baseUrl = `http://localhost:${port}`;
 
-    process = cmd.spawn();
+      process = new Deno.Command("deno", {
+        args: [
+          "run",
+          "--allow-net",
+          "--allow-env",
+          "--unstable-raw-imports",
+          `--config=${denoJsonPath}`,
+          result.compiledPath,
+        ],
+        env: { PORT: String(port) },
+        stdout: "piped",
+        stderr: "piped",
+      }).spawn();
 
-    // Drain stdout/stderr to prevent blocking
-    (async () => {
-      for await (const _chunk of process.stdout) {
-        // discard
+      // Drain stdout/stderr to prevent the subprocess blocking on a full pipe.
+      void (async () => {
+        for await (const _chunk of process.stdout) { /* discard */ }
+      })();
+      void (async () => {
+        for await (const _chunk of process.stderr) { /* discard */ }
+      })();
+
+      try {
+        await waitForServer(baseUrl);
+        ready = true;
+      } catch {
+        try {
+          process.kill("SIGTERM");
+          await process.status;
+        } catch { /* already exited */ }
       }
-    })();
-    (async () => {
-      for await (const _chunk of process.stderr) {
-        // discard
-      }
-    })();
+    }
 
-    await waitForServer(baseUrl);
+    if (!ready) {
+      throw new Error("Compiled app did not become ready after retries");
+    }
   });
 
   afterAll(async () => {
