@@ -18,6 +18,7 @@ import type {
   ResponseHook,
   ShutdownHook,
   SitemapEntriesProvider,
+  TemplateRenderer,
   TenCoreOptions,
   WidgetPageRendererCore,
 } from "./types.ts";
@@ -66,6 +67,7 @@ export class TenCore {
   private _robotsEnabled = true;
   private _sitemapEntriesProviders: SitemapEntriesProvider[] = [];
   private _errorHandler?: ErrorHandler;
+  private _renderer?: TemplateRenderer;
   private _requestHooks: RequestHook[] = [];
   private _responseHooks: ResponseHook[] = [];
   private _shutdownHooks: ShutdownHook[] = [];
@@ -99,6 +101,7 @@ export class TenCore {
       ? [...options.sitemapEntriesProviders]
       : [];
     this._errorHandler = options.errorHandler;
+    this._renderer = options.renderer;
   }
 
   // ---------------------------------------------------------------------------
@@ -270,6 +273,20 @@ export class TenCore {
   /** The registered custom error handler, if any. */
   get errorHandler(): ErrorHandler | undefined {
     return this._errorHandler;
+  }
+
+  /**
+   * Register a custom template renderer, replacing the built-in `{{key}}`
+   * mustache substitution for view routes. Registering again replaces the
+   * previous one.
+   */
+  setRenderer(renderer: TemplateRenderer): void {
+    this._renderer = renderer;
+  }
+
+  /** The registered custom template renderer, if any. */
+  get renderer(): TemplateRenderer | undefined {
+    return this._renderer;
   }
 
   // ---------------------------------------------------------------------------
@@ -863,6 +880,7 @@ export class TenCore {
             locale,
             i18n: this._i18n,
             shellCache: this._viewShellCache,
+            renderer: this._renderer,
           });
           const headers: Record<string, string> = {
             "Content-Type": "text/html; charset=utf-8",

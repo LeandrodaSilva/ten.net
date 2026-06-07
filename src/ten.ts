@@ -14,6 +14,7 @@ import type {
   RequestHook,
   ResponseHook,
   ShutdownHook,
+  TemplateRenderer,
 } from "./core/types.ts";
 import type { EventEmitter } from "./core/eventEmitter.ts";
 import type { SitemapContext, SitemapEntry } from "./models/Sitemap.ts";
@@ -183,6 +184,23 @@ export class Ten {
    */
   public onError(handler: ErrorHandler): void {
     this._core.onError(handler);
+  }
+
+  /**
+   * Registers a custom template renderer, replacing the built-in `{{key}}`
+   * mustache substitution for view routes (e.g. to use Handlebars, Eta, or an
+   * engine with loops/conditionals).
+   *
+   * @example
+   * ```typescript
+   * const app = Ten.net();
+   * app.setRenderer((template, data) =>
+   *   template.replaceAll("[[name]]", String(data.name))
+   * );
+   * ```
+   */
+  public setRenderer(renderer: TemplateRenderer): void {
+    this._core.setRenderer(renderer);
   }
 
   /**
