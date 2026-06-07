@@ -59,6 +59,8 @@ export class TenCore {
   private _decodeBase64: Base64Decoder;
   private _tailwindCss?: string;
   private _i18n: I18nMap = {};
+  /** Memoized sorted locale list; invalidated whenever `_i18n` changes. */
+  private _availableLocalesCache: string[] | null = null;
   private _initialized = false;
   private _appPath: string = "";
   private _canonicalBaseUrl?: string;
@@ -161,6 +163,7 @@ export class TenCore {
   /** Set the i18n translation map. */
   set i18n(value: I18nMap) {
     this._i18n = value;
+    this._availableLocalesCache = null;
   }
 
   /** The registered middleware chain (read-only view). */
@@ -245,6 +248,7 @@ export class TenCore {
     this._invalidateRouteCaches();
     if (manifest.i18n) {
       this._i18n = manifest.i18n;
+      this._availableLocalesCache = null;
     }
     this.init();
   }
@@ -402,6 +406,7 @@ export class TenCore {
       this._invalidateRouteCaches();
       if (this._embedded.i18n) {
         this._i18n = this._embedded.i18n;
+        this._availableLocalesCache = null;
       }
     }
   }
@@ -426,13 +431,16 @@ export class TenCore {
   // ---------------------------------------------------------------------------
 
   private get _availableLocales(): string[] {
+    if (this._availableLocalesCache !== null) {
+      return this._availableLocalesCache;
+    }
     const locales = new Set<string>();
     for (const dir of Object.values(this._i18n)) {
       for (const locale of Object.keys(dir)) {
         locales.add(locale);
       }
     }
-    return [...locales].sort();
+    return (this._availableLocalesCache = [...locales].sort());
   }
 
   private _normalizeBaseUrl(url: string): string {
@@ -726,23 +734,28 @@ export class TenCore {
       }
 
       if (!response) {
-        let index = 0;
         const chain = this._middlewares;
-        const routeRequest = this._routeRequest.bind(this);
-
-        const next = async (): Promise<Response> => {
-          if (index < chain.length) {
-            const mw = chain[index++];
-            return await mw(req, next);
-          }
-          return await routeRequest(req);
-        };
-
-        response = await next();
+        if (chain.length === 0) {
+          // Fast path: no middleware — skip the bind + closure allocation.
+          response = await this._routeRequest(req);
+        } else {
+          let index = 0;
+          const routeRequest = this._routeRequest.bind(this);
+          const next = async (): Promise<Response> => {
+            if (index < chain.length) {
+              const mw = chain[index++];
+              return await mw(req, next);
+            }
+            return await routeRequest(req);
+          };
+          response = await next();
+        }
       }
 
       // Lifecycle: onResponse hooks may replace the response.
-      return await this._applyResponseHooks(req, response);
+      return this._responseHooks.length === 0
+        ? response
+        : await this._applyResponseHooks(req, response);
     } catch (error) {
       console.error("Unhandled error in request pipeline", error); // NOSONAR
       const errorResponse = await this._renderError(req, error);
