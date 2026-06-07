@@ -3,7 +3,7 @@
 [![CI](https://github.com/LeandrodaSilva/ten.net/actions/workflows/ci.yml/badge.svg)](https://github.com/LeandrodaSilva/ten.net/actions/workflows/ci.yml)
 [![JSR](https://jsr.io/badges/@leproj/tennet)](https://jsr.io/@leproj/tennet)
 [![JSR Score](https://jsr.io/badges/@leproj/tennet/score)](https://jsr.io/@leproj/tennet)
-[![Coverage](https://img.shields.io/badge/coverage-%E2%89%A590%25-brightgreen)](https://github.com/LeandrodaSilva/ten.net/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-%E2%89%A577%25-yellow)](docs/coverage-plan.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A minimalist, extensible web microframework for TypeScript runtimes.
@@ -18,6 +18,11 @@ A minimalist, extensible web microframework for TypeScript runtimes.
 - **Dynamic route parameters** — `[param]/` directories for URL segments
 - **Plugin system** — extensible architecture via abstract `Plugin` class and
   `AdminPluginLike` interface
+- **Lifecycle hooks & events** — `onRequest`/`onResponse`/`onError`/`onShutdown`
+  hooks plus an event bus for decoupled plugin communication
+- **Graceful shutdown** — SIGINT/SIGTERM draining of in-flight requests
+- **Multi-runtime** — the runtime-agnostic core runs on Deno, Node.js, and
+  Service Workers
 - **Self-contained binary** — compile your entire app into a single deployable
   binary
 - **Dev mode** — file watcher with automatic route reload
@@ -49,15 +54,25 @@ The admin panel and CMS features are separate packages:
 
 ### Roadmap
 
-- **Reliability** — comprehensive error handling, graceful shutdown, connection
-  draining
-- **Performance** — route caching, template precompilation, zero-allocation hot
-  paths
-- **Flexibility** — middleware composition, custom renderers, response
-  interceptors
-- **Extensibility** — lifecycle hooks, event system, plugin communication
-- **Node.js runtime support** — run the same app on Node.js in addition to Deno
-- **Code obfuscation** — AES-256-GCM packaging for compiled binaries (available)
+Delivered:
+
+- ✅ **Reliability** — custom error handler (`onError`), graceful shutdown, and
+  connection draining
+- ✅ **Performance** — route-match caching and template-shell precompilation
+- ✅ **Flexibility** — middleware composition and response interceptors
+  (`onResponse`)
+- ✅ **Extensibility** — lifecycle hooks (`onRequest`/`onResponse`/`onShutdown`)
+  and an event bus for plugin communication
+- ✅ **Node.js runtime support** — run the same app on Node.js via
+  `@leproj/tennet/node`
+- ✅ **Code obfuscation** — AES-256-GCM packaging for compiled binaries
+
+In progress:
+
+- **Performance** — zero-allocation hot paths
+- **Flexibility** — pluggable custom renderers
+- **Coverage** — raising the enforced line-coverage floor toward 90% (see
+  [docs/coverage-plan.md](docs/coverage-plan.md))
 
 ## Installation
 
@@ -269,6 +284,70 @@ import { AdminPlugin, PagePlugin } from "@leproj/tennet-cms";
 const app = Ten.net();
 await app.useAdmin(new AdminPlugin({ plugins: [PagePlugin] }));
 await app.start();
+```
+
+## Lifecycle Hooks & Events
+
+Hooks let you observe and shape the request pipeline; the event bus lets plugins
+talk to each other without direct references.
+
+```ts
+import { Ten } from "@leproj/tennet";
+
+const app = Ten.net();
+
+// Run before middleware/routing; return a Response to short-circuit.
+app.onRequest((req) => {
+  if (new URL(req.url).pathname === "/health") return new Response("ok");
+});
+
+// Transform every response (response interceptor) — success, 404, and errors.
+app.onResponse((_req, res) => {
+  const headers = new Headers(res.headers);
+  headers.set("X-Frame-Options", "DENY");
+  return new Response(res.body, { status: res.status, headers });
+});
+
+// Customize error responses; falls back to a plain 500 if it throws.
+app.onError((_req, error) => {
+  console.error(error);
+  return new Response("Something went wrong", { status: 500 });
+});
+
+// Release resources during graceful shutdown (after requests drain).
+app.onShutdown(async () => {
+  await closeDatabase();
+});
+
+// Decoupled plugin communication.
+app.events.on("page:published", (slug) => console.log("published", slug));
+await app.events.emit("page:published", "/about");
+
+await app.start(); // SIGINT/SIGTERM trigger graceful shutdown by default
+```
+
+## Running on Node.js
+
+The runtime-agnostic core (`TenCore`) runs anywhere the Fetch API is available.
+Build the app's manifest on Deno (`deno task build`) and serve it on Node via
+`@leproj/tennet/node`:
+
+```ts
+import { TenCore } from "@leproj/tennet/core";
+import { serve } from "@leproj/tennet/node";
+import manifest from "./dist/manifest.json" with { type: "json" };
+
+const core = new TenCore({ embedded: manifest });
+serve(core, { port: 3000 }); // SIGINT/SIGTERM graceful shutdown built in
+```
+
+For finer control, compose the lower-level helpers with your own server:
+
+```ts
+import { createServer } from "node:http";
+import { createRequestListener } from "@leproj/tennet/node";
+
+createServer(createRequestListener(core)).listen(3000);
 ```
 
 ## Building for Production
