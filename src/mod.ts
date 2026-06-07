@@ -56,6 +56,7 @@ export type {
   ResponseHook,
   ShutdownHook,
   SitemapEntriesProvider,
+  TemplateRenderer,
   TenCoreOptions,
   WidgetPageRendererCore,
 } from "./core/types.ts";

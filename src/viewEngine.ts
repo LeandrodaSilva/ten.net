@@ -1,6 +1,6 @@
 import type { Route } from "./models/Route.ts";
 import type { AppManifest } from "./build/manifest.ts";
-import type { I18nMap } from "./core/types.ts";
+import type { I18nMap, TemplateRenderer } from "./core/types.ts";
 import { escapeHtml } from "./utils/htmlEscape.ts";
 
 type ViewDataHandler = (
@@ -25,6 +25,11 @@ interface IViewEngine {
    * reads and string wrapping. Invalidated by the owner when routes change.
    */
   shellCache?: Map<string, string>;
+  /**
+   * Optional custom template renderer. When provided, it replaces the built-in
+   * `{{key}}` mustache substitution for view routes that return JSON data.
+   */
+  renderer?: TemplateRenderer;
 }
 
 /**
@@ -120,20 +125,28 @@ export async function viewEngine(args: IViewEngine) {
         );
       }
 
-      const keys = Object.keys(body);
+      if (args.renderer) {
+        // Custom renderer replaces the built-in mustache substitution.
+        pageModule = await args.renderer(pageModule, body, {
+          route: route.path,
+          locale: args.locale,
+        });
+      } else {
+        const keys = Object.keys(body);
 
-      keys.forEach((key) => {
-        // Triple-brace: raw output (unescaped)
-        pageModule = String(pageModule).replaceAll(
-          `{{{${key}}}}`,
-          String(body[key]),
-        );
-        // Double-brace: escaped output (XSS-safe)
-        pageModule = String(pageModule).replaceAll(
-          `{{${key}}}`,
-          escapeHtml(String(body[key])),
-        );
-      });
+        keys.forEach((key) => {
+          // Triple-brace: raw output (unescaped)
+          pageModule = String(pageModule).replaceAll(
+            `{{{${key}}}}`,
+            String(body[key]),
+          );
+          // Double-brace: escaped output (XSS-safe)
+          pageModule = String(pageModule).replaceAll(
+            `{{${key}}}`,
+            escapeHtml(String(body[key])),
+          );
+        });
+      }
     }
   }
 

@@ -31,17 +31,16 @@ Delivered:
   connection draining
 - ✅ **Performance** — route-match caching, template-shell precompilation
 - ✅ **Flexibility** — middleware composition, response interceptors
-  (`onResponse`)
+  (`onResponse`), pluggable custom renderers (`setRenderer`)
 - ✅ **Extensibility** — lifecycle hooks
   (`onRequest`/`onResponse`/`onShutdown`), event bus for plugin communication
 - ✅ **Node.js support** — run the same app on Node.js via `@leproj/tennet/node`
+- ✅ **Coverage** — enforced line-coverage floor at 90% (see
+  `docs/coverage-plan.md`)
 
 Remaining:
 
-- **Performance** — zero-allocation hot paths
-- **Flexibility** — pluggable custom renderers
-- **Coverage** — raise the enforced line-coverage floor toward 90% (see
-  `docs/coverage-plan.md`)
+- **Performance** — zero-allocation hot paths (ongoing micro-optimization)
 
 ## Related Packages
 
@@ -143,6 +142,11 @@ error responses; `onError` customizes the error response (falls back to a plain
 500 if it throws); `onShutdown` runs during graceful shutdown after in-flight
 requests drain. `core.events` / `app.events` is a small resilient `EventEmitter`
 (`on`/`once`/`off`/`emit`) for decoupled plugin communication.
+
+**Custom renderers**: `setRenderer(fn)` swaps the built-in `{{key}}` mustache
+substitution for a custom engine. The renderer receives the assembled template
+(page + layouts + document) and the route handler's JSON data and returns the
+rendered HTML; i18n and Tailwind injection still run on the result.
 
 **Node.js adapter** (`src/node/`): `serve(core, opts)` runs `TenCore` on a Node
 `http` server; `createRequestListener`, `toWebRequest`, and `sendWebResponse`

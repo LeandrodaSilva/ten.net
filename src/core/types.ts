@@ -112,6 +112,23 @@ export type ResponseHook = (
 export type ShutdownHook = () => void | Promise<void>;
 
 /**
+ * Pluggable template renderer for view routes.
+ *
+ * Replaces the built-in `{{key}}`/`{{{key}}}` mustache substitution with a
+ * custom engine. Receives the assembled template (page wrapped in layouts and
+ * the document) and the JSON object returned by the route handler, and returns
+ * the rendered HTML. i18n and Tailwind injection still run on the result.
+ *
+ * Registered via {@link TenCore.setRenderer} (or the Deno adapter's
+ * `Ten.setRenderer`).
+ */
+export type TemplateRenderer = (
+  template: string,
+  data: Record<string, unknown>,
+  context: { route: string; locale?: string },
+) => string | Promise<string>;
+
+/**
  * Runtime-agnostic admin plugin interface.
  * Uses `unknown` for `kv` and {@link WidgetPageRendererCore} instead of
  * Deno-specific types so external plugins can target the core.
@@ -156,4 +173,6 @@ export interface TenCoreOptions {
   sitemapEntriesProviders?: SitemapEntriesProvider[];
   /** Custom handler invoked when the request pipeline throws. */
   errorHandler?: ErrorHandler;
+  /** Custom template renderer replacing the built-in mustache substitution. */
+  renderer?: TemplateRenderer;
 }

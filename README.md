@@ -59,20 +59,19 @@ Delivered:
 - ✅ **Reliability** — custom error handler (`onError`), graceful shutdown, and
   connection draining
 - ✅ **Performance** — route-match caching and template-shell precompilation
-- ✅ **Flexibility** — middleware composition and response interceptors
-  (`onResponse`)
+- ✅ **Flexibility** — middleware composition, response interceptors
+  (`onResponse`), and pluggable custom renderers (`setRenderer`)
 - ✅ **Extensibility** — lifecycle hooks (`onRequest`/`onResponse`/`onShutdown`)
   and an event bus for plugin communication
 - ✅ **Node.js runtime support** — run the same app on Node.js via
   `@leproj/tennet/node`
 - ✅ **Code obfuscation** — AES-256-GCM packaging for compiled binaries
+- ✅ **Coverage** — enforced line-coverage floor at 90% (see
+  [docs/coverage-plan.md](docs/coverage-plan.md))
 
 In progress:
 
-- **Performance** — zero-allocation hot paths
-- **Flexibility** — pluggable custom renderers
-- **Coverage** — raising the enforced line-coverage floor toward 90% (see
-  [docs/coverage-plan.md](docs/coverage-plan.md))
+- **Performance** — zero-allocation hot paths (ongoing micro-optimization)
 
 ## Installation
 
@@ -324,6 +323,26 @@ app.events.on("page:published", (slug) => console.log("published", slug));
 await app.events.emit("page:published", "/about");
 
 await app.start(); // SIGINT/SIGTERM trigger graceful shutdown by default
+```
+
+## Custom Template Renderer
+
+By default, view routes use `{{key}}`/`{{{key}}}` mustache substitution. Swap in
+your own engine (e.g. one with loops/conditionals) with `setRenderer`. The
+renderer receives the assembled template (page + layouts + document) and the
+route handler's JSON data; i18n and Tailwind injection still run on the result.
+
+```ts
+import { Ten } from "@leproj/tennet";
+
+const app = Ten.net();
+
+app.setRenderer((template, data, ctx) => {
+  // `ctx` is { route, locale }. Return the rendered HTML (sync or async).
+  return template.replaceAll("[[name]]", String(data.name));
+});
+
+await app.start();
 ```
 
 ## Running on Node.js
