@@ -70,6 +70,12 @@ export class TenCore {
   private _responseHooks: ResponseHook[] = [];
   private _shutdownHooks: ShutdownHook[] = [];
   private readonly _events = new EventEmitter();
+  /** Cache of `${METHOD} ${pathname}` → matched route (null = cached miss). */
+  private readonly _routeMatchCache = new Map<string, Route | null>();
+  /** Cache of assembled, layout-wrapped template shells, keyed by route path. */
+  private readonly _viewShellCache = new Map<string, string>();
+  /** Upper bound on the route-match cache to keep memory bounded. */
+  private static readonly ROUTE_CACHE_MAX = 1024;
 
   constructor(options: TenCoreOptions = {}) {
     this._embedded = options.embedded;
@@ -186,11 +192,19 @@ export class TenCore {
   /** Append routes to the registry. */
   addRoutes(routes: Route[]): void {
     this._routes.push(...routes);
+    this._invalidateRouteCaches();
   }
 
   /** Remove all routes (used by the file watcher before rescanning). */
   clearRoutes(): void {
     this._routes = [];
+    this._invalidateRouteCaches();
+  }
+
+  /** Drop cached route matches and template shells after the route set changes. */
+  private _invalidateRouteCaches(): void {
+    this._routeMatchCache.clear();
+    this._viewShellCache.clear();
   }
 
   /**
@@ -205,6 +219,7 @@ export class TenCore {
     this._embedded = manifest;
     this._routes = [];
     this._initialized = false;
+    this._invalidateRouteCaches();
     if (manifest.i18n) {
       this._i18n = manifest.i18n;
     }
@@ -296,6 +311,7 @@ export class TenCore {
     const { routes, middlewares, dynamicRegistry, kv, widgetRenderer } =
       await admin.init();
     this._routes.push(...routes);
+    this._invalidateRouteCaches();
     for (const mw of middlewares) {
       this.use(mw);
     }
@@ -345,6 +361,7 @@ export class TenCore {
 
     if (this._embedded) {
       this._routes.push(...embeddedRouterEngine(this._embedded));
+      this._invalidateRouteCaches();
       if (this._embedded.i18n) {
         this._i18n = this._embedded.i18n;
       }
@@ -395,13 +412,27 @@ export class TenCore {
   }
 
   private _matchRoute(pathname: string, method: string): Route | undefined {
-    return this._routes.find((r) => {
+    const upperMethod = method.toUpperCase();
+    const key = `${upperMethod} ${pathname}`;
+    const cached = this._routeMatchCache.get(key);
+    if (cached !== undefined) return cached ?? undefined;
+
+    const match = this._routes.find((r) => {
       if (!r.regex.test(pathname)) return false;
-      if (r.method !== "ALL" && r.method !== method.toUpperCase()) {
+      if (r.method !== "ALL" && r.method !== upperMethod) {
         return false;
       }
       return true;
-    });
+    }) ?? null;
+
+    // Bound the cache: evict the oldest entry once the cap is reached. This
+    // keeps memory in check even under floods of distinct (e.g. 404) paths.
+    if (this._routeMatchCache.size >= TenCore.ROUTE_CACHE_MAX) {
+      const oldest = this._routeMatchCache.keys().next().value;
+      if (oldest !== undefined) this._routeMatchCache.delete(oldest);
+    }
+    this._routeMatchCache.set(key, match);
+    return match ?? undefined;
   }
 
   private _isPrivatePath(path: string): boolean {
@@ -810,6 +841,7 @@ export class TenCore {
             tailwindCss: this._tailwindCss,
             locale,
             i18n: this._i18n,
+            shellCache: this._viewShellCache,
           });
           const headers: Record<string, string> = {
             "Content-Type": "text/html; charset=utf-8",

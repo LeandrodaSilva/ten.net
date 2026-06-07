@@ -48,6 +48,32 @@ Deno.bench("viewEngine_data", async () => {
   });
 });
 
+// --- viewEngine with the shell cache (template precompilation) ---
+// A persistent cache means the assembled layout/document shell is built once
+// and reused, so these measure the cached hot path versus the uncached ones.
+
+const staticShellCache = new Map<string, string>();
+Deno.bench("viewEngine_static_cached", async () => {
+  await viewEngine({
+    _appPath: "./example/http/app",
+    route: staticRoute,
+    req: new Request("http://localhost/"),
+    params: {},
+    shellCache: staticShellCache,
+  });
+});
+
+const dataShellCache = new Map<string, string>();
+Deno.bench("viewEngine_data_cached", async () => {
+  await viewEngine({
+    _appPath: "./example/http/app",
+    route: dataRoute,
+    req: new Request("http://localhost/hello"),
+    params: {},
+    shellCache: dataShellCache,
+  });
+});
+
 globalThis.addEventListener("unload", () => {
   restoreConsole();
 });

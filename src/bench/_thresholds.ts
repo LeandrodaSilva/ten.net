@@ -17,6 +17,9 @@ export const THRESHOLDS: Record<string, number> = {
   "routerEngine_full": 2000,
   "viewEngine_static": 50,
   "viewEngine_data": 50,
+  // Cached shell hot path skips filesystem reads — should be well under 5ms.
+  "viewEngine_static_cached": 5,
+  "viewEngine_data_cached": 5,
 
   // HTTP requests — max per request
   "http_static_page": 50,
