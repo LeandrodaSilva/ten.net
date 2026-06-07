@@ -1,3 +1,13 @@
+/**
+ * Inlined favicon asset for Ten.net.
+ *
+ * Exposes {@link faviconBytes} — the framework's default `favicon.ico` decoded
+ * to a `Uint8Array` — so apps and the dev server can serve a favicon without a
+ * filesystem read or the `--unstable-raw-imports` flag.
+ *
+ * @module
+ */
+
 // Base64-encoded favicon.ico — inlined to avoid unstable raw imports
 import { decodeBase64 } from "@std/encoding/base64";
 
