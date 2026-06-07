@@ -21,6 +21,10 @@ export const THRESHOLDS: Record<string, number> = {
   "viewEngine_static_cached": 5,
   "viewEngine_data_cached": 5,
 
+  // Core in-process fetch hot path — sub-millisecond (no socket I/O)
+  "core_fetch_api": 1,
+  "core_fetch_i18n": 1,
+
   // HTTP requests — max per request
   "http_static_page": 50,
   "http_view_template": 50,

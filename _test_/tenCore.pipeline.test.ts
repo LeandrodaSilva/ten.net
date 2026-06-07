@@ -79,6 +79,23 @@ describe("TenCore — i18n locale headers", () => {
     assertEquals(res.headers.get("Content-Language"), "pt-BR");
     assertStringIncludes(res.headers.get("Vary") ?? "", "Accept-Language");
   });
+
+  it("invalidates the memoized locale list when i18n is reassigned", async () => {
+    // Start with no translations: the first request memoizes an empty locale
+    // list and performs no locale resolution.
+    const core = new TenCore({ routes: [adminView("/admin/x")] });
+    const before = await core.fetch(new Request("http://x/pt-BR/admin/x"));
+    // No locales configured → the URL prefix is not treated as a locale, so
+    // the path "/pt-BR/admin/x" does not match and 404s.
+    assertEquals(before.status, 404);
+
+    // Assigning i18n must invalidate the cached locale list so the next
+    // request resolves the URL-prefixed locale.
+    core.i18n = i18n;
+    const after = await core.fetch(new Request("http://x/pt-BR/admin/x"));
+    assertEquals(after.status, 200);
+    assertEquals(after.headers.get("Content-Language"), "pt-BR");
+  });
 });
 
 describe("TenCore — dynamic pages", () => {
