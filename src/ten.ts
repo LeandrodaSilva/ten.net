@@ -270,18 +270,22 @@ export class Ten {
     await this._core.useAdmin(coreAdmin);
   }
 
+  /** Set the canonical base URL used for sitemap/robots/SEO links. */
   public setCanonicalBaseUrl(url?: string): void {
     this._core.canonicalBaseUrl = url;
   }
 
+  /** Set the runtime environment (e.g. `production`); affects robots.txt. */
   public setEnvironment(environment?: string): void {
     this._core.environment = environment;
   }
 
+  /** Enable or disable the built-in `/sitemap.xml` endpoint. */
   public setSitemapEnabled(enabled: boolean): void {
     this._core.sitemapEnabled = enabled;
   }
 
+  /** Enable or disable the built-in `/robots.txt` endpoint. */
   public setRobotsEnabled(enabled: boolean): void {
     this._core.robotsEnabled = enabled;
   }

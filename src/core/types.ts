@@ -15,20 +15,31 @@ export type WidgetPageRendererCore = (
 
 /** Structural interface for a dynamic route entry (subset of DynamicRoute). */
 export interface DynamicRouteLike {
+  /** Unique identifier of the dynamic page. */
   id: string;
+  /** Raw HTML body of the page. */
   body: string;
+  /** Human-readable page title. */
   title: string;
+  /** SEO `<title>` override. */
   seo_title: string;
+  /** SEO meta-description text. */
   seo_description: string;
+  /** Name of the document template to render with. */
   template: string;
+  /** Whether `{{widgets:*}}` placeholders should be resolved. */
   widgets_enabled?: boolean;
 }
 
 /** Dynamic route shape used when enumerating sitemap entries. */
 export interface DynamicRouteSitemapLike extends DynamicRouteLike {
+  /** URL slug of the page. */
   slug?: string;
+  /** Resolved route descriptor with its public path. */
   route?: { path: string };
+  /** Last-updated timestamp (ISO 8601). */
   updated_at?: string;
+  /** Publication timestamp (ISO 8601). */
   published_at?: string;
 }
 
@@ -39,8 +50,11 @@ export type SitemapEntriesProvider = (
 
 /** Structural interface for a dynamic route registry. */
 export interface DynamicRouteRegistryLike {
+  /** Resolve a pathname to a dynamic route, or `null` when none matches. */
   match(pathname: string): DynamicRouteLike | null;
+  /** The configured 404 page, if any. */
   readonly notFoundPage: DynamicRouteLike | null;
+  /** Enumerate all dynamic routes (used for sitemap generation). */
   all?(): DynamicRouteSitemapLike[];
 }
 
@@ -103,6 +117,7 @@ export type ShutdownHook = () => void | Promise<void>;
  * Deno-specific types so external plugins can target the core.
  */
 export interface AdminPluginLikeCore {
+  /** Initialize the plugin and return its routes, middlewares, and resources. */
   init(): Promise<{
     routes: Route[];
     middlewares: Middleware[];
@@ -110,6 +125,7 @@ export interface AdminPluginLikeCore {
     kv?: unknown;
     widgetRenderer?: WidgetPageRendererCore;
   }>;
+  /** Optionally contribute concrete public URLs to the sitemap. */
   getSitemapEntries?(context: SitemapContext): Promise<SitemapEntry[]>;
 }
 

@@ -56,6 +56,7 @@ export class IndexedDBStorage implements Storage {
   private _storeName: string;
   private _dbPromise: Promise<IDBDatabase> | null = null;
 
+  /** Create a store bound to the given IndexedDB database and object store. */
   constructor(dbName: string, storeName = "items") {
     this._dbName = dbName;
     this._storeName = storeName;
@@ -94,18 +95,21 @@ export class IndexedDBStorage implements Storage {
     return { store, tx };
   }
 
+  /** Fetch a single item by id, or `null` when it does not exist. */
   async get(id: string): Promise<StorageItem | null> {
     const { store } = await this._getStore("readonly");
     const result = await requestToPromise(store.get(id));
     return (result as StorageItem) ?? null;
   }
 
+  /** Create or replace the item stored under `id`. */
   async set(id: string, data: StorageItem): Promise<void> {
     const { store, tx } = await this._getStore("readwrite");
     store.put({ ...data, id });
     await transactionDone(tx);
   }
 
+  /** Delete the item by id; resolves `true` when one was removed. */
   async delete(id: string): Promise<boolean> {
     const { store, tx } = await this._getStore("readwrite");
     const existing = await requestToPromise(store.get(id));
@@ -115,6 +119,7 @@ export class IndexedDBStorage implements Storage {
     return true;
   }
 
+  /** List items, optionally paginated and filtered by a search query. */
   async list(options?: ListOptions): Promise<StorageItem[]> {
     const { store } = await this._getStore("readonly");
     const items: StorageItem[] = [];
@@ -160,6 +165,7 @@ export class IndexedDBStorage implements Storage {
     });
   }
 
+  /** Count items, optionally filtered by a search query. */
   async count(
     options?: { search?: string; searchFields?: string[] },
   ): Promise<number> {

@@ -77,6 +77,7 @@ export class TenCore {
   /** Upper bound on the route-match cache to keep memory bounded. */
   private static readonly ROUTE_CACHE_MAX = 1024;
 
+  /** Create a core, optionally seeded from {@link TenCoreOptions}. */
   constructor(options: TenCoreOptions = {}) {
     this._embedded = options.embedded;
     this._decodeBase64 = options.decodeBase64 ?? decodeBase64Universal;
@@ -104,26 +105,32 @@ export class TenCore {
   // Public accessors — used by the Deno adapter (ten.ts) to read/write state
   // ---------------------------------------------------------------------------
 
+  /** The currently registered routes (read-only view). */
   get routes(): readonly Route[] {
     return this._routes;
   }
 
+  /** The embedded application manifest, when running in compiled mode. */
   get embedded(): AppManifest | undefined {
     return this._embedded;
   }
 
+  /** The KV instance shared with plugins/dynamic pages, if any. */
   get kv(): unknown {
     return this._kv;
   }
 
+  /** Set the KV instance shared with plugins/dynamic pages. */
   set kv(value: unknown) {
     this._kv = value;
   }
 
+  /** The widget page renderer, when an admin plugin provides one. */
   get widgetRenderer(): WidgetPageRendererCore | undefined {
     return this._widgetRenderer;
   }
 
+  /** The active dynamic route registry, if one is installed. */
   get dynamicRegistry(): DynamicRouteRegistryLike | undefined {
     return this._dynamicRegistry;
   }
@@ -133,54 +140,67 @@ export class TenCore {
     this._dynamicRegistry = r;
   }
 
+  /** Inline Tailwind CSS injected into rendered pages (dev mode). */
   get tailwindCss(): string | undefined {
     return this._tailwindCss;
   }
 
+  /** Set the inline Tailwind CSS injected into rendered pages. */
   set tailwindCss(value: string | undefined) {
     this._tailwindCss = value;
   }
 
+  /** The scanned i18n translation map. */
   get i18n(): I18nMap {
     return this._i18n;
   }
 
+  /** Set the i18n translation map. */
   set i18n(value: I18nMap) {
     this._i18n = value;
   }
 
+  /** The registered middleware chain (read-only view). */
   get middlewares(): readonly Middleware[] {
     return this._middlewares;
   }
 
+  /** The canonical base URL used for sitemap/robots/SEO. */
   get canonicalBaseUrl(): string | undefined {
     return this._canonicalBaseUrl;
   }
 
+  /** Set the canonical base URL (trailing slash is normalized away). */
   set canonicalBaseUrl(value: string | undefined) {
     this._canonicalBaseUrl = value ? this._normalizeBaseUrl(value) : undefined;
   }
 
+  /** The current runtime environment (e.g. `production`, `development`). */
   get environment(): string {
     return this._environment;
   }
 
+  /** Set the runtime environment; defaults to `development` when omitted. */
   set environment(value: string | undefined) {
     this._environment = (value ?? "development").trim().toLowerCase();
   }
 
+  /** Whether the built-in `/sitemap.xml` endpoint is enabled. */
   get sitemapEnabled(): boolean {
     return this._sitemapEnabled;
   }
 
+  /** Enable or disable the built-in `/sitemap.xml` endpoint. */
   set sitemapEnabled(value: boolean) {
     this._sitemapEnabled = value;
   }
 
+  /** Whether the built-in `/robots.txt` endpoint is enabled. */
   get robotsEnabled(): boolean {
     return this._robotsEnabled;
   }
 
+  /** Enable or disable the built-in `/robots.txt` endpoint. */
   set robotsEnabled(value: boolean) {
     this._robotsEnabled = value;
   }
@@ -247,6 +267,7 @@ export class TenCore {
     this._errorHandler = handler;
   }
 
+  /** The registered custom error handler, if any. */
   get errorHandler(): ErrorHandler | undefined {
     return this._errorHandler;
   }

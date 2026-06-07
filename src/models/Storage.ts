@@ -1,23 +1,34 @@
 /** A generic item stored in plugin storage. */
 export interface StorageItem {
+  /** Unique identifier of the item. */
   id: string;
+  /** Arbitrary additional fields. */
   [key: string]: unknown;
 }
 
 /** Options for listing storage items. */
 export interface ListOptions {
+  /** 1-based page number. */
   page?: number;
+  /** Maximum number of items per page. */
   limit?: number;
+  /** Free-text query matched against {@link ListOptions.searchFields}. */
   search?: string;
+  /** Fields to match the `search` query against. */
   searchFields?: string[];
 }
 
 /** Pluggable storage interface for plugin data. */
 export interface Storage {
+  /** Fetch a single item by id, or `null` if it does not exist. */
   get(id: string): Promise<StorageItem | null>;
+  /** List items, optionally paginated and filtered. */
   list(options?: ListOptions): Promise<StorageItem[]>;
+  /** Create or replace the item stored under `id`. */
   set(id: string, data: StorageItem): Promise<void>;
+  /** Delete the item by id; resolves `true` when one was removed. */
   delete(id: string): Promise<boolean>;
+  /** Count items, optionally filtered by a search query. */
   count(
     options?: { search?: string; searchFields?: string[] },
   ): Promise<number>;

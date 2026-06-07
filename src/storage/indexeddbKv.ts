@@ -16,6 +16,7 @@ import { IndexedDBStorage } from "./indexeddb.ts";
 export class IndexedDBKv {
   private _storage: IndexedDBStorage;
 
+  /** Create a KV emulator backed by the given IndexedDB database. */
   constructor(dbName = "tennet-kv") {
     this._storage = new IndexedDBStorage(dbName, "kv");
   }
