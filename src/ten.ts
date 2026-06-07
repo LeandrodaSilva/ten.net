@@ -11,7 +11,11 @@ import type {
   AdminPluginLikeCore,
   DynamicRouteRegistryLike,
   ErrorHandler,
+  RequestHook,
+  ResponseHook,
+  ShutdownHook,
 } from "./core/types.ts";
+import type { EventEmitter } from "./core/eventEmitter.ts";
 import type { SitemapContext, SitemapEntry } from "./models/Sitemap.ts";
 
 /** Interface for an admin plugin that can be registered via useAdmin(). */
@@ -182,6 +186,45 @@ export class Ten {
   }
 
   /**
+   * Registers a lifecycle hook that runs before middleware and routing.
+   * Returning a `Response` short-circuits the request pipeline.
+   */
+  public onRequest(hook: RequestHook): void {
+    this._core.onRequest(hook);
+  }
+
+  /**
+   * Registers a lifecycle hook that runs after a response is produced and may
+   * replace it (response interceptor). Useful for injecting headers, logging,
+   * or transforming output across all routes.
+   */
+  public onResponse(hook: ResponseHook): void {
+    this._core.onResponse(hook);
+  }
+
+  /**
+   * Registers a hook that runs once during graceful shutdown, after in-flight
+   * requests have drained. Use it to release resources.
+   */
+  public onShutdown(hook: ShutdownHook): void {
+    this._core.onShutdown(hook);
+  }
+
+  /**
+   * The shared event bus for decoupled plugin communication.
+   *
+   * @example
+   * ```typescript
+   * const app = Ten.net();
+   * app.events.on("page:published", (slug) => console.log(slug));
+   * await app.events.emit("page:published", "/about");
+   * ```
+   */
+  public get events(): EventEmitter {
+    return this._core.events;
+  }
+
+  /**
    * Registers an admin plugin, initializing its routes and middlewares.
    * If the admin plugin returns a DynamicRouteRegistry, it is stored
    * for dynamic page matching in the request pipeline.
@@ -304,6 +347,8 @@ export class Ten {
       } catch (error) {
         console.error("Error during graceful shutdown", error);
       }
+      // Run user/plugin cleanup hooks after in-flight requests have drained.
+      await this._core.runShutdownHooks();
     };
 
     // Deno supports SIGTERM only on POSIX; Windows uses SIGBREAK.

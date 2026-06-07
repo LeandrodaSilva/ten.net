@@ -40,6 +40,11 @@ describe("Ten graceful shutdown", () => {
       },
     );
 
+    let shutdownHookRan = false;
+    app.onShutdown(() => {
+      shutdownHookRan = true;
+    });
+
     const infoSpy = console.info;
     const logSpy = console.log;
     console.info = () => {};
@@ -53,8 +58,11 @@ describe("Ten graceful shutdown", () => {
 
       // Fire SIGINT → triggers graceful shutdown of the server.
       added.get("SIGINT")!();
-      await Promise.resolve();
+      await new Promise((r) => setTimeout(r, 0));
       assertEquals(shutdownCalled, true);
+
+      // Shutdown hooks run after in-flight requests have drained.
+      assertEquals(shutdownHookRan, true);
 
       // Completing the server lifecycle removes the registered handlers.
       finishedResolve();

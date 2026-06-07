@@ -24,6 +24,8 @@
 
 export { TenCore } from "./tenCore.ts";
 export { decodeBase64Universal } from "./base64.ts";
+export { EventEmitter } from "./eventEmitter.ts";
+export type { EventListener } from "./eventEmitter.ts";
 export type {
   AdminPluginLikeCore,
   Base64Decoder,
@@ -31,6 +33,10 @@ export type {
   DynamicRouteLike,
   DynamicRouteRegistryLike,
   DynamicRouteSitemapLike,
+  ErrorHandler,
+  RequestHook,
+  ResponseHook,
+  ShutdownHook,
   SitemapEntriesProvider,
   TenCoreOptions,
   WidgetPageRendererCore,

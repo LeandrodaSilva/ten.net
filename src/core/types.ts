@@ -71,6 +71,33 @@ export type ErrorHandler = (
 ) => Response | Promise<Response>;
 
 /**
+ * Lifecycle hook invoked at the start of the request pipeline, before
+ * middleware and routing. Returning a `Response` short-circuits the pipeline
+ * (the response still passes through any {@link ResponseHook}s). Returning
+ * `undefined` continues normally.
+ */
+export type RequestHook = (
+  req: Request,
+) => void | Response | Promise<void | Response>;
+
+/**
+ * Lifecycle hook invoked after a response is produced. Returning a `Response`
+ * replaces the current one (response interceptor); returning `undefined` keeps
+ * it. Applied to success, 404, and error responses alike.
+ */
+export type ResponseHook = (
+  req: Request,
+  res: Response,
+) => void | Response | Promise<void | Response>;
+
+/**
+ * Lifecycle hook invoked once during graceful shutdown, after in-flight
+ * requests have drained. Use it to release resources (close DB handles, flush
+ * buffers, etc.).
+ */
+export type ShutdownHook = () => void | Promise<void>;
+
+/**
  * Runtime-agnostic admin plugin interface.
  * Uses `unknown` for `kv` and {@link WidgetPageRendererCore} instead of
  * Deno-specific types so external plugins can target the core.

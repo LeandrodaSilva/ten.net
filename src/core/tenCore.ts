@@ -5,6 +5,7 @@ import type { Route } from "../models/Route.ts";
 import type { AppManifest } from "../build/manifest.ts";
 import type { Middleware } from "../middleware/middleware.ts";
 import { decodeBase64Universal } from "./base64.ts";
+import { EventEmitter } from "./eventEmitter.ts";
 import type {
   AdminPluginLikeCore,
   Base64Decoder,
@@ -13,6 +14,9 @@ import type {
   DynamicRouteRegistryLike,
   ErrorHandler,
   I18nMap,
+  RequestHook,
+  ResponseHook,
+  ShutdownHook,
   SitemapEntriesProvider,
   TenCoreOptions,
   WidgetPageRendererCore,
@@ -62,6 +66,10 @@ export class TenCore {
   private _robotsEnabled = true;
   private _sitemapEntriesProviders: SitemapEntriesProvider[] = [];
   private _errorHandler?: ErrorHandler;
+  private _requestHooks: RequestHook[] = [];
+  private _responseHooks: ResponseHook[] = [];
+  private _shutdownHooks: ShutdownHook[] = [];
+  private readonly _events = new EventEmitter();
 
   constructor(options: TenCoreOptions = {}) {
     this._embedded = options.embedded;
@@ -226,6 +234,58 @@ export class TenCore {
 
   get errorHandler(): ErrorHandler | undefined {
     return this._errorHandler;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Lifecycle hooks & event bus
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Register a hook that runs before middleware and routing. Returning a
+   * `Response` short-circuits the pipeline. Hooks run in registration order.
+   */
+  onRequest(hook: RequestHook): void {
+    this._requestHooks.push(hook);
+  }
+
+  /**
+   * Register a hook that runs after a response is produced and may replace it
+   * (response interceptor). Applies to success, 404, and error responses.
+   * Hooks run in registration order.
+   */
+  onResponse(hook: ResponseHook): void {
+    this._responseHooks.push(hook);
+  }
+
+  /**
+   * Register a hook that runs once during graceful shutdown (after in-flight
+   * requests have drained). Invoke via {@link runShutdownHooks}.
+   */
+  onShutdown(hook: ShutdownHook): void {
+    this._shutdownHooks.push(hook);
+  }
+
+  /**
+   * The shared event bus for decoupled plugin communication. Plugins and app
+   * code can `on`/`once`/`off`/`emit` named events through it.
+   */
+  get events(): EventEmitter {
+    return this._events;
+  }
+
+  /**
+   * Run all registered shutdown hooks sequentially. Errors are logged and do
+   * not abort the remaining hooks. Called by the Deno adapter during graceful
+   * shutdown; other runtimes can call it from their own shutdown flow.
+   */
+  async runShutdownHooks(): Promise<void> {
+    for (const hook of this._shutdownHooks) {
+      try {
+        await hook();
+      } catch (error) {
+        console.error("onShutdown hook threw; ignoring", error); // NOSONAR
+      }
+    }
   }
 
   /**
@@ -586,23 +646,59 @@ export class TenCore {
 
   private async _handleRequest(req: Request): Promise<Response> {
     try {
-      let index = 0;
-      const chain = this._middlewares;
-      const routeRequest = this._routeRequest.bind(this);
-
-      const next = async (): Promise<Response> => {
-        if (index < chain.length) {
-          const mw = chain[index++];
-          return await mw(req, next);
+      // Lifecycle: onRequest hooks may short-circuit the pipeline.
+      let response: Response | undefined;
+      for (const hook of this._requestHooks) {
+        const early = await hook(req);
+        if (early instanceof Response) {
+          response = early;
+          break;
         }
-        return await routeRequest(req);
-      };
+      }
 
-      return await next();
+      if (!response) {
+        let index = 0;
+        const chain = this._middlewares;
+        const routeRequest = this._routeRequest.bind(this);
+
+        const next = async (): Promise<Response> => {
+          if (index < chain.length) {
+            const mw = chain[index++];
+            return await mw(req, next);
+          }
+          return await routeRequest(req);
+        };
+
+        response = await next();
+      }
+
+      // Lifecycle: onResponse hooks may replace the response.
+      return await this._applyResponseHooks(req, response);
     } catch (error) {
       console.error("Unhandled error in request pipeline", error); // NOSONAR
-      return await this._renderError(req, error);
+      const errorResponse = await this._renderError(req, error);
+      return await this._applyResponseHooks(req, errorResponse);
     }
+  }
+
+  /**
+   * Run response hooks in order, letting each optionally replace the response.
+   * Resilient: a hook that throws is logged and skipped.
+   */
+  private async _applyResponseHooks(
+    req: Request,
+    res: Response,
+  ): Promise<Response> {
+    let current = res;
+    for (const hook of this._responseHooks) {
+      try {
+        const result = await hook(req, current);
+        if (result instanceof Response) current = result;
+      } catch (error) {
+        console.error("onResponse hook threw; ignoring", error); // NOSONAR
+      }
+    }
+    return current;
   }
 
   /**
